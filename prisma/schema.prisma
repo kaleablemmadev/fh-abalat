@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String      @id @default(cuid())
+  fullName    String?
+  gender      genderType  @default(MALE)
+  type        userType    @default(MEMBER)
+  age         Int
+
+  // If User is Admin or Superadmin
+  email       String?     @unique
+
+  // If User is Member
+  memberType  memberType? @default(REGULAR_MEMBER)
+
+  // Relations
+  attendances      Attendance[]      @relation("MemberAttendances")
+  markedAttendances Attendance[]     @relation("MarkedByAdmin")
+  permissions      Permission[]      @relation("MemberPermissions")
+  reviewedPermissions Permission[]   @relation("ReviewedByAdmin")
+  createdEvents    Event[]           @relation("EventCreatedBy")
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum userType {
+  ADMIN
+  MEMBER
+  SUPERADMIN
+}
+
+enum genderType {
+  MALE
+  FEMALE
+}
+
+enum memberType {
+  COURSE_STUDENT
+  REGULAR_MEMBER
+  YOUTH_STUDENT
+}
+
+// -------------------------
+// EVENTS
+// -------------------------
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime
+  location    String?
+
+  // Optional eligibility gate for this event
+  eligibilityRuleId String?
+  eligibilityRule   EligibilityRule? @relation(fields: [eligibilityRuleId], references: [id])
+
+  // Which member types this event applies to (e.g. only YOUTH_STUDENT)
+  targetMemberTypes memberType[]
+
+  createdById String
+  createdBy   User     @relation("EventCreatedBy", fields: [createdById], references: [id])
+
+  attendances Attendance[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// -------------------------
+// ATTENDANCE
+// -------------------------
+
+// Configurable attendance types instead of hardcoding 1 / 0.5 / 0
+model AttendanceType {
+  id        String   @id @default(cuid())
+  name      String   @unique   // e.g. "Attended", "Permission", "Absent", "Late"
+  value     Float             // 1, 0.5, 0, or any custom weight
+  isDefault Boolean  @default(false)
+
+  attendances Attendance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attendance {
+  id     String @id @default(cuid())
+
+  memberId String
+  member   User   @relation("MemberAttendances", fields: [memberId], references: [id])
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  attendanceTypeId String
+  attendanceType   AttendanceType @relation(fields: [attendanceTypeId], references: [id])
+
+  // Linked if the attendance status is backed by an approved permission
+  permissionId String?
+  permission   Permission? @relation(fields: [permissionId], references: [id])
+
+  markedById String
+  markedBy   User   @relation("MarkedByAdmin", fields: [markedById], references: [id])
+
+  note      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([memberId, eventId]) // one attendance record per member per event
+}
+
+// -------------------------
+// PERMISSIONS
+// -------------------------
+
+model PermissionType {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g. "Medical", "Travel", "Work", "Family"
+  description String?
+
+  permissions Permission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum permissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Permission {
+  id     String @id @default(cuid())
+
+  memberId String
+  member   User   @relation("MemberPermissions", fields: [memberId], references: [id])
+
+  permissionTypeId String
+  permissionType   PermissionType @relation(fields: [permissionTypeId], references: [id])
+
+  reason String?
+  status permissionStatus @default(PENDING)
+
+  reviewedById String?
+  reviewedBy   User?   @relation("ReviewedByAdmin", fields: [reviewedById], references: [id])
+
+  attendances Attendance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -------------------------
+// ELIGIBILITY
+// -------------------------
+
+model EligibilityRule {
+  id                 String  @id @default(cuid())
+  name               String
+  minAttendanceScore Float   // e.g. 0.75 average score required
+  minEventsCount     Int?    // minimum number of past events required
+  lookbackEventCount Int?    // optional: only consider last N events
+
+  events Event[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -110,34 +110,65 @@ export default async function MultiMonthAttendancePage({
   const monthName = new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' });
 
   return (
-    <div className="space-y-8 animate-fade-in max-w-[95vw] mx-auto pb-8">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border pb-6">
+    <div className="space-y-5 animate-fade-in">
+      {/* ── Page header ──────────────────────────────────────────────── */}
+      <div
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4"
+        style={{ borderBottom: '1px solid hsl(var(--border))' }}
+      >
         <div>
-          <h1 className="text-3xl font-bold mb-2 capitalize text-foreground">{type} Attendance</h1>
-          <p className="text-muted-foreground">
+          <h1
+            className="text-xl font-bold tracking-tight capitalize"
+            style={{ color: 'hsl(var(--foreground))' }}
+          >
+            {type} Attendance
+          </h1>
+          <p className="text-sm mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
             {monthName} {currentYear}
           </p>
         </div>
-        
-        {/* Segmented Control / Tabs */}
-        <div className="inline-flex items-center p-1 bg-muted rounded-lg border border-border">
-          <Link 
+
+        {/* Segmented control — Chore / Sunday */}
+        <div
+          className="inline-flex items-center p-0.5 rounded"
+          style={{
+            background: 'hsl(var(--muted))',
+            border: '1px solid hsl(var(--border))',
+          }}
+        >
+          <Link
             href="/attendance/chore"
-            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
-              type === 'chore' 
-                ? 'bg-background text-foreground shadow-sm' 
-                : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
-            }`}
+            className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-150"
+            style={
+              type === 'chore'
+                ? {
+                    background: 'hsl(var(--background))',
+                    color: 'hsl(var(--foreground))',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  }
+                : {
+                    background: 'transparent',
+                    color: 'hsl(var(--muted-foreground))',
+                  }
+            }
           >
             Chore
           </Link>
-          <Link 
+          <Link
             href="/attendance/sunday"
-            className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
-              type === 'sunday' 
-                ? 'bg-background text-foreground shadow-sm' 
-                : 'text-muted-foreground hover:text-foreground hover:bg-background/50'
-            }`}
+            className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-150"
+            style={
+              type === 'sunday'
+                ? {
+                    background: 'hsl(var(--background))',
+                    color: 'hsl(var(--foreground))',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  }
+                : {
+                    background: 'transparent',
+                    color: 'hsl(var(--muted-foreground))',
+                  }
+            }
           >
             Sunday
           </Link>

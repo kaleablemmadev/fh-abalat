@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Search, Filter, Plus, Edit, User } from "lucide-react";
+import { Search, Filter, Plus, Edit, Users } from "lucide-react";
 
 interface Member {
   id: string;
@@ -15,17 +15,17 @@ interface Member {
 const memberTypeLabels: Record<string, string> = {
   COURSE_STUDENT: "Course Student",
   REGULAR_MEMBER: "Regular Member",
-  YOUTH_STUDENT: "Youth Student",
+  YOUTH_STUDENT:  "Youth Student",
 };
 
 const memberTypeColors: Record<string, string> = {
-  COURSE_STUDENT: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  REGULAR_MEMBER: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-  YOUTH_STUDENT: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  COURSE_STUDENT: "bg-sky-500/10 text-sky-400 border-sky-500/20",
+  REGULAR_MEMBER: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  YOUTH_STUDENT:  "bg-amber-500/10 text-amber-400 border-amber-500/20",
 };
 
 const genderLabels: Record<string, string> = {
-  MALE: "Male",
+  MALE:   "Male",
   FEMALE: "Female",
 };
 
@@ -89,71 +89,111 @@ export default function MembersPage() {
 
   const totals = useMemo(
     () => ({
-      total: filteredMembers.length,
-      regular: filteredMembers.filter(
-        (member) => member.memberType === "REGULAR_MEMBER",
-      ).length,
-      course: filteredMembers.filter(
-        (member) => member.memberType === "COURSE_STUDENT",
-      ).length,
-      youth: filteredMembers.filter(
-        (member) => member.memberType === "YOUTH_STUDENT",
-      ).length,
+      total:   filteredMembers.length,
+      regular: filteredMembers.filter((m) => m.memberType === "REGULAR_MEMBER").length,
+      course:  filteredMembers.filter((m) => m.memberType === "COURSE_STUDENT").length,
+      youth:   filteredMembers.filter((m) => m.memberType === "YOUTH_STUDENT").length,
     }),
     [filteredMembers],
   );
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-5 animate-fade-in">
+      {/* ── Page header ──────────────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Member Directory</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
+            Member Directory
+          </h1>
+          <p className="text-sm mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
             Browse and manage all registered members.
           </p>
         </div>
-        <Link 
+        <Link
           href="/members/new"
-          className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4 whitespace-nowrap"
+          className="inline-flex items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold transition-colors duration-150 whitespace-nowrap shrink-0"
+          style={{
+            background: 'hsl(160 70% 32%)',
+            color: '#fff',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = 'hsl(160 70% 38%)')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'hsl(160 70% 32%)')}
         >
-          <Plus size={16} />
+          <Plus size={14} />
           Add Member
         </Link>
       </div>
 
-      <div className="rounded-xl border border-border bg-card shadow-sm animate-slide-in">
-        <div className="p-6 border-b border-border space-y-6">
-          <div className="flex flex-col sm:flex-row gap-4 justify-between text-sm">
-             <div className="flex items-center gap-4 text-muted-foreground">
-                <div className="flex items-center gap-1.5">
-                  <User size={16} />
-                  <span className="font-medium text-foreground">{totals.total}</span> total
-                </div>
-                <div className="w-px h-4 bg-border"></div>
-                <div className="flex gap-3">
-                  <span><span className="font-medium text-emerald-500">{totals.regular}</span> regular</span>
-                  <span><span className="font-medium text-blue-500">{totals.course}</span> course</span>
-                  <span><span className="font-medium text-amber-500">{totals.youth}</span> youth</span>
-                </div>
-             </div>
+      {/* ── Panel ────────────────────────────────────────────────────────── */}
+      <div
+        className="rounded-lg overflow-hidden"
+        style={{
+          background: 'hsl(var(--card))',
+          border: '1px solid hsl(var(--border))',
+        }}
+      >
+        {/* Toolbar */}
+        <div
+          className="px-4 py-3 space-y-3"
+          style={{ borderBottom: '1px solid hsl(var(--border))' }}
+        >
+          {/* Totals row */}
+          <div className="flex flex-wrap items-center gap-3 text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+            <div className="flex items-center gap-1.5">
+              <Users size={13} />
+              <span className="font-semibold" style={{ color: 'hsl(var(--foreground))' }}>{totals.total}</span>
+              <span>total</span>
+            </div>
+            <span style={{ color: 'hsl(var(--border))' }}>|</span>
+            <span>
+              <span className="font-semibold" style={{ color: 'hsl(160 55% 55%)' }}>{totals.regular}</span>{' '}
+              regular
+            </span>
+            <span>
+              <span className="font-semibold" style={{ color: 'hsl(200 55% 55%)' }}>{totals.course}</span>{' '}
+              course
+            </span>
+            <span>
+              <span className="font-semibold" style={{ color: 'hsl(38 55% 55%)' }}>{totals.youth}</span>{' '}
+              youth
+            </span>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* Search + filter */}
+          <div className="flex flex-col sm:flex-row gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                size={13}
+                style={{ color: 'hsl(var(--muted-foreground))' }}
+              />
               <input
-                className="flex h-10 w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all"
+                className="h-8 w-full rounded border pl-8 pr-3 text-xs transition-all duration-150"
+                style={{
+                  background: 'hsl(var(--background))',
+                  border: '1px solid hsl(var(--border))',
+                  color: 'hsl(var(--foreground))',
+                }}
                 type="search"
                 value={searchText}
                 onChange={(event) => setSearchText(event.target.value)}
-                placeholder="Search name, gender, or member type..."
+                placeholder="Search name, gender, or type…"
               />
             </div>
 
-            <div className="relative w-full sm:w-[200px]">
-               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="relative w-full sm:w-44">
+              <Filter
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                size={13}
+                style={{ color: 'hsl(var(--muted-foreground))' }}
+              />
               <select
-                className="flex h-10 w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all appearance-none"
+                className="h-8 w-full rounded border pl-8 pr-3 text-xs appearance-none transition-all duration-150"
+                style={{
+                  background: 'hsl(var(--background))',
+                  border: '1px solid hsl(var(--border))',
+                  color: 'hsl(var(--foreground))',
+                }}
                 value={memberTypeFilter}
                 onChange={(event) => setMemberTypeFilter(event.target.value)}
               >
@@ -166,61 +206,109 @@ export default function MembersPage() {
           </div>
         </div>
 
-        <div className="p-6">
+        {/* Content */}
+        <div className="p-3">
           {isLoading ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-               {[...Array(6)].map((_, i) => (
-                  <div key={i} className="h-32 rounded-xl border border-border bg-muted/20 animate-pulse"></div>
-               ))}
+            /* Table-shaped skeleton */
+            <div className="space-y-1.5">
+              {[...Array(6)].map((_, i) => (
+                <div
+                  key={i}
+                  className="skeleton flex items-center gap-3 p-3 rounded"
+                  style={{ height: '52px' }}
+                >
+                  <div className="skeleton w-7 h-7 rounded-full shrink-0" style={{ background: 'hsl(var(--border))' }} />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="skeleton h-2.5 rounded w-1/3" style={{ background: 'hsl(var(--border))' }} />
+                    <div className="skeleton h-2 rounded w-1/5" style={{ background: 'hsl(var(--border))' }} />
+                  </div>
+                  <div className="skeleton h-5 w-20 rounded-full shrink-0" style={{ background: 'hsl(var(--border))' }} />
+                </div>
+              ))}
             </div>
           ) : error ? (
-            <div className="rounded-lg border border-dashed border-destructive/50 bg-destructive/10 p-8 text-center text-sm text-destructive">
+            <div
+              className="rounded p-6 text-center text-sm font-medium"
+              style={{
+                background: 'hsl(0 40% 10%)',
+                border: '1px dashed hsl(0 40% 22%)',
+                color: 'hsl(0 55% 60%)',
+              }}
+            >
               <strong>Error:</strong> {error}
             </div>
           ) : !members || members.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-              No members available.
+            <div className="emptyState">
+              <Users size={20} className="mx-auto mb-2" style={{ color: 'hsl(var(--muted-foreground))' }} />
+              <p>No members available.</p>
+              <p className="mt-1 text-xs">Add your first member to get started.</p>
             </div>
           ) : filteredMembers.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-              No members match your search. Try a broader filter.
+            <div className="emptyState">
+              <Search size={18} className="mx-auto mb-2" style={{ color: 'hsl(var(--muted-foreground))' }} />
+              <p>No members match your search.</p>
+              <p className="mt-1 text-xs">Try a broader filter or clear your search.</p>
             </div>
           ) : (
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {filteredMembers.map((member) => {
-                const colorClass = memberTypeColors[member.memberType] || "bg-muted text-muted-foreground border-border";
-                
+                const colorClass =
+                  memberTypeColors[member.memberType] ??
+                  "bg-zinc-500/10 text-zinc-400 border-zinc-500/20";
+
                 return (
-                <li 
-                  key={member.id} 
-                  className="group relative rounded-xl border border-border bg-card p-5 shadow-sm transition-all hover:border-primary/50 hover:bg-accent/30 flex flex-col justify-between"
-                >
-                  <Link href={`/members/${member.id}/edit`} className="absolute top-4 right-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-primary">
-                    <Edit size={16} />
-                  </Link>
-
-                  <div className="mb-4 pr-6">
-                    <h3 className="font-semibold tracking-tight text-foreground truncate">
-                      {member.fullName}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {genderLabels[member.gender] ?? member.gender} • {member.age} yrs
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold shadow-sm ${colorClass}`}>
-                      {memberTypeLabels[member.memberType] ?? member.memberType}
-                    </span>
-                    <Link 
-                      href={`/members/${member.id}`} 
-                      className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
+                  <li
+                    key={member.id}
+                    className="group relative rounded border p-3 transition-all duration-150 flex flex-col justify-between"
+                    style={{
+                      background: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'hsl(160 40% 25%)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'hsl(var(--border))')}
+                  >
+                    {/* Edit icon — visible on hover */}
+                    <Link
+                      href={`/members/${member.id}/edit`}
+                      className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                      style={{ color: 'hsl(var(--muted-foreground))' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = 'hsl(160 60% 55%)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = 'hsl(var(--muted-foreground))')}
                     >
-                      View Details &rarr;
+                      <Edit size={13} />
                     </Link>
-                  </div>
-                </li>
-              )})}
+
+                    <div className="mb-2.5 pr-5">
+                      <h3
+                        className="text-sm font-semibold leading-tight truncate"
+                        style={{ color: 'hsl(var(--foreground))' }}
+                      >
+                        {member.fullName}
+                      </h3>
+                      <p className="text-xs mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                        {genderLabels[member.gender] ?? member.gender} · {member.age} yrs
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${colorClass}`}
+                      >
+                        {memberTypeLabels[member.memberType] ?? member.memberType}
+                      </span>
+                      <Link
+                        href={`/members/${member.id}`}
+                        className="text-[11px] font-medium transition-colors duration-150"
+                        style={{ color: 'hsl(var(--muted-foreground))' }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = 'hsl(160 60% 55%)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = 'hsl(var(--muted-foreground))')}
+                      >
+                        Details →
+                      </Link>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>

@@ -3,6 +3,7 @@
 import { FormEvent, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 import {
     genderTypeValues,
     type genderType,
@@ -26,6 +27,16 @@ interface MemberDraft {
 interface MemberFormProps {
     initialData?: MemberDraft;
     memberId?: string;
+};
+
+/** Shared input/select className + inline style base */
+const fieldBase = {
+  className: "h-9 w-full rounded border px-3 text-sm transition-all duration-150 appearance-none",
+  style: {
+    background: 'hsl(var(--background))',
+    border: '1px solid hsl(var(--border))',
+    color: 'hsl(var(--foreground))',
+  },
 };
 
 export default function MemberForm({ initialData, memberId }: MemberFormProps ) {
@@ -82,91 +93,145 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps ) 
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-8 animate-fade-in max-w-2xl">
-            <div className="space-y-2">
-                <h2 className="text-xl font-semibold tracking-tight text-foreground">
+        <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in max-w-sm">
+            {/* ── Form title ───────────────────────────────────────────── */}
+            <div className="space-y-0.5">
+                <h2 className="text-lg font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
                     {isEditMode ? 'Edit Member' : 'New Member'}
                 </h2>
-                <p className="text-sm text-muted-foreground">
-                    {isEditMode ? 'Update the details for this member.' : 'Enter the personal details to register a new member.'}
+                <p className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                    {isEditMode
+                        ? 'Update the details for this member.'
+                        : 'Enter personal details to register a new member.'}
                 </p>
             </div>
 
-            <div className="bg-card border border-border rounded-xl p-6 space-y-6 shadow-sm">
-                <h3 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-4">Personal Details</h3>
-                
-                <div className="space-y-2">
-                    <label htmlFor="fullName" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            {/* ── Personal Details section ─────────────────────────────── */}
+            <div
+                className="rounded-lg p-4 space-y-4"
+                style={{
+                    background: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                }}
+            >
+                <p
+                    className="text-[10px] font-bold uppercase tracking-widest"
+                    style={{ color: 'hsl(var(--muted-foreground))' }}
+                >
+                    Personal Details
+                </p>
+
+                {/* Full name */}
+                <div className="space-y-1.5">
+                    <label
+                        htmlFor="fullName"
+                        className="block text-xs font-semibold"
+                        style={{ color: 'hsl(var(--foreground))' }}
+                    >
                         ሙሉ ስም (Full Name)
                     </label>
-                    <input 
+                    <input
                         id="fullName"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="ሙሉ ስም"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
+                        {...fieldBase}
                         required
                     />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <label htmlFor="gender" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            ፆታ (Gender)
-                        </label>
-                        <select 
-                            value={gender} 
-                            id="gender" 
-                            onChange={(e) => setGender(e.target.value as genderType)}
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all appearance-none"
-                        >
-                            {genderOptions.map((option) => (
-                                <option key={option} value={option}>{option === 'MALE' ? 'ወንድ (Male)' : 'ሴት (Female)'}</option>
-                            ))}
-                        </select>
-                    </div>
+                {/* Gender — single column */}
+                <div className="space-y-1.5">
+                    <label
+                        htmlFor="gender"
+                        className="block text-xs font-semibold"
+                        style={{ color: 'hsl(var(--foreground))' }}
+                    >
+                        ፆታ (Gender)
+                    </label>
+                    <select
+                        id="gender"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value as genderType)}
+                        {...fieldBase}
+                    >
+                        {genderOptions.map((option) => (
+                            <option key={option} value={option}>
+                                {option === 'MALE' ? 'ወንድ (Male)' : 'ሴት (Female)'}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-                    <div className="space-y-2">
-                        <label htmlFor="age" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            ዕድሜ (Age)
-                        </label>
-                        <input 
-                            id="age"
-                            type="number"
-                            value={age}
-                            onChange={(e) => {
-                                const value = Number(e.target.value)
-                                setAge(isNaN(value) || value < 0 ? 0 :
-                                value > 150 ? 150 :
-                                value)
-                            }}
-                            placeholder="ዕድሜ"
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all"
-                            required
-                        />
-                    </div>
+                {/* Age — single column */}
+                <div className="space-y-1.5">
+                    <label
+                        htmlFor="age"
+                        className="block text-xs font-semibold"
+                        style={{ color: 'hsl(var(--foreground))' }}
+                    >
+                        ዕድሜ (Age)
+                    </label>
+                    <input
+                        id="age"
+                        type="number"
+                        value={age}
+                        onChange={(e) => {
+                            const value = Number(e.target.value)
+                            setAge(isNaN(value) || value < 0 ? 0 :
+                            value > 150 ? 150 :
+                            value)
+                        }}
+                        placeholder="ዕድሜ"
+                        {...fieldBase}
+                        required
+                    />
                 </div>
             </div>
 
+            {/* Error message */}
             {error && (
-                <div className="p-4 rounded-md border border-destructive/50 bg-destructive/10 text-destructive text-sm font-medium animate-slide-in">
+                <div
+                    className="rounded p-3 text-sm font-medium animate-slide-in"
+                    style={{
+                        background: 'hsl(0 40% 10%)',
+                        border: '1px solid hsl(0 40% 22%)',
+                        color: 'hsl(0 55% 62%)',
+                    }}
+                >
                     {error}
                 </div>
             )}
 
-            <div className="flex items-center justify-end gap-4 pt-4 border-t border-border">
-                <Link 
+            {/* ── Actions ─────────────────────────────────────────────── */}
+            <div
+                className="flex items-center justify-end gap-3 pt-2"
+                style={{ borderTop: '1px solid hsl(var(--border))' }}
+            >
+                <Link
                     href="/members"
-                    className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-accent hover:text-accent-foreground h-10 py-2 px-4"
+                    className="inline-flex items-center justify-center rounded px-3 py-1.5 text-sm font-medium transition-colors duration-150"
+                    style={{
+                        background: 'transparent',
+                        border: '1px solid hsl(var(--border))',
+                        color: 'hsl(var(--muted-foreground))',
+                    }}
                 >
                     Cancel
                 </Link>
                 <button
                     type="submit"
                     disabled={isSaving}
-                    className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-4"
+                    className="inline-flex items-center gap-1.5 rounded px-4 py-1.5 text-sm font-semibold transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                        background: 'hsl(160 70% 32%)',
+                        color: '#fff',
+                    }}
+                    onMouseEnter={(e) => { if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 38%)'; }}
+                    onMouseLeave={(e) => { if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 32%)'; }}
                 >
-                    {isSaving ? 'Saving...' : isEditMode ? 'Save Changes' : 'Create Member'}
+                    {isSaving && <Loader2 size={13} className="animate-spin" />}
+                    {isSaving ? 'Saving…' : isEditMode ? 'Save Changes' : 'Create Member'}
                 </button>
             </div>
         </form>

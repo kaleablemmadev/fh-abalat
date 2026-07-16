@@ -33,113 +33,203 @@ export default async function Home() {
   // TODO: Fetch upcoming events
   const upcomingEventsCount = 0;
 
+  const statCards = [
+    {
+      label: 'Total Members',
+      value: totalMembers,
+      sub: 'Registered members',
+      icon: Users,
+      href: '/members',
+    },
+    {
+      label: 'Attendance Rate',
+      value: attendanceRate,
+      sub: "This week's average",
+      icon: TrendingUp,
+      href: '/attendance/chore',
+    },
+    {
+      label: 'Pending Permissions',
+      value: pendingPermissions,
+      sub: 'Requires review',
+      icon: ShieldAlert,
+      href: '/permissions',
+    },
+    {
+      label: 'Upcoming Events',
+      value: upcomingEventsCount,
+      sub: 'Next 7 days',
+      icon: Calendar,
+      href: '/events',
+    },
+  ];
+
   return (
     <div className="space-y-8 animate-fade-in">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Welcome back. Here's an overview of your organization.
+      {/* Page heading */}
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
+          Dashboard
+        </h1>
+        <p className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>
+          Welcome back. Here&apos;s an overview of your organization.
         </p>
       </div>
 
-      {/* Stats Cards */}
+      {/* ── Stat Cards ─────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm p-6 flex flex-col gap-1 transition-all hover:border-primary/50">
-          <div className="flex flex-row items-center justify-between pb-2">
-            <h3 className="tracking-tight text-sm font-medium text-muted-foreground uppercase">Total Members</h3>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div className="text-2xl font-bold">{totalMembers}</div>
-          <p className="text-xs text-muted-foreground">+0% from last month</p>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm p-6 flex flex-col gap-1 transition-all hover:border-primary/50">
-          <div className="flex flex-row items-center justify-between pb-2">
-            <h3 className="tracking-tight text-sm font-medium text-muted-foreground uppercase">Attendance Rate</h3>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </div>
-          {/* TODO: Implement real attendance rate */}
-          <div className="text-2xl font-bold">{attendanceRate}</div>
-          <p className="text-xs text-muted-foreground">This week's average</p>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm p-6 flex flex-col gap-1 transition-all hover:border-primary/50">
-          <div className="flex flex-row items-center justify-between pb-2">
-            <h3 className="tracking-tight text-sm font-medium text-muted-foreground uppercase">Pending Permissions</h3>
-            <ShieldAlert className="h-4 w-4 text-muted-foreground" />
-          </div>
-          {/* TODO: Implement real pending permissions count */}
-          <div className="text-2xl font-bold">{pendingPermissions}</div>
-          <p className="text-xs text-muted-foreground">Requires review</p>
-        </div>
-
-        <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm p-6 flex flex-col gap-1 transition-all hover:border-primary/50">
-          <div className="flex flex-row items-center justify-between pb-2">
-            <h3 className="tracking-tight text-sm font-medium text-muted-foreground uppercase">Upcoming Events</h3>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </div>
-          {/* TODO: Implement real upcoming events count */}
-          <div className="text-2xl font-bold">{upcomingEventsCount}</div>
-          <p className="text-xs text-muted-foreground">Next 7 days</p>
-        </div>
+        {statCards.map((card) => (
+          <Link
+            key={card.label}
+            href={card.href}
+            className="group block rounded-lg p-5 transition-all duration-150"
+            style={{
+              background: 'hsl(var(--card))',
+              border: '1px solid hsl(var(--border))',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'hsl(160 84% 39% / 0.35)')}
+            onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'hsl(var(--border))')}
+          >
+            <div className="flex items-start justify-between mb-3">
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                {card.label}
+              </p>
+              <div
+                className="w-7 h-7 rounded flex items-center justify-center shrink-0"
+                style={{ background: 'hsl(160 40% 12%)', color: 'hsl(160 60% 55%)' }}
+              >
+                <card.icon size={14} />
+              </div>
+            </div>
+            <div className="text-3xl font-bold tracking-tight mb-1" style={{ color: 'hsl(var(--foreground))' }}>
+              {card.value}
+            </div>
+            <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+              {card.sub}
+            </p>
+          </Link>
+        ))}
       </div>
 
-      {/* Main Content Area */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
+      {/* ── Content grid ───────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
         {/* Recent Members */}
-        <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold tracking-tight">Recent Members</h2>
-            <Link href="/members" className="text-sm font-medium text-primary hover:underline">
-              View all
+        <div
+          className="rounded-lg"
+          style={{
+            background: 'hsl(var(--card))',
+            border: '1px solid hsl(var(--border))',
+          }}
+        >
+          <div
+            className="flex items-center justify-between px-5 py-3.5"
+            style={{ borderBottom: '1px solid hsl(var(--border))' }}
+          >
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground))' }}>
+              Recent Members
+            </p>
+            <Link
+              href="/members"
+              className="text-xs font-medium transition-colors duration-150"
+              style={{ color: 'hsl(160 60% 55%)' }}
+            >
+              View all →
             </Link>
           </div>
           
-          <div className="space-y-4">
+          <div className="p-3">
             {!users ? (
-              <div className="p-6 border border-dashed border-border rounded-lg text-center text-sm text-muted-foreground">
-                Database not connected. Run <code className="px-1 py-0.5 rounded bg-muted">db:seed</code>
+              <div
+                className="rounded p-6 text-center text-sm"
+                style={{
+                  border: '1px dashed hsl(var(--border))',
+                  color: 'hsl(var(--muted-foreground))',
+                }}
+              >
+                Database not connected. Run{' '}
+                <code className="px-1 py-0.5 rounded text-xs">db:seed</code>
               </div>
             ) : users.length === 0 ? (
-              <div className="p-6 border border-dashed border-border rounded-lg text-center text-sm text-muted-foreground">
+              <div
+                className="rounded p-6 text-center text-sm"
+                style={{
+                  border: '1px dashed hsl(var(--border))',
+                  color: 'hsl(var(--muted-foreground))',
+                }}
+              >
                 No members found.
               </div>
             ) : (
-              <div className="space-y-4">
-                {users.map((user, i) => (
-                  <div key={user.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-background transition-colors hover:bg-accent/50 group">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <ul className="divide-y" style={{ borderColor: 'hsl(var(--border))' }}>
+                {users.map((user) => (
+                  <li key={user.id} className="flex items-center justify-between py-2 px-2 rounded transition-colors duration-150 hover:bg-[hsl(var(--accent))]">
+                    <div className="flex items-center gap-3">
+                      {/* Initials avatar */}
+                      <div
+                        className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0"
+                        style={{
+                          background: 'hsl(160 40% 12%)',
+                          color: 'hsl(160 60% 55%)',
+                          border: '1px solid hsl(160 30% 20%)',
+                        }}
+                      >
                         {(user.fullName ?? 'U').charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium leading-none">{user.fullName ?? "Unnamed user"}</p>
-                        <p className="text-sm text-muted-foreground mt-1">{user.memberType?.replace('_', ' ')}</p>
+                        <p className="text-sm font-medium leading-none" style={{ color: 'hsl(var(--foreground))' }}>
+                          {user.fullName ?? 'Unnamed user'}
+                        </p>
+                        <p className="text-xs mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                          {user.memberType?.replace('_', ' ')}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-sm text-muted-foreground bg-secondary px-2 py-1 rounded-md">
+                    <time className="text-[11px]" style={{ color: 'hsl(var(--muted-foreground))' }}>
                       {formatter.format(user.createdAt)}
-                    </div>
-                  </div>
+                    </time>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
           </div>
         </div>
 
-        {/* Upcoming Events (Stub) */}
-        <div className="rounded-xl border border-border bg-card text-card-foreground shadow-sm p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold tracking-tight">Upcoming Events</h2>
-            <Link href="/events" className="text-sm font-medium text-primary hover:underline">
-              View all
+        {/* Upcoming Events */}
+        <div
+          className="rounded-lg flex flex-col"
+          style={{
+            background: 'hsl(var(--card))',
+            border: '1px solid hsl(var(--border))',
+          }}
+        >
+          <div
+            className="flex items-center justify-between px-5 py-3.5"
+            style={{ borderBottom: '1px solid hsl(var(--border))' }}
+          >
+            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground))' }}>
+              Upcoming Events
+            </p>
+            <Link
+              href="/events"
+              className="text-xs font-medium transition-colors duration-150"
+              style={{ color: 'hsl(160 60% 55%)' }}
+            >
+              View all →
             </Link>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center p-6 border border-dashed border-border rounded-lg text-center">
-             <Calendar className="h-10 w-10 text-muted-foreground mb-4 opacity-50" />
-             <p className="text-sm text-muted-foreground">No events scheduled</p>
-             {/* TODO: Render actual upcoming events list here */}
+          <div className="flex-1 flex flex-col items-center justify-center p-8">
+            {/* TODO: Render actual upcoming events list here */}
+            <div
+              className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
+              style={{ background: 'hsl(var(--muted))', color: 'hsl(var(--muted-foreground))' }}
+            >
+              <Calendar size={18} />
+            </div>
+            <p className="text-sm font-medium" style={{ color: 'hsl(var(--foreground))' }}>No events scheduled</p>
+            <p className="text-xs mt-1" style={{ color: 'hsl(var(--muted-foreground))' }}>
+              Events will appear here when created
+            </p>
           </div>
         </div>
 

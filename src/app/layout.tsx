@@ -10,7 +10,7 @@ const inter = Inter({
 import AppLayout from "@/src/components/layout/AppLayout";
 
 export const metadata: Metadata = {
-  title: "fh-abalat",
+  title: "Abalat — Attendance",
   description: "Attendance and Member Management System",
 };
 

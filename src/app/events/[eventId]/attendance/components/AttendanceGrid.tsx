@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, CheckCircle2 } from 'lucide-react';
+import { Check, CheckCircle2, Loader2, X, Clock, Users } from 'lucide-react';
 
 interface Member {
   id: string;
@@ -25,6 +25,82 @@ interface AttendanceGridProps {
   members: Member[];
   attendanceTypes: AttendanceType[];
   initialAttendance: InitialAttendance[];
+}
+
+/** Map an attendance type name to its visual pill properties */
+function getPillStyle(name: string, isSelected: boolean) {
+  const n = name.toLowerCase();
+
+  if (n.includes('attended') || n.includes('present') || n === 'yes') {
+    return {
+      letter: '✓',
+      icon: <Check size={11} strokeWidth={3} />,
+      selected: {
+        background: 'hsl(160 40% 18%)',
+        color:      'hsl(160 65% 70%)',
+        border:     '1px solid hsl(160 40% 30%)',
+      },
+      unselected: {
+        background: 'hsl(var(--card))',
+        color:      'hsl(var(--muted-foreground))',
+        border:     '1px solid hsl(var(--border))',
+      },
+      hoverBorder: 'hsl(160 50% 35%)',
+    };
+  }
+
+  if (n.includes('permission') || n.includes('excused') || n === 'late') {
+    return {
+      letter: 'P',
+      icon: <Clock size={11} strokeWidth={2.5} />,
+      selected: {
+        background: 'hsl(38 35% 16%)',
+        color:      'hsl(38 65% 65%)',
+        border:     '1px solid hsl(38 40% 28%)',
+      },
+      unselected: {
+        background: 'hsl(var(--card))',
+        color:      'hsl(var(--muted-foreground))',
+        border:     '1px solid hsl(var(--border))',
+      },
+      hoverBorder: 'hsl(38 45% 35%)',
+    };
+  }
+
+  if (n.includes('absent') || n === 'no') {
+    return {
+      letter: '✗',
+      icon: <X size={11} strokeWidth={3} />,
+      selected: {
+        background: 'hsl(0 40% 16%)',
+        color:      'hsl(0 55% 65%)',
+        border:     '1px solid hsl(0 40% 28%)',
+      },
+      unselected: {
+        background: 'hsl(var(--card))',
+        color:      'hsl(var(--muted-foreground))',
+        border:     '1px solid hsl(var(--border))',
+      },
+      hoverBorder: 'hsl(0 45% 35%)',
+    };
+  }
+
+  // Default / unknown
+  return {
+    letter: '?',
+    icon: null,
+    selected: {
+      background: 'hsl(160 40% 14%)',
+      color:      'hsl(160 55% 60%)',
+      border:     '1px solid hsl(160 35% 25%)',
+    },
+    unselected: {
+      background: 'hsl(var(--card))',
+      color:      'hsl(var(--muted-foreground))',
+      border:     '1px solid hsl(var(--border))',
+    },
+    hoverBorder: 'hsl(160 40% 30%)',
+  };
 }
 
 export default function AttendanceGrid({
@@ -92,89 +168,145 @@ export default function AttendanceGrid({
     }
   };
 
-  // Helper to determine pill color based on name (Attended = green, Permission = amber, Absent = red)
-  const getPillColors = (name: string, isSelected: boolean) => {
-    const lowerName = name.toLowerCase();
-    if (lowerName.includes('attended') || lowerName.includes('present') || lowerName === 'yes') {
-      return isSelected 
-        ? 'bg-emerald-500 text-white border-emerald-600' 
-        : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/20';
-    }
-    if (lowerName.includes('permission') || lowerName.includes('excused') || lowerName === 'late') {
-      return isSelected 
-        ? 'bg-amber-500 text-white border-amber-600' 
-        : 'bg-amber-500/10 text-amber-500 border-amber-500/20 hover:bg-amber-500/20';
-    }
-    if (lowerName.includes('absent') || lowerName === 'no') {
-      return isSelected 
-        ? 'bg-destructive text-white border-destructive' 
-        : 'bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/20';
-    }
-    // Default
-    return isSelected
-      ? 'bg-primary text-primary-foreground border-primary'
-      : 'bg-accent/50 text-foreground border-border hover:bg-accent';
-  };
-
   return (
-    <div className="flex flex-col relative min-h-[50vh] pb-24">
-      <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden animate-slide-in">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-border bg-muted/50">
-                <th className="p-4 font-medium text-muted-foreground w-1/3">Member Name</th>
-                <th className="p-4 font-medium text-muted-foreground">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {members.map((member) => (
-                <tr key={member.id} className="transition-colors hover:bg-muted/30">
-                  <td className="p-4 font-medium">{member.fullName || 'Unknown'}</td>
-                  <td className="p-4">
-                    <div className="flex flex-wrap gap-2">
-                      {attendanceTypes.map((type) => {
-                        const isSelected = attendanceData[member.id] === type.id;
-                        const colorClass = getPillColors(type.name, isSelected);
-                        return (
-                          <button
-                            key={type.id}
-                            type="button"
-                            onClick={() => handleAttendanceChange(member.id, type.id)}
-                            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${colorClass}`}
-                          >
-                            {isSelected && <Check size={12} className="stroke-[3]" />}
-                            {type.name}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </td>
+    <div className="flex flex-col relative pb-20">
+      {/* ── Attendance table ──────────────────────────────────────────── */}
+      <div
+        className="rounded-lg overflow-hidden animate-slide-in"
+        style={{
+          background: 'hsl(var(--card))',
+          border: '1px solid hsl(var(--border))',
+        }}
+      >
+        {members.length === 0 ? (
+          <div
+            className="p-10 text-center text-sm"
+            style={{ color: 'hsl(var(--muted-foreground))' }}
+          >
+            <Users size={20} className="mx-auto mb-2" style={{ color: 'hsl(var(--muted-foreground))' }} />
+            No members found. Add members first.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr style={{ borderBottom: '1px solid hsl(var(--border))' }}>
+                  <th
+                    className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider w-2/5"
+                    style={{
+                      background: 'hsl(var(--muted))',
+                      color: 'hsl(var(--muted-foreground))',
+                    }}
+                  >
+                    Member
+                  </th>
+                  <th
+                    className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider"
+                    style={{
+                      background: 'hsl(var(--muted))',
+                      color: 'hsl(var(--muted-foreground))',
+                    }}
+                  >
+                    Status
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {members.map((member, idx) => (
+                  <tr
+                    key={member.id}
+                    className="transition-colors duration-100"
+                    style={{
+                      borderBottom: idx < members.length - 1 ? '1px solid hsl(var(--border))' : 'none',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'hsl(var(--accent))')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <td
+                      className="px-4 py-2.5 text-sm font-medium"
+                      style={{ color: 'hsl(var(--foreground))' }}
+                    >
+                      {member.fullName || 'Unknown'}
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex flex-wrap gap-1.5">
+                        {attendanceTypes.map((type) => {
+                          const isSelected = attendanceData[member.id] === type.id;
+                          const props = getPillStyle(type.name, isSelected);
+                          const styleNow = isSelected ? props.selected : props.unselected;
+
+                          return (
+                            <button
+                              key={type.id}
+                              type="button"
+                              onClick={() => handleAttendanceChange(member.id, type.id)}
+                              title={type.name}
+                              className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold transition-all duration-150"
+                              style={styleNow}
+                              onMouseEnter={(e) => {
+                                if (!isSelected) e.currentTarget.style.borderColor = props.hoverBorder;
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!isSelected) e.currentTarget.style.borderColor = 'hsl(var(--border))';
+                              }}
+                            >
+                              {props.icon}
+                              {type.name}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
-      {/* Sticky Bottom Bar */}
-      <div className="fixed bottom-0 left-0 md:left-64 right-0 p-4 bg-background/80 backdrop-blur-md border-t border-border z-40 flex items-center justify-between shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-        <div className="flex items-center gap-4">
-          {error && <p className="text-sm font-medium text-destructive animate-slide-in">{error}</p>}
+      {/* ── Sticky save bar ───────────────────────────────────────────── */}
+      <div
+        className="fixed bottom-0 left-0 md:left-56 right-0 px-5 py-3 z-40 flex items-center justify-between"
+        style={{
+          background: 'hsl(var(--card))',
+          borderTop: '1px solid hsl(var(--border))',
+        }}
+      >
+        {/* Status messages */}
+        <div className="flex items-center gap-3">
+          {error && (
+            <p
+              className="text-sm font-medium animate-slide-in"
+              style={{ color: 'hsl(0 55% 62%)' }}
+            >
+              {error}
+            </p>
+          )}
           {saveSuccess && (
-            <div className="flex items-center gap-2 text-sm font-medium text-emerald-500 animate-slide-in">
-              <CheckCircle2 size={16} />
+            <div
+              className="flex items-center gap-1.5 text-sm font-medium animate-slide-in"
+              style={{ color: 'hsl(160 55% 58%)' }}
+            >
+              <CheckCircle2 size={15} />
               <span>Saved successfully</span>
             </div>
           )}
         </div>
-        
+
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-10 py-2 px-6 shadow-sm"
+          className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            background: 'hsl(160 70% 32%)',
+            color: '#fff',
+          }}
+          onMouseEnter={(e) => { if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 38%)'; }}
+          onMouseLeave={(e) => { if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 32%)'; }}
         >
-          {isSaving ? 'Saving...' : 'Save Attendance'}
+          {isSaving && <Loader2 size={14} className="animate-spin" />}
+          {isSaving ? 'Saving…' : 'Save Attendance'}
         </button>
       </div>
     </div>

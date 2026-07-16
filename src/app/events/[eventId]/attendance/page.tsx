@@ -1,6 +1,7 @@
 import prisma from "@/src/lib/prisma";
 import AttendanceGrid from "./components/AttendanceGrid";
 import { notFound } from "next/navigation";
+import { Calendar, MapPin } from "lucide-react";
 
 export default async function SingleDayAttendancePage({
   params,
@@ -37,20 +38,47 @@ export default async function SingleDayAttendancePage({
   });
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div className="flex flex-col gap-2 border-b border-border pb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+    <div className="space-y-5 animate-fade-in">
+      {/* ── Event header ─────────────────────────────────────────────── */}
+      <div
+        className="pb-4"
+        style={{ borderBottom: '1px solid hsl(var(--border))' }}
+      >
+        <h1
+          className="text-xl font-bold tracking-tight mb-2"
+          style={{ color: 'hsl(var(--foreground))' }}
+        >
           {event.title}
         </h1>
-        <div className="flex items-center gap-2 text-muted-foreground mt-1">
-          <span className="inline-flex items-center rounded-md bg-secondary px-2 py-1 text-xs font-medium ring-1 ring-inset ring-border">
-            {event.date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-medium"
+            style={{
+              background: 'hsl(var(--muted))',
+              color: 'hsl(var(--muted-foreground))',
+              border: '1px solid hsl(var(--border))',
+            }}
+          >
+            <Calendar size={11} />
+            {event.date.toLocaleDateString(undefined, {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
           </span>
           {event.location && (
-            <>
-              <span>•</span>
-              <span className="text-sm">{event.location}</span>
-            </>
+            <span
+              className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-medium"
+              style={{
+                background: 'hsl(var(--muted))',
+                color: 'hsl(var(--muted-foreground))',
+                border: '1px solid hsl(var(--border))',
+              }}
+            >
+              <MapPin size={11} />
+              {event.location}
+            </span>
           )}
         </div>
       </div>

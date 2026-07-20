@@ -1,3 +1,4 @@
+/* /attendance/[type]/page.tsx */
 import prisma from "@/src/lib/prisma";
 import MultiMonthGrid from "../components/MultiMonthGrid";
 import { notFound } from "next/navigation";

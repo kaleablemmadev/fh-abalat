@@ -1,3 +1,4 @@
+/* /events/[eventId]/attendance/page.tsx */
 import prisma from "@/src/lib/prisma";
 import AttendanceGrid from "./components/AttendanceGrid";
 import { notFound } from "next/navigation";

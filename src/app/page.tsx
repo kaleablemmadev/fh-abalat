@@ -1,3 +1,4 @@
+/* ./page.tsx */
 export const dynamic = "force-dynamic";
 
 import { Users, Calendar, ShieldAlert, TrendingUp } from 'lucide-react';

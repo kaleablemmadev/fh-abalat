@@ -1,3 +1,4 @@
+/* /members/[id]/route.ts */
 import MemberDetailClient from "../components/MemberDetailClient";
 
 export default async function MemberDetailPage({

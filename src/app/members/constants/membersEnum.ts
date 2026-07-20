@@ -1,3 +1,4 @@
+/* /members/constants/memberEnum.ts */
 export const userTypeValues = ['ADMIN', 'MEMBER', 'SUPERADMIN'] as const;
 export type userType = (typeof userTypeValues)[number];
 

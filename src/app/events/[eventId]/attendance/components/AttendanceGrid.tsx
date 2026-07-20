@@ -1,3 +1,4 @@
+/* /events/[eventId]/attendance/components/AttendanceGrid.tsx */
 'use client'
 
 import { useState, useEffect } from 'react';

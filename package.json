@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
+    "ethio-date-picker": "^1.0.7",
     "ethiopian-calendar-date-converter": "^2.1.6",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.24.0",

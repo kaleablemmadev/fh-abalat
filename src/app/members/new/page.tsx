@@ -1,3 +1,4 @@
+/* /members/new/page.tsx */
 'use client'
 import MemberForm from '../components/MemberForm';
 

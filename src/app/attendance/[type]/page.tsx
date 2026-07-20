@@ -56,7 +56,12 @@ export default async function MultiMonthAttendancePage({
   const adminId = await getAdminId();
 
   // Get event dates for this Ethiopian month
-  const generatedEvents: Array<{ id: string; ethDate: { year: number; month: string; day: number } }> = [];
+  const generatedEvents: Array<{ 
+    id: string; 
+    title: string; 
+    date: Date; 
+    ethDate: { year: number; month: string; day: number } 
+  }> = [];
 
   if (type === 'chore') {
     // Get all chore days for the month
@@ -90,7 +95,9 @@ export default async function MultiMonthAttendancePage({
       }
       
       generatedEvents.push({
-        ...event,
+        id: event.id,
+        title: event.title,
+        date: event.date,
         ethDate: ethDay,
       });
     }
@@ -125,7 +132,9 @@ export default async function MultiMonthAttendancePage({
       }
       
       generatedEvents.push({
-        ...event,
+        id: event.id,
+        title: event.title,
+        date: event.date,
         ethDate: ethDay,
       });
     }

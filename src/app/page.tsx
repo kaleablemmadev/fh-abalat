@@ -1,25 +1,13 @@
 // ./page.tsx
-export const dynamic = "force-dynamic";
-
 import { Users, Calendar, ShieldAlert, TrendingUp, ChevronRight, UserPlus, Clock } from 'lucide-react';
 import Link from 'next/link';
-import type { Prisma } from '@/src/generated/prisma/client';
+import prisma from "@/src/lib/prisma";
 
-// Types for better type safety
-type UserWithAttendance = Prisma.UserGetPayload<{
-  include: {
-    attendances: {
-      include: {
-        event: true;
-        attendanceType: true;
-      };
-    };
-  };
-}>;
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Home() {
-  const { prisma } = await import("@/src/lib/prisma");
-  
   const formatter = new Intl.DateTimeFormat("en", {
     dateStyle: "medium",
     timeStyle: "short",
@@ -61,7 +49,7 @@ export default async function Home() {
       orderBy: {
         createdAt: "desc",
       },
-    }).catch(() => [] as UserWithAttendance[]),
+    }).catch(() => []),
 
     // Total members count
     prisma.user.count({
@@ -141,8 +129,6 @@ export default async function Home() {
       sub: 'Registered members',
       icon: Users,
       href: '/members',
-      trend: '+12%',
-      trendUp: true,
     },
     {
       label: 'Attendance Rate',
@@ -150,8 +136,6 @@ export default async function Home() {
       sub: "This week's average",
       icon: TrendingUp,
       href: '/attendance/chore',
-      trend: weeklyAttendance > 75 ? 'Excellent' : 'Needs improvement',
-      trendUp: weeklyAttendance > 75,
     },
     {
       label: 'Pending Permissions',
@@ -159,8 +143,6 @@ export default async function Home() {
       sub: 'Requires review',
       icon: ShieldAlert,
       href: '/permissions',
-      trend: pendingPermissions > 0 ? 'Action needed' : 'All clear',
-      trendUp: pendingPermissions === 0,
     },
     {
       label: 'Upcoming Events',
@@ -168,13 +150,11 @@ export default async function Home() {
       sub: 'Next 7 days',
       icon: Calendar,
       href: '/events',
-      trend: upcomingEvents.length > 0 ? `${upcomingEvents.length} events` : 'No events',
-      trendUp: upcomingEvents.length > 0,
     },
   ];
 
   // ─── Get member's last attendance status ──────────────────────────
-  const getLastAttendanceStatus = (member: UserWithAttendance) => {
+  const getLastAttendanceStatus = (member: any) => {
     const lastAttendance = member.attendances?.[0];
     if (!lastAttendance) return null;
     
@@ -244,21 +224,9 @@ export default async function Home() {
             <div className="text-3xl font-bold tracking-tight mb-1" style={{ color: 'hsl(var(--foreground))' }}>
               {card.value}
             </div>
-            <div className="flex items-center justify-between">
-              <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
-                {card.sub}
-              </p>
-              {card.trend && (
-                <span 
-                  className="text-[10px] font-medium"
-                  style={{ 
-                    color: card.trendUp ? 'hsl(160 60% 55%)' : 'hsl(0 55% 55%)',
-                  }}
-                >
-                  {card.trend}
-                </span>
-              )}
-            </div>
+            <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+              {card.sub}
+            </p>
           </Link>
         ))}
       </div>
@@ -313,7 +281,7 @@ export default async function Home() {
               </div>
             ) : (
               <ul className="divide-y" style={{ borderColor: 'hsl(var(--border))' }}>
-                {members.map((user) => {
+                {members.map((user: any) => {
                   const lastStatus = getLastAttendanceStatus(user);
                   return (
                     <li 
@@ -321,7 +289,6 @@ export default async function Home() {
                       className="flex items-center justify-between py-2.5 px-2 rounded transition-colors duration-150 hover:bg-[hsl(var(--accent))] group"
                     >
                       <div className="flex items-center gap-3 min-w-0 flex-1">
-                        {/* Initials avatar */}
                         <div
                           className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0"
                           style={{
@@ -402,18 +369,10 @@ export default async function Home() {
                 <p className="text-xs mt-1" style={{ color: 'hsl(var(--muted-foreground))' }}>
                   Events will appear here when created
                 </p>
-                <Link
-                  href="/events/new"
-                  className="text-xs font-medium mt-4 inline-flex items-center gap-1"
-                  style={{ color: 'hsl(160 60% 55%)' }}
-                >
-                  <Calendar size={12} />
-                  Create event →
-                </Link>
               </div>
             ) : (
               <ul className="space-y-2">
-                {upcomingEvents.map((event) => (
+                {upcomingEvents.map((event: any) => (
                   <li
                     key={event.id}
                     className="rounded-lg p-3 transition-all duration-150 hover:bg-[hsl(var(--accent))] group"

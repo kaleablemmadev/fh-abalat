@@ -1,8 +1,9 @@
-/* /events/[eventId]/attendance/page.tsx */
+// /events/[eventId]/attendance/page.tsx
 import prisma from "@/src/lib/prisma";
 import AttendanceGrid from "./components/AttendanceGrid";
 import { notFound } from "next/navigation";
 import { Calendar, MapPin } from "lucide-react";
+import { dateToEthiopian } from "@/src/lib/ethiopiancal";
 
 export default async function SingleDayAttendancePage({
   params,
@@ -19,6 +20,8 @@ export default async function SingleDayAttendancePage({
   if (!event) {
     notFound();
   }
+
+  const ethDate = dateToEthiopian(new Date(event.date));
 
   // 2. Fetch all Members
   const members = await prisma.user.findMany({
@@ -40,7 +43,7 @@ export default async function SingleDayAttendancePage({
 
   return (
     <div className="space-y-5 animate-fade-in">
-      {/* ── Event header ─────────────────────────────────────────────── */}
+      {/* Event header */}
       <div
         className="pb-4"
         style={{ borderBottom: '1px solid hsl(var(--border))' }}
@@ -61,7 +64,18 @@ export default async function SingleDayAttendancePage({
             }}
           >
             <Calendar size={11} />
-            {event.date.toLocaleDateString(undefined, {
+            {ethDate.month} {ethDate.day}፣ {ethDate.year} ዓ.ም.
+          </span>
+          <span
+            className="inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-medium"
+            style={{
+              background: 'hsl(var(--muted))',
+              color: 'hsl(var(--muted-foreground))',
+              border: '1px solid hsl(var(--border))',
+            }}
+          >
+            <Calendar size={11} />
+            {new Date(event.date).toLocaleDateString(undefined, {
               weekday: 'long',
               year: 'numeric',
               month: 'long',

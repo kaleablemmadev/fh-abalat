@@ -8,38 +8,40 @@ import { Edit2, ArrowLeft } from "lucide-react";
 interface Member {
   id: string;
   fullName: string | null;
+  christianName: string | null;
   gender: "MALE" | "FEMALE";
   age: number;
-  memberType: string | null;
+  memberType: "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT" | null;
   type: string;
+  registerDateDay: number | null;
+  registerDateMonth: string | null;
+  registerDateYear: number | null;
 }
 
 const memberTypeLabels: Record<string, string> = {
   COURSE_STUDENT: "Course Student",
   REGULAR_MEMBER: "Regular Member",
-  YOUTH_STUDENT:  "Youth Student",
+  YOUTH_STUDENT: "Youth Student",
 };
 
 const memberTypeColors: Record<string, string> = {
   COURSE_STUDENT: "bg-sky-500/10 text-sky-400 border-sky-500/20",
   REGULAR_MEMBER: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  YOUTH_STUDENT:  "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  YOUTH_STUDENT: "bg-amber-500/10 text-amber-400 border-amber-500/20",
 };
 
 const genderLabels: Record<string, string> = {
-  MALE:   "Male",
+  MALE: "Male",
   FEMALE: "Female",
 };
 
 export default function MemberDetailClient({ memberId }: { memberId: string }) {
   const [member, setMember] = useState<Member | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(memberId ? null : "Member ID is missing.");
+  const [isLoading, setIsLoading] = useState(!!memberId);
 
   useEffect(() => {
     if (!memberId) {
-      setError("Member ID is missing.");
-      setIsLoading(false);
       return;
     }
 
@@ -55,7 +57,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
         if (!res.ok) {
           const errorData = await res.json().catch(() => null);
           throw new Error(
-            errorData?.error || `Unable to load member (${res.status})`,
+            errorData?.error || `Unable to load member (${res.status})`
           );
         }
 
@@ -72,80 +74,100 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
     loadMember();
   }, [memberId]);
 
-  const badgeClass =
-    member?.memberType
-      ? memberTypeColors[member.memberType] ?? "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"
-      : "bg-zinc-500/10 text-zinc-400 border-zinc-500/20";
+  const badgeClass = member?.memberType
+    ? memberTypeColors[member.memberType] ??
+      "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"
+    : "bg-zinc-500/10 text-zinc-400 border-zinc-500/20";
 
   return (
     <div className="space-y-5 animate-fade-in max-w-lg">
-      {/* ── Breadcrumb ─────────────────────────────────────────────────── */}
-      <nav className="flex items-center gap-1.5 text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+      <nav
+        className="flex items-center gap-1.5 text-xs"
+        style={{ color: "hsl(var(--muted-foreground))" }}
+      >
         <Link
           href="/"
           className="transition-colors duration-150 hover:text-zinc-200"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
+          style={{ color: "hsl(var(--muted-foreground))" }}
         >
           Home
         </Link>
-        <span style={{ color: 'hsl(var(--border))' }}>/</span>
+        <span style={{ color: "hsl(var(--border))" }}>/</span>
         <Link
           href="/members"
           className="transition-colors duration-150 hover:text-zinc-200"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
+          style={{ color: "hsl(var(--muted-foreground))" }}
         >
           Members
         </Link>
-        <span style={{ color: 'hsl(var(--border))' }}>/</span>
-        <span style={{ color: 'hsl(var(--foreground))' }}>Profile</span>
+        <span style={{ color: "hsl(var(--border))" }}>/</span>
+        <span style={{ color: "hsl(var(--foreground))" }}>Profile</span>
       </nav>
 
-      {/* ── Page title ─────────────────────────────────────────────────── */}
       <div>
         <p
           className="text-[10px] font-bold uppercase tracking-widest mb-1"
-          style={{ color: 'hsl(160 55% 50%)' }}
+          style={{ color: "hsl(160 55% 50%)" }}
         >
           Member profile
         </p>
         <h1
           className="text-xl font-bold tracking-tight"
-          style={{ color: 'hsl(var(--foreground))' }}
+          style={{ color: "hsl(var(--foreground))" }}
         >
-          {member?.fullName ?? 'Member profile'}
+          {member?.fullName ?? "Member profile"}
         </h1>
       </div>
 
-      {/* ── Detail card ────────────────────────────────────────────────── */}
       <section
-        className="rounded-lg animate-slide-in"
+        className="rounded-lg animate-slide-in overflow-hidden"
         style={{
-          background: 'hsl(var(--card))',
-          border: '1px solid hsl(var(--border))',
+          background: "hsl(var(--card))",
+          border: "1px solid hsl(var(--border))",
         }}
       >
         {isLoading ? (
-          /* Skeleton matching the detail layout */
           <div className="p-5 space-y-4">
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-3">
               <div className="space-y-2 flex-1">
-                <div className="skeleton h-4 w-1/2 rounded" style={{ background: 'hsl(var(--border))' }} />
-                <div className="skeleton h-3 w-1/4 rounded" style={{ background: 'hsl(var(--border))' }} />
+                <div
+                  className="h-4 w-1/2 rounded"
+                  style={{ background: "hsl(var(--border))" }}
+                />
+                <div
+                  className="h-3 w-1/4 rounded"
+                  style={{ background: "hsl(var(--border))" }}
+                />
               </div>
-              <div className="skeleton h-5 w-20 rounded-full shrink-0" style={{ background: 'hsl(var(--border))' }} />
+              <div
+                className="h-5 w-20 rounded-full shrink-0"
+                style={{ background: "hsl(var(--border))" }}
+              />
             </div>
+
             <div className="grid grid-cols-2 gap-2 pt-2">
-              <div className="skeleton h-14 rounded" style={{ background: 'hsl(var(--border))' }} />
-              <div className="skeleton h-14 rounded" style={{ background: 'hsl(var(--border))' }} />
+              <div
+                className="h-14 rounded"
+                style={{ background: "hsl(var(--border))" }}
+              />
+              <div
+                className="h-14 rounded"
+                style={{ background: "hsl(var(--border))" }}
+              />
             </div>
+
+            <div
+              className="h-12 rounded"
+              style={{ background: "hsl(var(--border))" }}
+            />
           </div>
         ) : error ? (
           <div
             className="m-4 rounded p-5 text-center text-sm font-medium"
             style={{
-              background: 'hsl(0 40% 10%)',
-              border: '1px dashed hsl(0 40% 22%)',
-              color: 'hsl(0 55% 60%)',
+              background: "hsl(0 40% 10%)",
+              border: "1px dashed hsl(0 40% 22%)",
+              color: "hsl(0 55% 60%)",
             }}
           >
             <strong>Error:</strong> {error}
@@ -154,102 +176,164 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
           <div
             className="m-4 rounded p-5 text-center text-sm"
             style={{
-              border: '1px dashed hsl(var(--border))',
-              color: 'hsl(var(--muted-foreground))',
+              border: "1px dashed hsl(var(--border))",
+              color: "hsl(var(--muted-foreground))",
             }}
           >
             Member not found.
           </div>
         ) : (
           <div>
-            {/* Header */}
             <div
               className="flex items-start justify-between gap-3 px-5 py-4"
-              style={{ borderBottom: '1px solid hsl(var(--border))' }}
+              style={{ borderBottom: "1px solid hsl(var(--border))" }}
             >
               <div className="space-y-0.5">
                 <h2
                   className="text-base font-semibold leading-tight"
-                  style={{ color: 'hsl(var(--foreground))' }}
+                  style={{ color: "hsl(var(--foreground))" }}
                 >
-                  {member.fullName ?? 'Unnamed member'}
+                  {member.fullName ?? "Unnamed member"}
                 </h2>
-                <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                <p
+                  className="text-xs"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
                   {genderLabels[member.gender] ?? member.gender}
                 </p>
               </div>
+
               <span
-                className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold shrink-0 ${badgeClass}`}
+                className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold shrink-0 ${
+                  badgeClass
+                }`}
               >
-                {memberTypeLabels[member.memberType ?? ''] ?? member.memberType}
+                {member.memberType
+                  ? memberTypeLabels[member.memberType] ?? member.memberType
+                  : "No type"}
               </span>
             </div>
 
-            {/* Stats grid */}
             <div className="grid grid-cols-2 gap-2 p-4">
               <div
                 className="rounded p-3"
                 style={{
-                  background: 'hsl(var(--background))',
-                  border: '1px solid hsl(var(--border))',
+                  background: "hsl(var(--background))",
+                  border: "1px solid hsl(var(--border))",
                 }}
               >
                 <p
                   className="text-[10px] font-semibold uppercase tracking-wider mb-1"
-                  style={{ color: 'hsl(var(--muted-foreground))' }}
+                  style={{ color: "hsl(var(--muted-foreground))" }}
                 >
                   Age
                 </p>
-                <p className="text-sm font-semibold" style={{ color: 'hsl(var(--foreground))' }}>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "hsl(var(--foreground))" }}
+                >
                   {member.age}
                 </p>
               </div>
+
               <div
                 className="rounded p-3"
                 style={{
-                  background: 'hsl(var(--background))',
-                  border: '1px solid hsl(var(--border))',
+                  background: "hsl(var(--background))",
+                  border: "1px solid hsl(var(--border))",
                 }}
               >
                 <p
                   className="text-[10px] font-semibold uppercase tracking-wider mb-1"
-                  style={{ color: 'hsl(var(--muted-foreground))' }}
+                  style={{ color: "hsl(var(--muted-foreground))" }}
                 >
                   Member ID
                 </p>
                 <p
                   className="text-xs font-medium font-mono break-all leading-relaxed"
-                  style={{ color: 'hsl(var(--foreground))' }}
+                  style={{ color: "hsl(var(--foreground))" }}
                 >
                   {member.id}
                 </p>
               </div>
+
+              <div
+                className="rounded p-3"
+                style={{
+                  background: "hsl(var(--background))",
+                  border: "1px solid hsl(var(--border))",
+                }}
+              >
+                <p
+                  className="text-[10px] font-semibold uppercase tracking-wider mb-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
+                  Christian Name
+                </p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "hsl(var(--foreground))" }}
+                >
+                  {member.christianName ?? "-"}
+                </p>
+              </div>
+
+              <div
+                className="rounded p-3"
+                style={{
+                  background: "hsl(var(--background))",
+                  border: "1px solid hsl(var(--border))",
+                }}
+              >
+                <p
+                  className="text-[10px] font-semibold uppercase tracking-wider mb-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
+                  Registration Date
+                </p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "hsl(var(--foreground))" }}
+                >
+                  {member.registerDateDay && member.registerDateMonth && member.registerDateYear
+                    ? `${member.registerDateDay} ${member.registerDateMonth} ${member.registerDateYear}`
+                    : "-"}
+                </p>
+              </div>
             </div>
 
-            {/* Actions */}
             <div
               className="flex items-center justify-between gap-3 px-4 py-3"
-              style={{ borderTop: '1px solid hsl(var(--border))' }}
+              style={{ borderTop: "1px solid hsl(var(--border))" }}
             >
               <Link
                 href="/members"
                 className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors duration-150"
-                style={{ color: 'hsl(var(--muted-foreground))' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'hsl(var(--foreground))')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'hsl(var(--muted-foreground))')}
+                style={{ color: "hsl(var(--muted-foreground))" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "hsl(var(--foreground))")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "hsl(var(--muted-foreground))")
+                }
               >
                 <ArrowLeft size={12} />
                 Back to roster
               </Link>
+
               <Link
                 href={`/members/${memberId}/edit`}
                 className="inline-flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-semibold transition-colors duration-150"
                 style={{
-                  background: 'hsl(160 70% 32%)',
-                  color: '#fff',
+                  background: "hsl(160 70% 32%)",
+                  color: "#fff",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'hsl(160 70% 38%)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'hsl(160 70% 32%)')}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.background = "hsl(160 70% 38%)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.background = "hsl(160 70% 32%)")
+                }
               >
                 <Edit2 size={12} />
                 Edit Profile

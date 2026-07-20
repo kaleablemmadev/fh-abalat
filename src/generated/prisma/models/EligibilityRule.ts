@@ -433,14 +433,6 @@ export type EligibilityRuleUpdateOneWithoutEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EligibilityRuleUpdateToOneWithWhereWithoutEventsInput, Prisma.EligibilityRuleUpdateWithoutEventsInput>, Prisma.EligibilityRuleUncheckedUpdateWithoutEventsInput>
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EligibilityRuleCreateWithoutEventsInput = {
   id?: string
   name: string

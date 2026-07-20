@@ -31,6 +31,7 @@ export type PermissionMinAggregateOutputType = {
   reason: string | null
   status: $Enums.permissionStatus | null
   reviewedById: string | null
+  ethiopianDate: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,6 +43,7 @@ export type PermissionMaxAggregateOutputType = {
   reason: string | null
   status: $Enums.permissionStatus | null
   reviewedById: string | null
+  ethiopianDate: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,6 +55,7 @@ export type PermissionCountAggregateOutputType = {
   reason: number
   status: number
   reviewedById: number
+  ethiopianDate: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -66,6 +69,7 @@ export type PermissionMinAggregateInputType = {
   reason?: true
   status?: true
   reviewedById?: true
+  ethiopianDate?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -77,6 +81,7 @@ export type PermissionMaxAggregateInputType = {
   reason?: true
   status?: true
   reviewedById?: true
+  ethiopianDate?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +93,7 @@ export type PermissionCountAggregateInputType = {
   reason?: true
   status?: true
   reviewedById?: true
+  ethiopianDate?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -172,6 +178,7 @@ export type PermissionGroupByOutputType = {
   reason: string | null
   status: $Enums.permissionStatus
   reviewedById: string | null
+  ethiopianDate: string | null
   createdAt: Date
   updatedAt: Date
   _count: PermissionCountAggregateOutputType | null
@@ -204,6 +211,7 @@ export type PermissionWhereInput = {
   reason?: Prisma.StringNullableFilter<"Permission"> | string | null
   status?: Prisma.EnumpermissionStatusFilter<"Permission"> | $Enums.permissionStatus
   reviewedById?: Prisma.StringNullableFilter<"Permission"> | string | null
+  ethiopianDate?: Prisma.StringNullableFilter<"Permission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
   member?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -219,6 +227,7 @@ export type PermissionOrderByWithRelationInput = {
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  ethiopianDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   member?: Prisma.UserOrderByWithRelationInput
@@ -237,6 +246,7 @@ export type PermissionWhereUniqueInput = Prisma.AtLeast<{
   reason?: Prisma.StringNullableFilter<"Permission"> | string | null
   status?: Prisma.EnumpermissionStatusFilter<"Permission"> | $Enums.permissionStatus
   reviewedById?: Prisma.StringNullableFilter<"Permission"> | string | null
+  ethiopianDate?: Prisma.StringNullableFilter<"Permission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
   member?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -252,6 +262,7 @@ export type PermissionOrderByWithAggregationInput = {
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  ethiopianDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PermissionCountOrderByAggregateInput
@@ -269,6 +280,7 @@ export type PermissionScalarWhereWithAggregatesInput = {
   reason?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
   status?: Prisma.EnumpermissionStatusWithAggregatesFilter<"Permission"> | $Enums.permissionStatus
   reviewedById?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
+  ethiopianDate?: Prisma.StringNullableWithAggregatesFilter<"Permission"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Permission"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Permission"> | Date | string
 }
@@ -277,6 +289,7 @@ export type PermissionCreateInput = {
   id?: string
   reason?: string | null
   status?: $Enums.permissionStatus
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutPermissionsInput
@@ -292,6 +305,7 @@ export type PermissionUncheckedCreateInput = {
   reason?: string | null
   status?: $Enums.permissionStatus
   reviewedById?: string | null
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutPermissionInput
@@ -301,6 +315,7 @@ export type PermissionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutPermissionsNestedInput
@@ -316,6 +331,7 @@ export type PermissionUncheckedUpdateInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutPermissionNestedInput
@@ -328,6 +344,7 @@ export type PermissionCreateManyInput = {
   reason?: string | null
   status?: $Enums.permissionStatus
   reviewedById?: string | null
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -336,6 +353,7 @@ export type PermissionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -347,6 +365,7 @@ export type PermissionUncheckedUpdateManyInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -373,6 +392,7 @@ export type PermissionCountOrderByAggregateInput = {
   reason?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
+  ethiopianDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -384,6 +404,7 @@ export type PermissionMaxOrderByAggregateInput = {
   reason?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
+  ethiopianDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -395,6 +416,7 @@ export type PermissionMinOrderByAggregateInput = {
   reason?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reviewedById?: Prisma.SortOrder
+  ethiopianDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -549,6 +571,7 @@ export type PermissionCreateWithoutMemberInput = {
   id?: string
   reason?: string | null
   status?: $Enums.permissionStatus
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   permissionType: Prisma.PermissionTypeCreateNestedOneWithoutPermissionsInput
@@ -562,6 +585,7 @@ export type PermissionUncheckedCreateWithoutMemberInput = {
   reason?: string | null
   status?: $Enums.permissionStatus
   reviewedById?: string | null
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutPermissionInput
@@ -581,6 +605,7 @@ export type PermissionCreateWithoutReviewedByInput = {
   id?: string
   reason?: string | null
   status?: $Enums.permissionStatus
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutPermissionsInput
@@ -594,6 +619,7 @@ export type PermissionUncheckedCreateWithoutReviewedByInput = {
   permissionTypeId: string
   reason?: string | null
   status?: $Enums.permissionStatus
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutPermissionInput
@@ -635,6 +661,7 @@ export type PermissionScalarWhereInput = {
   reason?: Prisma.StringNullableFilter<"Permission"> | string | null
   status?: Prisma.EnumpermissionStatusFilter<"Permission"> | $Enums.permissionStatus
   reviewedById?: Prisma.StringNullableFilter<"Permission"> | string | null
+  ethiopianDate?: Prisma.StringNullableFilter<"Permission"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Permission"> | Date | string
 }
@@ -659,6 +686,7 @@ export type PermissionCreateWithoutAttendancesInput = {
   id?: string
   reason?: string | null
   status?: $Enums.permissionStatus
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutPermissionsInput
@@ -673,6 +701,7 @@ export type PermissionUncheckedCreateWithoutAttendancesInput = {
   reason?: string | null
   status?: $Enums.permissionStatus
   reviewedById?: string | null
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -697,6 +726,7 @@ export type PermissionUpdateWithoutAttendancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutPermissionsNestedInput
@@ -711,6 +741,7 @@ export type PermissionUncheckedUpdateWithoutAttendancesInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -719,6 +750,7 @@ export type PermissionCreateWithoutPermissionTypeInput = {
   id?: string
   reason?: string | null
   status?: $Enums.permissionStatus
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutPermissionsInput
@@ -732,6 +764,7 @@ export type PermissionUncheckedCreateWithoutPermissionTypeInput = {
   reason?: string | null
   status?: $Enums.permissionStatus
   reviewedById?: string | null
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutPermissionInput
@@ -769,6 +802,7 @@ export type PermissionCreateManyMemberInput = {
   reason?: string | null
   status?: $Enums.permissionStatus
   reviewedById?: string | null
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -779,6 +813,7 @@ export type PermissionCreateManyReviewedByInput = {
   permissionTypeId: string
   reason?: string | null
   status?: $Enums.permissionStatus
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -787,6 +822,7 @@ export type PermissionUpdateWithoutMemberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   permissionType?: Prisma.PermissionTypeUpdateOneRequiredWithoutPermissionsNestedInput
@@ -800,6 +836,7 @@ export type PermissionUncheckedUpdateWithoutMemberInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutPermissionNestedInput
@@ -811,6 +848,7 @@ export type PermissionUncheckedUpdateManyWithoutMemberInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -819,6 +857,7 @@ export type PermissionUpdateWithoutReviewedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutPermissionsNestedInput
@@ -832,6 +871,7 @@ export type PermissionUncheckedUpdateWithoutReviewedByInput = {
   permissionTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutPermissionNestedInput
@@ -843,6 +883,7 @@ export type PermissionUncheckedUpdateManyWithoutReviewedByInput = {
   permissionTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -853,6 +894,7 @@ export type PermissionCreateManyPermissionTypeInput = {
   reason?: string | null
   status?: $Enums.permissionStatus
   reviewedById?: string | null
+  ethiopianDate?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -861,6 +903,7 @@ export type PermissionUpdateWithoutPermissionTypeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutPermissionsNestedInput
@@ -874,6 +917,7 @@ export type PermissionUncheckedUpdateWithoutPermissionTypeInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutPermissionNestedInput
@@ -885,6 +929,7 @@ export type PermissionUncheckedUpdateManyWithoutPermissionTypeInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumpermissionStatusFieldUpdateOperationsInput | $Enums.permissionStatus
   reviewedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -927,6 +972,7 @@ export type PermissionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   reason?: boolean
   status?: boolean
   reviewedById?: boolean
+  ethiopianDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -943,6 +989,7 @@ export type PermissionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   reason?: boolean
   status?: boolean
   reviewedById?: boolean
+  ethiopianDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -957,6 +1004,7 @@ export type PermissionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   reason?: boolean
   status?: boolean
   reviewedById?: boolean
+  ethiopianDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -971,11 +1019,12 @@ export type PermissionSelectScalar = {
   reason?: boolean
   status?: boolean
   reviewedById?: boolean
+  ethiopianDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "permissionTypeId" | "reason" | "status" | "reviewedById" | "createdAt" | "updatedAt", ExtArgs["result"]["permission"]>
+export type PermissionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "permissionTypeId" | "reason" | "status" | "reviewedById" | "ethiopianDate" | "createdAt" | "updatedAt", ExtArgs["result"]["permission"]>
 export type PermissionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   permissionType?: boolean | Prisma.PermissionTypeDefaultArgs<ExtArgs>
@@ -1009,6 +1058,7 @@ export type $PermissionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     reason: string | null
     status: $Enums.permissionStatus
     reviewedById: string | null
+    ethiopianDate: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["permission"]>
@@ -1444,6 +1494,7 @@ export interface PermissionFieldRefs {
   readonly reason: Prisma.FieldRef<"Permission", 'String'>
   readonly status: Prisma.FieldRef<"Permission", 'permissionStatus'>
   readonly reviewedById: Prisma.FieldRef<"Permission", 'String'>
+  readonly ethiopianDate: Prisma.FieldRef<"Permission", 'String'>
   readonly createdAt: Prisma.FieldRef<"Permission", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Permission", 'DateTime'>
 }

@@ -29,7 +29,7 @@ interface AttendanceGridProps {
 }
 
 /** Map an attendance type name to its visual pill properties */
-function getPillStyle(name: string, isSelected: boolean) {
+function getPillStyle(name: string, _isSelected: boolean) {
   const n = name.toLowerCase();
 
   if (n.includes('attended') || n.includes('present') || n === 'yes') {

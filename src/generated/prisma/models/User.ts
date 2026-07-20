@@ -40,10 +40,13 @@ export type UserMinAggregateOutputType = {
   gender: $Enums.genderType | null
   type: $Enums.userType | null
   age: number | null
+  christianName: string | null
+  registerDate: string | null
   email: string | null
   memberType: $Enums.memberType | null
   createdAt: Date | null
   updatedAt: Date | null
+  ethiopianCreatedAt: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -52,10 +55,13 @@ export type UserMaxAggregateOutputType = {
   gender: $Enums.genderType | null
   type: $Enums.userType | null
   age: number | null
+  christianName: string | null
+  registerDate: string | null
   email: string | null
   memberType: $Enums.memberType | null
   createdAt: Date | null
   updatedAt: Date | null
+  ethiopianCreatedAt: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -64,10 +70,13 @@ export type UserCountAggregateOutputType = {
   gender: number
   type: number
   age: number
+  christianName: number
+  registerDate: number
   email: number
   memberType: number
   createdAt: number
   updatedAt: number
+  ethiopianCreatedAt: number
   _all: number
 }
 
@@ -86,10 +95,13 @@ export type UserMinAggregateInputType = {
   gender?: true
   type?: true
   age?: true
+  christianName?: true
+  registerDate?: true
   email?: true
   memberType?: true
   createdAt?: true
   updatedAt?: true
+  ethiopianCreatedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -98,10 +110,13 @@ export type UserMaxAggregateInputType = {
   gender?: true
   type?: true
   age?: true
+  christianName?: true
+  registerDate?: true
   email?: true
   memberType?: true
   createdAt?: true
   updatedAt?: true
+  ethiopianCreatedAt?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -110,10 +125,13 @@ export type UserCountAggregateInputType = {
   gender?: true
   type?: true
   age?: true
+  christianName?: true
+  registerDate?: true
   email?: true
   memberType?: true
   createdAt?: true
   updatedAt?: true
+  ethiopianCreatedAt?: true
   _all?: true
 }
 
@@ -209,10 +227,13 @@ export type UserGroupByOutputType = {
   gender: $Enums.genderType
   type: $Enums.userType
   age: number
+  christianName: string | null
+  registerDate: string | null
   email: string | null
   memberType: $Enums.memberType | null
   createdAt: Date
   updatedAt: Date
+  ethiopianCreatedAt: string | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -244,10 +265,13 @@ export type UserWhereInput = {
   gender?: Prisma.EnumgenderTypeFilter<"User"> | $Enums.genderType
   type?: Prisma.EnumuserTypeFilter<"User"> | $Enums.userType
   age?: Prisma.IntFilter<"User"> | number
+  christianName?: Prisma.StringNullableFilter<"User"> | string | null
+  registerDate?: Prisma.StringNullableFilter<"User"> | string | null
   email?: Prisma.StringNullableFilter<"User"> | string | null
   memberType?: Prisma.EnummemberTypeNullableFilter<"User"> | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  ethiopianCreatedAt?: Prisma.StringNullableFilter<"User"> | string | null
   attendances?: Prisma.AttendanceListRelationFilter
   markedAttendances?: Prisma.AttendanceListRelationFilter
   permissions?: Prisma.PermissionListRelationFilter
@@ -261,10 +285,13 @@ export type UserOrderByWithRelationInput = {
   gender?: Prisma.SortOrder
   type?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  christianName?: Prisma.SortOrderInput | Prisma.SortOrder
+  registerDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   memberType?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  ethiopianCreatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   attendances?: Prisma.AttendanceOrderByRelationAggregateInput
   markedAttendances?: Prisma.AttendanceOrderByRelationAggregateInput
   permissions?: Prisma.PermissionOrderByRelationAggregateInput
@@ -282,9 +309,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   gender?: Prisma.EnumgenderTypeFilter<"User"> | $Enums.genderType
   type?: Prisma.EnumuserTypeFilter<"User"> | $Enums.userType
   age?: Prisma.IntFilter<"User"> | number
+  christianName?: Prisma.StringNullableFilter<"User"> | string | null
+  registerDate?: Prisma.StringNullableFilter<"User"> | string | null
   memberType?: Prisma.EnummemberTypeNullableFilter<"User"> | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  ethiopianCreatedAt?: Prisma.StringNullableFilter<"User"> | string | null
   attendances?: Prisma.AttendanceListRelationFilter
   markedAttendances?: Prisma.AttendanceListRelationFilter
   permissions?: Prisma.PermissionListRelationFilter
@@ -298,10 +328,13 @@ export type UserOrderByWithAggregationInput = {
   gender?: Prisma.SortOrder
   type?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  christianName?: Prisma.SortOrderInput | Prisma.SortOrder
+  registerDate?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   memberType?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  ethiopianCreatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -318,10 +351,13 @@ export type UserScalarWhereWithAggregatesInput = {
   gender?: Prisma.EnumgenderTypeWithAggregatesFilter<"User"> | $Enums.genderType
   type?: Prisma.EnumuserTypeWithAggregatesFilter<"User"> | $Enums.userType
   age?: Prisma.IntWithAggregatesFilter<"User"> | number
+  christianName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  registerDate?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   memberType?: Prisma.EnummemberTypeNullableWithAggregatesFilter<"User"> | $Enums.memberType | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  ethiopianCreatedAt?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -330,10 +366,13 @@ export type UserCreateInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceCreateNestedManyWithoutMemberInput
   markedAttendances?: Prisma.AttendanceCreateNestedManyWithoutMarkedByInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutMemberInput
@@ -347,10 +386,13 @@ export type UserUncheckedCreateInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMemberInput
   markedAttendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMarkedByInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutMemberInput
@@ -364,10 +406,13 @@ export type UserUpdateInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUpdateManyWithoutMemberNestedInput
   markedAttendances?: Prisma.AttendanceUpdateManyWithoutMarkedByNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutMemberNestedInput
@@ -381,10 +426,13 @@ export type UserUncheckedUpdateInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMemberNestedInput
   markedAttendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutMemberNestedInput
@@ -398,10 +446,13 @@ export type UserCreateManyInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -410,10 +461,13 @@ export type UserUpdateManyMutationInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -422,10 +476,13 @@ export type UserUncheckedUpdateManyInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -434,10 +491,13 @@ export type UserCountOrderByAggregateInput = {
   gender?: Prisma.SortOrder
   type?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  christianName?: Prisma.SortOrder
+  registerDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   memberType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  ethiopianCreatedAt?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -450,10 +510,13 @@ export type UserMaxOrderByAggregateInput = {
   gender?: Prisma.SortOrder
   type?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  christianName?: Prisma.SortOrder
+  registerDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   memberType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  ethiopianCreatedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -462,10 +525,13 @@ export type UserMinOrderByAggregateInput = {
   gender?: Prisma.SortOrder
   type?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  christianName?: Prisma.SortOrder
+  registerDate?: Prisma.SortOrder
   email?: Prisma.SortOrder
   memberType?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  ethiopianCreatedAt?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -592,10 +658,13 @@ export type UserCreateWithoutCreatedEventsInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceCreateNestedManyWithoutMemberInput
   markedAttendances?: Prisma.AttendanceCreateNestedManyWithoutMarkedByInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutMemberInput
@@ -608,10 +677,13 @@ export type UserUncheckedCreateWithoutCreatedEventsInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMemberInput
   markedAttendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMarkedByInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutMemberInput
@@ -640,10 +712,13 @@ export type UserUpdateWithoutCreatedEventsInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUpdateManyWithoutMemberNestedInput
   markedAttendances?: Prisma.AttendanceUpdateManyWithoutMarkedByNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutMemberNestedInput
@@ -656,10 +731,13 @@ export type UserUncheckedUpdateWithoutCreatedEventsInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMemberNestedInput
   markedAttendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutMemberNestedInput
@@ -672,10 +750,13 @@ export type UserCreateWithoutAttendancesInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   markedAttendances?: Prisma.AttendanceCreateNestedManyWithoutMarkedByInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutMemberInput
   reviewedPermissions?: Prisma.PermissionCreateNestedManyWithoutReviewedByInput
@@ -688,10 +769,13 @@ export type UserUncheckedCreateWithoutAttendancesInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   markedAttendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMarkedByInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutMemberInput
   reviewedPermissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutReviewedByInput
@@ -709,10 +793,13 @@ export type UserCreateWithoutMarkedAttendancesInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceCreateNestedManyWithoutMemberInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutMemberInput
   reviewedPermissions?: Prisma.PermissionCreateNestedManyWithoutReviewedByInput
@@ -725,10 +812,13 @@ export type UserUncheckedCreateWithoutMarkedAttendancesInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMemberInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutMemberInput
   reviewedPermissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutReviewedByInput
@@ -757,10 +847,13 @@ export type UserUpdateWithoutAttendancesInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedAttendances?: Prisma.AttendanceUpdateManyWithoutMarkedByNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutMemberNestedInput
   reviewedPermissions?: Prisma.PermissionUpdateManyWithoutReviewedByNestedInput
@@ -773,10 +866,13 @@ export type UserUncheckedUpdateWithoutAttendancesInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedAttendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutMemberNestedInput
   reviewedPermissions?: Prisma.PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -800,10 +896,13 @@ export type UserUpdateWithoutMarkedAttendancesInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUpdateManyWithoutMemberNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutMemberNestedInput
   reviewedPermissions?: Prisma.PermissionUpdateManyWithoutReviewedByNestedInput
@@ -816,10 +915,13 @@ export type UserUncheckedUpdateWithoutMarkedAttendancesInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMemberNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutMemberNestedInput
   reviewedPermissions?: Prisma.PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -832,10 +934,13 @@ export type UserCreateWithoutPermissionsInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceCreateNestedManyWithoutMemberInput
   markedAttendances?: Prisma.AttendanceCreateNestedManyWithoutMarkedByInput
   reviewedPermissions?: Prisma.PermissionCreateNestedManyWithoutReviewedByInput
@@ -848,10 +953,13 @@ export type UserUncheckedCreateWithoutPermissionsInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMemberInput
   markedAttendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMarkedByInput
   reviewedPermissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutReviewedByInput
@@ -869,10 +977,13 @@ export type UserCreateWithoutReviewedPermissionsInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceCreateNestedManyWithoutMemberInput
   markedAttendances?: Prisma.AttendanceCreateNestedManyWithoutMarkedByInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutMemberInput
@@ -885,10 +996,13 @@ export type UserUncheckedCreateWithoutReviewedPermissionsInput = {
   gender?: $Enums.genderType
   type?: $Enums.userType
   age: number
+  christianName?: string | null
+  registerDate?: string | null
   email?: string | null
   memberType?: $Enums.memberType | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ethiopianCreatedAt?: string | null
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMemberInput
   markedAttendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMarkedByInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutMemberInput
@@ -917,10 +1031,13 @@ export type UserUpdateWithoutPermissionsInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUpdateManyWithoutMemberNestedInput
   markedAttendances?: Prisma.AttendanceUpdateManyWithoutMarkedByNestedInput
   reviewedPermissions?: Prisma.PermissionUpdateManyWithoutReviewedByNestedInput
@@ -933,10 +1050,13 @@ export type UserUncheckedUpdateWithoutPermissionsInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMemberNestedInput
   markedAttendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
   reviewedPermissions?: Prisma.PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
@@ -960,10 +1080,13 @@ export type UserUpdateWithoutReviewedPermissionsInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUpdateManyWithoutMemberNestedInput
   markedAttendances?: Prisma.AttendanceUpdateManyWithoutMarkedByNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutMemberNestedInput
@@ -976,10 +1099,13 @@ export type UserUncheckedUpdateWithoutReviewedPermissionsInput = {
   gender?: Prisma.EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
   type?: Prisma.EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
   age?: Prisma.IntFieldUpdateOperationsInput | number
+  christianName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  registerDate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   memberType?: Prisma.NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ethiopianCreatedAt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMemberNestedInput
   markedAttendances?: Prisma.AttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutMemberNestedInput
@@ -1059,10 +1185,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   gender?: boolean
   type?: boolean
   age?: boolean
+  christianName?: boolean
+  registerDate?: boolean
   email?: boolean
   memberType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  ethiopianCreatedAt?: boolean
   attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
   markedAttendances?: boolean | Prisma.User$markedAttendancesArgs<ExtArgs>
   permissions?: boolean | Prisma.User$permissionsArgs<ExtArgs>
@@ -1077,10 +1206,13 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   gender?: boolean
   type?: boolean
   age?: boolean
+  christianName?: boolean
+  registerDate?: boolean
   email?: boolean
   memberType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  ethiopianCreatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1089,10 +1221,13 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   gender?: boolean
   type?: boolean
   age?: boolean
+  christianName?: boolean
+  registerDate?: boolean
   email?: boolean
   memberType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  ethiopianCreatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1101,13 +1236,16 @@ export type UserSelectScalar = {
   gender?: boolean
   type?: boolean
   age?: boolean
+  christianName?: boolean
+  registerDate?: boolean
   email?: boolean
   memberType?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  ethiopianCreatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fullName" | "gender" | "type" | "age" | "email" | "memberType" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fullName" | "gender" | "type" | "age" | "christianName" | "registerDate" | "email" | "memberType" | "createdAt" | "updatedAt" | "ethiopianCreatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attendances?: boolean | Prisma.User$attendancesArgs<ExtArgs>
   markedAttendances?: boolean | Prisma.User$markedAttendancesArgs<ExtArgs>
@@ -1134,10 +1272,13 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     gender: $Enums.genderType
     type: $Enums.userType
     age: number
+    christianName: string | null
+    registerDate: string | null
     email: string | null
     memberType: $Enums.memberType | null
     createdAt: Date
     updatedAt: Date
+    ethiopianCreatedAt: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1571,10 +1712,13 @@ export interface UserFieldRefs {
   readonly gender: Prisma.FieldRef<"User", 'genderType'>
   readonly type: Prisma.FieldRef<"User", 'userType'>
   readonly age: Prisma.FieldRef<"User", 'Int'>
+  readonly christianName: Prisma.FieldRef<"User", 'String'>
+  readonly registerDate: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly memberType: Prisma.FieldRef<"User", 'memberType'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly ethiopianCreatedAt: Prisma.FieldRef<"User", 'String'>
 }
     
 

@@ -20,8 +20,22 @@ export type EventModel = runtime.Types.Result.DefaultSelection<Prisma.$EventPayl
 
 export type AggregateEvent = {
   _count: EventCountAggregateOutputType | null
+  _avg: EventAvgAggregateOutputType | null
+  _sum: EventSumAggregateOutputType | null
   _min: EventMinAggregateOutputType | null
   _max: EventMaxAggregateOutputType | null
+}
+
+export type EventAvgAggregateOutputType = {
+  ethiopianYear: number | null
+  ethiopianMonth: number | null
+  ethiopianDay: number | null
+}
+
+export type EventSumAggregateOutputType = {
+  ethiopianYear: number | null
+  ethiopianMonth: number | null
+  ethiopianDay: number | null
 }
 
 export type EventMinAggregateOutputType = {
@@ -30,6 +44,9 @@ export type EventMinAggregateOutputType = {
   description: string | null
   date: Date | null
   location: string | null
+  ethiopianYear: number | null
+  ethiopianMonth: number | null
+  ethiopianDay: number | null
   eligibilityRuleId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -42,6 +59,9 @@ export type EventMaxAggregateOutputType = {
   description: string | null
   date: Date | null
   location: string | null
+  ethiopianYear: number | null
+  ethiopianMonth: number | null
+  ethiopianDay: number | null
   eligibilityRuleId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -54,6 +74,9 @@ export type EventCountAggregateOutputType = {
   description: number
   date: number
   location: number
+  ethiopianYear: number
+  ethiopianMonth: number
+  ethiopianDay: number
   eligibilityRuleId: number
   targetMemberTypes: number
   createdById: number
@@ -63,12 +86,27 @@ export type EventCountAggregateOutputType = {
 }
 
 
+export type EventAvgAggregateInputType = {
+  ethiopianYear?: true
+  ethiopianMonth?: true
+  ethiopianDay?: true
+}
+
+export type EventSumAggregateInputType = {
+  ethiopianYear?: true
+  ethiopianMonth?: true
+  ethiopianDay?: true
+}
+
 export type EventMinAggregateInputType = {
   id?: true
   title?: true
   description?: true
   date?: true
   location?: true
+  ethiopianYear?: true
+  ethiopianMonth?: true
+  ethiopianDay?: true
   eligibilityRuleId?: true
   createdById?: true
   createdAt?: true
@@ -81,6 +119,9 @@ export type EventMaxAggregateInputType = {
   description?: true
   date?: true
   location?: true
+  ethiopianYear?: true
+  ethiopianMonth?: true
+  ethiopianDay?: true
   eligibilityRuleId?: true
   createdById?: true
   createdAt?: true
@@ -93,6 +134,9 @@ export type EventCountAggregateInputType = {
   description?: true
   date?: true
   location?: true
+  ethiopianYear?: true
+  ethiopianMonth?: true
+  ethiopianDay?: true
   eligibilityRuleId?: true
   targetMemberTypes?: true
   createdById?: true
@@ -139,6 +183,18 @@ export type EventAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: EventAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: EventSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: EventMinAggregateInputType
@@ -169,6 +225,8 @@ export type EventGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: EventCountAggregateInputType | true
+  _avg?: EventAvgAggregateInputType
+  _sum?: EventSumAggregateInputType
   _min?: EventMinAggregateInputType
   _max?: EventMaxAggregateInputType
 }
@@ -179,12 +237,17 @@ export type EventGroupByOutputType = {
   description: string | null
   date: Date
   location: string | null
+  ethiopianYear: number | null
+  ethiopianMonth: number | null
+  ethiopianDay: number | null
   eligibilityRuleId: string | null
   targetMemberTypes: $Enums.memberType[]
   createdById: string
   createdAt: Date
   updatedAt: Date
   _count: EventCountAggregateOutputType | null
+  _avg: EventAvgAggregateOutputType | null
+  _sum: EventSumAggregateOutputType | null
   _min: EventMinAggregateOutputType | null
   _max: EventMaxAggregateOutputType | null
 }
@@ -213,6 +276,9 @@ export type EventWhereInput = {
   description?: Prisma.StringNullableFilter<"Event"> | string | null
   date?: Prisma.DateTimeFilter<"Event"> | Date | string
   location?: Prisma.StringNullableFilter<"Event"> | string | null
+  ethiopianYear?: Prisma.IntNullableFilter<"Event"> | number | null
+  ethiopianMonth?: Prisma.IntNullableFilter<"Event"> | number | null
+  ethiopianDay?: Prisma.IntNullableFilter<"Event"> | number | null
   eligibilityRuleId?: Prisma.StringNullableFilter<"Event"> | string | null
   targetMemberTypes?: Prisma.EnummemberTypeNullableListFilter<"Event">
   createdById?: Prisma.StringFilter<"Event"> | string
@@ -229,6 +295,9 @@ export type EventOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  ethiopianYear?: Prisma.SortOrderInput | Prisma.SortOrder
+  ethiopianMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  ethiopianDay?: Prisma.SortOrderInput | Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrderInput | Prisma.SortOrder
   targetMemberTypes?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
@@ -248,6 +317,9 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Event"> | string | null
   date?: Prisma.DateTimeFilter<"Event"> | Date | string
   location?: Prisma.StringNullableFilter<"Event"> | string | null
+  ethiopianYear?: Prisma.IntNullableFilter<"Event"> | number | null
+  ethiopianMonth?: Prisma.IntNullableFilter<"Event"> | number | null
+  ethiopianDay?: Prisma.IntNullableFilter<"Event"> | number | null
   eligibilityRuleId?: Prisma.StringNullableFilter<"Event"> | string | null
   targetMemberTypes?: Prisma.EnummemberTypeNullableListFilter<"Event">
   createdById?: Prisma.StringFilter<"Event"> | string
@@ -264,14 +336,19 @@ export type EventOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  ethiopianYear?: Prisma.SortOrderInput | Prisma.SortOrder
+  ethiopianMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  ethiopianDay?: Prisma.SortOrderInput | Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrderInput | Prisma.SortOrder
   targetMemberTypes?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
+  _avg?: Prisma.EventAvgOrderByAggregateInput
   _max?: Prisma.EventMaxOrderByAggregateInput
   _min?: Prisma.EventMinOrderByAggregateInput
+  _sum?: Prisma.EventSumOrderByAggregateInput
 }
 
 export type EventScalarWhereWithAggregatesInput = {
@@ -283,6 +360,9 @@ export type EventScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   date?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   location?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  ethiopianYear?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
+  ethiopianMonth?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
+  ethiopianDay?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
   eligibilityRuleId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   targetMemberTypes?: Prisma.EnummemberTypeNullableListFilter<"Event">
   createdById?: Prisma.StringWithAggregatesFilter<"Event"> | string
@@ -296,6 +376,9 @@ export type EventCreateInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -310,6 +393,9 @@ export type EventUncheckedCreateInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
@@ -324,6 +410,9 @@ export type EventUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -338,6 +427,9 @@ export type EventUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
@@ -352,6 +444,9 @@ export type EventCreateManyInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
@@ -365,6 +460,9 @@ export type EventUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -376,6 +474,9 @@ export type EventUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
@@ -407,11 +508,20 @@ export type EventCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   date?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  ethiopianYear?: Prisma.SortOrder
+  ethiopianMonth?: Prisma.SortOrder
+  ethiopianDay?: Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrder
   targetMemberTypes?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type EventAvgOrderByAggregateInput = {
+  ethiopianYear?: Prisma.SortOrder
+  ethiopianMonth?: Prisma.SortOrder
+  ethiopianDay?: Prisma.SortOrder
 }
 
 export type EventMaxOrderByAggregateInput = {
@@ -420,6 +530,9 @@ export type EventMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   date?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  ethiopianYear?: Prisma.SortOrder
+  ethiopianMonth?: Prisma.SortOrder
+  ethiopianDay?: Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -432,10 +545,19 @@ export type EventMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   date?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  ethiopianYear?: Prisma.SortOrder
+  ethiopianMonth?: Prisma.SortOrder
+  ethiopianDay?: Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type EventSumOrderByAggregateInput = {
+  ethiopianYear?: Prisma.SortOrder
+  ethiopianMonth?: Prisma.SortOrder
+  ethiopianDay?: Prisma.SortOrder
 }
 
 export type EventScalarRelationFilter = {
@@ -487,6 +609,14 @@ export type EventUncheckedUpdateManyWithoutCreatedByNestedInput = {
 
 export type EventCreatetargetMemberTypesInput = {
   set: $Enums.memberType[]
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type EventUpdatetargetMemberTypesInput = {
@@ -556,6 +686,9 @@ export type EventCreateWithoutCreatedByInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -569,6 +702,9 @@ export type EventUncheckedCreateWithoutCreatedByInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
@@ -611,6 +747,9 @@ export type EventScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Event"> | string | null
   date?: Prisma.DateTimeFilter<"Event"> | Date | string
   location?: Prisma.StringNullableFilter<"Event"> | string | null
+  ethiopianYear?: Prisma.IntNullableFilter<"Event"> | number | null
+  ethiopianMonth?: Prisma.IntNullableFilter<"Event"> | number | null
+  ethiopianDay?: Prisma.IntNullableFilter<"Event"> | number | null
   eligibilityRuleId?: Prisma.StringNullableFilter<"Event"> | string | null
   targetMemberTypes?: Prisma.EnummemberTypeNullableListFilter<"Event">
   createdById?: Prisma.StringFilter<"Event"> | string
@@ -624,6 +763,9 @@ export type EventCreateWithoutAttendancesInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -637,6 +779,9 @@ export type EventUncheckedCreateWithoutAttendancesInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
@@ -666,6 +811,9 @@ export type EventUpdateWithoutAttendancesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -679,6 +827,9 @@ export type EventUncheckedUpdateWithoutAttendancesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
@@ -692,6 +843,9 @@ export type EventCreateWithoutEligibilityRuleInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -705,6 +859,9 @@ export type EventUncheckedCreateWithoutEligibilityRuleInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
   createdAt?: Date | string
@@ -744,6 +901,9 @@ export type EventCreateManyCreatedByInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
@@ -756,6 +916,9 @@ export type EventUpdateWithoutCreatedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -769,6 +932,9 @@ export type EventUncheckedUpdateWithoutCreatedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -782,6 +948,9 @@ export type EventUncheckedUpdateManyWithoutCreatedByInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -794,6 +963,9 @@ export type EventCreateManyEligibilityRuleInput = {
   description?: string | null
   date: Date | string
   location?: string | null
+  ethiopianYear?: number | null
+  ethiopianMonth?: number | null
+  ethiopianDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
   createdAt?: Date | string
@@ -806,6 +978,9 @@ export type EventUpdateWithoutEligibilityRuleInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -819,6 +994,9 @@ export type EventUncheckedUpdateWithoutEligibilityRuleInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -832,6 +1010,9 @@ export type EventUncheckedUpdateManyWithoutEligibilityRuleInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -875,6 +1056,9 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   description?: boolean
   date?: boolean
   location?: boolean
+  ethiopianYear?: boolean
+  ethiopianMonth?: boolean
+  ethiopianDay?: boolean
   eligibilityRuleId?: boolean
   targetMemberTypes?: boolean
   createdById?: boolean
@@ -892,6 +1076,9 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   description?: boolean
   date?: boolean
   location?: boolean
+  ethiopianYear?: boolean
+  ethiopianMonth?: boolean
+  ethiopianDay?: boolean
   eligibilityRuleId?: boolean
   targetMemberTypes?: boolean
   createdById?: boolean
@@ -907,6 +1094,9 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   description?: boolean
   date?: boolean
   location?: boolean
+  ethiopianYear?: boolean
+  ethiopianMonth?: boolean
+  ethiopianDay?: boolean
   eligibilityRuleId?: boolean
   targetMemberTypes?: boolean
   createdById?: boolean
@@ -922,6 +1112,9 @@ export type EventSelectScalar = {
   description?: boolean
   date?: boolean
   location?: boolean
+  ethiopianYear?: boolean
+  ethiopianMonth?: boolean
+  ethiopianDay?: boolean
   eligibilityRuleId?: boolean
   targetMemberTypes?: boolean
   createdById?: boolean
@@ -929,7 +1122,7 @@ export type EventSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "location" | "eligibilityRuleId" | "targetMemberTypes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "location" | "ethiopianYear" | "ethiopianMonth" | "ethiopianDay" | "eligibilityRuleId" | "targetMemberTypes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   eligibilityRule?: boolean | Prisma.Event$eligibilityRuleArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -958,6 +1151,9 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     description: string | null
     date: Date
     location: string | null
+    ethiopianYear: number | null
+    ethiopianMonth: number | null
+    ethiopianDay: number | null
     eligibilityRuleId: string | null
     targetMemberTypes: $Enums.memberType[]
     createdById: string
@@ -1394,6 +1590,9 @@ export interface EventFieldRefs {
   readonly description: Prisma.FieldRef<"Event", 'String'>
   readonly date: Prisma.FieldRef<"Event", 'DateTime'>
   readonly location: Prisma.FieldRef<"Event", 'String'>
+  readonly ethiopianYear: Prisma.FieldRef<"Event", 'Int'>
+  readonly ethiopianMonth: Prisma.FieldRef<"Event", 'Int'>
+  readonly ethiopianDay: Prisma.FieldRef<"Event", 'Int'>
   readonly eligibilityRuleId: Prisma.FieldRef<"Event", 'String'>
   readonly targetMemberTypes: Prisma.FieldRef<"Event", 'memberType[]'>
   readonly createdById: Prisma.FieldRef<"Event", 'String'>

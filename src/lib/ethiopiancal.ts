@@ -1,4 +1,4 @@
-/* /src/lib/ethiopiancal.ts */
+// /src/lib/ethiopiancal.ts
 export interface EthDate {
   year: number;
   month: number;
@@ -6,12 +6,12 @@ export interface EthDate {
 }
 
 export interface EthDateWords {
-    year: number;
-    month: string;
-    day: number
+  year: number;
+  month: string;
+  day: number;
 }
 
-interface GregorianDate {
+export interface GregorianDate {
   year: number;
   month: number;
   day: number;
@@ -31,10 +31,25 @@ export const ethMonthNames: Record<number, string> = {
   11: 'ሐምሌ',
   12: 'ነሐሴ',
   13: 'ጳጉሜ',
-}
+};
+
+export const ethMonthNamesEnglish: Record<number, string> = {
+  1: 'Meskerem',
+  2: 'Tikimt',
+  3: 'Hidar',
+  4: 'Tahsas',
+  5: 'Tir',
+  6: 'Yekatit',
+  7: 'Megabit',
+  8: 'Miyazya',
+  9: 'Ginbot',
+  10: 'Sene',
+  11: 'Hamle',
+  12: 'Nehase',
+  13: 'Pagume',
+};
 
 // ---------- Gregorian helpers ----------
-
 function isGregorianLeapYear(year: number): boolean {
   if (year % 4 !== 0) return false;
   if (year % 100 !== 0) return true;
@@ -43,8 +58,7 @@ function isGregorianLeapYear(year: number): boolean {
 }
 
 const GREG_MONTH_DAYS = [
-  0, // unused, 1-based
-  31, 28, 31, 30, 31, 30,
+  0, 31, 28, 31, 30, 31, 30,
   31, 31, 30, 31, 30, 31,
 ];
 
@@ -55,11 +69,10 @@ function getGregorianMonthDays(year: number, month: number): number {
   return GREG_MONTH_DAYS[month];
 }
 
-// Absolute days from a fixed epoch (0001-01-01 Gregorian)
 function gregorianToAbsoluteDays(date: GregorianDate): number {
+  // eslint-disable-next-line prefer-const
   let { year, month, day } = date;
-
-  // Days from complete years before this year
+  // eslint-disable-next-line prefer-const
   let y = year - 1;
   const daysFromYears =
     y * 365 +
@@ -67,7 +80,6 @@ function gregorianToAbsoluteDays(date: GregorianDate): number {
     Math.floor(y / 100) +
     Math.floor(y / 400);
 
-  // Days from complete months in current year
   let daysFromMonths = 0;
   for (let m = 1; m < month; m++) {
     daysFromMonths += getGregorianMonthDays(year, m);
@@ -77,19 +89,16 @@ function gregorianToAbsoluteDays(date: GregorianDate): number {
 }
 
 // ---------- Ethiopian helpers ----------
-
-// Ethiopian leap year: every 4 years without the 100/400 rules
 function isEthiopianLeapYear(year: number): boolean {
   return year % 4 === 0;
 }
 
 const ETH_MONTH_DAYS = [
-  0, // unused, 1-based
-  30, 30, 30, 30, 30, 30,
-  30, 30, 30, 30, 30, 30, 30, // 13 months (last is Pagume)
+  0, 30, 30, 30, 30, 30, 30,
+  30, 30, 30, 30, 30, 30, 30,
 ];
 
-function getEthiopianMonthDays(year: number, month: number): number {
+function getEthiopianMonthDaysCount(year: number, month: number): number {
   if (month === 13) {
     return isEthiopianLeapYear(year) ? 6 : 5;
   }
@@ -97,43 +106,25 @@ function getEthiopianMonthDays(year: number, month: number): number {
 }
 
 function absoluteDaysToEthiopian(absDays: number): EthDate {
-  // Ethiopian epoch relative to Gregorian:
-  // We'll derive by aligning a known date pair.
-  // Known: Gregorian 2000-01-01 ≈ Ethiopian 1992-04-22 (approx).
-  // Instead of hard-coding complex epoch math, we can use a simpler approach:
-  // Use a reference absolute day for a known Ethiopian date and offset from there.
-
-  // Reference: Gregorian 2000-01-01 -> Ethiopian 1992-04-22
   const refGreg: GregorianDate = { year: 2000, month: 1, day: 1 };
   const refEth: EthDate = { year: 1992, month: 4, day: 22 };
-
   const refAbs = gregorianToAbsoluteDays(refGreg);
 
-  // Convert reference Ethiopian date to absolute days by brute-forward from an approximated start.
-  // Simpler: compute absolute days for refEth by iterating from a safe low year upward.
-  // But that's inefficient. Instead, we can treat refAbs as the "anchor" and compute all Ethiopian
-  // dates by counting from refEth forward/backward using Ethiopian calendar rules.
-
-  // We'll implement a direct conversion by counting days from refEth.
-  let remainingDays = absDays - refAbs + 1; // can be negative
-
-  // Start from reference Ethiopian date
+  let remainingDays = absDays - refAbs + 1;
   let year = refEth.year;
   let month = refEth.month;
   let day = refEth.day;
 
   if (remainingDays >= 0) {
-    // Move forward
-    // First, complete current day
     while (remainingDays > 0) {
-      const daysInCurrentMonth = getEthiopianMonthDays(year, month);
+      const daysInCurrentMonth = getEthiopianMonthDaysCount(year, month);
       const daysLeftInMonth = daysInCurrentMonth - day;
 
       if (remainingDays <= daysLeftInMonth) {
         day += remainingDays;
         remainingDays = 0;
       } else {
-        remainingDays -= daysLeftInMonth + 1; // +1 to move to next day after month end
+        remainingDays -= daysLeftInMonth + 1;
         day = 1;
         if (month === 13) {
           month = 1;
@@ -144,20 +135,18 @@ function absoluteDaysToEthiopian(absDays: number): EthDate {
       }
     }
   } else {
-    // Move backward
     while (remainingDays < 0) {
       if (day > 1) {
         day--;
         remainingDays++;
       } else {
-        // go to previous month
         if (month === 1) {
           month = 13;
           year--;
         } else {
           month--;
         }
-        const daysInPrevMonth = getEthiopianMonthDays(year, month);
+        const daysInPrevMonth = getEthiopianMonthDaysCount(year, month);
         day = daysInPrevMonth;
         remainingDays++;
       }
@@ -167,36 +156,192 @@ function absoluteDaysToEthiopian(absDays: number): EthDate {
   return { year, month, day };
 }
 
-// ---------- Main conversion ----------
-
+// ---------- Main conversion functions ----------
 export function gregorianToEthiopianDate(gregorianDate: GregorianDate): EthDate {
   const absDays = gregorianToAbsoluteDays(gregorianDate);
   return absoluteDaysToEthiopian(absDays);
 }
 
-// --- Get month name ---
-function getEthiopianMonthName(month: number): string {
-    if(month < 1 || month > 13) {
-        throw new Error(`Invalid Ethiopian month: ${month}`);
+export function ethiopianToGregorianDate(ethDate: EthDate): GregorianDate {
+  const refGreg: GregorianDate = { year: 2000, month: 1, day: 1 };
+  const refEth: EthDate = { year: 1992, month: 4, day: 22 };
+  const refAbs = gregorianToAbsoluteDays(refGreg);
+  
+  let days = 0;
+  let tempYear = refEth.year;
+  let tempMonth = refEth.month;
+  let tempDay = refEth.day;
+  
+  while (tempYear < ethDate.year || 
+         (tempYear === ethDate.year && tempMonth < ethDate.month) || 
+         (tempYear === ethDate.year && tempMonth === ethDate.month && tempDay < ethDate.day)) {
+    days++;
+    tempDay++;
+    const daysInMonth = getEthiopianMonthDaysCount(tempYear, tempMonth);
+    if (tempDay > daysInMonth) {
+      tempDay = 1;
+      tempMonth++;
+      if (tempMonth > 13) {
+        tempMonth = 1;
+        tempYear++;
+      }
     }
-    return ethMonthNames[month];
+  }
+  
+  const absDays = refAbs + days;
+  
+  let year = 1;
+  let month = 1;
+  let day = 1;
+  let remaining = absDays;
+  
+  while (remaining >= (isGregorianLeapYear(year) ? 366 : 365)) {
+    remaining -= isGregorianLeapYear(year) ? 366 : 365;
+    year++;
+  }
+  
+  for (let m = 1; m <= 12; m++) {
+    const daysInMonth = getGregorianMonthDays(year, m);
+    if (remaining < daysInMonth) {
+      month = m;
+      day = remaining + 1;
+      break;
+    }
+    remaining -= daysInMonth;
+  }
+  
+  return { year, month, day };
 }
 
-// ---------- To words ----------
+export function getEthiopianMonthName(month: number, language: 'amharic' | 'english' = 'amharic'): string {
+  if (month < 1 || month > 13) {
+    throw new Error(`Invalid Ethiopian month: ${month}`);
+  }
+  return language === 'amharic' ? ethMonthNames[month] : ethMonthNamesEnglish[month];
+}
+
 export function ethiopianDateToWords(gregorianDate: GregorianDate): EthDateWords {
-    const ethDate = gregorianToEthiopianDate({ year: gregorianDate.year, month: gregorianDate.month, day: gregorianDate.day });
-    getEthiopianMonthName(ethDate.month)
-
-    const ethMonthName = ethMonthNames[ethDate.month];
-    const ethDateWithWords = { year: ethDate.year, month: ethMonthName, day: ethDate.day };
-    return ethDateWithWords;
+  const ethDate = gregorianToEthiopianDate({
+    year: gregorianDate.year,
+    month: gregorianDate.month,
+    day: gregorianDate.day
+  });
+  
+  const ethMonthName = ethMonthNames[ethDate.month];
+  return {
+    year: ethDate.year,
+    month: ethMonthName,
+    day: ethDate.day
+  };
 }
 
-const today = new Date();
-const todayDate = today.toISOString().split('T')[0];
+export function dateToEthiopian(date: Date): EthDateWords {
+  return ethiopianDateToWords({
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate(),
+  });
+}
 
-export const ethTodayDate: EthDateWords = ethiopianDateToWords({
-    year: Number(todayDate.split("-")[0]),
-    month: Number(todayDate.split("-")[1]),
-    day: Number(todayDate.split("-")[2]),
-})
+export function ethiopianDateToDate(ethDate: EthDateWords): Date {
+  // Find the month number from the name
+  let monthNumber = 1;
+  for (const [key, value] of Object.entries(ethMonthNames)) {
+    if (value === ethDate.month) {
+      monthNumber = parseInt(key);
+      break;
+    }
+  }
+  
+  const gregDate = ethiopianToGregorianDate({
+    year: ethDate.year,
+    month: monthNumber,
+    day: ethDate.day
+  });
+  return new Date(gregDate.year, gregDate.month - 1, gregDate.day);
+}
+
+export function formatEthiopianDate(date: Date | EthDateWords, format: 'short' | 'long' = 'long'): string {
+  let ethDate: EthDateWords;
+  
+  if (date instanceof Date) {
+    ethDate = dateToEthiopian(date);
+  } else {
+    ethDate = date;
+  }
+
+  if (format === 'short') {
+    return `${ethDate.month} ${ethDate.day}, ${ethDate.year}`;
+  }
+  
+  return `${ethDate.month} ${ethDate.day}፣ ${ethDate.year} ዓ.ም.`;
+}
+
+export function getEthiopianToday(): EthDateWords {
+  const today = new Date();
+  return ethiopianDateToWords({
+    year: today.getFullYear(),
+    month: today.getMonth() + 1,
+    day: today.getDate(),
+  });
+}
+
+// Helper to check if a date is a chore day
+export function isChoreDay(ethDate: EthDateWords): boolean {
+  const choreDays = [1, 12, 21, 23, 24];
+  return choreDays.includes(ethDate.day);
+}
+
+// Helper to get all chore days in a month
+export function getChoreDaysInMonth(ethYear: number, ethMonth: number): EthDateWords[] {
+  const daysInMonth = getEthiopianMonthDaysCount(ethYear, ethMonth);
+  const choreDays: EthDateWords[] = [];
+  const choreDayNumbers = [1, 12, 21, 23, 24];
+  const monthName = ethMonthNames[ethMonth];
+  
+  for (let day = 1; day <= daysInMonth; day++) {
+    if (choreDayNumbers.includes(day)) {
+      choreDays.push({
+        year: ethYear,
+        month: monthName,
+        day: day
+      });
+    }
+  }
+  
+  return choreDays;
+}
+
+// Helper to get all Sundays in an Ethiopian month
+export function getSundaysInMonth(ethYear: number, ethMonth: number): EthDateWords[] {
+  const daysInMonth = getEthiopianMonthDaysCount(ethYear, ethMonth);
+  const sundays: EthDateWords[] = [];
+  const monthName = ethMonthNames[ethMonth];
+  
+  // We need to check each day of the month and see if it's Sunday
+  // This requires converting each day to Gregorian and checking the day of week
+  for (let day = 1; day <= daysInMonth; day++) {
+    // Try to convert Ethiopian date to Gregorian
+    try {
+      const gregDate = ethiopianDateToDate({
+        year: ethYear,
+        month: monthName,
+        day: day
+      });
+      if (gregDate.getDay() === 0) { // Sunday
+        sundays.push({
+          year: ethYear,
+          month: monthName,
+          day: day
+        });
+      }
+    } catch {
+      // Skip invalid dates
+      continue;
+    }
+  }
+  
+  return sundays;
+}
+
+export const ethTodayDate = getEthiopianToday();

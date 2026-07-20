@@ -6,6 +6,8 @@ type MemberPayload = {
   fullName: string;
   gender?: "MALE" | "FEMALE";
   age: number;
+  christianName: string;
+  registerDate: string;
   memberType?: "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT";
 };
 
@@ -45,6 +47,8 @@ export async function POST(request: NextRequest) {
         fullName: body.fullName.trim(),
         gender: body.gender ?? "MALE",
         age: body.age,
+        christianName: body.christianName,
+        registerDate: body.registerDate,
         memberType: body.memberType ?? "REGULAR_MEMBER",
         type: "MEMBER",
       },

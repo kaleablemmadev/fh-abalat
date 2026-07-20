@@ -1,14 +1,22 @@
-/* /attendance/[type]/page.tsx */
+// /attendance/[type]/page.tsx
 import prisma from "@/src/lib/prisma";
 import MultiMonthGrid from "../components/MultiMonthGrid";
 import { notFound } from "next/navigation";
-import { EthDateTime } from "ethiopian-calendar-date-converter";
 import Link from "next/link";
+import { 
+  getEthiopianToday,
+  ethMonthNames,
+  getChoreDaysInMonth,
+  getSundaysInMonth,
+  ethiopianDateToDate
+} from "@/src/lib/ethiopiancal";
 
-// Dummy admin fallback if no auth is available
 async function getAdminId() {
-  const admin = await prisma.user.findFirst({ where: { type: "ADMIN" } }) || 
-                await prisma.user.findFirst({ where: { type: "SUPERADMIN" } });
+  const admin = await prisma.user.findFirst({ 
+    where: { type: "ADMIN" } 
+  }) || await prisma.user.findFirst({ 
+    where: { type: "SUPERADMIN" } 
+  });
   return admin?.id || "dummy-admin-id";
 }
 
@@ -27,62 +35,93 @@ export default async function MultiMonthAttendancePage({
     notFound();
   }
 
-  const currentDate = new Date();
-  const currentMonth = month ? parseInt(month, 10) - 1 : currentDate.getMonth(); // 0-indexed
-  const currentYear = year ? parseInt(year, 10) : currentDate.getFullYear();
-
-  // Determine dates for the events in this month
-  const eventDates: Date[] = [];
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(currentYear, currentMonth, day);
-    
-    if (type === 'sunday') {
-      if (date.getDay() === 0) { // 0 is Sunday
-        eventDates.push(date);
-      }
-    } else if (type === 'chore') {
-      // Convert to Ethiopian date
-      const ethDate = EthDateTime.fromEuropeanDate(date);
-      const targetEthDays = [1, 12, 21, 23, 24];
-      if (targetEthDays.includes(ethDate.date)) {
-        eventDates.push(date);
-      }
-    }
-  }
-
+  // Get current Ethiopian date
+  const todayEth = getEthiopianToday();
+  
+  // Determine which Ethiopian month/year to show
+  const currentEthMonth = month ? parseInt(month, 10) : parseInt(todayEth.month?.split(' ')[0] || '1');
+  const currentEthYear = year ? parseInt(year, 10) : todayEth.year;
+  
+  const monthName = ethMonthNames[currentEthMonth] || '';
   const adminId = await getAdminId();
-  const eventIds: string[] = [];
-  const generatedEvents = [];
 
-  // Generate or find events
-  for (const date of eventDates) {
-    const title = type === 'sunday' ? 'Sunday Morning Attendance' : 'Chore Attendance';
+  // Get event dates for this Ethiopian month
+  const eventDates: Date[] = [];
+  const generatedEvents: Array<{ id: string; ethDate: { day: number } }> = [];
+
+  if (type === 'chore') {
+    // Get all chore days for the month
+    const choreDays = getChoreDaysInMonth(currentEthYear, currentEthMonth);
     
-    // We check for events on the exact date and with similar title to avoid duplicates
-    let event = await prisma.event.findFirst({
-      where: {
-        title,
-        date: {
-          gte: new Date(date.setHours(0, 0, 0, 0)),
-          lt: new Date(date.setHours(23, 59, 59, 999)),
-        }
+    // Create or find events for each chore day
+    for (const ethDay of choreDays) {
+      const gregDate = ethiopianDateToDate(ethDay);
+      
+      // Check if event exists
+      let event = await prisma.event.findFirst({
+        where: {
+          ethiopianYear: currentEthYear,
+          ethiopianMonth: currentEthMonth,
+          ethiopianDay: ethDay.day,
+          title: { contains: 'Chore' },
+        },
+      });
+      
+      if (!event) {
+        event = await prisma.event.create({
+          data: {
+            title: `Chore Attendance`,
+            date: gregDate,
+            ethiopianYear: currentEthYear,
+            ethiopianMonth: currentEthMonth,
+            ethiopianDay: ethDay.day,
+            createdById: adminId,
+          },
+        });
       }
-    });
-
-    if (!event) {
-      event = await prisma.event.create({
-        data: {
-          title,
-          date: new Date(date.setHours(12, 0, 0, 0)), // set to noon to avoid timezone shift issues
-          createdById: adminId,
-        }
+      
+      eventDates.push(gregDate);
+      generatedEvents.push({
+        ...event,
+        ethDate: ethDay,
       });
     }
-
-    eventIds.push(event.id);
-    generatedEvents.push(event);
+  } else if (type === 'sunday') {
+    // Get all Sundays in the month
+    const sundays = getSundaysInMonth(currentEthYear, currentEthMonth);
+    
+    for (const ethDay of sundays) {
+      const gregDate = ethiopianDateToDate(ethDay);
+      
+      // Check if event exists
+      let event = await prisma.event.findFirst({
+        where: {
+          ethiopianYear: currentEthYear,
+          ethiopianMonth: currentEthMonth,
+          ethiopianDay: ethDay.day,
+          title: { contains: 'Sunday' },
+        },
+      });
+      
+      if (!event) {
+        event = await prisma.event.create({
+          data: {
+            title: `Sunday Morning Attendance`,
+            date: gregDate,
+            ethiopianYear: currentEthYear,
+            ethiopianMonth: currentEthMonth,
+            ethiopianDay: ethDay.day,
+            createdById: adminId,
+          },
+        });
+      }
+      
+      eventDates.push(gregDate);
+      generatedEvents.push({
+        ...event,
+        ethDate: ethDay,
+      });
+    }
   }
 
   // Fetch Members
@@ -97,22 +136,33 @@ export default async function MultiMonthAttendancePage({
     orderBy: { name: "asc" },
   });
 
-  // Try to find a Permission type to allow future marking
-  const permissionType = attendanceTypes.find(t => t.name.toLowerCase().includes('permission'));
+  const permissionType = attendanceTypes.find(t =>
+    t.name.toLowerCase().includes('permission')
+  );
 
-  // Fetch existing attendance for these events
+  // Fetch existing attendance
+  const eventIds = generatedEvents.map(e => e.id);
   const existingAttendances = await prisma.attendance.findMany({
     where: {
       eventId: { in: eventIds },
     },
-    select: { memberId: true, eventId: true, attendanceTypeId: true, permissionId: true },
+    select: { 
+      memberId: true, 
+      eventId: true, 
+      attendanceTypeId: true, 
+      permissionId: true 
+    },
   });
 
-  const monthName = new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' });
+  // Navigation URLs
+  const prevMonth = currentEthMonth === 1 ? 13 : currentEthMonth - 1;
+  const prevYear = currentEthMonth === 1 ? currentEthYear - 1 : currentEthYear;
+  const nextMonth = currentEthMonth === 13 ? 1 : currentEthMonth + 1;
+  const nextYear = currentEthMonth === 13 ? currentEthYear + 1 : currentEthYear;
 
   return (
     <div className="space-y-5 animate-fade-in">
-      {/* ── Page header ──────────────────────────────────────────────── */}
+      {/* Page header */}
       <div
         className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4"
         style={{ borderBottom: '1px solid hsl(var(--border))' }}
@@ -125,11 +175,47 @@ export default async function MultiMonthAttendancePage({
             {type} Attendance
           </h1>
           <p className="text-sm mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
-            {monthName} {currentYear}
+            {monthName} {currentEthYear} ዓ.ም. • {eventDates.length} {type === 'sunday' ? 'Sundays' : 'Chore days'}
           </p>
         </div>
+        
+        {/* Navigation buttons */}
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/attendance/${type}?month=${prevMonth}&year=${prevYear}`}
+            className="px-3 py-1.5 rounded text-xs font-medium transition-colors duration-150"
+            style={{
+              background: 'hsl(var(--muted))',
+              color: 'hsl(var(--muted-foreground))',
+              border: '1px solid hsl(var(--border))',
+            }}
+          >
+            Previous
+          </Link>
+          <Link
+            href={`/attendance/${type}`}
+            className="px-3 py-1.5 rounded text-xs font-medium transition-colors duration-150"
+            style={{
+              background: 'hsl(160 70% 32%)',
+              color: '#fff',
+            }}
+          >
+            Today
+          </Link>
+          <Link
+            href={`/attendance/${type}?month=${nextMonth}&year=${nextYear}`}
+            className="px-3 py-1.5 rounded text-xs font-medium transition-colors duration-150"
+            style={{
+              background: 'hsl(var(--muted))',
+              color: 'hsl(var(--muted-foreground))',
+              border: '1px solid hsl(var(--border))',
+            }}
+          >
+            Next
+          </Link>
+        </div>
 
-        {/* Segmented control — Chore / Sunday */}
+        {/* Segmented control */}
         <div
           className="inline-flex items-center p-0.5 rounded"
           style={{
@@ -138,7 +224,7 @@ export default async function MultiMonthAttendancePage({
           }}
         >
           <Link
-            href="/attendance/chore"
+            href={`/attendance/chore?month=${currentEthMonth}&year=${currentEthYear}`}
             className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-150"
             style={
               type === 'chore'
@@ -156,7 +242,7 @@ export default async function MultiMonthAttendancePage({
             Chore
           </Link>
           <Link
-            href="/attendance/sunday"
+            href={`/attendance/sunday?month=${currentEthMonth}&year=${currentEthYear}`}
             className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-150"
             style={
               type === 'sunday'
@@ -182,6 +268,9 @@ export default async function MultiMonthAttendancePage({
         attendanceTypes={attendanceTypes}
         initialAttendance={existingAttendances}
         permissionTypeId={permissionType?.id || null}
+        type={type}
+        currentEthYear={currentEthYear}
+        currentEthMonth={currentEthMonth}
       />
     </div>
   );

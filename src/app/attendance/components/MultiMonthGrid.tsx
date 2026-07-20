@@ -1,19 +1,11 @@
-/* /attendance/components/MultiMonthGrid.tsx */
-'use client'
+'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Check, X, Clock, HelpCircle, Loader2, Users } from 'lucide-react';
+import { Check, CheckCircle2, Loader2, X, Clock, Users } from 'lucide-react';
 
 interface Member {
   id: string;
   fullName: string | null;
-}
-
-interface Event {
-  id: string;
-  title: string;
-  date: Date;
 }
 
 interface AttendanceType {
@@ -24,9 +16,15 @@ interface AttendanceType {
 
 interface InitialAttendance {
   memberId: string;
-  eventId: string;
   attendanceTypeId: string;
   permissionId: string | null;
+}
+
+interface Event {
+  id: string;
+  title: string;
+  date: Date;
+  ethDate: { day: number };
 }
 
 interface MultiMonthGridProps {
@@ -35,63 +33,84 @@ interface MultiMonthGridProps {
   attendanceTypes: AttendanceType[];
   initialAttendance: InitialAttendance[];
   permissionTypeId: string | null;
+  type: string;
+  currentEthYear: number;
+  currentEthMonth: number;
 }
 
-/** Per-cell button visual props based on attendance type name */
-function getCellProps(name: string, isSelected: boolean, isDisabled: boolean) {
+/** Map an attendance type name to its visual pill properties */
+function getPillStyle(name: string) {
   const n = name.toLowerCase();
-
-  if (isDisabled) {
-    return {
-      letter: isSelected ? '✓' : '·',
-      icon: null as React.ReactNode,
-      style: {
-        background: 'hsl(var(--muted))',
-        color: 'hsl(var(--muted-foreground) / 0.3)',
-        border: '1px solid transparent',
-        opacity: 0.4,
-        cursor: 'not-allowed',
-      },
-    };
-  }
 
   if (n.includes('attended') || n.includes('present') || n === 'yes') {
     return {
       letter: '✓',
-      icon: <Check size={12} strokeWidth={3} />,
-      style: isSelected
-        ? { background: 'hsl(160 40% 18%)', color: 'hsl(160 65% 70%)', border: '1px solid hsl(160 40% 30%)', cursor: 'pointer' }
-        : { background: 'hsl(var(--card))', color: 'hsl(var(--muted-foreground))', border: '1px solid hsl(var(--border))', cursor: 'pointer' },
-      hoverStyle: !isSelected ? { borderColor: 'hsl(160 50% 35%)' } : {},
+      icon: <Check size={11} strokeWidth={3} />,
+      selected: {
+        background: 'hsl(160 40% 18%)',
+        color:      'hsl(160 65% 70%)',
+        border:     '1px solid hsl(160 40% 30%)',
+      },
+      unselected: {
+        background: 'hsl(var(--card))',
+        color:      'hsl(var(--muted-foreground))',
+        border:     '1px solid hsl(var(--border))',
+      },
+      hoverBorder: 'hsl(160 50% 35%)',
     };
   }
+
   if (n.includes('permission') || n.includes('excused') || n === 'late') {
     return {
       letter: 'P',
-      icon: <Clock size={12} strokeWidth={2.5} />,
-      style: isSelected
-        ? { background: 'hsl(38 35% 16%)', color: 'hsl(38 65% 65%)', border: '1px solid hsl(38 40% 28%)', cursor: 'pointer' }
-        : { background: 'hsl(var(--card))', color: 'hsl(var(--muted-foreground))', border: '1px solid hsl(var(--border))', cursor: 'pointer' },
-      hoverStyle: !isSelected ? { borderColor: 'hsl(38 45% 35%)' } : {},
+      icon: <Clock size={11} strokeWidth={2.5} />,
+      selected: {
+        background: 'hsl(38 35% 16%)',
+        color:      'hsl(38 65% 65%)',
+        border:     '1px solid hsl(38 40% 28%)',
+      },
+      unselected: {
+        background: 'hsl(var(--card))',
+        color:      'hsl(var(--muted-foreground))',
+        border:     '1px solid hsl(var(--border))',
+      },
+      hoverBorder: 'hsl(38 45% 35%)',
     };
   }
+
   if (n.includes('absent') || n === 'no') {
     return {
       letter: '✗',
-      icon: <X size={12} strokeWidth={3} />,
-      style: isSelected
-        ? { background: 'hsl(0 40% 16%)', color: 'hsl(0 55% 65%)', border: '1px solid hsl(0 40% 28%)', cursor: 'pointer' }
-        : { background: 'hsl(var(--card))', color: 'hsl(var(--muted-foreground))', border: '1px solid hsl(var(--border))', cursor: 'pointer' },
-      hoverStyle: !isSelected ? { borderColor: 'hsl(0 45% 35%)' } : {},
+      icon: <X size={11} strokeWidth={3} />,
+      selected: {
+        background: 'hsl(0 40% 16%)',
+        color:      'hsl(0 55% 65%)',
+        border:     '1px solid hsl(0 40% 28%)',
+      },
+      unselected: {
+        background: 'hsl(var(--card))',
+        color:      'hsl(var(--muted-foreground))',
+        border:     '1px solid hsl(var(--border))',
+      },
+      hoverBorder: 'hsl(0 45% 35%)',
     };
   }
+
+  // Default / unknown
   return {
     letter: '?',
-    icon: <HelpCircle size={12} />,
-    style: isSelected
-      ? { background: 'hsl(160 40% 14%)', color: 'hsl(160 55% 60%)', border: '1px solid hsl(160 35% 25%)', cursor: 'pointer' }
-      : { background: 'hsl(var(--card))', color: 'hsl(var(--muted-foreground))', border: '1px solid hsl(var(--border))', cursor: 'pointer' },
-    hoverStyle: !isSelected ? { borderColor: 'hsl(160 40% 30%)' } : {},
+    icon: null,
+    selected: {
+      background: 'hsl(160 40% 14%)',
+      color:      'hsl(160 55% 60%)',
+      border:     '1px solid hsl(160 35% 25%)',
+    },
+    unselected: {
+      background: 'hsl(var(--card))',
+      color:      'hsl(var(--muted-foreground))',
+      border:     '1px solid hsl(var(--border))',
+    },
+    hoverBorder: 'hsl(160 40% 30%)',
   };
 }
 
@@ -101,35 +120,35 @@ export default function MultiMonthGrid({
   attendanceTypes,
   initialAttendance,
   permissionTypeId,
+  type,
+  currentEthYear,
+  currentEthMonth,
 }: MultiMonthGridProps) {
-  const router = useRouter();
-  const sortedEvents = [...events].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-  );
-  
-  const [gridData, setGridData] = useState<Record<string, Record<string, string>>>(() => {
-    const initialState: Record<string, Record<string, string>> = {};
-    members.forEach(m => { initialState[m.id] = {}; });
+  const [attendanceData, setAttendanceData] = useState<Record<string, { attendanceTypeId: string; permissionId: string | null }>>(() => {
+    const initialState: Record<string, { attendanceTypeId: string; permissionId: string | null }> = {};
     initialAttendance.forEach((record) => {
-      if (!initialState[record.memberId]) initialState[record.memberId] = {};
-      initialState[record.memberId][record.eventId] = record.attendanceTypeId;
+      initialState[`${record.memberId}_${record.eventId}`] = {
+        attendanceTypeId: record.attendanceTypeId,
+        permissionId: record.permissionId,
+      };
     });
     return initialState;
   });
 
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
   const handleAttendanceChange = (memberId: string, eventId: string, attendanceTypeId: string) => {
-    setGridData((prev) => ({
+    const key = `${memberId}_${eventId}`;
+    const isPermission = attendanceTypeId === permissionTypeId;
+    setAttendanceData((prev) => ({
       ...prev,
-      [memberId]: {
-        ...prev[memberId],
-        [eventId]: attendanceTypeId,
-      }
+      [key]: {
+        attendanceTypeId,
+        permissionId: isPermission ? memberId : null,
+      },
     }));
-    setSaveSuccess(false);
   };
 
   const handleSave = async () => {
@@ -138,19 +157,17 @@ export default function MultiMonthGrid({
     setSaveSuccess(false);
 
     try {
-      const payload: { memberId: string, eventId: string, attendanceTypeId: string }[] = [];
-      Object.entries(gridData).forEach(([memberId, eventsData]) => {
-        Object.entries(eventsData).forEach(([eventId, attendanceTypeId]) => {
-          if (attendanceTypeId) payload.push({ memberId, eventId, attendanceTypeId });
-        });
+      const payload = Object.entries(attendanceData).map(([key, value]) => {
+        const [memberId, eventId] = key.split('_');
+        return {
+          memberId,
+          eventId,
+          attendanceTypeId: value.attendanceTypeId,
+          permissionId: value.permissionId,
+        };
       });
 
-      if (payload.length === 0) {
-        setIsSaving(false);
-        return;
-      }
-
-      const res = await fetch(`/api/attendance/bulk`, {
+      const res = await fetch('/api/attendance/bulk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -158,24 +175,21 @@ export default function MultiMonthGrid({
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => null);
-        throw new Error(errorData?.error || 'Failed to bulk save attendance');
+        throw new Error(errorData?.error || 'Failed to save attendance');
       }
 
       setSaveSuccess(true);
-      router.refresh();
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to bulk save attendance');
+      setError(err instanceof Error ? err.message : 'Failed to save attendance');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const isFutureEvent = (date: Date) => new Date(date).getTime() > new Date().getTime();
-
   return (
     <div className="flex flex-col relative pb-20">
-      {/* ── Grid table ───────────────────────────────────────────────── */}
+      {/* ── Attendance table ──────────────────────────────────────────── */}
       <div
         className="rounded-lg overflow-hidden animate-slide-in"
         style={{
@@ -188,130 +202,86 @@ export default function MultiMonthGrid({
             className="p-10 text-center text-sm"
             style={{ color: 'hsl(var(--muted-foreground))' }}
           >
-            <Users size={20} className="mx-auto mb-2" />
-            No members found.
+            <Users size={20} className="mx-auto mb-2" style={{ color: 'hsl(var(--muted-foreground))' }} />
+            No members found. Add members first.
           </div>
         ) : (
-          <div className="overflow-x-auto" style={{ maxHeight: '72vh' }}>
-            <table className="border-collapse text-sm" style={{ minWidth: '100%' }}>
-              {/* Sticky header */}
-              <thead className="sticky top-0 z-20">
-                <tr>
-                  {/* Sticky member-name corner cell */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr style={{ borderBottom: '1px solid hsl(var(--border))' }}>
                   <th
-                    className="sticky left-0 z-30 px-3 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap"
+                    className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider sticky left-0"
                     style={{
                       background: 'hsl(var(--muted))',
                       color: 'hsl(var(--muted-foreground))',
-                      borderRight: '1px solid hsl(var(--border))',
-                      borderBottom: '1px solid hsl(var(--border))',
-                      minWidth: '180px',
+                      minWidth: '150px',
                     }}
                   >
                     Member
                   </th>
-
-                  {/* Date column headers */}
-                  {sortedEvents.map((event) => (
+                  {events.map((event) => (
                     <th
                       key={event.id}
-                      className="px-2 py-2.5 text-center text-[11px] font-medium whitespace-nowrap"
+                      className="px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-center"
                       style={{
                         background: 'hsl(var(--muted))',
                         color: 'hsl(var(--muted-foreground))',
-                        borderLeft: '1px solid hsl(var(--border))',
-                        borderBottom: '1px solid hsl(var(--border))',
-                        minWidth: '80px',
+                        minWidth: '100px',
                       }}
                     >
-                      <div className="flex flex-col items-center gap-0.5">
-                        <span style={{ color: 'hsl(var(--foreground))' }}>
-                          {new Date(event.date).toLocaleDateString(undefined, {
-                            month: 'short',
-                            day: 'numeric',
-                          })}
-                        </span>
-                        <span className="text-[10px] uppercase tracking-wider opacity-60">
-                          {new Date(event.date).toLocaleDateString(undefined, { weekday: 'short' })}
-                        </span>
-                      </div>
+                      Day {event.ethDate.day}
                     </th>
                   ))}
                 </tr>
               </thead>
-
               <tbody>
-                {members.map((member, rowIdx) => (
+                {members.map((member, idx) => (
                   <tr
                     key={member.id}
                     className="transition-colors duration-100"
                     style={{
-                      borderBottom:
-                        rowIdx < members.length - 1
-                          ? '1px solid hsl(var(--border))'
-                          : 'none',
+                      borderBottom: idx < members.length - 1 ? '1px solid hsl(var(--border))' : 'none',
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'hsl(var(--muted) / 0.4)')}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'hsl(var(--accent))')}
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
-                    {/* Sticky member name */}
                     <td
-                      className="sticky left-0 z-10 px-3 py-2 text-sm font-medium whitespace-nowrap"
-                      style={{
+                      className="px-4 py-2.5 text-sm font-medium sticky left-0"
+                      style={{ 
                         background: 'hsl(var(--card))',
                         color: 'hsl(var(--foreground))',
-                        borderRight: '1px solid hsl(var(--border))',
                       }}
                     >
                       {member.fullName || 'Unknown'}
                     </td>
-
-                    {/* Per-event cells */}
-                    {sortedEvents.map((event) => {
-                      const isFuture = isFutureEvent(event.date);
-
+                    {events.map((event) => {
+                      const key = `${member.id}_${event.id}`;
+                      const currentAttendance = attendanceData[key];
                       return (
-                        <td
-                          key={event.id}
-                          className="p-1.5 text-center align-middle"
-                          style={{ borderLeft: '1px solid hsl(var(--border))' }}
-                        >
-                          <div className="flex items-center justify-center gap-0.5">
+                        <td key={event.id} className="px-3 py-2 text-center">
+                          <div className="flex flex-wrap gap-1 justify-center">
                             {attendanceTypes.map((type) => {
-                              const isSelected = gridData[member.id]?.[event.id] === type.id;
-                              const isPermissionType =
-                                type.id === permissionTypeId ||
-                                type.name.toLowerCase().includes('permission');
-                              const isDisabled = isFuture && !isPermissionType;
-                              const cell = getCellProps(type.name, isSelected, isDisabled);
+                              const isSelected = currentAttendance?.attendanceTypeId === type.id;
+                              const props = getPillStyle(type.name);
+                              const styleNow = isSelected ? props.selected : props.unselected;
 
                               return (
                                 <button
                                   key={type.id}
                                   type="button"
-                                  onClick={() =>
-                                    handleAttendanceChange(member.id, event.id, type.id)
-                                  }
-                                  disabled={isDisabled}
-                                  title={
-                                    isDisabled
-                                      ? 'Cannot mark regular attendance for future events'
-                                      : type.name
-                                  }
-                                  className="flex items-center justify-center w-7 h-7 rounded transition-all duration-100"
-                                  style={cell.style}
+                                  onClick={() => handleAttendanceChange(member.id, event.id, type.id)}
+                                  title={type.name}
+                                  className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold transition-all duration-150"
+                                  style={styleNow}
                                   onMouseEnter={(e) => {
-                                    if (!isDisabled && !isSelected && cell.hoverStyle) {
-                                      Object.assign(e.currentTarget.style, cell.hoverStyle);
-                                    }
+                                    if (!isSelected) e.currentTarget.style.borderColor = props.hoverBorder;
                                   }}
                                   onMouseLeave={(e) => {
-                                    if (!isDisabled && !isSelected) {
-                                      e.currentTarget.style.borderColor = 'hsl(var(--border))';
-                                    }
+                                    if (!isSelected) e.currentTarget.style.borderColor = 'hsl(var(--border))';
                                   }}
                                 >
-                                  {cell.icon}
+                                  {props.icon}
                                 </button>
                               );
                             })}
@@ -329,12 +299,13 @@ export default function MultiMonthGrid({
 
       {/* ── Sticky save bar ───────────────────────────────────────────── */}
       <div
-        className="bottom-0 left-0 md:left-56 right-0 px-5 py-3 z-40 flex items-center justify-between"
+        className="fixed bottom-0 left-0 md:left-56 right-0 px-5 py-3 z-40 flex items-center justify-between"
         style={{
           background: 'hsl(var(--card))',
           borderTop: '1px solid hsl(var(--border))',
         }}
       >
+        {/* Status messages */}
         <div className="flex items-center gap-3">
           {error && (
             <p
@@ -349,8 +320,8 @@ export default function MultiMonthGrid({
               className="flex items-center gap-1.5 text-sm font-medium animate-slide-in"
               style={{ color: 'hsl(160 55% 58%)' }}
             >
-              <Check size={14} strokeWidth={3} />
-              <span>Bulk saved successfully</span>
+              <CheckCircle2 size={15} />
+              <span>Saved successfully</span>
             </div>
           )}
         </div>
@@ -367,7 +338,7 @@ export default function MultiMonthGrid({
           onMouseLeave={(e) => { if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 32%)'; }}
         >
           {isSaving && <Loader2 size={14} className="animate-spin" />}
-          {isSaving ? 'Saving…' : 'Save All Changes'}
+          {isSaving ? 'Saving…' : 'Save Attendance'}
         </button>
       </div>
     </div>

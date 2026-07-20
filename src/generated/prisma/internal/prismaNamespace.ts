@@ -973,10 +973,13 @@ export const UserScalarFieldEnum = {
   gender: 'gender',
   type: 'type',
   age: 'age',
+  christianName: 'christianName',
+  registerDate: 'registerDate',
   email: 'email',
   memberType: 'memberType',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  ethiopianCreatedAt: 'ethiopianCreatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -988,6 +991,9 @@ export const EventScalarFieldEnum = {
   description: 'description',
   date: 'date',
   location: 'location',
+  ethiopianYear: 'ethiopianYear',
+  ethiopianMonth: 'ethiopianMonth',
+  ethiopianDay: 'ethiopianDay',
   eligibilityRuleId: 'eligibilityRuleId',
   targetMemberTypes: 'targetMemberTypes',
   createdById: 'createdById',
@@ -1043,6 +1049,7 @@ export const PermissionScalarFieldEnum = {
   reason: 'reason',
   status: 'status',
   reviewedById: 'reviewedById',
+  ethiopianDate: 'ethiopianDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

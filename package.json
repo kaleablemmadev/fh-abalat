@@ -12,7 +12,11 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "migrate:ethiopian": "ts-node scripts/migrateEthiopianCalendar.ts",
+    "backup": "ts-node scripts/backupDatabase.ts",
+    "add:ethiopian-fields": "ts-node scripts/addEthiopianFields.ts",
+    "update:ethiopian-dates": "ts-node scripts/updateEthiopianDates.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -37,7 +41,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.5.3",
-    "eslint": "^10.5.0",
+    "eslint": "^9.17.0",
     "eslint-config-next": "16.2.9",
     "postcss": "^8.5.19",
     "prisma": "^7.8.0",

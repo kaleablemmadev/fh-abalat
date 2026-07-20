@@ -1,6 +1,31 @@
-/* /api/events/[eventId/attendance/route.ts */
+/* /api/events/[eventId]/attendance/route.ts */
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ eventId: string }> }
+) {
+  try {
+    const { eventId } = await params;
+    
+    const attendances = await prisma.attendance.findMany({
+      where: { eventId },
+      include: {
+        member: true,
+        attendanceType: true,
+      },
+    });
+
+    return NextResponse.json(attendances);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Failed to load attendance" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(
   request: NextRequest,
@@ -39,7 +64,7 @@ export async function POST(
 
     // Perform upsert for each record
     await prisma.$transaction(
-      body.map((record: { memberId: string; attendanceTypeId: string }) =>
+      body.map((record: { memberId: string; attendanceTypeId: string; permissionId?: string | null }) =>
         prisma.attendance.upsert({
           where: {
             memberId_eventId: {
@@ -49,12 +74,14 @@ export async function POST(
           },
           update: {
             attendanceTypeId: record.attendanceTypeId,
+            permissionId: record.permissionId,
             markedById: adminUser.id,
           },
           create: {
             memberId: record.memberId,
             eventId: eventId,
             attendanceTypeId: record.attendanceTypeId,
+            permissionId: record.permissionId,
             markedById: adminUser.id,
           },
         })
@@ -66,6 +93,27 @@ export async function POST(
     console.error(error);
     return NextResponse.json(
       { error: "Failed to save attendance" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ eventId: string }> }
+) {
+  try {
+    const { eventId } = await params;
+    
+    await prisma.attendance.deleteMany({
+      where: { eventId },
+    });
+
+    return NextResponse.json({ message: "Attendance deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Failed to delete attendance" },
       { status: 500 }
     );
   }

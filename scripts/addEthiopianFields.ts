@@ -1,4 +1,4 @@
-// /scripts/addEthiopianFields.ts
+// scripts/addEthiopianFields.ts
 import { prisma } from '../src/lib/prisma';
 
 async function addEthiopianFields() {
@@ -92,8 +92,6 @@ async function addEthiopianFields() {
   } catch (error) {
     console.error('❌ Error:', error);
     throw error;
-  } finally {
-    await prisma.$disconnect();
   }
 }
 

@@ -1,7 +1,7 @@
-// /scripts/migrateEthiopianCalendar.ts
+// scripts/migrateEthiopianCalendar.ts
 import { backupDatabase } from './backupDatabase';
 import { addEthiopianFields } from './addEthiopianFields';
-import { updateEthiopianDates } from './updateEthiopianDates';
+import { updateEthiopianDates } from './updateEthiopianDates.ts';
 
 async function migrateEthiopianCalendar() {
   console.log('🚀 Starting Ethiopian calendar migration...\n');

@@ -1,4 +1,4 @@
-// /scripts/backupDatabase.ts
+// scripts/backupDatabase.ts
 import { prisma } from '../src/lib/prisma';
 import fs from 'fs';
 import path from 'path';
@@ -47,8 +47,6 @@ async function backupDatabase() {
   } catch (error) {
     console.error('❌ Backup failed:', error);
     throw error;
-  } finally {
-    await prisma.$disconnect();
   }
 }
 

@@ -118,6 +118,7 @@ export default function EventsPage() {
           <ul className="space-y-3">
             {events.map((e) => {
               const ethDate = dateToEthiopian(new Date(e.date));
+              const attendancesCount = e._count?.attendances ?? 0;
               return (
                 <li
                   key={e.id}
@@ -145,7 +146,7 @@ export default function EventsPage() {
                           minute: '2-digit',
                         })}
                       </span>
-                      {e._count?.attendances > 0 && (
+                      {attendancesCount > 0 && (
                         <span
                           className="text-xs px-1.5 py-0.5 rounded"
                           style={{
@@ -153,7 +154,7 @@ export default function EventsPage() {
                             color: 'hsl(160 60% 55%)',
                           }}
                         >
-                          {e._count.attendances} attending
+                          {attendancesCount} attending
                         </span>
                       )}
                     </div>

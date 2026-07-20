@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     // Perform upsert for each record
     await prisma.$transaction(
-      body.map((record: { memberId: string; eventId: string; attendanceTypeId: string }) =>
+      body.map((record: { memberId: string; eventId: string; attendanceTypeId: string; permissionId?: string | null }) =>
         prisma.attendance.upsert({
           where: {
             memberId_eventId: {
@@ -44,12 +44,14 @@ export async function POST(request: NextRequest) {
           },
           update: {
             attendanceTypeId: record.attendanceTypeId,
+            permissionId: record.permissionId,
             markedById: adminUser.id,
           },
           create: {
             memberId: record.memberId,
             eventId: record.eventId,
             attendanceTypeId: record.attendanceTypeId,
+            permissionId: record.permissionId,
             markedById: adminUser.id,
           },
         })

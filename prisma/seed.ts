@@ -1,8 +1,6 @@
 // /prisma/seed.ts
-import { PrismaClient } from '@prisma/client';
+import prisma from "@/src/lib/prisma";
 import { getEthiopianToday, getChoreDaysInMonth, getSundaysInMonth, ethiopianDateToDate } from '../src/lib/ethiopiancal';
-
-const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Seeding database (preserving existing data)...');

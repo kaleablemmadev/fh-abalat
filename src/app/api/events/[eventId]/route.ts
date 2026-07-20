@@ -84,6 +84,7 @@ export async function PUT(
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
+    // Build update data with proper types
     const updateData: {
       title?: string;
       description?: string | null;
@@ -94,11 +95,16 @@ export async function PUT(
       ethiopianDay?: number | null;
       eligibilityRuleId?: string | null;
       targetMemberTypes?: EventTargetMemberTypes[];
-    } = { ...body };
-    
-    if (body.date) {
-      updateData.date = new Date(body.date);
-    }
+    } = {};
+
+    if (body.title !== undefined) updateData.title = body.title;
+    if (body.description !== undefined) updateData.description = body.description;
+    if (body.date) updateData.date = new Date(body.date);
+    if (body.location !== undefined) updateData.location = body.location;
+    if (body.ethiopianYear !== undefined) updateData.ethiopianYear = body.ethiopianYear;
+    if (body.ethiopianMonth !== undefined) updateData.ethiopianMonth = body.ethiopianMonth;
+    if (body.ethiopianDay !== undefined) updateData.ethiopianDay = body.ethiopianDay;
+    if (body.eligibilityRuleId !== undefined) updateData.eligibilityRuleId = body.eligibilityRuleId;
     if (body.targetMemberTypes) {
       updateData.targetMemberTypes = body.targetMemberTypes as EventTargetMemberTypes[];
     }

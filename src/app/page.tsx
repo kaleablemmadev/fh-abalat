@@ -183,13 +183,11 @@ export default async function Home() {
         </div>
         <Link
           href="/members/new"
-          className="inline-flex items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold transition-colors duration-150 whitespace-nowrap shrink-0"
+          className="inline-flex items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 hover:bg-[hsl(160 70% 38%)]"
           style={{
             background: 'hsl(160 70% 32%)',
             color: '#fff',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = 'hsl(160 70% 38%)')}
-          onMouseLeave={(e) => (e.currentTarget.style.background = 'hsl(160 70% 32%)')}
         >
           <UserPlus size={14} />
           Add Member
@@ -202,13 +200,11 @@ export default async function Home() {
           <Link
             key={card.label}
             href={card.href}
-            className="group block rounded-lg p-5 transition-all duration-150 hover:scale-[1.02]"
+            className="group block rounded-lg p-5 transition-all duration-150 hover:scale-[1.02] hover:border-[hsl(160_84%_39%_/_0.35)]"
             style={{
               background: 'hsl(var(--card))',
               border: '1px solid hsl(var(--border))',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'hsl(160 84% 39% / 0.35)')}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'hsl(var(--border))')}
           >
             <div className="flex items-start justify-between mb-3">
               <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground))' }}>
@@ -250,10 +246,8 @@ export default async function Home() {
             </p>
             <Link
               href="/members"
-              className="text-xs font-medium transition-colors duration-150 flex items-center gap-1"
+              className="text-xs font-medium transition-colors duration-150 flex items-center gap-1 hover:text-[hsl(160_60%_65%)]"
               style={{ color: 'hsl(160 60% 55%)' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'hsl(160 60% 65%)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'hsl(160 60% 55%)')}
             >
               View all
               <ChevronRight size={12} />
@@ -346,10 +340,8 @@ export default async function Home() {
             </p>
             <Link
               href="/events"
-              className="text-xs font-medium transition-colors duration-150 flex items-center gap-1"
+              className="text-xs font-medium transition-colors duration-150 flex items-center gap-1 hover:text-[hsl(160_60%_65%)]"
               style={{ color: 'hsl(160 60% 55%)' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'hsl(160 60% 65%)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'hsl(160 60% 55%)')}
             >
               View all
               <ChevronRight size={12} />

@@ -32,6 +32,7 @@ export type AttendanceMinAggregateOutputType = {
   permissionId: string | null
   markedById: string | null
   note: string | null
+  countedForEligibility: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +45,7 @@ export type AttendanceMaxAggregateOutputType = {
   permissionId: string | null
   markedById: string | null
   note: string | null
+  countedForEligibility: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +58,7 @@ export type AttendanceCountAggregateOutputType = {
   permissionId: number
   markedById: number
   note: number
+  countedForEligibility: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -70,6 +73,7 @@ export type AttendanceMinAggregateInputType = {
   permissionId?: true
   markedById?: true
   note?: true
+  countedForEligibility?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +86,7 @@ export type AttendanceMaxAggregateInputType = {
   permissionId?: true
   markedById?: true
   note?: true
+  countedForEligibility?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +99,7 @@ export type AttendanceCountAggregateInputType = {
   permissionId?: true
   markedById?: true
   note?: true
+  countedForEligibility?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -179,6 +185,7 @@ export type AttendanceGroupByOutputType = {
   permissionId: string | null
   markedById: string
   note: string | null
+  countedForEligibility: boolean | null
   createdAt: Date
   updatedAt: Date
   _count: AttendanceCountAggregateOutputType | null
@@ -212,6 +219,7 @@ export type AttendanceWhereInput = {
   permissionId?: Prisma.StringNullableFilter<"Attendance"> | string | null
   markedById?: Prisma.StringFilter<"Attendance"> | string
   note?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  countedForEligibility?: Prisma.BoolNullableFilter<"Attendance"> | boolean | null
   createdAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   member?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -229,6 +237,7 @@ export type AttendanceOrderByWithRelationInput = {
   permissionId?: Prisma.SortOrderInput | Prisma.SortOrder
   markedById?: Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
+  countedForEligibility?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   member?: Prisma.UserOrderByWithRelationInput
@@ -250,6 +259,7 @@ export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
   permissionId?: Prisma.StringNullableFilter<"Attendance"> | string | null
   markedById?: Prisma.StringFilter<"Attendance"> | string
   note?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  countedForEligibility?: Prisma.BoolNullableFilter<"Attendance"> | boolean | null
   createdAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   member?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -267,6 +277,7 @@ export type AttendanceOrderByWithAggregationInput = {
   permissionId?: Prisma.SortOrderInput | Prisma.SortOrder
   markedById?: Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
+  countedForEligibility?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AttendanceCountOrderByAggregateInput
@@ -285,6 +296,7 @@ export type AttendanceScalarWhereWithAggregatesInput = {
   permissionId?: Prisma.StringNullableWithAggregatesFilter<"Attendance"> | string | null
   markedById?: Prisma.StringWithAggregatesFilter<"Attendance"> | string
   note?: Prisma.StringNullableWithAggregatesFilter<"Attendance"> | string | null
+  countedForEligibility?: Prisma.BoolNullableWithAggregatesFilter<"Attendance"> | boolean | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Attendance"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Attendance"> | Date | string
 }
@@ -292,6 +304,7 @@ export type AttendanceScalarWhereWithAggregatesInput = {
 export type AttendanceCreateInput = {
   id?: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutAttendancesInput
@@ -309,6 +322,7 @@ export type AttendanceUncheckedCreateInput = {
   permissionId?: string | null
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -316,6 +330,7 @@ export type AttendanceUncheckedCreateInput = {
 export type AttendanceUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutAttendancesNestedInput
@@ -333,6 +348,7 @@ export type AttendanceUncheckedUpdateInput = {
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -345,6 +361,7 @@ export type AttendanceCreateManyInput = {
   permissionId?: string | null
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -352,6 +369,7 @@ export type AttendanceCreateManyInput = {
 export type AttendanceUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -364,6 +382,7 @@ export type AttendanceUncheckedUpdateManyInput = {
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -391,6 +410,7 @@ export type AttendanceCountOrderByAggregateInput = {
   permissionId?: Prisma.SortOrder
   markedById?: Prisma.SortOrder
   note?: Prisma.SortOrder
+  countedForEligibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -403,6 +423,7 @@ export type AttendanceMaxOrderByAggregateInput = {
   permissionId?: Prisma.SortOrder
   markedById?: Prisma.SortOrder
   note?: Prisma.SortOrder
+  countedForEligibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -415,6 +436,7 @@ export type AttendanceMinOrderByAggregateInput = {
   permissionId?: Prisma.SortOrder
   markedById?: Prisma.SortOrder
   note?: Prisma.SortOrder
+  countedForEligibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -587,6 +609,10 @@ export type AttendanceUncheckedUpdateManyWithoutAttendanceTypeNestedInput = {
   deleteMany?: Prisma.AttendanceScalarWhereInput | Prisma.AttendanceScalarWhereInput[]
 }
 
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
+}
+
 export type AttendanceCreateNestedManyWithoutPermissionInput = {
   create?: Prisma.XOR<Prisma.AttendanceCreateWithoutPermissionInput, Prisma.AttendanceUncheckedCreateWithoutPermissionInput> | Prisma.AttendanceCreateWithoutPermissionInput[] | Prisma.AttendanceUncheckedCreateWithoutPermissionInput[]
   connectOrCreate?: Prisma.AttendanceCreateOrConnectWithoutPermissionInput | Prisma.AttendanceCreateOrConnectWithoutPermissionInput[]
@@ -632,6 +658,7 @@ export type AttendanceUncheckedUpdateManyWithoutPermissionNestedInput = {
 export type AttendanceCreateWithoutMemberInput = {
   id?: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
   event: Prisma.EventCreateNestedOneWithoutAttendancesInput
@@ -647,6 +674,7 @@ export type AttendanceUncheckedCreateWithoutMemberInput = {
   permissionId?: string | null
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -664,6 +692,7 @@ export type AttendanceCreateManyMemberInputEnvelope = {
 export type AttendanceCreateWithoutMarkedByInput = {
   id?: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutAttendancesInput
@@ -679,6 +708,7 @@ export type AttendanceUncheckedCreateWithoutMarkedByInput = {
   attendanceTypeId: string
   permissionId?: string | null
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -720,6 +750,7 @@ export type AttendanceScalarWhereInput = {
   permissionId?: Prisma.StringNullableFilter<"Attendance"> | string | null
   markedById?: Prisma.StringFilter<"Attendance"> | string
   note?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  countedForEligibility?: Prisma.BoolNullableFilter<"Attendance"> | boolean | null
   createdAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
 }
@@ -743,6 +774,7 @@ export type AttendanceUpdateManyWithWhereWithoutMarkedByInput = {
 export type AttendanceCreateWithoutEventInput = {
   id?: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutAttendancesInput
@@ -758,6 +790,7 @@ export type AttendanceUncheckedCreateWithoutEventInput = {
   permissionId?: string | null
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -791,6 +824,7 @@ export type AttendanceUpdateManyWithWhereWithoutEventInput = {
 export type AttendanceCreateWithoutAttendanceTypeInput = {
   id?: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutAttendancesInput
@@ -806,6 +840,7 @@ export type AttendanceUncheckedCreateWithoutAttendanceTypeInput = {
   permissionId?: string | null
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -839,6 +874,7 @@ export type AttendanceUpdateManyWithWhereWithoutAttendanceTypeInput = {
 export type AttendanceCreateWithoutPermissionInput = {
   id?: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.UserCreateNestedOneWithoutAttendancesInput
@@ -854,6 +890,7 @@ export type AttendanceUncheckedCreateWithoutPermissionInput = {
   attendanceTypeId: string
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -891,6 +928,7 @@ export type AttendanceCreateManyMemberInput = {
   permissionId?: string | null
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -902,6 +940,7 @@ export type AttendanceCreateManyMarkedByInput = {
   attendanceTypeId: string
   permissionId?: string | null
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -909,6 +948,7 @@ export type AttendanceCreateManyMarkedByInput = {
 export type AttendanceUpdateWithoutMemberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventUpdateOneRequiredWithoutAttendancesNestedInput
@@ -924,6 +964,7 @@ export type AttendanceUncheckedUpdateWithoutMemberInput = {
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -935,6 +976,7 @@ export type AttendanceUncheckedUpdateManyWithoutMemberInput = {
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -942,6 +984,7 @@ export type AttendanceUncheckedUpdateManyWithoutMemberInput = {
 export type AttendanceUpdateWithoutMarkedByInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutAttendancesNestedInput
@@ -957,6 +1000,7 @@ export type AttendanceUncheckedUpdateWithoutMarkedByInput = {
   attendanceTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -968,6 +1012,7 @@ export type AttendanceUncheckedUpdateManyWithoutMarkedByInput = {
   attendanceTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -979,6 +1024,7 @@ export type AttendanceCreateManyEventInput = {
   permissionId?: string | null
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -986,6 +1032,7 @@ export type AttendanceCreateManyEventInput = {
 export type AttendanceUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutAttendancesNestedInput
@@ -1001,6 +1048,7 @@ export type AttendanceUncheckedUpdateWithoutEventInput = {
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1012,6 +1060,7 @@ export type AttendanceUncheckedUpdateManyWithoutEventInput = {
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1023,6 +1072,7 @@ export type AttendanceCreateManyAttendanceTypeInput = {
   permissionId?: string | null
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1030,6 +1080,7 @@ export type AttendanceCreateManyAttendanceTypeInput = {
 export type AttendanceUpdateWithoutAttendanceTypeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutAttendancesNestedInput
@@ -1045,6 +1096,7 @@ export type AttendanceUncheckedUpdateWithoutAttendanceTypeInput = {
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1056,6 +1108,7 @@ export type AttendanceUncheckedUpdateManyWithoutAttendanceTypeInput = {
   permissionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1067,6 +1120,7 @@ export type AttendanceCreateManyPermissionInput = {
   attendanceTypeId: string
   markedById: string
   note?: string | null
+  countedForEligibility?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1074,6 +1128,7 @@ export type AttendanceCreateManyPermissionInput = {
 export type AttendanceUpdateWithoutPermissionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.UserUpdateOneRequiredWithoutAttendancesNestedInput
@@ -1089,6 +1144,7 @@ export type AttendanceUncheckedUpdateWithoutPermissionInput = {
   attendanceTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1100,6 +1156,7 @@ export type AttendanceUncheckedUpdateManyWithoutPermissionInput = {
   attendanceTypeId?: Prisma.StringFieldUpdateOperationsInput | string
   markedById?: Prisma.StringFieldUpdateOperationsInput | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  countedForEligibility?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1114,6 +1171,7 @@ export type AttendanceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   permissionId?: boolean
   markedById?: boolean
   note?: boolean
+  countedForEligibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1131,6 +1189,7 @@ export type AttendanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   permissionId?: boolean
   markedById?: boolean
   note?: boolean
+  countedForEligibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1148,6 +1207,7 @@ export type AttendanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   permissionId?: boolean
   markedById?: boolean
   note?: boolean
+  countedForEligibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1165,11 +1225,12 @@ export type AttendanceSelectScalar = {
   permissionId?: boolean
   markedById?: boolean
   note?: boolean
+  countedForEligibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AttendanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "eventId" | "attendanceTypeId" | "permissionId" | "markedById" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
+export type AttendanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "eventId" | "attendanceTypeId" | "permissionId" | "markedById" | "note" | "countedForEligibility" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
 export type AttendanceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   member?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
@@ -1209,6 +1270,7 @@ export type $AttendancePayload<ExtArgs extends runtime.Types.Extensions.Internal
     permissionId: string | null
     markedById: string
     note: string | null
+    countedForEligibility: boolean | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["attendance"]>
@@ -1646,6 +1708,7 @@ export interface AttendanceFieldRefs {
   readonly permissionId: Prisma.FieldRef<"Attendance", 'String'>
   readonly markedById: Prisma.FieldRef<"Attendance", 'String'>
   readonly note: Prisma.FieldRef<"Attendance", 'String'>
+  readonly countedForEligibility: Prisma.FieldRef<"Attendance", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Attendance", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Attendance", 'DateTime'>
 }

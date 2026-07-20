@@ -76,3 +76,8 @@ export type Permission = Prisma.PermissionModel
  * 
  */
 export type EligibilityRule = Prisma.EligibilityRuleModel
+/**
+ * Model EligibilityCriteria
+ * 
+ */
+export type EligibilityCriteria = Prisma.EligibilityCriteriaModel

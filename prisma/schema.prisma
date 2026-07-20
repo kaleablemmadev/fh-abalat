@@ -16,7 +16,7 @@ model User {
   age         Int
   
   christianName String?   // የክርስትና ስም
-  registerDate  String?   // የምዝገባ ቀን (Ethiopian date)
+  registerDate  String?   // የምዝገባ ቀን
 
   // If User is Admin or Superadmin
   email       String?     @unique
@@ -35,7 +35,7 @@ model User {
   updatedAt   DateTime    @updatedAt
 
   // Ethiopian calendar fields for display
-  ethiopianCreatedAt String? // Store Ethiopian date as string for display
+  ethiopianCreatedAt String?
 }
 
 enum userType {
@@ -94,7 +94,6 @@ model Event {
 // ATTENDANCE
 // -------------------------
 
-// Configurable attendance types instead of hardcoding 1 / 0.5 / 0
 model AttendanceType {
   id        String   @id @default(cuid())
   name      String   @unique   // e.g. "Attended", "Permission", "Absent", "Late"
@@ -127,11 +126,14 @@ model Attendance {
   markedBy   User   @relation("MarkedByAdmin", fields: [markedById], references: [id])
 
   note      String?
+  
+  // Track if this attendance was counted for eligibility
+  countedForEligibility Boolean? @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([memberId, eventId]) // one attendance record per member per event
+  @@unique([memberId, eventId])
   @@index([eventId])
   @@index([memberId])
 }
@@ -186,14 +188,30 @@ model Permission {
 // -------------------------
 
 model EligibilityRule {
-  id                 String  @id @default(cuid())
+  id                 String   @id @default(cuid())
   name               String
-  minAttendanceScore Float   // e.g. 0.75 average score required
-  minEventsCount     Int?    // minimum number of past events required
-  lookbackEventCount Int?    // optional: only consider last N events
+  description        String?
+  minAttendanceScore Float?   // overall minimum score
+  minEventsCount     Int?     // minimum number of events attended
+  
+  // Relations
+  rules              EligibilityCriteria[]
+  events             Event[]
 
-  events Event[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model EligibilityCriteria {
+  id                String   @id @default(cuid())
+  eligibilityRuleId String
+  eligibilityRule   EligibilityRule @relation(fields: [eligibilityRuleId], references: [id], onDelete: Cascade)
+  
+  eventType         String   // "chore", "sunday", or specific event type
+  minAttendances    Int      // minimum number of attendances required
+  lookbackMonths    Int      // number of months to look back
+  lookbackDays      Int?     // optional: specific number of days instead of months
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

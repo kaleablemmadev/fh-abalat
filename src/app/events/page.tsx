@@ -146,6 +146,14 @@ export default function EventsPage() {
                           minute: '2-digit',
                         })}
                       </span>
+                      <Link
+                        href={`/events/${e.id}/eligibility`}
+                        className="inline-flex items-center gap-1 text-sm font-medium transition-colors duration-150"
+                        style={{ color: 'hsl(160 60% 55%)' }}
+                      >
+                        Check Eligibility
+                        <ChevronRight size={14} />
+                      </Link>
                       {attendancesCount > 0 && (
                         <span
                           className="text-xs px-1.5 py-0.5 rounded"

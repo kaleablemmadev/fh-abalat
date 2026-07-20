@@ -390,7 +390,8 @@ export const ModelName = {
   Attendance: 'Attendance',
   PermissionType: 'PermissionType',
   Permission: 'Permission',
-  EligibilityRule: 'EligibilityRule'
+  EligibilityRule: 'EligibilityRule',
+  EligibilityCriteria: 'EligibilityCriteria'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "event" | "attendanceType" | "attendance" | "permissionType" | "permission" | "eligibilityRule"
+    modelProps: "user" | "event" | "attendanceType" | "attendance" | "permissionType" | "permission" | "eligibilityRule" | "eligibilityCriteria"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +929,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EligibilityCriteria: {
+      payload: Prisma.$EligibilityCriteriaPayload<ExtArgs>
+      fields: Prisma.EligibilityCriteriaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EligibilityCriteriaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EligibilityCriteriaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>
+        }
+        findFirst: {
+          args: Prisma.EligibilityCriteriaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EligibilityCriteriaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>
+        }
+        findMany: {
+          args: Prisma.EligibilityCriteriaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>[]
+        }
+        create: {
+          args: Prisma.EligibilityCriteriaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>
+        }
+        createMany: {
+          args: Prisma.EligibilityCriteriaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EligibilityCriteriaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>[]
+        }
+        delete: {
+          args: Prisma.EligibilityCriteriaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>
+        }
+        update: {
+          args: Prisma.EligibilityCriteriaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>
+        }
+        deleteMany: {
+          args: Prisma.EligibilityCriteriaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EligibilityCriteriaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EligibilityCriteriaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>[]
+        }
+        upsert: {
+          args: Prisma.EligibilityCriteriaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EligibilityCriteriaPayload>
+        }
+        aggregate: {
+          args: Prisma.EligibilityCriteriaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEligibilityCriteria>
+        }
+        groupBy: {
+          args: Prisma.EligibilityCriteriaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EligibilityCriteriaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EligibilityCriteriaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EligibilityCriteriaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1024,6 +1099,7 @@ export const AttendanceScalarFieldEnum = {
   permissionId: 'permissionId',
   markedById: 'markedById',
   note: 'note',
+  countedForEligibility: 'countedForEligibility',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1060,14 +1136,28 @@ export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof
 export const EligibilityRuleScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   minAttendanceScore: 'minAttendanceScore',
   minEventsCount: 'minEventsCount',
-  lookbackEventCount: 'lookbackEventCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type EligibilityRuleScalarFieldEnum = (typeof EligibilityRuleScalarFieldEnum)[keyof typeof EligibilityRuleScalarFieldEnum]
+
+
+export const EligibilityCriteriaScalarFieldEnum = {
+  id: 'id',
+  eligibilityRuleId: 'eligibilityRuleId',
+  eventType: 'eventType',
+  minAttendances: 'minAttendances',
+  lookbackMonths: 'lookbackMonths',
+  lookbackDays: 'lookbackDays',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EligibilityCriteriaScalarFieldEnum = (typeof EligibilityCriteriaScalarFieldEnum)[keyof typeof EligibilityCriteriaScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1335,6 +1425,7 @@ export type GlobalOmitConfig = {
   permissionType?: Prisma.PermissionTypeOmit
   permission?: Prisma.PermissionOmit
   eligibilityRule?: Prisma.EligibilityRuleOmit
+  eligibilityCriteria?: Prisma.EligibilityCriteriaOmit
 }
 
 /* Types for Logging */

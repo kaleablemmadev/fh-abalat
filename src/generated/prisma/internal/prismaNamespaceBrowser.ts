@@ -57,7 +57,8 @@ export const ModelName = {
   Attendance: 'Attendance',
   PermissionType: 'PermissionType',
   Permission: 'Permission',
-  EligibilityRule: 'EligibilityRule'
+  EligibilityRule: 'EligibilityRule',
+  EligibilityCriteria: 'EligibilityCriteria'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -133,6 +134,7 @@ export const AttendanceScalarFieldEnum = {
   permissionId: 'permissionId',
   markedById: 'markedById',
   note: 'note',
+  countedForEligibility: 'countedForEligibility',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -169,14 +171,28 @@ export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof
 export const EligibilityRuleScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   minAttendanceScore: 'minAttendanceScore',
   minEventsCount: 'minEventsCount',
-  lookbackEventCount: 'lookbackEventCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type EligibilityRuleScalarFieldEnum = (typeof EligibilityRuleScalarFieldEnum)[keyof typeof EligibilityRuleScalarFieldEnum]
+
+
+export const EligibilityCriteriaScalarFieldEnum = {
+  id: 'id',
+  eligibilityRuleId: 'eligibilityRuleId',
+  eventType: 'eventType',
+  minAttendances: 'minAttendances',
+  lookbackMonths: 'lookbackMonths',
+  lookbackDays: 'lookbackDays',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EligibilityCriteriaScalarFieldEnum = (typeof EligibilityCriteriaScalarFieldEnum)[keyof typeof EligibilityCriteriaScalarFieldEnum]
 
 
 export const SortOrder = {

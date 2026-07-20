@@ -1,4 +1,4 @@
-/* /members/components/MemberDetailClient.tsx */
+// /members/components/MemberDetailClient.tsx
 "use client";
 
 import Link from "next/link";
@@ -13,9 +13,7 @@ interface Member {
   age: number;
   memberType: "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT" | null;
   type: string;
-  registerDateDay: number | null;
-  registerDateMonth: string | null;
-  registerDateYear: number | null;
+  registerDate: string | null;
 }
 
 const memberTypeLabels: Record<string, string> = {
@@ -295,9 +293,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                   className="text-sm font-semibold"
                   style={{ color: "hsl(var(--foreground))" }}
                 >
-                  {member.registerDateDay && member.registerDateMonth && member.registerDateYear
-                    ? `${member.registerDateDay} ${member.registerDateMonth} ${member.registerDateYear}`
-                    : "-"}
+                  {member.registerDate ?? "-"}
                 </p>
               </div>
             </div>

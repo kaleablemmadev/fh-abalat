@@ -1,4 +1,4 @@
-/* /events/[eventId]/attendance/components/AttendanceGrid.tsx */
+// /events/[eventId]/attendance/components/AttendanceGrid.tsx
 'use client'
 
 import { useState, useEffect } from 'react';
@@ -29,7 +29,7 @@ interface AttendanceGridProps {
 }
 
 /** Map an attendance type name to its visual pill properties */
-function getPillStyle(name: string, _isSelected: boolean) {
+function getPillStyle(name: string) {
   const n = name.toLowerCase();
 
   if (n.includes('attended') || n.includes('present') || n === 'yes') {
@@ -233,7 +233,7 @@ export default function AttendanceGrid({
                       <div className="flex flex-wrap gap-1.5">
                         {attendanceTypes.map((type) => {
                           const isSelected = attendanceData[member.id] === type.id;
-                          const props = getPillStyle(type.name, isSelected);
+                          const props = getPillStyle(type.name);
                           const styleNow = isSelected ? props.selected : props.unselected;
 
                           return (

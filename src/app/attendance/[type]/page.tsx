@@ -39,15 +39,24 @@ export default async function MultiMonthAttendancePage({
   const todayEth = getEthiopianToday();
   
   // Determine which Ethiopian month/year to show
-  const currentEthMonth = month ? parseInt(month, 10) : parseInt(todayEth.month?.split(' ')[0] || '1');
+  let currentEthMonth = month ? parseInt(month, 10) : 1;
   const currentEthYear = year ? parseInt(year, 10) : todayEth.year;
+  
+  // If no month provided, try to find current month
+  if (!month) {
+    for (const [key, value] of Object.entries(ethMonthNames)) {
+      if (value === todayEth.month) {
+        currentEthMonth = parseInt(key);
+        break;
+      }
+    }
+  }
   
   const monthName = ethMonthNames[currentEthMonth] || '';
   const adminId = await getAdminId();
 
   // Get event dates for this Ethiopian month
-  const eventDates: Date[] = [];
-  const generatedEvents: Array<{ id: string; ethDate: { day: number } }> = [];
+  const generatedEvents: Array<{ id: string; ethDate: { year: number; month: string; day: number } }> = [];
 
   if (type === 'chore') {
     // Get all chore days for the month
@@ -80,7 +89,6 @@ export default async function MultiMonthAttendancePage({
         });
       }
       
-      eventDates.push(gregDate);
       generatedEvents.push({
         ...event,
         ethDate: ethDay,
@@ -116,7 +124,6 @@ export default async function MultiMonthAttendancePage({
         });
       }
       
-      eventDates.push(gregDate);
       generatedEvents.push({
         ...event,
         ethDate: ethDay,
@@ -175,7 +182,7 @@ export default async function MultiMonthAttendancePage({
             {type} Attendance
           </h1>
           <p className="text-sm mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
-            {monthName} {currentEthYear} ዓ.ም. • {eventDates.length} {type === 'sunday' ? 'Sundays' : 'Chore days'}
+            {monthName} {currentEthYear} ዓ.ም. • {generatedEvents.length} {type === 'sunday' ? 'Sundays' : 'Chore days'}
           </p>
         </div>
         

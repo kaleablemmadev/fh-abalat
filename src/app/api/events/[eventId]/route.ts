@@ -15,6 +15,8 @@ type EventUpdatePayload = Partial<{
   targetMemberTypes: string[];
 }>;
 
+type EventTargetMemberTypes = "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT";
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ eventId: string }> }
@@ -82,9 +84,23 @@ export async function PUT(
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    const updateData: any = { ...body };
+    const updateData: {
+      title?: string;
+      description?: string | null;
+      date?: Date;
+      location?: string | null;
+      ethiopianYear?: number | null;
+      ethiopianMonth?: number | null;
+      ethiopianDay?: number | null;
+      eligibilityRuleId?: string | null;
+      targetMemberTypes?: EventTargetMemberTypes[];
+    } = { ...body };
+    
     if (body.date) {
       updateData.date = new Date(body.date);
+    }
+    if (body.targetMemberTypes) {
+      updateData.targetMemberTypes = body.targetMemberTypes as EventTargetMemberTypes[];
     }
 
     const updatedEvent = await prisma.event.update({

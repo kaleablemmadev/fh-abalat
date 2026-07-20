@@ -1,4 +1,4 @@
-/* /api/members/[id]/route.ts */
+// /api/members/[id]/route.ts
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,6 +6,8 @@ type MemberUpdatePayload = Partial<{
   fullName: string;
   gender: "MALE" | "FEMALE";
   age: number;
+  christianName: string;
+  registerDate: string;
   memberType: "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT";
 }>;
 

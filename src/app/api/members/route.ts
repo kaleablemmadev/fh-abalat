@@ -1,13 +1,16 @@
-/* /api/members/route.ts */
+// /api/members/route.ts
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { ethMonthNames } from "@/src/lib/ethiopiancal";
 
 type MemberPayload = {
   fullName: string;
   gender?: "MALE" | "FEMALE";
   age: number;
-  christianName: string;
-  registerDate: string;
+  christianName?: string;
+  registerDateDay?: number;
+  registerDateMonth?: string;
+  registerDateYear?: number;
   memberType?: "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT";
 };
 
@@ -42,13 +45,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Build registration date string from Ethiopian calendar parts
+    let registerDate: string | undefined;
+    if (body.registerDateDay && body.registerDateMonth && body.registerDateYear) {
+      const monthName = ethMonthNames[parseInt(body.registerDateMonth)];
+      if (monthName) {
+        registerDate = `${monthName} ${body.registerDateDay}, ${body.registerDateYear}`;
+      }
+    }
+
     const member = await prisma.user.create({
       data: {
         fullName: body.fullName.trim(),
         gender: body.gender ?? "MALE",
         age: body.age,
         christianName: body.christianName,
-        registerDate: body.registerDate,
+        registerDate: registerDate,
         memberType: body.memberType ?? "REGULAR_MEMBER",
         type: "MEMBER",
       },

@@ -15,10 +15,13 @@ type EventPayload = {
   targetMemberTypes?: string[];
 };
 
+type EventTargetMemberTypes = "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT";
+
 export async function GET() {
   try {
     const events = await prisma.event.findMany({
       include: {
+        eligibilityRule: true,
         _count: {
           select: {
             attendances: true,
@@ -39,6 +42,7 @@ export async function GET() {
       ethiopianYear: event.ethiopianYear,
       ethiopianMonth: event.ethiopianMonth,
       ethiopianDay: event.ethiopianDay,
+      eligibilityRule: event.eligibilityRule?.name ?? "",
       eligibilityRuleId: event.eligibilityRuleId,
       targetMemberTypes: event.targetMemberTypes,
       ethDate: dateToEthiopian(new Date(event.date)),
@@ -84,6 +88,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const targetMemberTypes = body.targetMemberTypes as EventTargetMemberTypes[] | undefined;
+
     const event = await prisma.event.create({
       data: {
         title: body.title,
@@ -94,7 +100,7 @@ export async function POST(request: NextRequest) {
         ethiopianMonth: body.ethiopianMonth,
         ethiopianDay: body.ethiopianDay,
         eligibilityRuleId: body.eligibilityRuleId,
-        targetMemberTypes: body.targetMemberTypes,
+        targetMemberTypes: targetMemberTypes || [],
         createdById: adminUser.id,
       },
     });

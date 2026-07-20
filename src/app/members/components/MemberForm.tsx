@@ -1,10 +1,11 @@
+// /members/components/MemberForm.tsx
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
-import { ethMonthNames } from '@/src/lib/ethiopiancal';
+import { ethMonthNames, getEthiopianToday } from '@/src/lib/ethiopiancal';
 import {
   genderTypeValues,
   type genderType,
@@ -51,6 +52,13 @@ const fieldBase = {
 export default function MemberForm({ initialData, memberId }: MemberFormProps) {
   const router = useRouter();
   const isEditMode = Boolean(memberId);
+  const isInitialMount = useRef(true);
+
+  // Get today's Ethiopian date for default registration date
+  const today = getEthiopianToday();
+  const todayMonthNumber = Object.keys(ethMonthNames).find(
+    key => ethMonthNames[parseInt(key)] === today.month
+  );
 
   const [fullName, setFullName] = useState(initialData?.fullName ?? '');
   const [gender, setGender] = useState<genderType>(
@@ -61,17 +69,40 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
     initialData?.christianName ?? ''
   );
   const [registerDateDay, setRegisterDateDay] = useState<number | ''>(
-    initialData?.registerDateDay ?? ''
+    initialData?.registerDateDay ?? today.day
   );
   const [registerDateMonth, setRegisterDateMonth] = useState(
-    initialData?.registerDateMonth ?? ''
+    initialData?.registerDateMonth ?? todayMonthNumber ?? '1'
   );
   const [registerDateYear, setRegisterDateYear] = useState<number | ''>(
-    initialData?.registerDateYear ?? ''
+    initialData?.registerDateYear ?? today.year
   );
 
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  // Use a ref to track if we've already initialized
+  const initialized = useRef(false);
+
+  // Only update state when initialData changes and it's not the first mount
+  useEffect(() => {
+    // Skip the first mount since we already set initial state
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    if (initialData && !initialized.current) {
+      initialized.current = true;
+      setFullName(initialData.fullName);
+      setGender(initialData.gender);
+      setAge(initialData.age);
+      setChristianName(initialData.christianName || '');
+      setRegisterDateDay(initialData.registerDateDay);
+      setRegisterDateMonth(initialData.registerDateMonth);
+      setRegisterDateYear(initialData.registerDateYear);
+    }
+  }, [initialData]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -89,11 +120,11 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
         body: JSON.stringify({
           fullName,
           gender,
-          age: age === '' ? null : age,
+          age: age === '' ? 0 : Number(age),
           christianName,
-          registerDateDay: registerDateDay === '' ? null : registerDateDay,
+          registerDateDay: registerDateDay === '' ? null : Number(registerDateDay),
           registerDateMonth,
-          registerDateYear: registerDateYear === '' ? null : registerDateYear,
+          registerDateYear: registerDateYear === '' ? null : Number(registerDateYear),
         }),
       });
 
@@ -165,7 +196,7 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
             className="block text-xs font-semibold"
             style={{ color: 'hsl(var(--foreground))' }}
           >
-            የክርስትና ስም
+            የክርስትና ስም (Christian Name)
           </label>
           <input
             id="christianName"
@@ -173,7 +204,6 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
             onChange={(e) => setChristianName(e.target.value)}
             placeholder="ክርስትና ስም"
             {...fieldBase}
-            required
           />
         </div>
 
@@ -229,7 +259,7 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
             className="block text-xs font-semibold"
             style={{ color: 'hsl(var(--foreground))' }}
           >
-            የምዝገባ ቀን (Registration Date)
+            የምዝገባ ቀን (Registration Date - Ethiopian Calendar)
           </label>
 
           <div className="grid grid-cols-3 gap-2">
@@ -271,12 +301,6 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
               onChange={(e) => {
                 const raw = e.target.value;
                 setRegisterDateYear(raw === '' ? '' : Number(raw));
-              }}
-              onBlur={() => {
-                setRegisterDateYear((prev) => {
-                  if (prev === '') return '';
-                  return Math.max(1800, prev);
-                });
               }}
               placeholder="ዓመት"
               {...fieldBase}
@@ -323,6 +347,12 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
           style={{
             background: 'hsl(160 70% 32%)',
             color: '#fff',
+          }}
+          onMouseEnter={(e) => {
+            if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 38%)';
+          }}
+          onMouseLeave={(e) => {
+            if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 32%)';
           }}
         >
           {isSaving && <Loader2 size={13} className="animate-spin" />}

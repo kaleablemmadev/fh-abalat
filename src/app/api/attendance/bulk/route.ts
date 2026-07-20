@@ -1,4 +1,4 @@
-/* /api/attendance/bulk/route.ts */
+// /api/attendance/bulk/route.ts
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -44,14 +44,14 @@ export async function POST(request: NextRequest) {
           },
           update: {
             attendanceTypeId: record.attendanceTypeId,
-            permissionId: record.permissionId,
+            permissionId: record.permissionId || null,
             markedById: adminUser.id,
           },
           create: {
             memberId: record.memberId,
             eventId: record.eventId,
             attendanceTypeId: record.attendanceTypeId,
-            permissionId: record.permissionId,
+            permissionId: record.permissionId || null,
             markedById: adminUser.id,
           },
         })

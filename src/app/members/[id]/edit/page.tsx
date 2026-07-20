@@ -123,6 +123,14 @@ export default function UpdateMember() {
 
   return (
     <div className="space-y-4 animate-fade-in">
+      <div>
+        <h1 className="text-xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
+          Edit Member
+        </h1>
+        <p className="text-sm mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
+          Update the details for this member record.
+        </p>
+      </div>
       <MemberForm memberId={id} initialData={member} />
     </div>
   );

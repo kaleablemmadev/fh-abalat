@@ -1,4 +1,4 @@
-/* /members/page.tsx */
+// /members/page.tsx
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -11,9 +11,7 @@ interface Member {
   gender: "MALE" | "FEMALE";
   age: number;
   christianName: string | null;
-  registerDateDay: number | null;
-  registerDateMonth: string | null;
-  registerDateYear: number | null;
+  registerDate: string | null;
   memberType: "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT" | null;
 }
 
@@ -77,7 +75,7 @@ export default function MembersPage() {
         member.gender ?? "",
         member.memberType ?? "",
         member.christianName ?? "",
-        member.registerDateMonth ?? "",
+        member.registerDate ?? "",
       ]
         .join(" ")
         .toLowerCase();
@@ -373,14 +371,11 @@ export default function MembersPage() {
                         className="text-[11px]"
                         style={{ color: "hsl(var(--muted-foreground))" }}
                       >
-                        {member.registerDateDay &&
-                        member.registerDateMonth &&
-                        member.registerDateYear ? (
+                        {member.registerDate ? (
                           <span>
                             Registered:{" "}
                             <span style={{ color: "hsl(var(--foreground))" }}>
-                              {member.registerDateDay} {member.registerDateMonth}{" "}
-                              {member.registerDateYear}
+                              {member.registerDate}
                             </span>
                           </span>
                         ) : (

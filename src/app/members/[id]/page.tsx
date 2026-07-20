@@ -1,4 +1,4 @@
-/* /members/[id]/route.ts */
+// /members/[id]/page.tsx
 import MemberDetailClient from "../components/MemberDetailClient";
 
 export default async function MemberDetailPage({

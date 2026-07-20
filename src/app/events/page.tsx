@@ -11,7 +11,11 @@ interface EventProps {
   title: string;
   description?: string;
   date: string;
-  eligibilityRule: string;
+  location?: string;
+  ethiopianYear?: number;
+  ethiopianMonth?: number;
+  ethiopianDay?: number;
+  eligibilityRule?: string;
   _count?: {
     attendances: number;
   };

@@ -1,3 +1,4 @@
+// /attendance/components/MultiMonthGrid.tsx
 'use client';
 
 import { useState } from 'react';
@@ -16,6 +17,7 @@ interface AttendanceType {
 
 interface InitialAttendance {
   memberId: string;
+  eventId: string;
   attendanceTypeId: string;
   permissionId: string | null;
 }
@@ -24,7 +26,7 @@ interface Event {
   id: string;
   title: string;
   date: Date;
-  ethDate: { day: number };
+  ethDate: { year: number; month: string; day: number };
 }
 
 interface MultiMonthGridProps {
@@ -48,13 +50,13 @@ function getPillStyle(name: string) {
       icon: <Check size={11} strokeWidth={3} />,
       selected: {
         background: 'hsl(160 40% 18%)',
-        color:      'hsl(160 65% 70%)',
-        border:     '1px solid hsl(160 40% 30%)',
+        color: 'hsl(160 65% 70%)',
+        border: '1px solid hsl(160 40% 30%)',
       },
       unselected: {
         background: 'hsl(var(--card))',
-        color:      'hsl(var(--muted-foreground))',
-        border:     '1px solid hsl(var(--border))',
+        color: 'hsl(var(--muted-foreground))',
+        border: '1px solid hsl(var(--border))',
       },
       hoverBorder: 'hsl(160 50% 35%)',
     };
@@ -66,13 +68,13 @@ function getPillStyle(name: string) {
       icon: <Clock size={11} strokeWidth={2.5} />,
       selected: {
         background: 'hsl(38 35% 16%)',
-        color:      'hsl(38 65% 65%)',
-        border:     '1px solid hsl(38 40% 28%)',
+        color: 'hsl(38 65% 65%)',
+        border: '1px solid hsl(38 40% 28%)',
       },
       unselected: {
         background: 'hsl(var(--card))',
-        color:      'hsl(var(--muted-foreground))',
-        border:     '1px solid hsl(var(--border))',
+        color: 'hsl(var(--muted-foreground))',
+        border: '1px solid hsl(var(--border))',
       },
       hoverBorder: 'hsl(38 45% 35%)',
     };
@@ -84,13 +86,13 @@ function getPillStyle(name: string) {
       icon: <X size={11} strokeWidth={3} />,
       selected: {
         background: 'hsl(0 40% 16%)',
-        color:      'hsl(0 55% 65%)',
-        border:     '1px solid hsl(0 40% 28%)',
+        color: 'hsl(0 55% 65%)',
+        border: '1px solid hsl(0 40% 28%)',
       },
       unselected: {
         background: 'hsl(var(--card))',
-        color:      'hsl(var(--muted-foreground))',
-        border:     '1px solid hsl(var(--border))',
+        color: 'hsl(var(--muted-foreground))',
+        border: '1px solid hsl(var(--border))',
       },
       hoverBorder: 'hsl(0 45% 35%)',
     };
@@ -102,13 +104,13 @@ function getPillStyle(name: string) {
     icon: null,
     selected: {
       background: 'hsl(160 40% 14%)',
-      color:      'hsl(160 55% 60%)',
-      border:     '1px solid hsl(160 35% 25%)',
+      color: 'hsl(160 55% 60%)',
+      border: '1px solid hsl(160 35% 25%)',
     },
     unselected: {
       background: 'hsl(var(--card))',
-      color:      'hsl(var(--muted-foreground))',
-      border:     '1px solid hsl(var(--border))',
+      color: 'hsl(var(--muted-foreground))',
+      border: '1px solid hsl(var(--border))',
     },
     hoverBorder: 'hsl(160 40% 30%)',
   };
@@ -121,13 +123,15 @@ export default function MultiMonthGrid({
   initialAttendance,
   permissionTypeId,
   type,
-  currentEthYear,
-  currentEthMonth,
+  currentEthYear: _currentEthYear,
+  currentEthMonth: _currentEthMonth,
 }: MultiMonthGridProps) {
+  // Initialize attendance data from existing records
   const [attendanceData, setAttendanceData] = useState<Record<string, { attendanceTypeId: string; permissionId: string | null }>>(() => {
     const initialState: Record<string, { attendanceTypeId: string; permissionId: string | null }> = {};
     initialAttendance.forEach((record) => {
-      initialState[`${record.memberId}_${record.eventId}`] = {
+      const key = `${record.memberId}_${record.eventId}`;
+      initialState[key] = {
         attendanceTypeId: record.attendanceTypeId,
         permissionId: record.permissionId,
       };
@@ -149,6 +153,7 @@ export default function MultiMonthGrid({
         permissionId: isPermission ? memberId : null,
       },
     }));
+    setSaveSuccess(false);
   };
 
   const handleSave = async () => {
@@ -166,6 +171,11 @@ export default function MultiMonthGrid({
           permissionId: value.permissionId,
         };
       });
+
+      if (payload.length === 0) {
+        setIsSaving(false);
+        return;
+      }
 
       const res = await fetch('/api/attendance/bulk', {
         method: 'POST',
@@ -211,7 +221,7 @@ export default function MultiMonthGrid({
               <thead>
                 <tr style={{ borderBottom: '1px solid hsl(var(--border))' }}>
                   <th
-                    className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider sticky left-0"
+                    className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider sticky left-0 z-10"
                     style={{
                       background: 'hsl(var(--muted))',
                       color: 'hsl(var(--muted-foreground))',
@@ -230,7 +240,11 @@ export default function MultiMonthGrid({
                         minWidth: '100px',
                       }}
                     >
-                      Day {event.ethDate.day}
+                      {type === 'chore' ? 'Chore' : 'Sunday'}
+                      <br />
+                      <span className="text-[10px] font-normal opacity-70">
+                        {event.ethDate.month.substring(0, 3)} {event.ethDate.day}
+                      </span>
                     </th>
                   ))}
                 </tr>
@@ -247,8 +261,8 @@ export default function MultiMonthGrid({
                     onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   >
                     <td
-                      className="px-4 py-2.5 text-sm font-medium sticky left-0"
-                      style={{ 
+                      className="px-4 py-2.5 text-sm font-medium sticky left-0 z-10"
+                      style={{
                         background: 'hsl(var(--card))',
                         color: 'hsl(var(--foreground))',
                       }}

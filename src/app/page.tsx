@@ -11,6 +11,7 @@ type UserWithAttendance = Prisma.UserGetPayload<{
     attendances: {
       include: {
         event: true;
+        attendanceType: true;
       };
     };
   };
@@ -49,6 +50,7 @@ export default async function Home() {
         attendances: {
           include: {
             event: true,
+            attendanceType: true,
           },
           orderBy: {
             createdAt: 'desc',
@@ -429,7 +431,7 @@ export default async function Home() {
                             <span className="text-[11px]" style={{ color: 'hsl(var(--muted-foreground))' }}>
                               {dateFormatter.format(new Date(event.date))}
                             </span>
-                            {event._count.attendances > 0 && (
+                            {event._count && event._count.attendances > 0 && (
                               <>
                                 <span className="w-1 h-1 rounded-full" style={{ background: 'hsl(var(--muted-foreground))' }} />
                                 <span className="text-[10px]" style={{ color: 'hsl(var(--muted-foreground))' }}>

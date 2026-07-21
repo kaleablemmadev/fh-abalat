@@ -55,13 +55,17 @@ export async function POST(
       .replace(/\s+/g, '-')
       .toLowerCase();
     
-    const filename = sanitizedTitle ? `eligible-members-${sanitizedTitle}.${format}` : `eligible-members-${eventId}.${format}`;
+    const filename = sanitizedTitle 
+      ? `eligible-members-${sanitizedTitle}.${format}` 
+      : `eligible-members-${eventId}.${format}`;
 
+    // docBuffer is already Uint8Array from the service
     return new NextResponse(docBuffer, {
       status: 200,
       headers: {
         'Content-Type': contentType,
         'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': String(docBuffer.length),
       },
     });
   } catch (error) {

@@ -37,8 +37,13 @@ export class DocumentService {
         children: [
           // Title
           new Paragraph({
-            text: title,
-            heading: HeadingLevel.TITLE,
+            children: [
+              new TextRun({
+                text: title,
+                size: 32,
+                bold: true,
+              }),
+            ],
             alignment: AlignmentType.CENTER,
             spacing: { before: 0, after: 100 },
           }),
@@ -57,8 +62,13 @@ export class DocumentService {
           }),
           
           ...(subtitle ? [new Paragraph({
-            text: subtitle,
-            heading: HeadingLevel.HEADING_2,
+            children: [
+              new TextRun({
+                text: subtitle,
+                size: 18,
+                bold: true,
+              }),
+            ],
             alignment: AlignmentType.CENTER,
             spacing: { before: 0, after: 50 },
           })] : []),
@@ -67,7 +77,7 @@ export class DocumentService {
             children: [
               new TextRun({
                 text: `Description: ${eventDescription}`,
-                size: 18,
+                size: 16,
               }),
             ],
             alignment: AlignmentType.CENTER,
@@ -78,7 +88,7 @@ export class DocumentService {
             children: [
               new TextRun({
                 text: `Location: ${eventLocation}`,
-                size: 18,
+                size: 16,
               }),
             ],
             alignment: AlignmentType.CENTER,
@@ -88,12 +98,8 @@ export class DocumentService {
           ...(eventDate ? [new Paragraph({
             children: [
               new TextRun({
-                text: `Date: ${eventDate.toLocaleDateString()}`,
-                size: 18,
-              }),
-              new TextRun({
-                text: ` | Time: ${eventDate.toLocaleTimeString()}`,
-                size: 18,
+                text: `Date: ${eventDate.toLocaleDateString()} | Time: ${eventDate.toLocaleTimeString()}`,
+                size: 16,
               }),
             ],
             alignment: AlignmentType.CENTER,
@@ -185,8 +191,10 @@ export class DocumentService {
                     // Column 1 - Number
                     new TableCell({
                       children: [new Paragraph({ 
-                        text: member1 ? `${index + 1}` : '',
-                        size: 16,
+                        children: [new TextRun({
+                          text: member1 ? `${index + 1}` : '',
+                          size: 16,
+                        })],
                         alignment: AlignmentType.CENTER,
                       })],
                       borders: {
@@ -199,8 +207,10 @@ export class DocumentService {
                     // Column 1 - Name
                     new TableCell({
                       children: [new Paragraph({ 
-                        text: member1 ? member1.fullName || 'Unnamed' : '',
-                        size: 16,
+                        children: [new TextRun({
+                          text: member1 ? member1.fullName || 'Unnamed' : '',
+                          size: 16,
+                        })],
                       })],
                       borders: {
                         top: { style: BorderStyle.SINGLE, size: 1 },
@@ -212,8 +222,10 @@ export class DocumentService {
                     // Column 2 - Number
                     new TableCell({
                       children: [new Paragraph({ 
-                        text: member2 ? `${index + 1 + membersPerColumn}` : '',
-                        size: 16,
+                        children: [new TextRun({
+                          text: member2 ? `${index + 1 + membersPerColumn}` : '',
+                          size: 16,
+                        })],
                         alignment: AlignmentType.CENTER,
                       })],
                       borders: {
@@ -226,8 +238,10 @@ export class DocumentService {
                     // Column 2 - Name
                     new TableCell({
                       children: [new Paragraph({ 
-                        text: member2 ? member2.fullName || 'Unnamed' : '',
-                        size: 16,
+                        children: [new TextRun({
+                          text: member2 ? member2.fullName || 'Unnamed' : '',
+                          size: 16,
+                        })],
                       })],
                       borders: {
                         top: { style: BorderStyle.SINGLE, size: 1 },
@@ -299,9 +313,9 @@ export class DocumentService {
             const fontData = fs.readFileSync(fontPath);
             const base64Font = fontData.toString('base64');
             const fontName = path.basename(fontPath, '.ttf');
-            // @ts-expeact-error
+            // @ts-ignore
             doc.addFileToVFS(fontName + '.ttf', base64Font);
-            // @ts-expeact-error
+            // @ts-ignore
             doc.addFont(fontName + '.ttf', 'NotoSansEthiopic', 'normal');
             fontLoaded = true;
             console.log('✅ Amharic font loaded from:', fontPath);

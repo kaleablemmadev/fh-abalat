@@ -1,19 +1,21 @@
-# Implementation Plan - Fix NextResponse BodyInit Type Error
+# Implementation Plan - Unstick Action Bars
 
-The build is failing because `NextResponse` expects a `BodyInit` type, but is receiving a Node.js `Buffer`. In the Next.js App Router environment, `Buffer` needs to be converted to a `Uint8Array` to satisfy the TypeScript compiler.
+The user wants to remove the fixed positioning of the "Save Changes" / "Save Attendance" bars in the attendance pages and other places, so they flow naturally with the content instead of being stuck at the bottom of the viewport.
 
 ## Proposed Changes
 
-### [API Routes]
+### [Attendance Components]
 
-#### [MODIFY] [monthly-attendance download route](file:///C:/Users/hp/OneDrive/Documents/10_Business_Study_Plan/kaleablemmadev-portfolio/kaleab-dev-portfolio/02_CODING_PORTFOLIO/fh-abalat/src/app/api/reports/monthly-attendance/download/route.ts)
-- Wrap `docxBuffer` and `pdfBuffer` with `new Uint8Array()` when passing to `new NextResponse()`.
+#### [MODIFY] [MultiMonthGrid.tsx](file:///C:/Users/hp/OneDrive/Documents/10_Business_Study_Plan/kaleablemmadev-portfolio/kaleab-dev-portfolio/02_CODING_PORTFOLIO/fh-abalat/src/app/attendance/components/MultiMonthGrid.tsx)
+- Change the "Sticky save bar" from `fixed bottom-0 ...` to a normal `div` that flows at the end of the content.
+- Update styling to remove viewport-relative positioning (`left-0`, `md:left-56`, `right-0`) and add margin/padding/rounding suitable for a content-integrated bar.
 
-#### [MODIFY] [eligibility download route](file:///C:/Users/hp/OneDrive/Documents/10_Business_Study_Plan/kaleablemmadev-portfolio/kaleab-dev-portfolio/02_CODING_PORTFOLIO/fh-abalat/src/app/api/events/[eventId]/eligibility/download/route.ts)
-- Wrap `docBuffer` with `new Uint8Array()` when passing to `new NextResponse()`.
+#### [MODIFY] [AttendanceGrid.tsx](file:///C:/Users/hp/OneDrive/Documents/10_Business_Study_Plan/kaleablemmadev-portfolio/kaleab-dev-portfolio/02_CODING_PORTFOLIO/fh-abalat/src/app/events/[eventId]/attendance/components/AttendanceGrid.tsx)
+- Similar to above, change the fixed bar to a naturally flowing bar.
 
 ## Verification Plan
 
-### Automated Tests
-- Run `analyze_file` on both files to ensure TypeScript no longer reports the `BodyInit` error.
-- The primary verification is a successful build on Vercel.
+### Manual Verification
+- **Attendance Page**: Verify that the "Save Attendance" bar now appears directly below the table and scrolls with the page.
+- **Event Attendance Page**: Verify the same for the event-specific attendance grid.
+- **Mobile View**: Verify that these bars are no longer overlapping with the mobile bottom navigation bar.

@@ -93,6 +93,15 @@
 .animate-fade-in  { animation: fadeIn  180ms ease-out both; }
 .animate-slide-in { animation: slideIn 180ms ease-out both; }
 
+/* ─── Utilities ────────────────────────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* ─── Skeleton shimmer ──────────────────────────────────────────────────────── */
 .skeleton {
   background: hsl(var(--muted));

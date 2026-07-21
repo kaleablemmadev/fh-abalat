@@ -17,8 +17,7 @@ const navItems = [
   { name: 'Attendance',  href: '/attendance/chore', icon: CheckSquare },
   { name: 'Eligibility', href: '/eligibility-rules', icon: Shield },
   { name: 'Permissions', href: '/permission-types', icon: FileText },
-  { name: 'Reports',     href: '/reports/monthly-attendance', icon: BarChart3 },
-  { name: 'Settings',    href: '/settings',        icon: Settings },
+  { name: 'Reports',     href: '/reports/monthly-attendance', icon: BarChart3 }
 ];
 
 /** Derive initials from a display name */
@@ -139,7 +138,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       </aside>
 
       {/* ── Main content ────────────────────────────────────────────────── */}
-      <main className="flex-1 flex flex-col min-h-screen pb-14 md:pb-0 min-w-0">
+      <main className="flex-1 flex flex-col min-h-screen pb-20 md:pb-0 min-w-0">
 
         {/* Top bar */}
         <header
@@ -190,19 +189,20 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
       {/* ── Mobile bottom nav ───────────────────────────────────────────── */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 h-14 flex items-center justify-around z-50 px-1"
+        className="md:hidden fixed bottom-0 left-0 right-0 h-14 flex items-center overflow-x-auto no-scrollbar whitespace-nowrap snap-x z-50 px-1 pb-safe"
         style={{
           background: 'hsl(var(--card))',
           borderTop: '1px solid hsl(var(--border))',
+          paddingBottom: 'env(safe-area-inset-bottom)',
         }}
       >
-        {navItems.slice(0, 5).map((item) => {
+        {navItems.map((item) => {
           const active = isActive(item.href);
           return (
             <Link
               key={item.name}
               href={item.href}
-              className="flex flex-col items-center justify-center w-full h-full gap-1 transition-colors duration-150"
+              className="flex flex-col items-center justify-center min-w-[4.5rem] flex-1 h-full gap-1 snap-center transition-colors duration-150"
               style={{ color: active ? 'hsl(160 60% 55%)' : 'hsl(var(--muted-foreground))' }}
             >
               <item.icon size={18} strokeWidth={active ? 2.5 : 1.75} />

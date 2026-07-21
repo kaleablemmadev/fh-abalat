@@ -266,12 +266,12 @@ export default function AttendanceGrid({
         )}
       </div>
 
-      {/* ── Sticky save bar ───────────────────────────────────────────── */}
+      {/* ── Save bar ───────────────────────────────────────────── */}
       <div
-        className="fixed bottom-0 left-0 md:left-56 right-0 px-5 py-3 z-40 flex items-center justify-between"
+        className="mt-6 px-5 py-3 rounded-lg flex items-center justify-between"
         style={{
           background: 'hsl(var(--card))',
-          borderTop: '1px solid hsl(var(--border))',
+          border: '1px solid hsl(var(--border))',
         }}
       >
         {/* Status messages */}

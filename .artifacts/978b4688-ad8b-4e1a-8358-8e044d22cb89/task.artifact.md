@@ -1,13 +1,3 @@
-- `[x]` Update `src/services/document.service.ts`
-    - `[x]` Add `MonthlyAttendanceOptions` interface
-    - `[x]` Add `generateMonthlyAttendanceDOCX` method
-- `[x]` Update `src/app/api/reports/monthly-attendance/download/route.ts`
-    - `[x]` Support `format` parameter
-    - `[x]` Handle DOCX generation via `DocumentService`
-- `[x]` Update `src/app/reports/monthly-attendance/page.tsx`
-    - `[x]` Add `downloadReport` function
-    - `[x]` Add "Download DOCX" button
-- `[/]` Fix `NextResponse` Type Errors (Uint8Array conversion)
-    - `[ ]` Fix `src/app/api/reports/monthly-attendance/download/route.ts`
-    - `[ ]` Fix `src/app/api/events/[eventId]/eligibility/download/route.ts`
-- `[ ]` Verify build success
+- `[x]` Unstick save bar in `src/app/attendance/components/MultiMonthGrid.tsx`
+- `[x]` Unstick save bar in `src/app/events/[eventId]/attendance/components/AttendanceGrid.tsx`
+- `[x]` Verify bars flow naturally below content

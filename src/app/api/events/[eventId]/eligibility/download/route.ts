@@ -59,13 +59,14 @@ export async function POST(
       ? `eligible-members-${sanitizedTitle}.${format}` 
       : `eligible-members-${eventId}.${format}`;
 
-    // docBuffer is already Uint8Array from the service
-    return new NextResponse(docBuffer, {
+    // Convert Buffer to base64 string for NextResponse compatibility
+    const base64Data = docBuffer.toString('base64');
+
+    return new NextResponse(Buffer.from(base64Data, 'base64'), {
       status: 200,
       headers: {
         'Content-Type': contentType,
         'Content-Disposition': `attachment; filename="${filename}"`,
-        'Content-Length': String(docBuffer.length),
       },
     });
   } catch (error) {

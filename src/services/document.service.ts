@@ -14,7 +14,7 @@ interface DocumentOptions {
 }
 
 export class DocumentService {
-  static async generateDOCX(options: DocumentOptions): Promise<Uint8Array> {
+  static async generateDOCX(options: DocumentOptions): Promise<Buffer> {
     const { title, subtitle, eventDate, totalMembers, eligibleMembers, eventDescription, eventLocation } = options;
 
     // Split members into two columns
@@ -267,11 +267,10 @@ export class DocumentService {
       }],
     });
 
-    const buffer = await Packer.toBuffer(doc);
-    return new Uint8Array(buffer);
+    return await Packer.toBuffer(doc);
   }
 
-  static async generatePDF(options: DocumentOptions): Promise<Uint8Array> {
+  static async generatePDF(options: DocumentOptions): Promise<Buffer> {
     const { title, subtitle, eventDate, totalMembers, eligibleMembers, eventDescription, eventLocation } = options;
 
     const { default: jsPDF } = await import('jspdf');
@@ -438,7 +437,7 @@ export class DocumentService {
         doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 15, finalY + 8, { align: 'right' });
 
         const pdfBuffer = doc.output('arraybuffer');
-        resolve(new Uint8Array(pdfBuffer));
+        resolve(Buffer.from(pdfBuffer));
       } catch (error) {
         reject(error);
       }
@@ -448,7 +447,7 @@ export class DocumentService {
   static async generateDocument(
     options: DocumentOptions,
     format: 'docx' | 'pdf' = 'pdf'
-  ): Promise<Uint8Array> {
+  ): Promise<Buffer> {
     if (format === 'docx') {
       return this.generateDOCX(options);
     } else {

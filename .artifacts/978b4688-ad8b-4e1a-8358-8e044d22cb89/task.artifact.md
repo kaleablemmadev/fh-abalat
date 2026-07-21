@@ -7,4 +7,7 @@
 - `[x]` Update `src/app/reports/monthly-attendance/page.tsx`
     - `[x]` Add `downloadReport` function
     - `[x]` Add "Download DOCX" button
-- `[x]` Verify build and functionality
+- `[/]` Fix `NextResponse` Type Errors (Uint8Array conversion)
+    - `[ ]` Fix `src/app/api/reports/monthly-attendance/download/route.ts`
+    - `[ ]` Fix `src/app/api/events/[eventId]/eligibility/download/route.ts`
+- `[ ]` Verify build success

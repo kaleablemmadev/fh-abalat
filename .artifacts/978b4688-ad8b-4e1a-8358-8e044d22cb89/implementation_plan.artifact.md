@@ -1,34 +1,19 @@
-# Implementation Plan - Add DOCX Download for Monthly Attendance Report
+# Implementation Plan - Fix NextResponse BodyInit Type Error
 
-The goal is to add an option to download the Monthly Attendance Report as a `.docx` file, in addition to the existing PDF option.
+The build is failing because `NextResponse` expects a `BodyInit` type, but is receiving a Node.js `Buffer`. In the Next.js App Router environment, `Buffer` needs to be converted to a `Uint8Array` to satisfy the TypeScript compiler.
 
 ## Proposed Changes
-
-### [Document Service]
-
-#### [MODIFY] [document.service.ts](file:///C:/Users/hp/OneDrive/Documents/10_Business_Study_Plan/kaleablemmadev-portfolio/kaleab-dev-portfolio/02_CODING_PORTFOLIO/fh-abalat/src/services/document.service.ts)
-
-- Add a new interface `MonthlyAttendanceOptions` to represent the data needed for the monthly report.
-- Add a new static method `generateMonthlyAttendanceDOCX(options: MonthlyAttendanceOptions): Promise<Buffer>` to generate the DOCX file with a table structure matching the report.
 
 ### [API Routes]
 
 #### [MODIFY] [monthly-attendance download route](file:///C:/Users/hp/OneDrive/Documents/10_Business_Study_Plan/kaleablemmadev-portfolio/kaleab-dev-portfolio/02_CODING_PORTFOLIO/fh-abalat/src/app/api/reports/monthly-attendance/download/route.ts)
+- Wrap `docxBuffer` and `pdfBuffer` with `new Uint8Array()` when passing to `new NextResponse()`.
 
-- Update the POST handler to accept a `format` parameter (defaulting to `pdf`).
-- If `format` is `docx`, call `DocumentService.generateMonthlyAttendanceDOCX`.
-- Set the appropriate `Content-Type` and file extension for the response.
-
-### [Monthly Attendance Page]
-
-#### [MODIFY] [monthly-attendance page](file:///C:/Users/hp/OneDrive/Documents/10_Business_Study_Plan/kaleablemmadev-portfolio/kaleab-dev-portfolio/02_CODING_PORTFOLIO/fh-abalat/src/app/reports/monthly-attendance/page.tsx)
-
-- Refactor `downloadPDF` to a generic `downloadReport(format: 'pdf' | 'docx')` function.
-- Add a "Download DOCX" button next to the "Download PDF" button.
+#### [MODIFY] [eligibility download route](file:///C:/Users/hp/OneDrive/Documents/10_Business_Study_Plan/kaleablemmadev-portfolio/kaleab-dev-portfolio/02_CODING_PORTFOLIO/fh-abalat/src/app/api/events/[eventId]/eligibility/download/route.ts)
+- Wrap `docBuffer` with `new Uint8Array()` when passing to `new NextResponse()`.
 
 ## Verification Plan
 
-### Manual Verification
-- Generate a monthly attendance report.
-- Click "Download PDF" and verify the PDF is correct.
-- Click "Download DOCX" and verify the DOCX file opens correctly in Word/Google Docs and contains the expected data in a table format.
+### Automated Tests
+- Run `analyze_file` on both files to ensure TypeScript no longer reports the `BodyInit` error.
+- The primary verification is a successful build on Vercel.

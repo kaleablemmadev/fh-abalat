@@ -80,10 +80,7 @@ export async function POST(
       ? `eligible-members-${sanitizedTitle}.${format}` 
       : `eligible-members-${eventId}.${format}`;
 
-    // Convert Buffer to base64 string for NextResponse compatibility
-    const base64Data = docBuffer.toString('base64');
-
-    return new NextResponse(Buffer.from(base64Data, 'base64'), {
+    return new NextResponse(new Uint8Array(docBuffer), {
       status: 200,
       headers: {
         'Content-Type': contentType,

@@ -1115,6 +1115,13 @@ export const PermissionTypeScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  category: 'category',
+  durationMonths: 'durationMonths',
+  durationYears: 'durationYears',
+  appliesToChore: 'appliesToChore',
+  appliesToSunday: 'appliesToSunday',
+  specificDays: 'specificDays',
+  appliesToSundays: 'appliesToSundays',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1129,7 +1136,8 @@ export const PermissionScalarFieldEnum = {
   reason: 'reason',
   status: 'status',
   reviewedById: 'reviewedById',
-  ethiopianDate: 'ethiopianDate',
+  ethiopianStartDate: 'ethiopianStartDate',
+  ethiopianEndDate: 'ethiopianEndDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1308,6 +1316,20 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'permissionTypeCategory'
+ */
+export type EnumpermissionTypeCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'permissionTypeCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'permissionTypeCategory[]'
+ */
+export type ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'permissionTypeCategory[]'>
     
 
 

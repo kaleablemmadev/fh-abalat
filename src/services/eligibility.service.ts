@@ -1,6 +1,7 @@
 // src/services/eligibility.service.ts
 import prisma from '@/src/lib/prisma';
 import { dateToEthiopian } from '@/src/lib/ethiopiancal';
+import { checkMemberPermission } from './permission.service';
 
 export interface EligibilityCheckResult {
   memberId: string;
@@ -22,6 +23,12 @@ export interface EligibilityCheckResult {
     eventDate: Date;
     attendanceType: string;
     value: number;
+    excused?: boolean;
+    permissionType?: string;
+  }[];
+  activePermissions?: {
+    permissionType: string;
+    reason?: string;
   }[];
 }
 
@@ -58,6 +65,7 @@ export class EligibilityService {
     sundayScore: number; 
     totalScore: number;
     attendanceDetails: any[];
+    activePermissions: any[];
   }> {
     const cutoffDate = new Date(targetDate);
     cutoffDate.setMonth(cutoffDate.getMonth() - lookbackMonths);
@@ -155,7 +163,7 @@ export class EligibilityService {
       }
     }
 
-    const { choreScore, sundayScore, totalScore, attendanceDetails } = 
+    const { choreScore, sundayScore, totalScore, attendanceDetails, activePermissions } = 
       await this.calculateMemberScore(memberId, maxLookbackMonths, targetDate);
 
     // Check chore criteria
@@ -188,6 +196,7 @@ export class EligibilityService {
         lookbackMonths: maxLookbackMonths,
       },
       attendanceDetails,
+      activePermissions,
     };
   }
 

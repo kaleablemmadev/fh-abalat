@@ -10,7 +10,7 @@ export async function POST(
 ) {
   try {
     const { eventId } = await params;
-    const { format = 'pdf' } = await request.json();
+    const { format = 'pdf', ruleId } = await request.json();
 
     // Fetch event details
     const event = await prisma.event.findUnique({
@@ -24,7 +24,28 @@ export async function POST(
       );
     }
 
-    const report = await EligibilityService.checkEventEligibility(eventId);
+    let report;
+    // If a specific rule is requested, use it
+    if (ruleId) {
+      const rule = await prisma.eligibilityRule.findUnique({
+        where: { id: ruleId },
+        include: {
+          criteria: true,
+        },
+      });
+
+      if (!rule) {
+        return NextResponse.json(
+          { error: "Eligibility rule not found" },
+          { status: 404 }
+        );
+      }
+
+      report = await EligibilityService.checkEventEligibilityWithRule(eventId, rule);
+    } else {
+      // Otherwise use the event's current rule
+      report = await EligibilityService.checkEventEligibility(eventId);
+    }
 
     if (report.eligibleMembers.length === 0) {
       return NextResponse.json(

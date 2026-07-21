@@ -55,7 +55,7 @@
   body {
     margin: 0;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: 'Noto Sans Ethiopic', var(--font-inter), system-ui, sans-serif;
+    font-family: var(--font-ethiopic), var(--font-inter), system-ui, sans-serif;
     background: hsl(var(--background));
     color: hsl(var(--foreground));
     -webkit-font-smoothing: antialiased;
@@ -423,11 +423,11 @@ code {
 }
 
 /* ─── Amharic Font Support ──────────────────────────────────────────────────── */
-/* Note: Font is imported in layout.tsx via @fontsource/noto-sans-ethiopic */
+/* Note: Font is loaded from assets/fonts/NotoSansEthiopic-VariableFont_wdth,wght.ttf */
 
 /* Utility class for forcing Amharic font */
 .font-amharic {
-  font-family: 'Noto Sans Ethiopic', var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-ethiopic), var(--font-inter), system-ui, sans-serif;
 }
 
 /* Utility class for forcing Latin/Inter font */

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { ethMonthNames, getEthiopianToday, ethiopianToGregorianDate } from '@/src/lib/ethiopiancal';
+import Breadcrumb from '@/src/components/navigation/Breadcrumb';
 
 interface FormData {
   title: string;
@@ -137,16 +138,12 @@ export default function NewEventPage() {
 
   return (
     <div className="space-y-6 animate-fade-in max-w-2xl">
-      <div className="flex items-center gap-4">
-        <Link
-          href="/events"
-          className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-150"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
-        >
-          <ArrowLeft size={16} />
-          Back to Events
-        </Link>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'Events', href: '/events' },
+          { label: 'Create Event' },
+        ]}
+      />
 
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>

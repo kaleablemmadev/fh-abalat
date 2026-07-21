@@ -158,10 +158,26 @@ model Attendance {
 // PERMISSIONS
 // -------------------------
 
+enum permissionTypeCategory {
+  DURATION_BASED  // Excused for X months/years
+  DAY_BASED       // Excused on specific days (e.g., 1st, 21st) or Sundays
+}
+
 model PermissionType {
   id          String   @id @default(cuid())
   name        String   @unique // e.g. "Medical", "Travel", "Work", "Family"
   description String?
+  category    permissionTypeCategory @default(DURATION_BASED)
+
+  // For DURATION_BASED type
+  durationMonths Int?   // Number of months the permission is valid
+  durationYears  Int?   // Number of years the permission is valid
+  appliesToChore Boolean @default(false)  // Applies to chore attendance
+  appliesToSunday Boolean @default(false) // Applies to Sunday attendance
+
+  // For DAY_BASED type
+  specificDays Int[]  // Days of month (e.g., [1, 21])
+  appliesToSundays Boolean @default(false) // Excused on all Sundays
 
   permissions Permission[]
 
@@ -192,8 +208,9 @@ model Permission {
 
   attendances Attendance[]
 
-  // Ethiopian calendar fields for the permission date
-  ethiopianDate String?
+  // Ethiopian calendar fields for the permission start date
+  ethiopianStartDate String?
+  ethiopianEndDate String?   // For duration-based permissions
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

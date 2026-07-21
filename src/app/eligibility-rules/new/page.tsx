@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Loader2, ArrowLeft, Plus, X } from 'lucide-react';
+import Breadcrumb from '@/src/components/navigation/Breadcrumb';
 
 interface Criterion {
   id: string;
@@ -97,16 +98,12 @@ export default function NewEligibilityRulePage() {
 
   return (
     <div className="space-y-6 animate-fade-in max-w-2xl">
-      <div className="flex items-center gap-4">
-        <Link
-          href="/eligibility-rules"
-          className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-150"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
-        >
-          <ArrowLeft size={16} />
-          Back to Rules
-        </Link>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'Eligibility Rules', href: '/eligibility-rules' },
+          { label: 'Create Rule' },
+        ]}
+      />
 
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>

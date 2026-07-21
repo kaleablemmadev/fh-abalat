@@ -44,6 +44,14 @@ export const eventType = {
 export type eventType = (typeof eventType)[keyof typeof eventType]
 
 
+export const permissionTypeCategory = {
+  DURATION_BASED: 'DURATION_BASED',
+  DAY_BASED: 'DAY_BASED'
+} as const
+
+export type permissionTypeCategory = (typeof permissionTypeCategory)[keyof typeof permissionTypeCategory]
+
+
 export const permissionStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',

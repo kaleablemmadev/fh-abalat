@@ -12,6 +12,7 @@ import {
   dateToEthiopian,
   getEthiopianMonthDaysCount
 } from "@/src/lib/ethiopiancal";
+import Breadcrumb from "@/src/components/navigation/Breadcrumb";
 
 async function getAdminId() {
   const admin = await prisma.user.findFirst({ 
@@ -203,6 +204,14 @@ export default async function MultiMonthAttendancePage({
 
   return (
     <div className="space-y-5 animate-fade-in">
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: 'Attendance', href: `/attendance/${type}` },
+          { label: `${monthName} ${currentEthYear}` },
+        ]}
+      />
+
       {/* Page header */}
       <div
         className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4"

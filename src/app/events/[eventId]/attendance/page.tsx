@@ -4,6 +4,7 @@ import AttendanceGrid from "./components/AttendanceGrid";
 import { notFound } from "next/navigation";
 import { Calendar, MapPin } from "lucide-react";
 import { dateToEthiopian } from "@/src/lib/ethiopiancal";
+import Breadcrumb from "@/src/components/navigation/Breadcrumb";
 
 export default async function SingleDayAttendancePage({
   params,
@@ -43,6 +44,15 @@ export default async function SingleDayAttendancePage({
 
   return (
     <div className="space-y-5 animate-fade-in">
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: 'Events', href: '/events' },
+          { label: event.title, href: `/events/${eventId}` },
+          { label: 'Attendance' },
+        ]}
+      />
+
       {/* Event header */}
       <div
         className="pb-4"

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Users } from "lucide-react";
 import { dateToEthiopian } from "@/src/lib/ethiopiancal";
+import Breadcrumb from "@/src/components/navigation/Breadcrumb";
 
 export default async function AttendanceListPage({
   params,
@@ -42,17 +43,12 @@ export default async function AttendanceListPage({
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link
-          href={`/attendance/${type}`}
-          className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-150"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
-        >
-          <ArrowLeft size={16} />
-          Back to {isChore ? 'Chore' : 'Sunday'} Attendance
-        </Link>
-      </div>
+      <Breadcrumb
+        items={[
+          { label: 'Attendance', href: `/attendance/${type}` },
+          { label: `${isChore ? 'Chore' : 'Sunday'} History` },
+        ]}
+      />
 
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>

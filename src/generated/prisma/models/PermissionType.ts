@@ -20,14 +20,34 @@ export type PermissionTypeModel = runtime.Types.Result.DefaultSelection<Prisma.$
 
 export type AggregatePermissionType = {
   _count: PermissionTypeCountAggregateOutputType | null
+  _avg: PermissionTypeAvgAggregateOutputType | null
+  _sum: PermissionTypeSumAggregateOutputType | null
   _min: PermissionTypeMinAggregateOutputType | null
   _max: PermissionTypeMaxAggregateOutputType | null
+}
+
+export type PermissionTypeAvgAggregateOutputType = {
+  durationMonths: number | null
+  durationYears: number | null
+  specificDays: number | null
+}
+
+export type PermissionTypeSumAggregateOutputType = {
+  durationMonths: number | null
+  durationYears: number | null
+  specificDays: number[]
 }
 
 export type PermissionTypeMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  category: $Enums.permissionTypeCategory | null
+  durationMonths: number | null
+  durationYears: number | null
+  appliesToChore: boolean | null
+  appliesToSunday: boolean | null
+  appliesToSundays: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -36,6 +56,12 @@ export type PermissionTypeMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  category: $Enums.permissionTypeCategory | null
+  durationMonths: number | null
+  durationYears: number | null
+  appliesToChore: boolean | null
+  appliesToSunday: boolean | null
+  appliesToSundays: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,16 +70,41 @@ export type PermissionTypeCountAggregateOutputType = {
   id: number
   name: number
   description: number
+  category: number
+  durationMonths: number
+  durationYears: number
+  appliesToChore: number
+  appliesToSunday: number
+  specificDays: number
+  appliesToSundays: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
 
+export type PermissionTypeAvgAggregateInputType = {
+  durationMonths?: true
+  durationYears?: true
+  specificDays?: true
+}
+
+export type PermissionTypeSumAggregateInputType = {
+  durationMonths?: true
+  durationYears?: true
+  specificDays?: true
+}
+
 export type PermissionTypeMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  category?: true
+  durationMonths?: true
+  durationYears?: true
+  appliesToChore?: true
+  appliesToSunday?: true
+  appliesToSundays?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -62,6 +113,12 @@ export type PermissionTypeMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  category?: true
+  durationMonths?: true
+  durationYears?: true
+  appliesToChore?: true
+  appliesToSunday?: true
+  appliesToSundays?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -70,6 +127,13 @@ export type PermissionTypeCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  category?: true
+  durationMonths?: true
+  durationYears?: true
+  appliesToChore?: true
+  appliesToSunday?: true
+  specificDays?: true
+  appliesToSundays?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -113,6 +177,18 @@ export type PermissionTypeAggregateArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: PermissionTypeAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: PermissionTypeSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: PermissionTypeMinAggregateInputType
@@ -143,6 +219,8 @@ export type PermissionTypeGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   _count?: PermissionTypeCountAggregateInputType | true
+  _avg?: PermissionTypeAvgAggregateInputType
+  _sum?: PermissionTypeSumAggregateInputType
   _min?: PermissionTypeMinAggregateInputType
   _max?: PermissionTypeMaxAggregateInputType
 }
@@ -151,9 +229,18 @@ export type PermissionTypeGroupByOutputType = {
   id: string
   name: string
   description: string | null
+  category: $Enums.permissionTypeCategory
+  durationMonths: number | null
+  durationYears: number | null
+  appliesToChore: boolean
+  appliesToSunday: boolean
+  specificDays: number[]
+  appliesToSundays: boolean
   createdAt: Date
   updatedAt: Date
   _count: PermissionTypeCountAggregateOutputType | null
+  _avg: PermissionTypeAvgAggregateOutputType | null
+  _sum: PermissionTypeSumAggregateOutputType | null
   _min: PermissionTypeMinAggregateOutputType | null
   _max: PermissionTypeMaxAggregateOutputType | null
 }
@@ -180,6 +267,13 @@ export type PermissionTypeWhereInput = {
   id?: Prisma.StringFilter<"PermissionType"> | string
   name?: Prisma.StringFilter<"PermissionType"> | string
   description?: Prisma.StringNullableFilter<"PermissionType"> | string | null
+  category?: Prisma.EnumpermissionTypeCategoryFilter<"PermissionType"> | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.IntNullableFilter<"PermissionType"> | number | null
+  durationYears?: Prisma.IntNullableFilter<"PermissionType"> | number | null
+  appliesToChore?: Prisma.BoolFilter<"PermissionType"> | boolean
+  appliesToSunday?: Prisma.BoolFilter<"PermissionType"> | boolean
+  specificDays?: Prisma.IntNullableListFilter<"PermissionType">
+  appliesToSundays?: Prisma.BoolFilter<"PermissionType"> | boolean
   createdAt?: Prisma.DateTimeFilter<"PermissionType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PermissionType"> | Date | string
   permissions?: Prisma.PermissionListRelationFilter
@@ -189,6 +283,13 @@ export type PermissionTypeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrder
+  durationMonths?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationYears?: Prisma.SortOrderInput | Prisma.SortOrder
+  appliesToChore?: Prisma.SortOrder
+  appliesToSunday?: Prisma.SortOrder
+  specificDays?: Prisma.SortOrder
+  appliesToSundays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   permissions?: Prisma.PermissionOrderByRelationAggregateInput
@@ -201,6 +302,13 @@ export type PermissionTypeWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PermissionTypeWhereInput[]
   NOT?: Prisma.PermissionTypeWhereInput | Prisma.PermissionTypeWhereInput[]
   description?: Prisma.StringNullableFilter<"PermissionType"> | string | null
+  category?: Prisma.EnumpermissionTypeCategoryFilter<"PermissionType"> | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.IntNullableFilter<"PermissionType"> | number | null
+  durationYears?: Prisma.IntNullableFilter<"PermissionType"> | number | null
+  appliesToChore?: Prisma.BoolFilter<"PermissionType"> | boolean
+  appliesToSunday?: Prisma.BoolFilter<"PermissionType"> | boolean
+  specificDays?: Prisma.IntNullableListFilter<"PermissionType">
+  appliesToSundays?: Prisma.BoolFilter<"PermissionType"> | boolean
   createdAt?: Prisma.DateTimeFilter<"PermissionType"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PermissionType"> | Date | string
   permissions?: Prisma.PermissionListRelationFilter
@@ -210,11 +318,20 @@ export type PermissionTypeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrder
+  durationMonths?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationYears?: Prisma.SortOrderInput | Prisma.SortOrder
+  appliesToChore?: Prisma.SortOrder
+  appliesToSunday?: Prisma.SortOrder
+  specificDays?: Prisma.SortOrder
+  appliesToSundays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.PermissionTypeCountOrderByAggregateInput
+  _avg?: Prisma.PermissionTypeAvgOrderByAggregateInput
   _max?: Prisma.PermissionTypeMaxOrderByAggregateInput
   _min?: Prisma.PermissionTypeMinOrderByAggregateInput
+  _sum?: Prisma.PermissionTypeSumOrderByAggregateInput
 }
 
 export type PermissionTypeScalarWhereWithAggregatesInput = {
@@ -224,6 +341,13 @@ export type PermissionTypeScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"PermissionType"> | string
   name?: Prisma.StringWithAggregatesFilter<"PermissionType"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"PermissionType"> | string | null
+  category?: Prisma.EnumpermissionTypeCategoryWithAggregatesFilter<"PermissionType"> | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.IntNullableWithAggregatesFilter<"PermissionType"> | number | null
+  durationYears?: Prisma.IntNullableWithAggregatesFilter<"PermissionType"> | number | null
+  appliesToChore?: Prisma.BoolWithAggregatesFilter<"PermissionType"> | boolean
+  appliesToSunday?: Prisma.BoolWithAggregatesFilter<"PermissionType"> | boolean
+  specificDays?: Prisma.IntNullableListFilter<"PermissionType">
+  appliesToSundays?: Prisma.BoolWithAggregatesFilter<"PermissionType"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PermissionType"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PermissionType"> | Date | string
 }
@@ -232,6 +356,13 @@ export type PermissionTypeCreateInput = {
   id?: string
   name: string
   description?: string | null
+  category?: $Enums.permissionTypeCategory
+  durationMonths?: number | null
+  durationYears?: number | null
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: Prisma.PermissionTypeCreatespecificDaysInput | number[]
+  appliesToSundays?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   permissions?: Prisma.PermissionCreateNestedManyWithoutPermissionTypeInput
@@ -241,6 +372,13 @@ export type PermissionTypeUncheckedCreateInput = {
   id?: string
   name: string
   description?: string | null
+  category?: $Enums.permissionTypeCategory
+  durationMonths?: number | null
+  durationYears?: number | null
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: Prisma.PermissionTypeCreatespecificDaysInput | number[]
+  appliesToSundays?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutPermissionTypeInput
@@ -250,6 +388,13 @@ export type PermissionTypeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumpermissionTypeCategoryFieldUpdateOperationsInput | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationYears?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  appliesToChore?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appliesToSunday?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  specificDays?: Prisma.PermissionTypeUpdatespecificDaysInput | number[]
+  appliesToSundays?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   permissions?: Prisma.PermissionUpdateManyWithoutPermissionTypeNestedInput
@@ -259,6 +404,13 @@ export type PermissionTypeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumpermissionTypeCategoryFieldUpdateOperationsInput | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationYears?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  appliesToChore?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appliesToSunday?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  specificDays?: Prisma.PermissionTypeUpdatespecificDaysInput | number[]
+  appliesToSundays?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutPermissionTypeNestedInput
@@ -268,6 +420,13 @@ export type PermissionTypeCreateManyInput = {
   id?: string
   name: string
   description?: string | null
+  category?: $Enums.permissionTypeCategory
+  durationMonths?: number | null
+  durationYears?: number | null
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: Prisma.PermissionTypeCreatespecificDaysInput | number[]
+  appliesToSundays?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -276,6 +435,13 @@ export type PermissionTypeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumpermissionTypeCategoryFieldUpdateOperationsInput | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationYears?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  appliesToChore?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appliesToSunday?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  specificDays?: Prisma.PermissionTypeUpdatespecificDaysInput | number[]
+  appliesToSundays?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -284,22 +450,56 @@ export type PermissionTypeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumpermissionTypeCategoryFieldUpdateOperationsInput | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationYears?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  appliesToChore?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appliesToSunday?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  specificDays?: Prisma.PermissionTypeUpdatespecificDaysInput | number[]
+  appliesToSundays?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type IntNullableListFilter<$PrismaModel = never> = {
+  equals?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
+  has?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  hasEvery?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  hasSome?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type PermissionTypeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  durationMonths?: Prisma.SortOrder
+  durationYears?: Prisma.SortOrder
+  appliesToChore?: Prisma.SortOrder
+  appliesToSunday?: Prisma.SortOrder
+  specificDays?: Prisma.SortOrder
+  appliesToSundays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type PermissionTypeAvgOrderByAggregateInput = {
+  durationMonths?: Prisma.SortOrder
+  durationYears?: Prisma.SortOrder
+  specificDays?: Prisma.SortOrder
 }
 
 export type PermissionTypeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  durationMonths?: Prisma.SortOrder
+  durationYears?: Prisma.SortOrder
+  appliesToChore?: Prisma.SortOrder
+  appliesToSunday?: Prisma.SortOrder
+  appliesToSundays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -308,13 +508,38 @@ export type PermissionTypeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  category?: Prisma.SortOrder
+  durationMonths?: Prisma.SortOrder
+  durationYears?: Prisma.SortOrder
+  appliesToChore?: Prisma.SortOrder
+  appliesToSunday?: Prisma.SortOrder
+  appliesToSundays?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type PermissionTypeSumOrderByAggregateInput = {
+  durationMonths?: Prisma.SortOrder
+  durationYears?: Prisma.SortOrder
+  specificDays?: Prisma.SortOrder
 }
 
 export type PermissionTypeScalarRelationFilter = {
   is?: Prisma.PermissionTypeWhereInput
   isNot?: Prisma.PermissionTypeWhereInput
+}
+
+export type PermissionTypeCreatespecificDaysInput = {
+  set: number[]
+}
+
+export type EnumpermissionTypeCategoryFieldUpdateOperationsInput = {
+  set?: $Enums.permissionTypeCategory
+}
+
+export type PermissionTypeUpdatespecificDaysInput = {
+  set?: number[]
+  push?: number | number[]
 }
 
 export type PermissionTypeCreateNestedOneWithoutPermissionsInput = {
@@ -335,6 +560,13 @@ export type PermissionTypeCreateWithoutPermissionsInput = {
   id?: string
   name: string
   description?: string | null
+  category?: $Enums.permissionTypeCategory
+  durationMonths?: number | null
+  durationYears?: number | null
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: Prisma.PermissionTypeCreatespecificDaysInput | number[]
+  appliesToSundays?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -343,6 +575,13 @@ export type PermissionTypeUncheckedCreateWithoutPermissionsInput = {
   id?: string
   name: string
   description?: string | null
+  category?: $Enums.permissionTypeCategory
+  durationMonths?: number | null
+  durationYears?: number | null
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: Prisma.PermissionTypeCreatespecificDaysInput | number[]
+  appliesToSundays?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -367,6 +606,13 @@ export type PermissionTypeUpdateWithoutPermissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumpermissionTypeCategoryFieldUpdateOperationsInput | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationYears?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  appliesToChore?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appliesToSunday?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  specificDays?: Prisma.PermissionTypeUpdatespecificDaysInput | number[]
+  appliesToSundays?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -375,6 +621,13 @@ export type PermissionTypeUncheckedUpdateWithoutPermissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumpermissionTypeCategoryFieldUpdateOperationsInput | $Enums.permissionTypeCategory
+  durationMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationYears?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  appliesToChore?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  appliesToSunday?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  specificDays?: Prisma.PermissionTypeUpdatespecificDaysInput | number[]
+  appliesToSundays?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -414,6 +667,13 @@ export type PermissionTypeSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   name?: boolean
   description?: boolean
+  category?: boolean
+  durationMonths?: boolean
+  durationYears?: boolean
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: boolean
+  appliesToSundays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   permissions?: boolean | Prisma.PermissionType$permissionsArgs<ExtArgs>
@@ -424,6 +684,13 @@ export type PermissionTypeSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   name?: boolean
   description?: boolean
+  category?: boolean
+  durationMonths?: boolean
+  durationYears?: boolean
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: boolean
+  appliesToSundays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["permissionType"]>
@@ -432,6 +699,13 @@ export type PermissionTypeSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   name?: boolean
   description?: boolean
+  category?: boolean
+  durationMonths?: boolean
+  durationYears?: boolean
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: boolean
+  appliesToSundays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["permissionType"]>
@@ -440,11 +714,18 @@ export type PermissionTypeSelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
+  category?: boolean
+  durationMonths?: boolean
+  durationYears?: boolean
+  appliesToChore?: boolean
+  appliesToSunday?: boolean
+  specificDays?: boolean
+  appliesToSundays?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PermissionTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["permissionType"]>
+export type PermissionTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "category" | "durationMonths" | "durationYears" | "appliesToChore" | "appliesToSunday" | "specificDays" | "appliesToSundays" | "createdAt" | "updatedAt", ExtArgs["result"]["permissionType"]>
 export type PermissionTypeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   permissions?: boolean | Prisma.PermissionType$permissionsArgs<ExtArgs>
   _count?: boolean | Prisma.PermissionTypeCountOutputTypeDefaultArgs<ExtArgs>
@@ -461,6 +742,13 @@ export type $PermissionTypePayload<ExtArgs extends runtime.Types.Extensions.Inte
     id: string
     name: string
     description: string | null
+    category: $Enums.permissionTypeCategory
+    durationMonths: number | null
+    durationYears: number | null
+    appliesToChore: boolean
+    appliesToSunday: boolean
+    specificDays: number[]
+    appliesToSundays: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["permissionType"]>
@@ -890,6 +1178,13 @@ export interface PermissionTypeFieldRefs {
   readonly id: Prisma.FieldRef<"PermissionType", 'String'>
   readonly name: Prisma.FieldRef<"PermissionType", 'String'>
   readonly description: Prisma.FieldRef<"PermissionType", 'String'>
+  readonly category: Prisma.FieldRef<"PermissionType", 'permissionTypeCategory'>
+  readonly durationMonths: Prisma.FieldRef<"PermissionType", 'Int'>
+  readonly durationYears: Prisma.FieldRef<"PermissionType", 'Int'>
+  readonly appliesToChore: Prisma.FieldRef<"PermissionType", 'Boolean'>
+  readonly appliesToSunday: Prisma.FieldRef<"PermissionType", 'Boolean'>
+  readonly specificDays: Prisma.FieldRef<"PermissionType", 'Int[]'>
+  readonly appliesToSundays: Prisma.FieldRef<"PermissionType", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"PermissionType", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"PermissionType", 'DateTime'>
 }

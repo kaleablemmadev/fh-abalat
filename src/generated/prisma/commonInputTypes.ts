@@ -285,6 +285,23 @@ export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
 }
 
+export type EnumpermissionTypeCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.permissionTypeCategory | Prisma.EnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.permissionTypeCategory[] | Prisma.ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.permissionTypeCategory[] | Prisma.ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumpermissionTypeCategoryFilter<$PrismaModel> | $Enums.permissionTypeCategory
+}
+
+export type EnumpermissionTypeCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.permissionTypeCategory | Prisma.EnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.permissionTypeCategory[] | Prisma.ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.permissionTypeCategory[] | Prisma.ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumpermissionTypeCategoryWithAggregatesFilter<$PrismaModel> | $Enums.permissionTypeCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
+}
+
 export type EnumpermissionStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.permissionStatus | Prisma.EnumpermissionStatusFieldRefInput<$PrismaModel>
   in?: $Enums.permissionStatus[] | Prisma.ListEnumpermissionStatusFieldRefInput<$PrismaModel>
@@ -573,6 +590,23 @@ export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedBoolNullableFilter<$PrismaModel>
   _max?: Prisma.NestedBoolNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumpermissionTypeCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.permissionTypeCategory | Prisma.EnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.permissionTypeCategory[] | Prisma.ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.permissionTypeCategory[] | Prisma.ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumpermissionTypeCategoryFilter<$PrismaModel> | $Enums.permissionTypeCategory
+}
+
+export type NestedEnumpermissionTypeCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.permissionTypeCategory | Prisma.EnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.permissionTypeCategory[] | Prisma.ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.permissionTypeCategory[] | Prisma.ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumpermissionTypeCategoryWithAggregatesFilter<$PrismaModel> | $Enums.permissionTypeCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
 }
 
 export type NestedEnumpermissionStatusFilter<$PrismaModel = never> = {

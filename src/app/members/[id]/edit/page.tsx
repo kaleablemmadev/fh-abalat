@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import MemberForm from "../../components/MemberForm";
 import { type genderType } from "../../constants/membersEnum";
+import Breadcrumb from "@/src/components/navigation/Breadcrumb";
 
 interface MemberDraft {
   fullName: string;
@@ -123,6 +124,13 @@ export default function UpdateMember() {
 
   return (
     <div className="space-y-4 animate-fade-in">
+      <Breadcrumb
+        items={[
+          { label: 'Members', href: '/members' },
+          { label: member?.fullName || 'Edit' },
+          { label: 'Edit' },
+        ]}
+      />
       <div>
         <h1 className="text-xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
           Edit Member

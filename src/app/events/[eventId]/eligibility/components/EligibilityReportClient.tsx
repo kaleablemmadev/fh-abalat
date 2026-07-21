@@ -16,6 +16,7 @@ import {
   Settings,
   Loader2
 } from 'lucide-react';
+import Breadcrumb from '@/src/components/navigation/Breadcrumb';
 
 interface EligibilityResult {
   memberId: string;
@@ -168,7 +169,7 @@ export default function EligibilityReportClient({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ format }),
+        body: JSON.stringify({ format, ruleId: selectedRuleId }),
       });
 
       if (!response.ok) {
@@ -202,17 +203,14 @@ export default function EligibilityReportClient({
 
   return (
     <div className="space-y-6">
-      {/* Back Button */}
-      <div className="flex items-center gap-4">
-        <Link
-          href={`/events/${eventId}`}
-          className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-150"
-          style={{ color: 'hsl(var(--muted-foreground))' }}
-        >
-          <ArrowLeft size={16} />
-          Back to Event
-        </Link>
-      </div>
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: 'Events', href: '/events' },
+          { label: eventTitle, href: `/events/${eventId}` },
+          { label: 'Eligibility' },
+        ]}
+      />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[hsl(var(--border))]">

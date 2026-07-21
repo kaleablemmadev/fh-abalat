@@ -150,6 +150,13 @@ export const PermissionTypeScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  category: 'category',
+  durationMonths: 'durationMonths',
+  durationYears: 'durationYears',
+  appliesToChore: 'appliesToChore',
+  appliesToSunday: 'appliesToSunday',
+  specificDays: 'specificDays',
+  appliesToSundays: 'appliesToSundays',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -164,7 +171,8 @@ export const PermissionScalarFieldEnum = {
   reason: 'reason',
   status: 'status',
   reviewedById: 'reviewedById',
-  ethiopianDate: 'ethiopianDate',
+  ethiopianStartDate: 'ethiopianStartDate',
+  ethiopianEndDate: 'ethiopianEndDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

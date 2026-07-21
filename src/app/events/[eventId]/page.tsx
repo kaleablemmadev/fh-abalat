@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Calendar, MapPin, ArrowLeft, Clock, Users, Settings } from "lucide-react";
 import { dateToEthiopian } from "@/src/lib/ethiopiancal";
 import EventEligibilitySelector from "./components/EventEligibilitySelector";
+import Breadcrumb from "@/src/components/navigation/Breadcrumb";
 
 export default async function EventDetailPage({
   params,
@@ -45,15 +46,13 @@ export default async function EventDetailPage({
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Back link */}
-      <Link
-        href="/events"
-        className="inline-flex items-center gap-1.5 text-sm font-medium transition-colors duration-150"
-        style={{ color: 'hsl(var(--muted-foreground))' }}
-      >
-        <ArrowLeft size={16} />
-        Back to Events
-      </Link>
+      {/* Breadcrumb */}
+      <Breadcrumb
+        items={[
+          { label: 'Events', href: '/events' },
+          { label: event.title },
+        ]}
+      />
 
       {/* Event header */}
       <div

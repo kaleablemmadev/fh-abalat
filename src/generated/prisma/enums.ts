@@ -35,6 +35,15 @@ export const memberType = {
 export type memberType = (typeof memberType)[keyof typeof memberType]
 
 
+export const eventType = {
+  EVENT: 'EVENT',
+  CHORE: 'CHORE',
+  SUNDAY: 'SUNDAY'
+} as const
+
+export type eventType = (typeof eventType)[keyof typeof eventType]
+
+
 export const permissionStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',

@@ -104,6 +104,10 @@ export const EventScalarFieldEnum = {
   ethiopianYear: 'ethiopianYear',
   ethiopianMonth: 'ethiopianMonth',
   ethiopianDay: 'ethiopianDay',
+  eventType: 'eventType',
+  isRecurring: 'isRecurring',
+  recurringMonth: 'recurringMonth',
+  recurringDay: 'recurringDay',
   eligibilityRuleId: 'eligibilityRuleId',
   targetMemberTypes: 'targetMemberTypes',
   createdById: 'createdById',
@@ -172,8 +176,6 @@ export const EligibilityRuleScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  minAttendanceScore: 'minAttendanceScore',
-  minEventsCount: 'minEventsCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -187,7 +189,7 @@ export const EligibilityCriteriaScalarFieldEnum = {
   eventType: 'eventType',
   minAttendances: 'minAttendances',
   lookbackMonths: 'lookbackMonths',
-  lookbackDays: 'lookbackDays',
+  isTotalAttendance: 'isTotalAttendance',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -145,12 +145,11 @@ export default function MultiMonthGrid({
 
   const handleAttendanceChange = (memberId: string, eventId: string, attendanceTypeId: string) => {
     const key = `${memberId}_${eventId}`;
-    const isPermission = attendanceTypeId === permissionTypeId;
     setAttendanceData((prev) => ({
       ...prev,
       [key]: {
         attendanceTypeId,
-        permissionId: isPermission ? memberId : null,
+        permissionId: null, // Always null — permissions are linked separately
       },
     }));
     setSaveSuccess(false);
@@ -172,6 +171,8 @@ export default function MultiMonthGrid({
         };
       });
 
+      console.log("Sending payload:", JSON.stringify(payload, null, 2));
+
       if (payload.length === 0) {
         setIsSaving(false);
         return;
@@ -183,9 +184,11 @@ export default function MultiMonthGrid({
         body: JSON.stringify(payload),
       });
 
+      const responseData = await res.json().catch(() => null);
+      console.log("Server response:", res.status, responseData);
+
       if (!res.ok) {
-        const errorData = await res.json().catch(() => null);
-        throw new Error(errorData?.error || 'Failed to save attendance');
+        throw new Error(responseData?.error || responseData?.details || `Failed to save attendance (${res.status})`);
       }
 
       setSaveSuccess(true);

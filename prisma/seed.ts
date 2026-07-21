@@ -1,5 +1,5 @@
 // /prisma/seed.ts
-import prisma from "@/src/lib/prisma";
+import prisma from "@/src/lib/prisma.ts";
 import { getEthiopianToday, getChoreDaysInMonth, getSundaysInMonth, ethiopianDateToDate } from '../src/lib/ethiopiancal';
 
 async function main() {

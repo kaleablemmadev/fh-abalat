@@ -20,28 +20,14 @@ export type EligibilityRuleModel = runtime.Types.Result.DefaultSelection<Prisma.
 
 export type AggregateEligibilityRule = {
   _count: EligibilityRuleCountAggregateOutputType | null
-  _avg: EligibilityRuleAvgAggregateOutputType | null
-  _sum: EligibilityRuleSumAggregateOutputType | null
   _min: EligibilityRuleMinAggregateOutputType | null
   _max: EligibilityRuleMaxAggregateOutputType | null
-}
-
-export type EligibilityRuleAvgAggregateOutputType = {
-  minAttendanceScore: number | null
-  minEventsCount: number | null
-}
-
-export type EligibilityRuleSumAggregateOutputType = {
-  minAttendanceScore: number | null
-  minEventsCount: number | null
 }
 
 export type EligibilityRuleMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
-  minAttendanceScore: number | null
-  minEventsCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,8 +36,6 @@ export type EligibilityRuleMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
-  minAttendanceScore: number | null
-  minEventsCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,30 +44,16 @@ export type EligibilityRuleCountAggregateOutputType = {
   id: number
   name: number
   description: number
-  minAttendanceScore: number
-  minEventsCount: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
 
-export type EligibilityRuleAvgAggregateInputType = {
-  minAttendanceScore?: true
-  minEventsCount?: true
-}
-
-export type EligibilityRuleSumAggregateInputType = {
-  minAttendanceScore?: true
-  minEventsCount?: true
-}
-
 export type EligibilityRuleMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  minAttendanceScore?: true
-  minEventsCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,8 +62,6 @@ export type EligibilityRuleMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  minAttendanceScore?: true
-  minEventsCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -102,8 +70,6 @@ export type EligibilityRuleCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  minAttendanceScore?: true
-  minEventsCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -147,18 +113,6 @@ export type EligibilityRuleAggregateArgs<ExtArgs extends runtime.Types.Extension
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: EligibilityRuleAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: EligibilityRuleSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: EligibilityRuleMinAggregateInputType
@@ -189,8 +143,6 @@ export type EligibilityRuleGroupByArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   _count?: EligibilityRuleCountAggregateInputType | true
-  _avg?: EligibilityRuleAvgAggregateInputType
-  _sum?: EligibilityRuleSumAggregateInputType
   _min?: EligibilityRuleMinAggregateInputType
   _max?: EligibilityRuleMaxAggregateInputType
 }
@@ -199,13 +151,9 @@ export type EligibilityRuleGroupByOutputType = {
   id: string
   name: string
   description: string | null
-  minAttendanceScore: number | null
-  minEventsCount: number | null
   createdAt: Date
   updatedAt: Date
   _count: EligibilityRuleCountAggregateOutputType | null
-  _avg: EligibilityRuleAvgAggregateOutputType | null
-  _sum: EligibilityRuleSumAggregateOutputType | null
   _min: EligibilityRuleMinAggregateOutputType | null
   _max: EligibilityRuleMaxAggregateOutputType | null
 }
@@ -232,11 +180,9 @@ export type EligibilityRuleWhereInput = {
   id?: Prisma.StringFilter<"EligibilityRule"> | string
   name?: Prisma.StringFilter<"EligibilityRule"> | string
   description?: Prisma.StringNullableFilter<"EligibilityRule"> | string | null
-  minAttendanceScore?: Prisma.FloatNullableFilter<"EligibilityRule"> | number | null
-  minEventsCount?: Prisma.IntNullableFilter<"EligibilityRule"> | number | null
   createdAt?: Prisma.DateTimeFilter<"EligibilityRule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EligibilityRule"> | Date | string
-  rules?: Prisma.EligibilityCriteriaListRelationFilter
+  criteria?: Prisma.EligibilityCriteriaListRelationFilter
   events?: Prisma.EventListRelationFilter
 }
 
@@ -244,11 +190,9 @@ export type EligibilityRuleOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  minAttendanceScore?: Prisma.SortOrderInput | Prisma.SortOrder
-  minEventsCount?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  rules?: Prisma.EligibilityCriteriaOrderByRelationAggregateInput
+  criteria?: Prisma.EligibilityCriteriaOrderByRelationAggregateInput
   events?: Prisma.EventOrderByRelationAggregateInput
 }
 
@@ -259,11 +203,9 @@ export type EligibilityRuleWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.EligibilityRuleWhereInput | Prisma.EligibilityRuleWhereInput[]
   name?: Prisma.StringFilter<"EligibilityRule"> | string
   description?: Prisma.StringNullableFilter<"EligibilityRule"> | string | null
-  minAttendanceScore?: Prisma.FloatNullableFilter<"EligibilityRule"> | number | null
-  minEventsCount?: Prisma.IntNullableFilter<"EligibilityRule"> | number | null
   createdAt?: Prisma.DateTimeFilter<"EligibilityRule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EligibilityRule"> | Date | string
-  rules?: Prisma.EligibilityCriteriaListRelationFilter
+  criteria?: Prisma.EligibilityCriteriaListRelationFilter
   events?: Prisma.EventListRelationFilter
 }, "id">
 
@@ -271,15 +213,11 @@ export type EligibilityRuleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  minAttendanceScore?: Prisma.SortOrderInput | Prisma.SortOrder
-  minEventsCount?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EligibilityRuleCountOrderByAggregateInput
-  _avg?: Prisma.EligibilityRuleAvgOrderByAggregateInput
   _max?: Prisma.EligibilityRuleMaxOrderByAggregateInput
   _min?: Prisma.EligibilityRuleMinOrderByAggregateInput
-  _sum?: Prisma.EligibilityRuleSumOrderByAggregateInput
 }
 
 export type EligibilityRuleScalarWhereWithAggregatesInput = {
@@ -289,8 +227,6 @@ export type EligibilityRuleScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"EligibilityRule"> | string
   name?: Prisma.StringWithAggregatesFilter<"EligibilityRule"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"EligibilityRule"> | string | null
-  minAttendanceScore?: Prisma.FloatNullableWithAggregatesFilter<"EligibilityRule"> | number | null
-  minEventsCount?: Prisma.IntNullableWithAggregatesFilter<"EligibilityRule"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EligibilityRule"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"EligibilityRule"> | Date | string
 }
@@ -299,11 +235,9 @@ export type EligibilityRuleCreateInput = {
   id?: string
   name: string
   description?: string | null
-  minAttendanceScore?: number | null
-  minEventsCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  rules?: Prisma.EligibilityCriteriaCreateNestedManyWithoutEligibilityRuleInput
+  criteria?: Prisma.EligibilityCriteriaCreateNestedManyWithoutEligibilityRuleInput
   events?: Prisma.EventCreateNestedManyWithoutEligibilityRuleInput
 }
 
@@ -311,11 +245,9 @@ export type EligibilityRuleUncheckedCreateInput = {
   id?: string
   name: string
   description?: string | null
-  minAttendanceScore?: number | null
-  minEventsCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  rules?: Prisma.EligibilityCriteriaUncheckedCreateNestedManyWithoutEligibilityRuleInput
+  criteria?: Prisma.EligibilityCriteriaUncheckedCreateNestedManyWithoutEligibilityRuleInput
   events?: Prisma.EventUncheckedCreateNestedManyWithoutEligibilityRuleInput
 }
 
@@ -323,11 +255,9 @@ export type EligibilityRuleUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  minAttendanceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  minEventsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  rules?: Prisma.EligibilityCriteriaUpdateManyWithoutEligibilityRuleNestedInput
+  criteria?: Prisma.EligibilityCriteriaUpdateManyWithoutEligibilityRuleNestedInput
   events?: Prisma.EventUpdateManyWithoutEligibilityRuleNestedInput
 }
 
@@ -335,11 +265,9 @@ export type EligibilityRuleUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  minAttendanceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  minEventsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  rules?: Prisma.EligibilityCriteriaUncheckedUpdateManyWithoutEligibilityRuleNestedInput
+  criteria?: Prisma.EligibilityCriteriaUncheckedUpdateManyWithoutEligibilityRuleNestedInput
   events?: Prisma.EventUncheckedUpdateManyWithoutEligibilityRuleNestedInput
 }
 
@@ -347,8 +275,6 @@ export type EligibilityRuleCreateManyInput = {
   id?: string
   name: string
   description?: string | null
-  minAttendanceScore?: number | null
-  minEventsCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -357,8 +283,6 @@ export type EligibilityRuleUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  minAttendanceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  minEventsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -367,8 +291,6 @@ export type EligibilityRuleUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  minAttendanceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  minEventsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -382,23 +304,14 @@ export type EligibilityRuleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  minAttendanceScore?: Prisma.SortOrder
-  minEventsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type EligibilityRuleAvgOrderByAggregateInput = {
-  minAttendanceScore?: Prisma.SortOrder
-  minEventsCount?: Prisma.SortOrder
 }
 
 export type EligibilityRuleMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  minAttendanceScore?: Prisma.SortOrder
-  minEventsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -407,15 +320,8 @@ export type EligibilityRuleMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  minAttendanceScore?: Prisma.SortOrder
-  minEventsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type EligibilityRuleSumOrderByAggregateInput = {
-  minAttendanceScore?: Prisma.SortOrder
-  minEventsCount?: Prisma.SortOrder
 }
 
 export type EligibilityRuleScalarRelationFilter = {
@@ -439,48 +345,36 @@ export type EligibilityRuleUpdateOneWithoutEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EligibilityRuleUpdateToOneWithWhereWithoutEventsInput, Prisma.EligibilityRuleUpdateWithoutEventsInput>, Prisma.EligibilityRuleUncheckedUpdateWithoutEventsInput>
 }
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type EligibilityRuleCreateNestedOneWithoutRulesInput = {
-  create?: Prisma.XOR<Prisma.EligibilityRuleCreateWithoutRulesInput, Prisma.EligibilityRuleUncheckedCreateWithoutRulesInput>
-  connectOrCreate?: Prisma.EligibilityRuleCreateOrConnectWithoutRulesInput
+export type EligibilityRuleCreateNestedOneWithoutCriteriaInput = {
+  create?: Prisma.XOR<Prisma.EligibilityRuleCreateWithoutCriteriaInput, Prisma.EligibilityRuleUncheckedCreateWithoutCriteriaInput>
+  connectOrCreate?: Prisma.EligibilityRuleCreateOrConnectWithoutCriteriaInput
   connect?: Prisma.EligibilityRuleWhereUniqueInput
 }
 
-export type EligibilityRuleUpdateOneRequiredWithoutRulesNestedInput = {
-  create?: Prisma.XOR<Prisma.EligibilityRuleCreateWithoutRulesInput, Prisma.EligibilityRuleUncheckedCreateWithoutRulesInput>
-  connectOrCreate?: Prisma.EligibilityRuleCreateOrConnectWithoutRulesInput
-  upsert?: Prisma.EligibilityRuleUpsertWithoutRulesInput
+export type EligibilityRuleUpdateOneRequiredWithoutCriteriaNestedInput = {
+  create?: Prisma.XOR<Prisma.EligibilityRuleCreateWithoutCriteriaInput, Prisma.EligibilityRuleUncheckedCreateWithoutCriteriaInput>
+  connectOrCreate?: Prisma.EligibilityRuleCreateOrConnectWithoutCriteriaInput
+  upsert?: Prisma.EligibilityRuleUpsertWithoutCriteriaInput
   connect?: Prisma.EligibilityRuleWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EligibilityRuleUpdateToOneWithWhereWithoutRulesInput, Prisma.EligibilityRuleUpdateWithoutRulesInput>, Prisma.EligibilityRuleUncheckedUpdateWithoutRulesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EligibilityRuleUpdateToOneWithWhereWithoutCriteriaInput, Prisma.EligibilityRuleUpdateWithoutCriteriaInput>, Prisma.EligibilityRuleUncheckedUpdateWithoutCriteriaInput>
 }
 
 export type EligibilityRuleCreateWithoutEventsInput = {
   id?: string
   name: string
   description?: string | null
-  minAttendanceScore?: number | null
-  minEventsCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  rules?: Prisma.EligibilityCriteriaCreateNestedManyWithoutEligibilityRuleInput
+  criteria?: Prisma.EligibilityCriteriaCreateNestedManyWithoutEligibilityRuleInput
 }
 
 export type EligibilityRuleUncheckedCreateWithoutEventsInput = {
   id?: string
   name: string
   description?: string | null
-  minAttendanceScore?: number | null
-  minEventsCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  rules?: Prisma.EligibilityCriteriaUncheckedCreateNestedManyWithoutEligibilityRuleInput
+  criteria?: Prisma.EligibilityCriteriaUncheckedCreateNestedManyWithoutEligibilityRuleInput
 }
 
 export type EligibilityRuleCreateOrConnectWithoutEventsInput = {
@@ -503,79 +397,67 @@ export type EligibilityRuleUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  minAttendanceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  minEventsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  rules?: Prisma.EligibilityCriteriaUpdateManyWithoutEligibilityRuleNestedInput
+  criteria?: Prisma.EligibilityCriteriaUpdateManyWithoutEligibilityRuleNestedInput
 }
 
 export type EligibilityRuleUncheckedUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  minAttendanceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  minEventsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  rules?: Prisma.EligibilityCriteriaUncheckedUpdateManyWithoutEligibilityRuleNestedInput
+  criteria?: Prisma.EligibilityCriteriaUncheckedUpdateManyWithoutEligibilityRuleNestedInput
 }
 
-export type EligibilityRuleCreateWithoutRulesInput = {
+export type EligibilityRuleCreateWithoutCriteriaInput = {
   id?: string
   name: string
   description?: string | null
-  minAttendanceScore?: number | null
-  minEventsCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   events?: Prisma.EventCreateNestedManyWithoutEligibilityRuleInput
 }
 
-export type EligibilityRuleUncheckedCreateWithoutRulesInput = {
+export type EligibilityRuleUncheckedCreateWithoutCriteriaInput = {
   id?: string
   name: string
   description?: string | null
-  minAttendanceScore?: number | null
-  minEventsCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   events?: Prisma.EventUncheckedCreateNestedManyWithoutEligibilityRuleInput
 }
 
-export type EligibilityRuleCreateOrConnectWithoutRulesInput = {
+export type EligibilityRuleCreateOrConnectWithoutCriteriaInput = {
   where: Prisma.EligibilityRuleWhereUniqueInput
-  create: Prisma.XOR<Prisma.EligibilityRuleCreateWithoutRulesInput, Prisma.EligibilityRuleUncheckedCreateWithoutRulesInput>
+  create: Prisma.XOR<Prisma.EligibilityRuleCreateWithoutCriteriaInput, Prisma.EligibilityRuleUncheckedCreateWithoutCriteriaInput>
 }
 
-export type EligibilityRuleUpsertWithoutRulesInput = {
-  update: Prisma.XOR<Prisma.EligibilityRuleUpdateWithoutRulesInput, Prisma.EligibilityRuleUncheckedUpdateWithoutRulesInput>
-  create: Prisma.XOR<Prisma.EligibilityRuleCreateWithoutRulesInput, Prisma.EligibilityRuleUncheckedCreateWithoutRulesInput>
+export type EligibilityRuleUpsertWithoutCriteriaInput = {
+  update: Prisma.XOR<Prisma.EligibilityRuleUpdateWithoutCriteriaInput, Prisma.EligibilityRuleUncheckedUpdateWithoutCriteriaInput>
+  create: Prisma.XOR<Prisma.EligibilityRuleCreateWithoutCriteriaInput, Prisma.EligibilityRuleUncheckedCreateWithoutCriteriaInput>
   where?: Prisma.EligibilityRuleWhereInput
 }
 
-export type EligibilityRuleUpdateToOneWithWhereWithoutRulesInput = {
+export type EligibilityRuleUpdateToOneWithWhereWithoutCriteriaInput = {
   where?: Prisma.EligibilityRuleWhereInput
-  data: Prisma.XOR<Prisma.EligibilityRuleUpdateWithoutRulesInput, Prisma.EligibilityRuleUncheckedUpdateWithoutRulesInput>
+  data: Prisma.XOR<Prisma.EligibilityRuleUpdateWithoutCriteriaInput, Prisma.EligibilityRuleUncheckedUpdateWithoutCriteriaInput>
 }
 
-export type EligibilityRuleUpdateWithoutRulesInput = {
+export type EligibilityRuleUpdateWithoutCriteriaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  minAttendanceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  minEventsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUpdateManyWithoutEligibilityRuleNestedInput
 }
 
-export type EligibilityRuleUncheckedUpdateWithoutRulesInput = {
+export type EligibilityRuleUncheckedUpdateWithoutCriteriaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  minAttendanceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  minEventsCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.EventUncheckedUpdateManyWithoutEligibilityRuleNestedInput
@@ -587,12 +469,12 @@ export type EligibilityRuleUncheckedUpdateWithoutRulesInput = {
  */
 
 export type EligibilityRuleCountOutputType = {
-  rules: number
+  criteria: number
   events: number
 }
 
 export type EligibilityRuleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  rules?: boolean | EligibilityRuleCountOutputTypeCountRulesArgs
+  criteria?: boolean | EligibilityRuleCountOutputTypeCountCriteriaArgs
   events?: boolean | EligibilityRuleCountOutputTypeCountEventsArgs
 }
 
@@ -609,7 +491,7 @@ export type EligibilityRuleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Ty
 /**
  * EligibilityRuleCountOutputType without action
  */
-export type EligibilityRuleCountOutputTypeCountRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type EligibilityRuleCountOutputTypeCountCriteriaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EligibilityCriteriaWhereInput
 }
 
@@ -625,11 +507,9 @@ export type EligibilityRuleSelect<ExtArgs extends runtime.Types.Extensions.Inter
   id?: boolean
   name?: boolean
   description?: boolean
-  minAttendanceScore?: boolean
-  minEventsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  rules?: boolean | Prisma.EligibilityRule$rulesArgs<ExtArgs>
+  criteria?: boolean | Prisma.EligibilityRule$criteriaArgs<ExtArgs>
   events?: boolean | Prisma.EligibilityRule$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.EligibilityRuleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["eligibilityRule"]>
@@ -638,8 +518,6 @@ export type EligibilityRuleSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   name?: boolean
   description?: boolean
-  minAttendanceScore?: boolean
-  minEventsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["eligibilityRule"]>
@@ -648,8 +526,6 @@ export type EligibilityRuleSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   id?: boolean
   name?: boolean
   description?: boolean
-  minAttendanceScore?: boolean
-  minEventsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["eligibilityRule"]>
@@ -658,15 +534,13 @@ export type EligibilityRuleSelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
-  minAttendanceScore?: boolean
-  minEventsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EligibilityRuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "minAttendanceScore" | "minEventsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["eligibilityRule"]>
+export type EligibilityRuleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["eligibilityRule"]>
 export type EligibilityRuleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  rules?: boolean | Prisma.EligibilityRule$rulesArgs<ExtArgs>
+  criteria?: boolean | Prisma.EligibilityRule$criteriaArgs<ExtArgs>
   events?: boolean | Prisma.EligibilityRule$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.EligibilityRuleCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -676,15 +550,13 @@ export type EligibilityRuleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type $EligibilityRulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "EligibilityRule"
   objects: {
-    rules: Prisma.$EligibilityCriteriaPayload<ExtArgs>[]
+    criteria: Prisma.$EligibilityCriteriaPayload<ExtArgs>[]
     events: Prisma.$EventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     description: string | null
-    minAttendanceScore: number | null
-    minEventsCount: number | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["eligibilityRule"]>
@@ -1081,7 +953,7 @@ readonly fields: EligibilityRuleFieldRefs;
  */
 export interface Prisma__EligibilityRuleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  rules<T extends Prisma.EligibilityRule$rulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EligibilityRule$rulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EligibilityCriteriaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  criteria<T extends Prisma.EligibilityRule$criteriaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EligibilityRule$criteriaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EligibilityCriteriaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   events<T extends Prisma.EligibilityRule$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EligibilityRule$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1115,8 +987,6 @@ export interface EligibilityRuleFieldRefs {
   readonly id: Prisma.FieldRef<"EligibilityRule", 'String'>
   readonly name: Prisma.FieldRef<"EligibilityRule", 'String'>
   readonly description: Prisma.FieldRef<"EligibilityRule", 'String'>
-  readonly minAttendanceScore: Prisma.FieldRef<"EligibilityRule", 'Float'>
-  readonly minEventsCount: Prisma.FieldRef<"EligibilityRule", 'Int'>
   readonly createdAt: Prisma.FieldRef<"EligibilityRule", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"EligibilityRule", 'DateTime'>
 }
@@ -1512,9 +1382,9 @@ export type EligibilityRuleDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * EligibilityRule.rules
+ * EligibilityRule.criteria
  */
-export type EligibilityRule$rulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type EligibilityRule$criteriaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the EligibilityCriteria
    */

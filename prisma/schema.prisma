@@ -59,6 +59,12 @@ enum memberType {
 // EVENTS
 // -------------------------
 
+enum eventType {
+  EVENT
+  CHORE
+  SUNDAY
+}
+
 model Event {
   id          String   @id @default(cuid())
   title       String
@@ -70,6 +76,15 @@ model Event {
   ethiopianYear  Int?
   ethiopianMonth Int?
   ethiopianDay   Int?
+
+  // Event type to distinguish real events from attendance tracking
+  eventType   eventType @default(EVENT)
+
+  // NEW: Mark if this is a recurring yearly event
+  isRecurring   Boolean @default(false)
+  // NEW: The original Ethiopian date (month and day only) for recurring events
+  recurringMonth Int?   // 1-13
+  recurringDay   Int?   // 1-30
 
   // Optional eligibility gate for this event
   eligibilityRuleId String?
@@ -88,6 +103,7 @@ model Event {
 
   @@index([date])
   @@index([ethiopianYear, ethiopianMonth])
+  @@index([isRecurring])
 }
 
 // -------------------------
@@ -191,11 +207,9 @@ model EligibilityRule {
   id                 String   @id @default(cuid())
   name               String
   description        String?
-  minAttendanceScore Float?   // overall minimum score
-  minEventsCount     Int?     // minimum number of events attended
   
   // Relations
-  rules              EligibilityCriteria[]
+  criteria           EligibilityCriteria[]
   events             Event[]
 
   createdAt          DateTime @default(now())
@@ -207,10 +221,13 @@ model EligibilityCriteria {
   eligibilityRuleId String
   eligibilityRule   EligibilityRule @relation(fields: [eligibilityRuleId], references: [id], onDelete: Cascade)
   
-  eventType         String   // "chore", "sunday", or specific event type
+  // The type of event to count (chore, sunday, or specific event type)
+  eventType         String   // "chore", "sunday", "total" for total attendances
   minAttendances    Int      // minimum number of attendances required
-  lookbackMonths    Int      // number of months to look back
-  lookbackDays      Int?     // optional: specific number of days instead of months
+  lookbackMonths    Int      // number of months to look back from the event date
+  
+  // For total attendance option, we don't need eventType filter
+  isTotalAttendance Boolean @default(false) // If true, counts all attendances regardless of type
   
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

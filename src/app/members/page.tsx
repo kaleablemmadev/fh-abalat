@@ -16,9 +16,9 @@ interface Member {
 }
 
 const memberTypeLabels: Record<string, string> = {
-  COURSE_STUDENT: "Course Student",
-  REGULAR_MEMBER: "Regular Member",
-  YOUTH_STUDENT: "Youth Student",
+  COURSE_STUDENT: "ኮርሰኛ አባል",
+  REGULAR_MEMBER: "ወጣት አባል",
+  YOUTH_STUDENT: "ማዕለካዊ አባል",
 };
 
 const memberTypeColors: Record<string, string> = {
@@ -28,8 +28,8 @@ const memberTypeColors: Record<string, string> = {
 };
 
 const genderLabels: Record<string, string> = {
-  MALE: "Male",
-  FEMALE: "Female",
+  MALE: "ወንድ",
+  FEMALE: "ሴት",
 };
 
 export default function MembersPage() {
@@ -110,13 +110,13 @@ export default function MembersPage() {
             className="text-xl font-bold tracking-tight"
             style={{ color: "hsl(var(--foreground))" }}
           >
-            Member Directory
+            የአባላት መዝገብ
           </h1>
           <p
             className="text-sm mt-0.5"
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
-            Browse and manage all registered members.
+            አባላትን መመዝገቢያና መከታተያ
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export default function MembersPage() {
           onMouseLeave={(e) => (e.currentTarget.style.background = "hsl(160 70% 32%)")}
         >
           <Plus size={14} />
-          Add Member
+          ዐዲስ አባል
         </Link>
       </div>
 
@@ -167,21 +167,21 @@ export default function MembersPage() {
               <span className="font-semibold" style={{ color: "hsl(160 55% 55%)" }}>
                 {totals.regular}
               </span>{" "}
-              regular
+              ወጣት
             </span>
 
             <span>
               <span className="font-semibold" style={{ color: "hsl(200 55% 55%)" }}>
                 {totals.course}
               </span>{" "}
-              course
+              ኮርሰኛ
             </span>
 
             <span>
               <span className="font-semibold" style={{ color: "hsl(38 55% 55%)" }}>
                 {totals.youth}
               </span>{" "}
-              youth
+              ማዕከላዊ
             </span>
           </div>
 
@@ -202,7 +202,7 @@ export default function MembersPage() {
                 type="search"
                 value={searchText}
                 onChange={(event) => setSearchText(event.target.value)}
-                placeholder="Search name, gender, type, or Christian name…"
+                placeholder="በስም፣ የክርስትና ስም፣ ወዘተ… ፈልግ"
               />
             </div>
 
@@ -222,10 +222,10 @@ export default function MembersPage() {
                 value={memberTypeFilter}
                 onChange={(event) => setMemberTypeFilter(event.target.value)}
               >
-                <option value="">All member types</option>
-                <option value="REGULAR_MEMBER">Regular Member</option>
-                <option value="COURSE_STUDENT">Course Student</option>
-                <option value="YOUTH_STUDENT">Youth Student</option>
+                <option value="">አባላት በሙሉ</option>
+                <option value="REGULAR_MEMBER">ወጣት አባላት</option>
+                <option value="COURSE_STUDENT">ኮርሰኛ አባላት</option>
+                <option value="YOUTH_STUDENT">ማዕከላዊ አባላት</option>
               </select>
             </div>
           </div>
@@ -346,7 +346,7 @@ export default function MembersPage() {
                         className="text-xs mt-0.5"
                         style={{ color: "hsl(var(--muted-foreground))" }}
                       >
-                        {genderLabels[member.gender] ?? member.gender} · {member.age} yrs
+                        {genderLabels[member.gender] ?? member.gender} · {member.age} ዓመት
                       </p>
                     </div>
 
@@ -357,13 +357,13 @@ export default function MembersPage() {
                       >
                         {member.christianName ? (
                           <span>
-                            Christian name:{" "}
+                            የክርስትና ስም:{" "}
                             <span style={{ color: "hsl(var(--foreground))" }}>
                               {member.christianName}
                             </span>
                           </span>
                         ) : (
-                          <span>Christian name not set</span>
+                          <span>የክርስትና ስም አልተቀመጠም</span>
                         )}
                       </div>
 
@@ -373,13 +373,13 @@ export default function MembersPage() {
                       >
                         {member.registerDate ? (
                           <span>
-                            Registered:{" "}
+                            ምዝገባ ጊዜ:{" "}
                             <span style={{ color: "hsl(var(--foreground))" }}>
                               {member.registerDate}
                             </span>
                           </span>
                         ) : (
-                          <span>Registration date not set</span>
+                          <span>የምዝገባ ቀን አልተቀመጠም</span>
                         )}
                       </div>
 
@@ -403,7 +403,7 @@ export default function MembersPage() {
                             (e.currentTarget.style.color = "hsl(var(--muted-foreground))")
                           }
                         >
-                          Details →
+                          ዝርዝር →
                         </Link>
                       </div>
                     </div>

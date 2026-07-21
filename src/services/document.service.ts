@@ -1,7 +1,7 @@
 // src/services/document.service.ts
 import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, BorderStyle, HeadingLevel, AlignmentType, WidthType } from 'docx';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import fs from 'fs';
+import path from 'path';
 
 interface DocumentOptions {
   title: string;
@@ -9,117 +9,259 @@ interface DocumentOptions {
   eventDate?: Date;
   totalMembers: number;
   eligibleMembers: Array<{ fullName: string | null }>;
+  eventDescription?: string;
+  eventLocation?: string;
 }
 
 export class DocumentService {
   static async generateDOCX(options: DocumentOptions): Promise<Buffer> {
-    const { title, subtitle, eventDate, totalMembers, eligibleMembers } = options;
+    const { title, subtitle, eventDate, totalMembers, eligibleMembers, eventDescription, eventLocation } = options;
+
+    // Split members into two columns
+    const membersPerColumn = Math.ceil(eligibleMembers.length / 2);
+    const column1 = eligibleMembers.slice(0, membersPerColumn);
+    const column2 = eligibleMembers.slice(membersPerColumn);
 
     const doc = new Document({
       sections: [{
-        properties: {},
+        properties: {
+          page: {
+            margin: {
+              top: 500,
+              bottom: 500,
+              left: 500,
+              right: 500,
+            },
+          },
+        },
         children: [
+          // Title
           new Paragraph({
             text: title,
             heading: HeadingLevel.TITLE,
             alignment: AlignmentType.CENTER,
-            spacing: { after: 200 },
+            spacing: { before: 0, after: 100 },
           }),
+          
+          // Event Details
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Event: ${title}`,
+                size: 20,
+                bold: true,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 0, after: 50 },
+          }),
+          
           ...(subtitle ? [new Paragraph({
             text: subtitle,
             heading: HeadingLevel.HEADING_2,
             alignment: AlignmentType.CENTER,
-            spacing: { after: 200 },
+            spacing: { before: 0, after: 50 },
           })] : []),
+          
+          ...(eventDescription ? [new Paragraph({
+            children: [
+              new TextRun({
+                text: `Description: ${eventDescription}`,
+                size: 18,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 0, after: 50 },
+          })] : []),
+          
+          ...(eventLocation ? [new Paragraph({
+            children: [
+              new TextRun({
+                text: `Location: ${eventLocation}`,
+                size: 18,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 0, after: 50 },
+          })] : []),
+          
           ...(eventDate ? [new Paragraph({
             children: [
               new TextRun({
                 text: `Date: ${eventDate.toLocaleDateString()}`,
-                size: 24,
+                size: 18,
+              }),
+              new TextRun({
+                text: ` | Time: ${eventDate.toLocaleTimeString()}`,
+                size: 18,
               }),
             ],
             alignment: AlignmentType.CENTER,
-            spacing: { after: 300 },
+            spacing: { before: 0, after: 100 },
           })] : []),
+          
+          // Summary
           new Paragraph({
             children: [
               new TextRun({
                 text: `Total Members: ${totalMembers}`,
-                size: 24,
+                size: 18,
                 bold: true,
               }),
               new TextRun({
                 text: ` | Eligible: ${eligibleMembers.length}`,
-                size: 24,
+                size: 18,
                 bold: true,
                 color: '2e7d32',
               }),
             ],
             alignment: AlignmentType.CENTER,
-            spacing: { after: 400 },
+            spacing: { before: 0, after: 150 },
           }),
-          new Paragraph({
-            text: 'Eligible Members List',
-            heading: HeadingLevel.HEADING_3,
-            spacing: { before: 200, after: 200 },
-          }),
+          
+          // Two-column table
           new Table({
             rows: [
+              // Header row
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ text: 'No.', bold: true })],
+                    children: [new Paragraph({ 
+                      children: [new TextRun({ text: 'ተ.ቁ', bold: true, size: 18 })]
+                    })],
                     width: { size: 10, type: WidthType.PERCENTAGE },
+                    borders: {
+                      top: { style: BorderStyle.SINGLE, size: 1 },
+                      bottom: { style: BorderStyle.SINGLE, size: 1 },
+                      left: { style: BorderStyle.SINGLE, size: 1 },
+                      right: { style: BorderStyle.SINGLE, size: 1 },
+                    },
+                    padding: { top: 50, bottom: 50, left: 50, right: 50 },
                   }),
                   new TableCell({
-                    children: [new Paragraph({ text: 'Full Name', bold: true })],
-                    width: { size: 60, type: WidthType.PERCENTAGE },
+                    children: [new Paragraph({ 
+                      children: [new TextRun({ text: 'ሙሉ ስም', bold: true, size: 18 })]
+                    })],
+                    width: { size: 40, type: WidthType.PERCENTAGE },
+                    borders: {
+                      top: { style: BorderStyle.SINGLE, size: 1 },
+                      bottom: { style: BorderStyle.SINGLE, size: 1 },
+                      left: { style: BorderStyle.SINGLE, size: 1 },
+                      right: { style: BorderStyle.SINGLE, size: 1 },
+                    },
+                    padding: { top: 50, bottom: 50, left: 50, right: 50 },
                   }),
                   new TableCell({
-                    children: [new Paragraph({ text: 'Status', bold: true })],
-                    width: { size: 30, type: WidthType.PERCENTAGE },
+                    children: [new Paragraph({ 
+                      children: [new TextRun({ text: 'ተ.ቁ', bold: true, size: 18 })]
+                    })],
+                    width: { size: 10, type: WidthType.PERCENTAGE },
+                    borders: {
+                      top: { style: BorderStyle.SINGLE, size: 1 },
+                      bottom: { style: BorderStyle.SINGLE, size: 1 },
+                      left: { style: BorderStyle.SINGLE, size: 1 },
+                      right: { style: BorderStyle.SINGLE, size: 1 },
+                    },
+                    padding: { top: 50, bottom: 50, left: 50, right: 50 },
+                  }),
+                  new TableCell({
+                    children: [new Paragraph({ 
+                      children: [new TextRun({ text: 'ሙሉ ስም', bold: true, size: 18 })]
+                    })],
+                    width: { size: 40, type: WidthType.PERCENTAGE },
+                    borders: {
+                      top: { style: BorderStyle.SINGLE, size: 1 },
+                      bottom: { style: BorderStyle.SINGLE, size: 1 },
+                      left: { style: BorderStyle.SINGLE, size: 1 },
+                      right: { style: BorderStyle.SINGLE, size: 1 },
+                    },
+                    padding: { top: 50, bottom: 50, left: 50, right: 50 },
                   }),
                 ],
-                tableHeader: true,
               }),
-              ...eligibleMembers.map((member, index) => 
-                new TableRow({
+              // Data rows - two columns side by side
+              ...Array.from({ length: Math.max(column1.length, column2.length) }, (_, index) => {
+                const member1 = column1[index];
+                const member2 = column2[index];
+                
+                return new TableRow({
                   children: [
-                    new TableCell({
-                      children: [new Paragraph({ text: `${index + 1}` })],
-                    }),
-                    new TableCell({
-                      children: [new Paragraph({ text: member.fullName || 'Unnamed' })],
-                    }),
+                    // Column 1 - Number
                     new TableCell({
                       children: [new Paragraph({ 
-                        text: '✓ Eligible',
+                        text: member1 ? `${index + 1}` : '',
+                        size: 16,
+                        alignment: AlignmentType.CENTER,
                       })],
+                      borders: {
+                        top: { style: BorderStyle.SINGLE, size: 1 },
+                        bottom: { style: BorderStyle.SINGLE, size: 1 },
+                        left: { style: BorderStyle.SINGLE, size: 1 },
+                        right: { style: BorderStyle.SINGLE, size: 1 },
+                      },
+                      padding: { top: 30, bottom: 30, left: 30, right: 30 },
+                    }),
+                    // Column 1 - Name
+                    new TableCell({
+                      children: [new Paragraph({ 
+                        text: member1 ? member1.fullName || 'Unnamed' : '',
+                        size: 16,
+                      })],
+                      borders: {
+                        top: { style: BorderStyle.SINGLE, size: 1 },
+                        bottom: { style: BorderStyle.SINGLE, size: 1 },
+                        left: { style: BorderStyle.SINGLE, size: 1 },
+                        right: { style: BorderStyle.SINGLE, size: 1 },
+                      },
+                      padding: { top: 30, bottom: 30, left: 30, right: 30 },
+                    }),
+                    // Column 2 - Number
+                    new TableCell({
+                      children: [new Paragraph({ 
+                        text: member2 ? `${index + 1 + membersPerColumn}` : '',
+                        size: 16,
+                        alignment: AlignmentType.CENTER,
+                      })],
+                      borders: {
+                        top: { style: BorderStyle.SINGLE, size: 1 },
+                        bottom: { style: BorderStyle.SINGLE, size: 1 },
+                        left: { style: BorderStyle.SINGLE, size: 1 },
+                        right: { style: BorderStyle.SINGLE, size: 1 },
+                      },
+                      padding: { top: 30, bottom: 30, left: 30, right: 30 },
+                    }),
+                    // Column 2 - Name
+                    new TableCell({
+                      children: [new Paragraph({ 
+                        text: member2 ? member2.fullName || 'Unnamed' : '',
+                        size: 16,
+                      })],
+                      borders: {
+                        top: { style: BorderStyle.SINGLE, size: 1 },
+                        bottom: { style: BorderStyle.SINGLE, size: 1 },
+                        left: { style: BorderStyle.SINGLE, size: 1 },
+                        right: { style: BorderStyle.SINGLE, size: 1 },
+                      },
+                      padding: { top: 30, bottom: 30, left: 30, right: 30 },
                     }),
                   ],
-                })
-              ),
+                });
+              }),
             ],
             width: { size: 100, type: WidthType.PERCENTAGE },
-            borders: {
-              top: { style: BorderStyle.SINGLE, size: 1 },
-              bottom: { style: BorderStyle.SINGLE, size: 1 },
-              left: { style: BorderStyle.SINGLE, size: 1 },
-              right: { style: BorderStyle.SINGLE, size: 1 },
-              insideHorizontal: { style: BorderStyle.SINGLE, size: 1 },
-              insideVertical: { style: BorderStyle.SINGLE, size: 1 },
-            },
           }),
+          
+          // Footer
           new Paragraph({
             children: [
               new TextRun({
                 text: `Generated on: ${new Date().toLocaleString()}`,
-                size: 20,
+                size: 14,
                 color: '666666',
               }),
             ],
             alignment: AlignmentType.RIGHT,
-            spacing: { before: 400 },
+            spacing: { before: 100, after: 0 },
           }),
         ],
       }],
@@ -129,7 +271,10 @@ export class DocumentService {
   }
 
   static async generatePDF(options: DocumentOptions): Promise<Buffer> {
-    const { title, subtitle, eventDate, totalMembers, eligibleMembers } = options;
+    const { title, subtitle, eventDate, totalMembers, eligibleMembers, eventDescription, eventLocation } = options;
+
+    const { default: jsPDF } = await import('jspdf');
+    const { default: autoTable } = await import('jspdf-autotable');
 
     return new Promise((resolve, reject) => {
       try {
@@ -140,63 +285,156 @@ export class DocumentService {
         });
 
         const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
         
-        doc.setFontSize(18);
-        doc.setFont('helvetica', 'bold');
-        doc.text(title, pageWidth / 2, 20, { align: 'center' });
-        
-        let yPosition = 30;
-        if (subtitle) {
-          doc.setFontSize(14);
-          doc.setFont('helvetica', 'normal');
-          doc.text(subtitle, pageWidth / 2, yPosition, { align: 'center' });
-          yPosition += 10;
-        }
-        
-        if (eventDate) {
-          doc.setFontSize(12);
-          doc.text(`Date: ${eventDate.toLocaleDateString()}`, pageWidth / 2, yPosition, { align: 'center' });
-          yPosition += 10;
-        }
-        
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`Total Members: ${totalMembers}`, 20, yPosition);
-        doc.setTextColor(46, 125, 50);
-        doc.text(`Eligible: ${eligibleMembers.length}`, 120, yPosition);
-        doc.setTextColor(0);
-        
-        yPosition += 15;
-        
-        const tableData = eligibleMembers.map((member, index) => [
-          `${index + 1}`,
-          member.fullName || 'Unnamed',
-          '✓ Eligible'
-        ]);
+        // ---- Load Amharic Font ----
+        let fontLoaded = false;
+        try {
+          const fontPaths = [
+            path.join(process.cwd(), 'src', 'assets', 'fonts', 'NotoSansEthiopic-VariableFont_wdth,wght.ttf'),
+            path.join(process.cwd(), 'src', 'assets', 'fonts', 'NotoSansEthiopic-Regular.ttf'),
+          ];
 
-        (doc as any).autoTable({
-          startY: yPosition,
-          head: [['No.', 'Full Name', 'Status']],
+          let fontPath = null;
+          for (const p of fontPaths) {
+            if (fs.existsSync(p)) {
+              fontPath = p;
+              break;
+            }
+          }
+
+          if (fontPath) {
+            const fontData = fs.readFileSync(fontPath);
+            const base64Font = fontData.toString('base64');
+            const fontName = path.basename(fontPath, '.ttf');
+            // @ts-ignore
+            doc.addFileToVFS(fontName + '.ttf', base64Font);
+            // @ts-ignore
+            doc.addFont(fontName + '.ttf', 'NotoSansEthiopic', 'normal');
+            fontLoaded = true;
+            console.log('✅ Amharic font loaded from:', fontPath);
+          }
+        } catch (error) {
+          console.warn('⚠️ Could not load Amharic font:', error);
+        }
+
+        let yPosition = 10;
+
+        // ---- Title ----
+        doc.setFontSize(16);
+        doc.setFont(fontLoaded ? 'NotoSansEthiopic' : 'helvetica', 'bold');
+        doc.text(title, pageWidth / 2, yPosition, { align: 'center' });
+        yPosition += 8;
+
+        // ---- Event Details ----
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Event: ${title}`, pageWidth / 2, yPosition, { align: 'center' });
+        yPosition += 6;
+
+        if (subtitle) {
+          doc.setFontSize(10);
+          doc.setFont(fontLoaded ? 'NotoSansEthiopic' : 'helvetica', 'normal');
+          doc.text(subtitle, pageWidth / 2, yPosition, { align: 'center' });
+          yPosition += 6;
+        }
+
+        if (eventDescription) {
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'normal');
+          doc.text(`Description: ${eventDescription}`, pageWidth / 2, yPosition, { align: 'center' });
+          yPosition += 5;
+        }
+
+        if (eventLocation) {
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'normal');
+          doc.text(`Location: ${eventLocation}`, pageWidth / 2, yPosition, { align: 'center' });
+          yPosition += 5;
+        }
+
+        if (eventDate) {
+          doc.setFontSize(9);
+          doc.setFont('helvetica', 'normal');
+          doc.text(
+            `Date: ${eventDate.toLocaleDateString()} | Time: ${eventDate.toLocaleTimeString()}`,
+            pageWidth / 2,
+            yPosition,
+            { align: 'center' }
+          );
+          yPosition += 6;
+        }
+
+        // ---- Summary ----
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`Total Members: ${totalMembers}`, 15, yPosition);
+        doc.setTextColor(46, 125, 50);
+        doc.text(`Eligible: ${eligibleMembers.length}`, 85, yPosition);
+        doc.setTextColor(0);
+        yPosition += 5;
+
+        // ---- Split members into two columns ----
+        const membersPerColumn = Math.ceil(eligibleMembers.length / 2);
+        const column1 = eligibleMembers.slice(0, membersPerColumn);
+        const column2 = eligibleMembers.slice(membersPerColumn);
+
+        // ---- Two-Column Table ----
+        const tableData = [];
+        const maxRows = Math.max(column1.length, column2.length);
+        
+        for (let i = 0; i < maxRows; i++) {
+          const member1 = column1[i];
+          const member2 = column2[i];
+          tableData.push([
+            member1 ? `${i + 1}` : '',
+            member1 ? member1.fullName || 'Unnamed' : '',
+            member2 ? `${i + 1 + membersPerColumn}` : '',
+            member2 ? member2.fullName || 'Unnamed' : '',
+          ]);
+        }
+
+        autoTable(doc, {
+          startY: yPosition + 2,
+          head: [['ተ.ቁ', 'ሙሉ ስም', 'ተ.ቁ', 'ሙሉ ስም']],
           body: tableData,
           theme: 'grid',
-          headStyles: { fillColor: [41, 128, 185], textColor: [255, 255, 255] },
-          bodyStyles: { fontSize: 10 },
-          columnStyles: {
-            0: { cellWidth: 20 },
-            1: { cellWidth: 120 },
-            2: { cellWidth: 40 }
+          headStyles: {
+            fillColor: [41, 128, 185],
+            textColor: [255, 255, 255],
+            font: 'helvetica',
+            halign: 'center',
+            fontSize: 8,
+            cellPadding: 1.5,
           },
-          didDrawPage: function(data: any) {
-            const pageCount = doc.internal.getNumberOfPages();
-            doc.setFontSize(10);
-            doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, pageWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+          bodyStyles: {
+            fontSize: 8,
+            font: fontLoaded ? 'NotoSansEthiopic' : 'helvetica',
+            halign: 'left',
+            cellPadding: 1.5,
+          },
+          columnStyles: {
+            0: { cellWidth: 18, halign: 'center' },
+            1: { cellWidth: 70, halign: 'left' },
+            2: { cellWidth: 18, halign: 'center' },
+            3: { cellWidth: 70, halign: 'left' },
+          },
+          margin: { left: 10, right: 10 },
+          didDrawPage: function() {
+            const pageCount = (doc as any).internal.getNumberOfPages();
+            const currentPage = (doc as any).internal.getCurrentPageInfo().pageNumber;
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Page ${currentPage} of ${pageCount}`, pageWidth / 2, pageHeight - 5, { align: 'center' });
           }
         });
 
-        const finalY = (doc as any).lastAutoTable?.finalY || yPosition + 50;
-        doc.setFontSize(8);
+        // ---- Footer ----
+        const finalY = (doc as any).lastAutoTable?.finalY || yPosition + 30;
+        doc.setFontSize(7);
         doc.setTextColor(102, 102, 102);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 20, finalY + 20, { align: 'right' });
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth - 15, finalY + 8, { align: 'right' });
 
         const pdfBuffer = doc.output('arraybuffer');
         resolve(Buffer.from(pdfBuffer));

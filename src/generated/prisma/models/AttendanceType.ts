@@ -391,10 +391,6 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type AttendanceTypeCreateNestedOneWithoutAttendancesInput = {
   create?: Prisma.XOR<Prisma.AttendanceTypeCreateWithoutAttendancesInput, Prisma.AttendanceTypeUncheckedCreateWithoutAttendancesInput>
   connectOrCreate?: Prisma.AttendanceTypeCreateOrConnectWithoutAttendancesInput

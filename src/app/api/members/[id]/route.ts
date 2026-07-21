@@ -1,6 +1,7 @@
 // /api/members/[id]/route.ts
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { ethMonthNames } from "@/src/lib/ethiopiancal";
 
 type MemberUpdatePayload = Partial<{
   fullName: string;
@@ -39,7 +40,7 @@ export async function PUT(
 ) {
   try {
     const routeParams = await params;
-    const body = (await request.json()) as MemberUpdatePayload;
+    const body = await request.json();
 
     if (!body || Object.keys(body).length === 0) {
       return NextResponse.json(
@@ -53,9 +54,28 @@ export async function PUT(
       return NextResponse.json({ error: "Member not found" }, { status: 404 });
     }
 
+    // Build update data — only include fields that are provided
+    const updateData: any = {};
+
+    if (body.fullName !== undefined) updateData.fullName = body.fullName.trim();
+    if (body.gender !== undefined) updateData.gender = body.gender;
+    if (body.age !== undefined) updateData.age = Number(body.age);
+    if (body.christianName !== undefined) updateData.christianName = body.christianName || null;
+    if (body.memberType !== undefined) updateData.memberType = body.memberType;
+
+    // Handle Ethiopian date fields from form → registerDate string
+    if (body.registerDateDay && body.registerDateMonth && body.registerDateYear) {
+      const monthName = ethMonthNames[parseInt(body.registerDateMonth)];
+      if (monthName) {
+        updateData.registerDate = `${monthName} ${body.registerDateDay}, ${body.registerDateYear}`;
+      }
+    } else if (body.registerDate !== undefined) {
+      updateData.registerDate = body.registerDate;
+    }
+
     const updatedMember = await prisma.user.update({
       where: { id: routeParams.id },
-      data: body,
+      data: updateData,
     });
 
     return NextResponse.json(updatedMember);

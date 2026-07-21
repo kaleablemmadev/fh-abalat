@@ -4,7 +4,7 @@
 import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Calendar, CheckSquare, Shield, Settings, LogOut } from 'lucide-react';
+import { Home, Users, Calendar, CheckSquare, Shield, Settings, LogOut, ChevronRight } from 'lucide-react';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -15,7 +15,7 @@ const navItems = [
   { name: 'Members',     href: '/members',         icon: Users },
   { name: 'Events',      href: '/events',          icon: Calendar },
   { name: 'Attendance',  href: '/attendance/chore', icon: CheckSquare },
-  { name: 'Permissions', href: '/permissions',     icon: Shield },
+  { name: 'Eligibility', href: '/eligibility-rules', icon: Shield }, // NEW
   { name: 'Settings',    href: '/settings',        icon: Settings },
 ];
 

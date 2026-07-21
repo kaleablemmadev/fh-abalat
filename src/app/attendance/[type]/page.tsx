@@ -8,7 +8,9 @@ import {
   ethMonthNames,
   getChoreDaysInMonth,
   getSundaysInMonth,
-  ethiopianDateToDate
+  ethiopianDateToDate,
+  dateToEthiopian,
+  getEthiopianMonthDaysCount
 } from "@/src/lib/ethiopiancal";
 
 async function getAdminId() {
@@ -89,6 +91,7 @@ export default async function MultiMonthAttendancePage({
             ethiopianYear: currentEthYear,
             ethiopianMonth: currentEthMonth,
             ethiopianDay: ethDay.day,
+            eventType: 'CHORE', // <-- ADD THIS
             createdById: adminId,
           },
         });
@@ -101,42 +104,64 @@ export default async function MultiMonthAttendancePage({
         ethDate: ethDay,
       });
     }
-  } else if (type === 'sunday') {
-    // Get all Sundays in the month
-    const sundays = getSundaysInMonth(currentEthYear, currentEthMonth);
+} else if (type === 'sunday') {
+    // Get all Sundays in the month - FIXED with manual date mapping
+    const daysInMonth = getEthiopianMonthDaysCount(currentEthYear, currentEthMonth);
+    const monthName = ethMonthNames[currentEthMonth];
     
-    for (const ethDay of sundays) {
-      const gregDate = ethiopianDateToDate(ethDay);
-      
-      // Check if event exists
-      let event = await prisma.event.findFirst({
-        where: {
-          ethiopianYear: currentEthYear,
-          ethiopianMonth: currentEthMonth,
-          ethiopianDay: ethDay.day,
-          title: { contains: 'Sunday' },
-        },
-      });
-      
-      if (!event) {
-        event = await prisma.event.create({
-          data: {
-            title: `Sunday Morning Attendance`,
-            date: gregDate,
-            ethiopianYear: currentEthYear,
-            ethiopianMonth: currentEthMonth,
-            ethiopianDay: ethDay.day,
-            createdById: adminId,
-          },
-        });
+    // Known mapping for July 2024 as reference:
+    // Ethiopian Hamle 5, 2024 = Gregorian July 13, 2024 (Saturday)
+    // Ethiopian Hamle 6, 2024 = Gregorian July 14, 2024 (Sunday)
+    // Ethiopian Hamle 12, 2024 = Gregorian July 20, 2024 (Saturday)
+    // Ethiopian Hamle 13, 2024 = Gregorian July 21, 2024 (Sunday)
+    // Ethiopian Hamle 19, 2024 = Gregorian July 27, 2024 (Saturday)
+    // Ethiopian Hamle 20, 2024 = Gregorian July 28, 2024 (Sunday)
+    
+    // We need to check each day of the month and see if it's Sunday
+    for (let day = 1; day <= daysInMonth; day++) {
+      try {
+        // Convert Ethiopian date to Gregorian
+        const ethDay = { year: currentEthYear, month: monthName, day };
+        const gregDate = ethiopianDateToDate(ethDay);
+        
+        // Check if it's Sunday (day 0 is Sunday in JavaScript)
+        if (gregDate.getDay() === 0) {
+          // Check if event exists
+          let event = await prisma.event.findFirst({
+            where: {
+              ethiopianYear: currentEthYear,
+              ethiopianMonth: currentEthMonth,
+              ethiopianDay: day,
+              title: { contains: 'Sunday' },
+            },
+          });
+          
+          if (!event) {
+            event = await prisma.event.create({
+              data: {
+                title: `Sunday Morning Attendance`,
+                date: gregDate,
+                ethiopianYear: currentEthYear,
+                ethiopianMonth: currentEthMonth,
+                ethiopianDay: ethDay.day,
+                eventType: 'SUNDAY', // <-- ADD THIS
+                createdById: adminId,
+              },
+            });
+          }
+          
+          generatedEvents.push({
+            id: event.id,
+            title: event.title,
+            date: event.date,
+            ethDate: { year: currentEthYear, month: monthName, day },
+          });
+        }
+      } catch (error) {
+        // Skip invalid dates
+        console.error(`Error processing day ${day}:`, error);
+        continue;
       }
-      
-      generatedEvents.push({
-        id: event.id,
-        title: event.title,
-        date: event.date,
-        ethDate: ethDay,
-      });
     }
   }
 
@@ -228,6 +253,17 @@ export default async function MultiMonthAttendancePage({
             }}
           >
             Next
+          </Link>
+          <Link
+            href={`/attendance/${type}/list`}
+            className="px-3 py-1.5 rounded text-xs font-medium transition-colors duration-150"
+            style={{
+              background: 'hsl(var(--muted))',
+              color: 'hsl(var(--foreground))',
+              border: '1px solid hsl(var(--border))',
+            }}
+          >
+            View Past
           </Link>
         </div>
 

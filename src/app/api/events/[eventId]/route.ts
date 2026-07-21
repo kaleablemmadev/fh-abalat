@@ -11,6 +11,9 @@ type EventUpdatePayload = Partial<{
   ethiopianYear: number;
   ethiopianMonth: number;
   ethiopianDay: number;
+  isRecurring: boolean;
+  recurringMonth: number;
+  recurringDay: number;
   eligibilityRuleId: string;
   targetMemberTypes: string[];
 }>;
@@ -27,11 +30,7 @@ export async function GET(
     const event = await prisma.event.findUnique({
       where: { id: eventId },
       include: {
-        _count: {
-          select: {
-            attendances: true,
-          },
-        },
+        eligibilityRule: true,
       },
     });
 
@@ -48,10 +47,13 @@ export async function GET(
       ethiopianYear: event.ethiopianYear,
       ethiopianMonth: event.ethiopianMonth,
       ethiopianDay: event.ethiopianDay,
+      isRecurring: event.isRecurring,
+      recurringMonth: event.recurringMonth,
+      recurringDay: event.recurringDay,
+      eligibilityRule: event.eligibilityRule?.name ?? "",
       eligibilityRuleId: event.eligibilityRuleId,
       targetMemberTypes: event.targetMemberTypes,
       ethDate: dateToEthiopian(new Date(event.date)),
-      _count: event._count,
     };
 
     return NextResponse.json(serialized);
@@ -84,7 +86,7 @@ export async function PUT(
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    // Build update data with proper types
+    // Build update data
     const updateData: {
       title?: string;
       description?: string | null;
@@ -93,6 +95,9 @@ export async function PUT(
       ethiopianYear?: number | null;
       ethiopianMonth?: number | null;
       ethiopianDay?: number | null;
+      isRecurring?: boolean;
+      recurringMonth?: number | null;
+      recurringDay?: number | null;
       eligibilityRuleId?: string | null;
       targetMemberTypes?: EventTargetMemberTypes[];
     } = {};
@@ -104,6 +109,9 @@ export async function PUT(
     if (body.ethiopianYear !== undefined) updateData.ethiopianYear = body.ethiopianYear;
     if (body.ethiopianMonth !== undefined) updateData.ethiopianMonth = body.ethiopianMonth;
     if (body.ethiopianDay !== undefined) updateData.ethiopianDay = body.ethiopianDay;
+    if (body.isRecurring !== undefined) updateData.isRecurring = body.isRecurring;
+    if (body.recurringMonth !== undefined) updateData.recurringMonth = body.recurringMonth;
+    if (body.recurringDay !== undefined) updateData.recurringDay = body.recurringDay;
     if (body.eligibilityRuleId !== undefined) updateData.eligibilityRuleId = body.eligibilityRuleId;
     if (body.targetMemberTypes) {
       updateData.targetMemberTypes = body.targetMemberTypes as EventTargetMemberTypes[];
@@ -140,7 +148,6 @@ export async function DELETE(
     await prisma.attendance.deleteMany({
       where: { eventId },
     });
-
     await prisma.event.delete({
       where: { id: eventId },
     });

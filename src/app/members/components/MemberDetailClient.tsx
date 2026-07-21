@@ -17,9 +17,9 @@ interface Member {
 }
 
 const memberTypeLabels: Record<string, string> = {
-  COURSE_STUDENT: "Course Student",
-  REGULAR_MEMBER: "Regular Member",
-  YOUTH_STUDENT: "Youth Student",
+  COURSE_STUDENT: "ኮርሰኛ አባል",
+  REGULAR_MEMBER: "ወጣት አባል",
+  YOUTH_STUDENT: "ማዕከላዊ አባል",
 };
 
 const memberTypeColors: Record<string, string> = {
@@ -29,8 +29,8 @@ const memberTypeColors: Record<string, string> = {
 };
 
 const genderLabels: Record<string, string> = {
-  MALE: "Male",
-  FEMALE: "Female",
+  MALE: "ወንድ",
+  FEMALE: "ሴት",
 };
 
 export default function MemberDetailClient({ memberId }: { memberId: string }) {
@@ -107,7 +107,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
           className="text-[10px] font-bold uppercase tracking-widest mb-1"
           style={{ color: "hsl(160 55% 50%)" }}
         >
-          Member profile
+          የአባላት ዝርዝር ገጽ
         </p>
         <h1
           className="text-xl font-bold tracking-tight"
@@ -224,7 +224,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                   className="text-[10px] font-semibold uppercase tracking-wider mb-1"
                   style={{ color: "hsl(var(--muted-foreground))" }}
                 >
-                  Age
+                  ዕድሜ
                 </p>
                 <p
                   className="text-sm font-semibold"
@@ -266,7 +266,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                   className="text-[10px] font-semibold uppercase tracking-wider mb-1"
                   style={{ color: "hsl(var(--muted-foreground))" }}
                 >
-                  Christian Name
+                  የክርስትና ስም
                 </p>
                 <p
                   className="text-sm font-semibold"
@@ -287,7 +287,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                   className="text-[10px] font-semibold uppercase tracking-wider mb-1"
                   style={{ color: "hsl(var(--muted-foreground))" }}
                 >
-                  Registration Date
+                  የምዝገባ ቀን
                 </p>
                 <p
                   className="text-sm font-semibold"
@@ -314,7 +314,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                 }
               >
                 <ArrowLeft size={12} />
-                Back to roster
+                ወደኋላ ተመለስ
               </Link>
 
               <Link
@@ -332,7 +332,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                 }
               >
                 <Edit2 size={12} />
-                Edit Profile
+                አስተካክል
               </Link>
             </div>
           </div>

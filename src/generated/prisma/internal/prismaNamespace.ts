@@ -1069,6 +1069,10 @@ export const EventScalarFieldEnum = {
   ethiopianYear: 'ethiopianYear',
   ethiopianMonth: 'ethiopianMonth',
   ethiopianDay: 'ethiopianDay',
+  eventType: 'eventType',
+  isRecurring: 'isRecurring',
+  recurringMonth: 'recurringMonth',
+  recurringDay: 'recurringDay',
   eligibilityRuleId: 'eligibilityRuleId',
   targetMemberTypes: 'targetMemberTypes',
   createdById: 'createdById',
@@ -1137,8 +1141,6 @@ export const EligibilityRuleScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  minAttendanceScore: 'minAttendanceScore',
-  minEventsCount: 'minEventsCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1152,7 +1154,7 @@ export const EligibilityCriteriaScalarFieldEnum = {
   eventType: 'eventType',
   minAttendances: 'minAttendances',
   lookbackMonths: 'lookbackMonths',
-  lookbackDays: 'lookbackDays',
+  isTotalAttendance: 'isTotalAttendance',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1275,6 +1277,27 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'eventType'
+ */
+export type EnumeventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'eventType'>
+    
+
+
+/**
+ * Reference to a field of type 'eventType[]'
+ */
+export type ListEnumeventTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'eventType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1285,13 +1308,6 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

@@ -2,22 +2,30 @@
 import prisma from '@/src/lib/prisma';
 import { dateToEthiopian } from '@/src/lib/ethiopiancal';
 
-interface EligibilityCheckResult {
+export interface EligibilityCheckResult {
   memberId: string;
   fullName: string | null;
   eligible: boolean;
   reasons: string[];
-  attendances: {
-    choreCount: number;
-    sundayCount: number;
-    totalCount: number;
+  scores: {
+    choreScore: number;
+    sundayScore: number;
+    totalScore: number;
     requiredChore: number;
     requiredSunday: number;
+    requiredTotal: number;
     lookbackMonths: number;
   };
+  attendanceDetails?: {
+    eventId: string;
+    eventTitle: string;
+    eventDate: Date;
+    attendanceType: string;
+    value: number;
+  }[];
 }
 
-interface EventEligibilityReport {
+export interface EventEligibilityReport {
   eventId: string;
   eventTitle: string;
   eventDate: Date;
@@ -31,18 +39,93 @@ interface EventEligibilityReport {
       eventType: string;
       minAttendances: number;
       lookbackMonths: number;
+      isTotalAttendance: boolean;
     }[];
   };
 }
 
 export class EligibilityService {
+  /**
+   * Calculate the score for a member based on attendance records
+   * This queries the Attendance table directly through Prisma
+   */
+  static async calculateMemberScore(
+    memberId: string,
+    lookbackMonths: number,
+    targetDate: Date
+  ): Promise<{ 
+    choreScore: number; 
+    sundayScore: number; 
+    totalScore: number;
+    attendanceDetails: any[];
+  }> {
+    const cutoffDate = new Date(targetDate);
+    cutoffDate.setMonth(cutoffDate.getMonth() - lookbackMonths);
+
+    // Query the Attendance table directly
+    const attendances = await prisma.attendance.findMany({
+      where: {
+        memberId: memberId,
+        event: {
+          date: {
+            gte: cutoffDate,
+            lt: targetDate,
+          },
+        },
+      },
+      include: {
+        event: true,
+        attendanceType: true,
+      },
+      orderBy: {
+        event: {
+          date: 'desc',
+        },
+      },
+    });
+
+    let choreScore = 0;
+    let sundayScore = 0;
+    let totalScore = 0;
+    const attendanceDetails: any[] = [];
+
+    for (const attendance of attendances) {
+      const value = attendance.attendanceType?.value || 0;
+      totalScore += value;
+
+      const eventTitle = attendance.event?.title || '';
+      const eventType = attendance.event?.eventType || '';
+
+      attendanceDetails.push({
+        eventId: attendance.eventId,
+        eventTitle: eventTitle,
+        eventDate: attendance.event?.date,
+        attendanceType: attendance.attendanceType?.name || 'Unknown',
+        value: value,
+      });
+
+      if (eventType === 'CHORE') {
+        choreScore += value;
+      } else if (eventType === 'SUNDAY') {
+        sundayScore += value;
+      }
+    }
+
+    return { choreScore, sundayScore, totalScore, attendanceDetails };
+  }
+
+  /**
+   * Check if a member is eligible based on the criteria
+   */
   static async checkMemberEligibility(
     memberId: string,
     criteria: {
       eventType: string;
       minAttendances: number;
       lookbackMonths: number;
-    }[]
+      isTotalAttendance: boolean;
+    }[],
+    targetDate: Date
   ): Promise<EligibilityCheckResult> {
     const member = await prisma.user.findUnique({
       where: { id: memberId },
@@ -54,129 +137,139 @@ export class EligibilityService {
     }
 
     const reasons: string[] = [];
-    const attendances = {
-      choreCount: 0,
-      sundayCount: 0,
-      totalCount: 0,
-      requiredChore: 0,
-      requiredSunday: 0,
-      lookbackMonths: 0
-    };
-
     let maxLookbackMonths = 0;
+    let requiredChore = 0;
+    let requiredSunday = 0;
+    let requiredTotal = 0;
+
     for (const c of criteria) {
       if (c.lookbackMonths > maxLookbackMonths) {
         maxLookbackMonths = c.lookbackMonths;
       }
-      if (c.eventType === 'chore') {
-        attendances.requiredChore = c.minAttendances;
-      } else if (c.eventType === 'sunday') {
-        attendances.requiredSunday = c.minAttendances;
-      }
-    }
-    attendances.lookbackMonths = maxLookbackMonths;
-
-    const cutoffDate = new Date();
-    cutoffDate.setMonth(cutoffDate.getMonth() - maxLookbackMonths);
-
-    const memberAttendances = await prisma.attendance.findMany({
-      where: {
-        memberId: memberId,
-        event: {
-          date: {
-            gte: cutoffDate
-          }
-        },
-        attendanceType: {
-          name: {
-            in: ['Attended', 'Present', 'Yes']
-          }
-        }
-      },
-      include: {
-        event: true,
-        attendanceType: true
-      },
-      orderBy: {
-        event: {
-          date: 'desc'
-        }
-      }
-    });
-
-    for (const criterion of criteria) {
-      const count = memberAttendances.filter(a => {
-        const eventDate = new Date(a.event.date);
-        const lookbackDate = new Date();
-        lookbackDate.setMonth(lookbackDate.getMonth() - criterion.lookbackMonths);
-        
-        if (eventDate < lookbackDate) return false;
-        
-        if (criterion.eventType === 'chore') {
-          return a.event.title?.toLowerCase().includes('chore');
-        } else if (criterion.eventType === 'sunday') {
-          return a.event.title?.toLowerCase().includes('sunday');
-        }
-        return true;
-      }).length;
-
-      if (criterion.eventType === 'chore') {
-        attendances.choreCount = count;
-        if (count < criterion.minAttendances) {
-          reasons.push(`Has ${count}/${criterion.minAttendances} chore attendances in last ${criterion.lookbackMonths} months`);
-        }
-      } else if (criterion.eventType === 'sunday') {
-        attendances.sundayCount = count;
-        if (count < criterion.minAttendances) {
-          reasons.push(`Has ${count}/${criterion.minAttendances} Sunday attendances in last ${criterion.lookbackMonths} months`);
-        }
+      if (c.eventType === 'chore' && !c.isTotalAttendance) {
+        requiredChore = c.minAttendances;
+      } else if (c.eventType === 'sunday' && !c.isTotalAttendance) {
+        requiredSunday = c.minAttendances;
+      } else if (c.isTotalAttendance) {
+        requiredTotal = c.minAttendances;
       }
     }
 
-    attendances.totalCount = memberAttendances.length;
+    const { choreScore, sundayScore, totalScore, attendanceDetails } = 
+      await this.calculateMemberScore(memberId, maxLookbackMonths, targetDate);
+
+    // Check chore criteria
+    if (requiredChore > 0 && choreScore < requiredChore) {
+      reasons.push(`Has ${choreScore}/${requiredChore} chore attendances in last ${maxLookbackMonths} months`);
+    }
+
+    // Check sunday criteria
+    if (requiredSunday > 0 && sundayScore < requiredSunday) {
+      reasons.push(`Has ${sundayScore}/${requiredSunday} Sunday attendances in last ${maxLookbackMonths} months`);
+    }
+
+    // Check total attendance criteria
+    if (requiredTotal > 0 && totalScore < requiredTotal) {
+      reasons.push(`Has ${totalScore}/${requiredTotal} total attendances in last ${maxLookbackMonths} months`);
+    }
 
     return {
       memberId: member.id,
       fullName: member.fullName,
       eligible: reasons.length === 0,
       reasons,
-      attendances
+      scores: {
+        choreScore,
+        sundayScore,
+        totalScore,
+        requiredChore,
+        requiredSunday,
+        requiredTotal,
+        lookbackMonths: maxLookbackMonths,
+      },
+      attendanceDetails,
     };
   }
 
-  static async checkEventEligibility(
-    eventId: string
-  ): Promise<EventEligibilityReport> {
+  /**
+   * Check eligibility for all members for a specific event
+   */
+  static async checkEventEligibility(eventId: string): Promise<EventEligibilityReport> {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
       include: {
         eligibilityRule: {
           include: {
-            rules: true
-          }
-        }
-      }
+            criteria: true,
+          },
+        },
+      },
     });
 
     if (!event) {
       throw new Error('Event not found');
     }
 
-    const activeCriteria = event.eligibilityRule?.rules.map(rule => ({
-      eventType: rule.eventType,
-      minAttendances: rule.minAttendances,
-      lookbackMonths: rule.lookbackMonths
-    })) || [];
+    if (!event.eligibilityRule || event.eligibilityRule.criteria.length === 0) {
+      return {
+        eventId: event.id,
+        eventTitle: event.title,
+        eventDate: event.date,
+        totalMembers: 0,
+        eligibleMembers: [],
+        ineligibleMembers: [],
+        eligibilityRule: {
+          name: 'No Rule',
+          description: 'No eligibility rule configured for this event',
+          criteria: [],
+        },
+      };
+    }
+
+    const activeCriteria = event.eligibilityRule.criteria.map(c => ({
+      eventType: c.eventType,
+      minAttendances: c.minAttendances,
+      lookbackMonths: c.lookbackMonths,
+      isTotalAttendance: c.isTotalAttendance || false,
+    }));
 
     const members = await prisma.user.findMany({
-      where: { type: 'MEMBER' },
+      where: {
+        type: 'MEMBER',
+        ...(event.targetMemberTypes.length > 0 ? {
+          memberType: { in: event.targetMemberTypes },
+        } : {}),
+      },
       select: { id: true, fullName: true }
     });
 
     const results: EligibilityCheckResult[] = [];
     for (const member of members) {
-      const result = await this.checkMemberEligibility(member.id, activeCriteria);
-      results.push(result);
+      try {
+        const result = await this.checkMemberEligibility(
+          member.id,
+          activeCriteria,
+          event.date
+        );
+        results.push(result);
+      } catch (error) {
+        console.error(`Failed to check eligibility for member ${member.id}:`, error);
+        results.push({
+          memberId: member.id,
+          fullName: member.fullName,
+          eligible: false,
+          reasons: ['Failed to check eligibility'],
+          scores: {
+            choreScore: 0,
+            sundayScore: 0,
+            totalScore: 0,
+            requiredChore: 0,
+            requiredSunday: 0,
+            requiredTotal: 0,
+            lookbackMonths: 0,
+          },
+        });
+      }
     }
 
     return {
@@ -187,31 +280,127 @@ export class EligibilityService {
       eligibleMembers: results.filter(r => r.eligible),
       ineligibleMembers: results.filter(r => !r.eligible),
       eligibilityRule: {
-        name: event.eligibilityRule?.name || 'Default Rule',
-        description: event.eligibilityRule?.description || 'Standard eligibility criteria',
-        criteria: activeCriteria
-      }
+        name: event.eligibilityRule.name,
+        description: event.eligibilityRule.description,
+        criteria: activeCriteria,
+      },
     };
   }
 
+  /**
+   * Check eligibility with a specific rule (not necessarily attached to the event)
+   */
+  static async checkEventEligibilityWithRule(
+    eventId: string,
+    rule: any
+  ): Promise<EventEligibilityReport> {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+    });
+
+    if (!event) {
+      throw new Error('Event not found');
+    }
+
+    if (!rule || rule.criteria.length === 0) {
+      return {
+        eventId: event.id,
+        eventTitle: event.title,
+        eventDate: event.date,
+        totalMembers: 0,
+        eligibleMembers: [],
+        ineligibleMembers: [],
+        eligibilityRule: {
+          name: 'No Rule',
+          description: 'No eligibility rule configured for this event',
+          criteria: [],
+        },
+      };
+    }
+
+    const activeCriteria = rule.criteria.map((c: any) => ({
+      eventType: c.eventType,
+      minAttendances: c.minAttendances,
+      lookbackMonths: c.lookbackMonths,
+      isTotalAttendance: c.isTotalAttendance || false,
+    }));
+
+    const members = await prisma.user.findMany({
+      where: {
+        type: 'MEMBER',
+        ...(event.targetMemberTypes.length > 0 ? {
+          memberType: { in: event.targetMemberTypes },
+        } : {}),
+      },
+      select: { id: true, fullName: true }
+    });
+
+    const results: EligibilityCheckResult[] = [];
+    for (const member of members) {
+      try {
+        const result = await this.checkMemberEligibility(
+          member.id,
+          activeCriteria,
+          event.date
+        );
+        results.push(result);
+      } catch (error) {
+        console.error(`Failed to check eligibility for member ${member.id}:`, error);
+        results.push({
+          memberId: member.id,
+          fullName: member.fullName,
+          eligible: false,
+          reasons: ['Failed to check eligibility'],
+          scores: {
+            choreScore: 0,
+            sundayScore: 0,
+            totalScore: 0,
+            requiredChore: 0,
+            requiredSunday: 0,
+            requiredTotal: 0,
+            lookbackMonths: 0,
+          },
+        });
+      }
+    }
+
+    return {
+      eventId: event.id,
+      eventTitle: event.title,
+      eventDate: event.date,
+      totalMembers: members.length,
+      eligibleMembers: results.filter(r => r.eligible),
+      ineligibleMembers: results.filter(r => !r.eligible),
+      eligibilityRule: {
+        name: rule.name,
+        description: rule.description,
+        criteria: activeCriteria,
+      },
+    };
+  }
+
+  /**
+   * Get eligibility for the nearest upcoming event
+   */
   static async getNearestEventEligibility() {
     const now = new Date();
     const nearestEvent = await prisma.event.findFirst({
       where: {
         date: {
-          gte: now
-        }
+          gte: now,
+        },
+        eventType: 'EVENT',
       },
       include: {
         eligibilityRule: {
           include: {
-            rules: true
-          }
-        }
+            criteria: true,
+          },
+        },
       },
       orderBy: {
-        date: 'asc'
-      }
+        date: 'asc',
+      },
     });
 
     if (!nearestEvent) {

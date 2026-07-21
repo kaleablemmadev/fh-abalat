@@ -1,4 +1,4 @@
-// /api/events/nearest/eligibility/route.ts
+// src/app/api/events/nearest/eligibility/route.ts
 import { NextResponse } from "next/server";
 import { EligibilityService } from "@/src/services/eligibility.service";
 

@@ -11,6 +11,8 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        amharic: ["var(--font-noto-sans-ethiopic)", "sans-serif"],
+        ethiopic: ["var(--font-noto-sans-ethiopic)", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

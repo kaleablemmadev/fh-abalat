@@ -1,6 +1,8 @@
-/* ./layout.tsx */
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+// Import the font from the npm package
+import "@fontsource/noto-sans-ethiopic";
 import "./globals.css";
 
 const inter = Inter({ 
@@ -22,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={inter.variable}>
+      <body className={`${inter.variable}`}>
         <AppLayout>{children}</AppLayout>
       </body>
     </html>

@@ -55,7 +55,7 @@
   body {
     margin: 0;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: var(--font-inter), system-ui, sans-serif;
+    font-family: 'Noto Sans Ethiopic', var(--font-inter), system-ui, sans-serif;
     background: hsl(var(--background));
     color: hsl(var(--foreground));
     -webkit-font-smoothing: antialiased;
@@ -420,4 +420,29 @@ code {
   .memberFooter,
   .memberHeading { flex-direction: column; align-items: flex-start; }
   .detailFooter { grid-template-columns: 1fr; }
+}
+
+/* ─── Amharic Font Support ──────────────────────────────────────────────────── */
+/* Note: Font is imported in layout.tsx via @fontsource/noto-sans-ethiopic */
+
+/* Utility class for forcing Amharic font */
+.font-amharic {
+  font-family: 'Noto Sans Ethiopic', var(--font-inter), system-ui, sans-serif;
+}
+
+/* Utility class for forcing Latin/Inter font */
+.font-latin {
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+/* ─── PDF/Print Styles ──────────────────────────────────────────────────────── */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
 }

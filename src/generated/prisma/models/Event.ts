@@ -30,12 +30,16 @@ export type EventAvgAggregateOutputType = {
   ethiopianYear: number | null
   ethiopianMonth: number | null
   ethiopianDay: number | null
+  recurringMonth: number | null
+  recurringDay: number | null
 }
 
 export type EventSumAggregateOutputType = {
   ethiopianYear: number | null
   ethiopianMonth: number | null
   ethiopianDay: number | null
+  recurringMonth: number | null
+  recurringDay: number | null
 }
 
 export type EventMinAggregateOutputType = {
@@ -47,6 +51,10 @@ export type EventMinAggregateOutputType = {
   ethiopianYear: number | null
   ethiopianMonth: number | null
   ethiopianDay: number | null
+  eventType: $Enums.eventType | null
+  isRecurring: boolean | null
+  recurringMonth: number | null
+  recurringDay: number | null
   eligibilityRuleId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -62,6 +70,10 @@ export type EventMaxAggregateOutputType = {
   ethiopianYear: number | null
   ethiopianMonth: number | null
   ethiopianDay: number | null
+  eventType: $Enums.eventType | null
+  isRecurring: boolean | null
+  recurringMonth: number | null
+  recurringDay: number | null
   eligibilityRuleId: string | null
   createdById: string | null
   createdAt: Date | null
@@ -77,6 +89,10 @@ export type EventCountAggregateOutputType = {
   ethiopianYear: number
   ethiopianMonth: number
   ethiopianDay: number
+  eventType: number
+  isRecurring: number
+  recurringMonth: number
+  recurringDay: number
   eligibilityRuleId: number
   targetMemberTypes: number
   createdById: number
@@ -90,12 +106,16 @@ export type EventAvgAggregateInputType = {
   ethiopianYear?: true
   ethiopianMonth?: true
   ethiopianDay?: true
+  recurringMonth?: true
+  recurringDay?: true
 }
 
 export type EventSumAggregateInputType = {
   ethiopianYear?: true
   ethiopianMonth?: true
   ethiopianDay?: true
+  recurringMonth?: true
+  recurringDay?: true
 }
 
 export type EventMinAggregateInputType = {
@@ -107,6 +127,10 @@ export type EventMinAggregateInputType = {
   ethiopianYear?: true
   ethiopianMonth?: true
   ethiopianDay?: true
+  eventType?: true
+  isRecurring?: true
+  recurringMonth?: true
+  recurringDay?: true
   eligibilityRuleId?: true
   createdById?: true
   createdAt?: true
@@ -122,6 +146,10 @@ export type EventMaxAggregateInputType = {
   ethiopianYear?: true
   ethiopianMonth?: true
   ethiopianDay?: true
+  eventType?: true
+  isRecurring?: true
+  recurringMonth?: true
+  recurringDay?: true
   eligibilityRuleId?: true
   createdById?: true
   createdAt?: true
@@ -137,6 +165,10 @@ export type EventCountAggregateInputType = {
   ethiopianYear?: true
   ethiopianMonth?: true
   ethiopianDay?: true
+  eventType?: true
+  isRecurring?: true
+  recurringMonth?: true
+  recurringDay?: true
   eligibilityRuleId?: true
   targetMemberTypes?: true
   createdById?: true
@@ -240,6 +272,10 @@ export type EventGroupByOutputType = {
   ethiopianYear: number | null
   ethiopianMonth: number | null
   ethiopianDay: number | null
+  eventType: $Enums.eventType
+  isRecurring: boolean
+  recurringMonth: number | null
+  recurringDay: number | null
   eligibilityRuleId: string | null
   targetMemberTypes: $Enums.memberType[]
   createdById: string
@@ -279,6 +315,10 @@ export type EventWhereInput = {
   ethiopianYear?: Prisma.IntNullableFilter<"Event"> | number | null
   ethiopianMonth?: Prisma.IntNullableFilter<"Event"> | number | null
   ethiopianDay?: Prisma.IntNullableFilter<"Event"> | number | null
+  eventType?: Prisma.EnumeventTypeFilter<"Event"> | $Enums.eventType
+  isRecurring?: Prisma.BoolFilter<"Event"> | boolean
+  recurringMonth?: Prisma.IntNullableFilter<"Event"> | number | null
+  recurringDay?: Prisma.IntNullableFilter<"Event"> | number | null
   eligibilityRuleId?: Prisma.StringNullableFilter<"Event"> | string | null
   targetMemberTypes?: Prisma.EnummemberTypeNullableListFilter<"Event">
   createdById?: Prisma.StringFilter<"Event"> | string
@@ -298,6 +338,10 @@ export type EventOrderByWithRelationInput = {
   ethiopianYear?: Prisma.SortOrderInput | Prisma.SortOrder
   ethiopianMonth?: Prisma.SortOrderInput | Prisma.SortOrder
   ethiopianDay?: Prisma.SortOrderInput | Prisma.SortOrder
+  eventType?: Prisma.SortOrder
+  isRecurring?: Prisma.SortOrder
+  recurringMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  recurringDay?: Prisma.SortOrderInput | Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrderInput | Prisma.SortOrder
   targetMemberTypes?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
@@ -320,6 +364,10 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   ethiopianYear?: Prisma.IntNullableFilter<"Event"> | number | null
   ethiopianMonth?: Prisma.IntNullableFilter<"Event"> | number | null
   ethiopianDay?: Prisma.IntNullableFilter<"Event"> | number | null
+  eventType?: Prisma.EnumeventTypeFilter<"Event"> | $Enums.eventType
+  isRecurring?: Prisma.BoolFilter<"Event"> | boolean
+  recurringMonth?: Prisma.IntNullableFilter<"Event"> | number | null
+  recurringDay?: Prisma.IntNullableFilter<"Event"> | number | null
   eligibilityRuleId?: Prisma.StringNullableFilter<"Event"> | string | null
   targetMemberTypes?: Prisma.EnummemberTypeNullableListFilter<"Event">
   createdById?: Prisma.StringFilter<"Event"> | string
@@ -339,6 +387,10 @@ export type EventOrderByWithAggregationInput = {
   ethiopianYear?: Prisma.SortOrderInput | Prisma.SortOrder
   ethiopianMonth?: Prisma.SortOrderInput | Prisma.SortOrder
   ethiopianDay?: Prisma.SortOrderInput | Prisma.SortOrder
+  eventType?: Prisma.SortOrder
+  isRecurring?: Prisma.SortOrder
+  recurringMonth?: Prisma.SortOrderInput | Prisma.SortOrder
+  recurringDay?: Prisma.SortOrderInput | Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrderInput | Prisma.SortOrder
   targetMemberTypes?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
@@ -363,6 +415,10 @@ export type EventScalarWhereWithAggregatesInput = {
   ethiopianYear?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
   ethiopianMonth?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
   ethiopianDay?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
+  eventType?: Prisma.EnumeventTypeWithAggregatesFilter<"Event"> | $Enums.eventType
+  isRecurring?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
+  recurringMonth?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
+  recurringDay?: Prisma.IntNullableWithAggregatesFilter<"Event"> | number | null
   eligibilityRuleId?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   targetMemberTypes?: Prisma.EnummemberTypeNullableListFilter<"Event">
   createdById?: Prisma.StringWithAggregatesFilter<"Event"> | string
@@ -379,6 +435,10 @@ export type EventCreateInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -396,6 +456,10 @@ export type EventUncheckedCreateInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
@@ -413,6 +477,10 @@ export type EventUpdateInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +498,10 @@ export type EventUncheckedUpdateInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
@@ -447,6 +519,10 @@ export type EventCreateManyInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
@@ -463,6 +539,10 @@ export type EventUpdateManyMutationInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -477,6 +557,10 @@ export type EventUncheckedUpdateManyInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
@@ -511,6 +595,10 @@ export type EventCountOrderByAggregateInput = {
   ethiopianYear?: Prisma.SortOrder
   ethiopianMonth?: Prisma.SortOrder
   ethiopianDay?: Prisma.SortOrder
+  eventType?: Prisma.SortOrder
+  isRecurring?: Prisma.SortOrder
+  recurringMonth?: Prisma.SortOrder
+  recurringDay?: Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrder
   targetMemberTypes?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
@@ -522,6 +610,8 @@ export type EventAvgOrderByAggregateInput = {
   ethiopianYear?: Prisma.SortOrder
   ethiopianMonth?: Prisma.SortOrder
   ethiopianDay?: Prisma.SortOrder
+  recurringMonth?: Prisma.SortOrder
+  recurringDay?: Prisma.SortOrder
 }
 
 export type EventMaxOrderByAggregateInput = {
@@ -533,6 +623,10 @@ export type EventMaxOrderByAggregateInput = {
   ethiopianYear?: Prisma.SortOrder
   ethiopianMonth?: Prisma.SortOrder
   ethiopianDay?: Prisma.SortOrder
+  eventType?: Prisma.SortOrder
+  isRecurring?: Prisma.SortOrder
+  recurringMonth?: Prisma.SortOrder
+  recurringDay?: Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -548,6 +642,10 @@ export type EventMinOrderByAggregateInput = {
   ethiopianYear?: Prisma.SortOrder
   ethiopianMonth?: Prisma.SortOrder
   ethiopianDay?: Prisma.SortOrder
+  eventType?: Prisma.SortOrder
+  isRecurring?: Prisma.SortOrder
+  recurringMonth?: Prisma.SortOrder
+  recurringDay?: Prisma.SortOrder
   eligibilityRuleId?: Prisma.SortOrder
   createdById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -558,6 +656,8 @@ export type EventSumOrderByAggregateInput = {
   ethiopianYear?: Prisma.SortOrder
   ethiopianMonth?: Prisma.SortOrder
   ethiopianDay?: Prisma.SortOrder
+  recurringMonth?: Prisma.SortOrder
+  recurringDay?: Prisma.SortOrder
 }
 
 export type EventScalarRelationFilter = {
@@ -617,6 +717,14 @@ export type NullableIntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type EnumeventTypeFieldUpdateOperationsInput = {
+  set?: $Enums.eventType
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type EventUpdatetargetMemberTypesInput = {
@@ -689,6 +797,10 @@ export type EventCreateWithoutCreatedByInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -705,6 +817,10 @@ export type EventUncheckedCreateWithoutCreatedByInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
@@ -750,6 +866,10 @@ export type EventScalarWhereInput = {
   ethiopianYear?: Prisma.IntNullableFilter<"Event"> | number | null
   ethiopianMonth?: Prisma.IntNullableFilter<"Event"> | number | null
   ethiopianDay?: Prisma.IntNullableFilter<"Event"> | number | null
+  eventType?: Prisma.EnumeventTypeFilter<"Event"> | $Enums.eventType
+  isRecurring?: Prisma.BoolFilter<"Event"> | boolean
+  recurringMonth?: Prisma.IntNullableFilter<"Event"> | number | null
+  recurringDay?: Prisma.IntNullableFilter<"Event"> | number | null
   eligibilityRuleId?: Prisma.StringNullableFilter<"Event"> | string | null
   targetMemberTypes?: Prisma.EnummemberTypeNullableListFilter<"Event">
   createdById?: Prisma.StringFilter<"Event"> | string
@@ -766,6 +886,10 @@ export type EventCreateWithoutAttendancesInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -782,6 +906,10 @@ export type EventUncheckedCreateWithoutAttendancesInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
@@ -814,6 +942,10 @@ export type EventUpdateWithoutAttendancesInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -830,6 +962,10 @@ export type EventUncheckedUpdateWithoutAttendancesInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
@@ -846,6 +982,10 @@ export type EventCreateWithoutEligibilityRuleInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -862,6 +1002,10 @@ export type EventUncheckedCreateWithoutEligibilityRuleInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
   createdAt?: Date | string
@@ -904,6 +1048,10 @@ export type EventCreateManyCreatedByInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   eligibilityRuleId?: string | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Date | string
@@ -919,6 +1067,10 @@ export type EventUpdateWithoutCreatedByInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -935,6 +1087,10 @@ export type EventUncheckedUpdateWithoutCreatedByInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -951,6 +1107,10 @@ export type EventUncheckedUpdateManyWithoutCreatedByInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   eligibilityRuleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -966,6 +1126,10 @@ export type EventCreateManyEligibilityRuleInput = {
   ethiopianYear?: number | null
   ethiopianMonth?: number | null
   ethiopianDay?: number | null
+  eventType?: $Enums.eventType
+  isRecurring?: boolean
+  recurringMonth?: number | null
+  recurringDay?: number | null
   targetMemberTypes?: Prisma.EventCreatetargetMemberTypesInput | $Enums.memberType[]
   createdById: string
   createdAt?: Date | string
@@ -981,6 +1145,10 @@ export type EventUpdateWithoutEligibilityRuleInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -997,6 +1165,10 @@ export type EventUncheckedUpdateWithoutEligibilityRuleInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1013,6 +1185,10 @@ export type EventUncheckedUpdateManyWithoutEligibilityRuleInput = {
   ethiopianYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   ethiopianDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  eventType?: Prisma.EnumeventTypeFieldUpdateOperationsInput | $Enums.eventType
+  isRecurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recurringMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  recurringDay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   targetMemberTypes?: Prisma.EventUpdatetargetMemberTypesInput | $Enums.memberType[]
   createdById?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1059,6 +1235,10 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   ethiopianYear?: boolean
   ethiopianMonth?: boolean
   ethiopianDay?: boolean
+  eventType?: boolean
+  isRecurring?: boolean
+  recurringMonth?: boolean
+  recurringDay?: boolean
   eligibilityRuleId?: boolean
   targetMemberTypes?: boolean
   createdById?: boolean
@@ -1079,6 +1259,10 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   ethiopianYear?: boolean
   ethiopianMonth?: boolean
   ethiopianDay?: boolean
+  eventType?: boolean
+  isRecurring?: boolean
+  recurringMonth?: boolean
+  recurringDay?: boolean
   eligibilityRuleId?: boolean
   targetMemberTypes?: boolean
   createdById?: boolean
@@ -1097,6 +1281,10 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   ethiopianYear?: boolean
   ethiopianMonth?: boolean
   ethiopianDay?: boolean
+  eventType?: boolean
+  isRecurring?: boolean
+  recurringMonth?: boolean
+  recurringDay?: boolean
   eligibilityRuleId?: boolean
   targetMemberTypes?: boolean
   createdById?: boolean
@@ -1115,6 +1303,10 @@ export type EventSelectScalar = {
   ethiopianYear?: boolean
   ethiopianMonth?: boolean
   ethiopianDay?: boolean
+  eventType?: boolean
+  isRecurring?: boolean
+  recurringMonth?: boolean
+  recurringDay?: boolean
   eligibilityRuleId?: boolean
   targetMemberTypes?: boolean
   createdById?: boolean
@@ -1122,7 +1314,7 @@ export type EventSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "location" | "ethiopianYear" | "ethiopianMonth" | "ethiopianDay" | "eligibilityRuleId" | "targetMemberTypes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "location" | "ethiopianYear" | "ethiopianMonth" | "ethiopianDay" | "eventType" | "isRecurring" | "recurringMonth" | "recurringDay" | "eligibilityRuleId" | "targetMemberTypes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   eligibilityRule?: boolean | Prisma.Event$eligibilityRuleArgs<ExtArgs>
   createdBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1154,6 +1346,10 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     ethiopianYear: number | null
     ethiopianMonth: number | null
     ethiopianDay: number | null
+    eventType: $Enums.eventType
+    isRecurring: boolean
+    recurringMonth: number | null
+    recurringDay: number | null
     eligibilityRuleId: string | null
     targetMemberTypes: $Enums.memberType[]
     createdById: string
@@ -1593,6 +1789,10 @@ export interface EventFieldRefs {
   readonly ethiopianYear: Prisma.FieldRef<"Event", 'Int'>
   readonly ethiopianMonth: Prisma.FieldRef<"Event", 'Int'>
   readonly ethiopianDay: Prisma.FieldRef<"Event", 'Int'>
+  readonly eventType: Prisma.FieldRef<"Event", 'eventType'>
+  readonly isRecurring: Prisma.FieldRef<"Event", 'Boolean'>
+  readonly recurringMonth: Prisma.FieldRef<"Event", 'Int'>
+  readonly recurringDay: Prisma.FieldRef<"Event", 'Int'>
   readonly eligibilityRuleId: Prisma.FieldRef<"Event", 'String'>
   readonly targetMemberTypes: Prisma.FieldRef<"Event", 'memberType[]'>
   readonly createdById: Prisma.FieldRef<"Event", 'String'>

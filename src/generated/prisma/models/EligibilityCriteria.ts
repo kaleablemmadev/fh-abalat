@@ -29,13 +29,11 @@ export type AggregateEligibilityCriteria = {
 export type EligibilityCriteriaAvgAggregateOutputType = {
   minAttendances: number | null
   lookbackMonths: number | null
-  lookbackDays: number | null
 }
 
 export type EligibilityCriteriaSumAggregateOutputType = {
   minAttendances: number | null
   lookbackMonths: number | null
-  lookbackDays: number | null
 }
 
 export type EligibilityCriteriaMinAggregateOutputType = {
@@ -44,7 +42,7 @@ export type EligibilityCriteriaMinAggregateOutputType = {
   eventType: string | null
   minAttendances: number | null
   lookbackMonths: number | null
-  lookbackDays: number | null
+  isTotalAttendance: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -55,7 +53,7 @@ export type EligibilityCriteriaMaxAggregateOutputType = {
   eventType: string | null
   minAttendances: number | null
   lookbackMonths: number | null
-  lookbackDays: number | null
+  isTotalAttendance: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,7 +64,7 @@ export type EligibilityCriteriaCountAggregateOutputType = {
   eventType: number
   minAttendances: number
   lookbackMonths: number
-  lookbackDays: number
+  isTotalAttendance: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -76,13 +74,11 @@ export type EligibilityCriteriaCountAggregateOutputType = {
 export type EligibilityCriteriaAvgAggregateInputType = {
   minAttendances?: true
   lookbackMonths?: true
-  lookbackDays?: true
 }
 
 export type EligibilityCriteriaSumAggregateInputType = {
   minAttendances?: true
   lookbackMonths?: true
-  lookbackDays?: true
 }
 
 export type EligibilityCriteriaMinAggregateInputType = {
@@ -91,7 +87,7 @@ export type EligibilityCriteriaMinAggregateInputType = {
   eventType?: true
   minAttendances?: true
   lookbackMonths?: true
-  lookbackDays?: true
+  isTotalAttendance?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -102,7 +98,7 @@ export type EligibilityCriteriaMaxAggregateInputType = {
   eventType?: true
   minAttendances?: true
   lookbackMonths?: true
-  lookbackDays?: true
+  isTotalAttendance?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -113,7 +109,7 @@ export type EligibilityCriteriaCountAggregateInputType = {
   eventType?: true
   minAttendances?: true
   lookbackMonths?: true
-  lookbackDays?: true
+  isTotalAttendance?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -211,7 +207,7 @@ export type EligibilityCriteriaGroupByOutputType = {
   eventType: string
   minAttendances: number
   lookbackMonths: number
-  lookbackDays: number | null
+  isTotalAttendance: boolean
   createdAt: Date
   updatedAt: Date
   _count: EligibilityCriteriaCountAggregateOutputType | null
@@ -245,7 +241,7 @@ export type EligibilityCriteriaWhereInput = {
   eventType?: Prisma.StringFilter<"EligibilityCriteria"> | string
   minAttendances?: Prisma.IntFilter<"EligibilityCriteria"> | number
   lookbackMonths?: Prisma.IntFilter<"EligibilityCriteria"> | number
-  lookbackDays?: Prisma.IntNullableFilter<"EligibilityCriteria"> | number | null
+  isTotalAttendance?: Prisma.BoolFilter<"EligibilityCriteria"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EligibilityCriteria"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EligibilityCriteria"> | Date | string
   eligibilityRule?: Prisma.XOR<Prisma.EligibilityRuleScalarRelationFilter, Prisma.EligibilityRuleWhereInput>
@@ -257,7 +253,7 @@ export type EligibilityCriteriaOrderByWithRelationInput = {
   eventType?: Prisma.SortOrder
   minAttendances?: Prisma.SortOrder
   lookbackMonths?: Prisma.SortOrder
-  lookbackDays?: Prisma.SortOrderInput | Prisma.SortOrder
+  isTotalAttendance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   eligibilityRule?: Prisma.EligibilityRuleOrderByWithRelationInput
@@ -272,7 +268,7 @@ export type EligibilityCriteriaWhereUniqueInput = Prisma.AtLeast<{
   eventType?: Prisma.StringFilter<"EligibilityCriteria"> | string
   minAttendances?: Prisma.IntFilter<"EligibilityCriteria"> | number
   lookbackMonths?: Prisma.IntFilter<"EligibilityCriteria"> | number
-  lookbackDays?: Prisma.IntNullableFilter<"EligibilityCriteria"> | number | null
+  isTotalAttendance?: Prisma.BoolFilter<"EligibilityCriteria"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EligibilityCriteria"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EligibilityCriteria"> | Date | string
   eligibilityRule?: Prisma.XOR<Prisma.EligibilityRuleScalarRelationFilter, Prisma.EligibilityRuleWhereInput>
@@ -284,7 +280,7 @@ export type EligibilityCriteriaOrderByWithAggregationInput = {
   eventType?: Prisma.SortOrder
   minAttendances?: Prisma.SortOrder
   lookbackMonths?: Prisma.SortOrder
-  lookbackDays?: Prisma.SortOrderInput | Prisma.SortOrder
+  isTotalAttendance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EligibilityCriteriaCountOrderByAggregateInput
@@ -303,7 +299,7 @@ export type EligibilityCriteriaScalarWhereWithAggregatesInput = {
   eventType?: Prisma.StringWithAggregatesFilter<"EligibilityCriteria"> | string
   minAttendances?: Prisma.IntWithAggregatesFilter<"EligibilityCriteria"> | number
   lookbackMonths?: Prisma.IntWithAggregatesFilter<"EligibilityCriteria"> | number
-  lookbackDays?: Prisma.IntNullableWithAggregatesFilter<"EligibilityCriteria"> | number | null
+  isTotalAttendance?: Prisma.BoolWithAggregatesFilter<"EligibilityCriteria"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EligibilityCriteria"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"EligibilityCriteria"> | Date | string
 }
@@ -313,10 +309,10 @@ export type EligibilityCriteriaCreateInput = {
   eventType: string
   minAttendances: number
   lookbackMonths: number
-  lookbackDays?: number | null
+  isTotalAttendance?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  eligibilityRule: Prisma.EligibilityRuleCreateNestedOneWithoutRulesInput
+  eligibilityRule: Prisma.EligibilityRuleCreateNestedOneWithoutCriteriaInput
 }
 
 export type EligibilityCriteriaUncheckedCreateInput = {
@@ -325,7 +321,7 @@ export type EligibilityCriteriaUncheckedCreateInput = {
   eventType: string
   minAttendances: number
   lookbackMonths: number
-  lookbackDays?: number | null
+  isTotalAttendance?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -335,10 +331,10 @@ export type EligibilityCriteriaUpdateInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   minAttendances?: Prisma.IntFieldUpdateOperationsInput | number
   lookbackMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  lookbackDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTotalAttendance?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  eligibilityRule?: Prisma.EligibilityRuleUpdateOneRequiredWithoutRulesNestedInput
+  eligibilityRule?: Prisma.EligibilityRuleUpdateOneRequiredWithoutCriteriaNestedInput
 }
 
 export type EligibilityCriteriaUncheckedUpdateInput = {
@@ -347,7 +343,7 @@ export type EligibilityCriteriaUncheckedUpdateInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   minAttendances?: Prisma.IntFieldUpdateOperationsInput | number
   lookbackMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  lookbackDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTotalAttendance?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -358,7 +354,7 @@ export type EligibilityCriteriaCreateManyInput = {
   eventType: string
   minAttendances: number
   lookbackMonths: number
-  lookbackDays?: number | null
+  isTotalAttendance?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -368,7 +364,7 @@ export type EligibilityCriteriaUpdateManyMutationInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   minAttendances?: Prisma.IntFieldUpdateOperationsInput | number
   lookbackMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  lookbackDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTotalAttendance?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -379,7 +375,7 @@ export type EligibilityCriteriaUncheckedUpdateManyInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   minAttendances?: Prisma.IntFieldUpdateOperationsInput | number
   lookbackMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  lookbackDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTotalAttendance?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -400,7 +396,7 @@ export type EligibilityCriteriaCountOrderByAggregateInput = {
   eventType?: Prisma.SortOrder
   minAttendances?: Prisma.SortOrder
   lookbackMonths?: Prisma.SortOrder
-  lookbackDays?: Prisma.SortOrder
+  isTotalAttendance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -408,7 +404,6 @@ export type EligibilityCriteriaCountOrderByAggregateInput = {
 export type EligibilityCriteriaAvgOrderByAggregateInput = {
   minAttendances?: Prisma.SortOrder
   lookbackMonths?: Prisma.SortOrder
-  lookbackDays?: Prisma.SortOrder
 }
 
 export type EligibilityCriteriaMaxOrderByAggregateInput = {
@@ -417,7 +412,7 @@ export type EligibilityCriteriaMaxOrderByAggregateInput = {
   eventType?: Prisma.SortOrder
   minAttendances?: Prisma.SortOrder
   lookbackMonths?: Prisma.SortOrder
-  lookbackDays?: Prisma.SortOrder
+  isTotalAttendance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -428,7 +423,7 @@ export type EligibilityCriteriaMinOrderByAggregateInput = {
   eventType?: Prisma.SortOrder
   minAttendances?: Prisma.SortOrder
   lookbackMonths?: Prisma.SortOrder
-  lookbackDays?: Prisma.SortOrder
+  isTotalAttendance?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -436,7 +431,6 @@ export type EligibilityCriteriaMinOrderByAggregateInput = {
 export type EligibilityCriteriaSumOrderByAggregateInput = {
   minAttendances?: Prisma.SortOrder
   lookbackMonths?: Prisma.SortOrder
-  lookbackDays?: Prisma.SortOrder
 }
 
 export type EligibilityCriteriaCreateNestedManyWithoutEligibilityRuleInput = {
@@ -486,7 +480,7 @@ export type EligibilityCriteriaCreateWithoutEligibilityRuleInput = {
   eventType: string
   minAttendances: number
   lookbackMonths: number
-  lookbackDays?: number | null
+  isTotalAttendance?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -496,7 +490,7 @@ export type EligibilityCriteriaUncheckedCreateWithoutEligibilityRuleInput = {
   eventType: string
   minAttendances: number
   lookbackMonths: number
-  lookbackDays?: number | null
+  isTotalAttendance?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -536,7 +530,7 @@ export type EligibilityCriteriaScalarWhereInput = {
   eventType?: Prisma.StringFilter<"EligibilityCriteria"> | string
   minAttendances?: Prisma.IntFilter<"EligibilityCriteria"> | number
   lookbackMonths?: Prisma.IntFilter<"EligibilityCriteria"> | number
-  lookbackDays?: Prisma.IntNullableFilter<"EligibilityCriteria"> | number | null
+  isTotalAttendance?: Prisma.BoolFilter<"EligibilityCriteria"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EligibilityCriteria"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EligibilityCriteria"> | Date | string
 }
@@ -546,7 +540,7 @@ export type EligibilityCriteriaCreateManyEligibilityRuleInput = {
   eventType: string
   minAttendances: number
   lookbackMonths: number
-  lookbackDays?: number | null
+  isTotalAttendance?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -556,7 +550,7 @@ export type EligibilityCriteriaUpdateWithoutEligibilityRuleInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   minAttendances?: Prisma.IntFieldUpdateOperationsInput | number
   lookbackMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  lookbackDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTotalAttendance?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -566,7 +560,7 @@ export type EligibilityCriteriaUncheckedUpdateWithoutEligibilityRuleInput = {
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   minAttendances?: Prisma.IntFieldUpdateOperationsInput | number
   lookbackMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  lookbackDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTotalAttendance?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -576,7 +570,7 @@ export type EligibilityCriteriaUncheckedUpdateManyWithoutEligibilityRuleInput = 
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   minAttendances?: Prisma.IntFieldUpdateOperationsInput | number
   lookbackMonths?: Prisma.IntFieldUpdateOperationsInput | number
-  lookbackDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTotalAttendance?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -589,7 +583,7 @@ export type EligibilityCriteriaSelect<ExtArgs extends runtime.Types.Extensions.I
   eventType?: boolean
   minAttendances?: boolean
   lookbackMonths?: boolean
-  lookbackDays?: boolean
+  isTotalAttendance?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   eligibilityRule?: boolean | Prisma.EligibilityRuleDefaultArgs<ExtArgs>
@@ -601,7 +595,7 @@ export type EligibilityCriteriaSelectCreateManyAndReturn<ExtArgs extends runtime
   eventType?: boolean
   minAttendances?: boolean
   lookbackMonths?: boolean
-  lookbackDays?: boolean
+  isTotalAttendance?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   eligibilityRule?: boolean | Prisma.EligibilityRuleDefaultArgs<ExtArgs>
@@ -613,7 +607,7 @@ export type EligibilityCriteriaSelectUpdateManyAndReturn<ExtArgs extends runtime
   eventType?: boolean
   minAttendances?: boolean
   lookbackMonths?: boolean
-  lookbackDays?: boolean
+  isTotalAttendance?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   eligibilityRule?: boolean | Prisma.EligibilityRuleDefaultArgs<ExtArgs>
@@ -625,12 +619,12 @@ export type EligibilityCriteriaSelectScalar = {
   eventType?: boolean
   minAttendances?: boolean
   lookbackMonths?: boolean
-  lookbackDays?: boolean
+  isTotalAttendance?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EligibilityCriteriaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eligibilityRuleId" | "eventType" | "minAttendances" | "lookbackMonths" | "lookbackDays" | "createdAt" | "updatedAt", ExtArgs["result"]["eligibilityCriteria"]>
+export type EligibilityCriteriaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eligibilityRuleId" | "eventType" | "minAttendances" | "lookbackMonths" | "isTotalAttendance" | "createdAt" | "updatedAt", ExtArgs["result"]["eligibilityCriteria"]>
 export type EligibilityCriteriaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   eligibilityRule?: boolean | Prisma.EligibilityRuleDefaultArgs<ExtArgs>
 }
@@ -652,7 +646,7 @@ export type $EligibilityCriteriaPayload<ExtArgs extends runtime.Types.Extensions
     eventType: string
     minAttendances: number
     lookbackMonths: number
-    lookbackDays: number | null
+    isTotalAttendance: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["eligibilityCriteria"]>
@@ -1084,7 +1078,7 @@ export interface EligibilityCriteriaFieldRefs {
   readonly eventType: Prisma.FieldRef<"EligibilityCriteria", 'String'>
   readonly minAttendances: Prisma.FieldRef<"EligibilityCriteria", 'Int'>
   readonly lookbackMonths: Prisma.FieldRef<"EligibilityCriteria", 'Int'>
-  readonly lookbackDays: Prisma.FieldRef<"EligibilityCriteria", 'Int'>
+  readonly isTotalAttendance: Prisma.FieldRef<"EligibilityCriteria", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"EligibilityCriteria", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"EligibilityCriteria", 'DateTime'>
 }

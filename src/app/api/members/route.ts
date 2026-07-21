@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
         age: body.age,
         christianName: body.christianName,
         registerDate: registerDate,
-        memberType: body.memberType ?? "REGULAR_MEMBER",
+        memberType: body.memberType ?? "REGULAR_MEMBER",  // ✅ ADD THIS LINE
         type: "MEMBER",
       },
     });

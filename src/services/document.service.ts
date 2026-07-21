@@ -13,7 +13,125 @@ interface DocumentOptions {
   eventLocation?: string;
 }
 
+interface MonthlyAttendanceOptions {
+  months: { month: string; year: number }[];
+  data: {
+    fullName: string | null;
+    monthlyAttendances: Record<string, number>;
+    total: number;
+  }[];
+  attendanceType?: string;
+}
+
 export class DocumentService {
+  static async generateMonthlyAttendanceDOCX(options: MonthlyAttendanceOptions): Promise<Buffer> {
+    const { months, data, attendanceType } = options;
+
+    const doc = new Document({
+      sections: [{
+        properties: {
+          page: {
+            margin: {
+              top: 500,
+              bottom: 500,
+              left: 500,
+              right: 500,
+            },
+          },
+        },
+        children: [
+          // Title
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: 'Monthly Attendance Report',
+                size: 32,
+                bold: true,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 0, after: 100 },
+          }),
+
+          // Details
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Attendance Type: ${attendanceType === 'ALL' ? 'All Types' : attendanceType}`,
+                size: 18,
+              }),
+            ],
+            spacing: { before: 0, after: 50 },
+          }),
+
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `Generated on: ${new Date().toLocaleDateString()}`,
+                size: 18,
+              }),
+            ],
+            spacing: { before: 0, after: 150 },
+          }),
+
+          // Table
+          new Table({
+            rows: [
+              // Header Row
+              new TableRow({
+                children: [
+                  new TableCell({
+                    children: [new Paragraph({ children: [new TextRun({ text: 'No.', bold: true, size: 18 })] })],
+                    width: { size: 5, type: WidthType.PERCENTAGE },
+                  }),
+                  new TableCell({
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Name', bold: true, size: 18 })] })],
+                    width: { size: 30, type: WidthType.PERCENTAGE },
+                  }),
+                  ...months.map(m => new TableCell({
+                    children: [new Paragraph({
+                      children: [new TextRun({ text: `${m.month} ${m.year}`, bold: true, size: 18 })],
+                      alignment: AlignmentType.CENTER,
+                    })],
+                    width: { size: 60 / months.length, type: WidthType.PERCENTAGE },
+                  })),
+                  new TableCell({
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Total', bold: true, size: 18 })], alignment: AlignmentType.CENTER })],
+                    width: { size: 5, type: WidthType.PERCENTAGE },
+                  }),
+                ],
+              }),
+              // Data Rows
+              ...data.map((member, index) => new TableRow({
+                children: [
+                  new TableCell({
+                    children: [new Paragraph({ children: [new TextRun({ text: `${index + 1}`, size: 16 })], alignment: AlignmentType.CENTER })],
+                  }),
+                  new TableCell({
+                    children: [new Paragraph({ children: [new TextRun({ text: member.fullName || 'Unknown', size: 16 })] })],
+                  }),
+                  ...months.map(month => {
+                    const monthKey = `${month.month} ${month.year}`;
+                    const count = member.monthlyAttendances[monthKey] || 0;
+                    return new TableCell({
+                      children: [new Paragraph({ children: [new TextRun({ text: `${count}`, size: 16 })], alignment: AlignmentType.CENTER })],
+                    });
+                  }),
+                  new TableCell({
+                    children: [new Paragraph({ children: [new TextRun({ text: `${member.total}`, size: 16, bold: true })], alignment: AlignmentType.CENTER })],
+                  }),
+                ],
+              })),
+            ],
+            width: { size: 100, type: WidthType.PERCENTAGE },
+          }),
+        ],
+      }],
+    });
+
+    return await Packer.toBuffer(doc);
+  }
+
   static async generateDOCX(options: DocumentOptions): Promise<Buffer> {
     const { title, subtitle, eventDate, totalMembers, eligibleMembers, eventDescription, eventLocation } = options;
 

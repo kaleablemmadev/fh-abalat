@@ -4,6 +4,7 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { DocumentService } from '@/src/services/document.service';
 
 interface MonthSelection {
   month: string;
@@ -20,7 +21,17 @@ interface MemberAttendanceData {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { months, data, attendanceType }: { months: MonthSelection[]; data: MemberAttendanceData[]; attendanceType?: string } = body;
+    const {
+      months,
+      data,
+      attendanceType,
+      format = 'pdf'
+    }: {
+      months: MonthSelection[];
+      data: MemberAttendanceData[];
+      attendanceType?: string;
+      format?: 'pdf' | 'docx';
+    } = body;
 
     if (!months || months.length === 0 || !data) {
       return NextResponse.json(
@@ -29,7 +40,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create PDF document
+    if (format === 'docx') {
+      const docxBuffer = await DocumentService.generateMonthlyAttendanceDOCX({
+        months,
+        data,
+        attendanceType
+      });
+
+      return new NextResponse(docxBuffer, {
+        headers: {
+          'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'Content-Disposition': `attachment; filename="attendance-report-${Date.now()}.docx"`,
+        },
+      });
+    }
+
+    // Create PDF document (existing logic)
     const doc = new jsPDF();
 
     // Load and add Noto Sans Ethiopic font

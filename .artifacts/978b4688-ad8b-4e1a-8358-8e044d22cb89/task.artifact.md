@@ -1,7 +1,10 @@
-- `[x]` Update `EligibilityService.calculateMemberScore` in `src/services/eligibility.service.ts`
-    - `[x]` Update Prisma query to include permission and permissionType
-    - `[x]` Fetch active permissions for the member
-    - `[x]` Map `attendanceDetails` with excused/permission info
-    - `[x]` Return `activePermissions`
-- `[x]` Verify build success
-- `[x]` Create walkthrough
+- `[x]` Update `src/services/document.service.ts`
+    - `[x]` Add `MonthlyAttendanceOptions` interface
+    - `[x]` Add `generateMonthlyAttendanceDOCX` method
+- `[x]` Update `src/app/api/reports/monthly-attendance/download/route.ts`
+    - `[x]` Support `format` parameter
+    - `[x]` Handle DOCX generation via `DocumentService`
+- `[x]` Update `src/app/reports/monthly-attendance/page.tsx`
+    - `[x]` Add `downloadReport` function
+    - `[x]` Add "Download DOCX" button
+- `[x]` Verify build and functionality

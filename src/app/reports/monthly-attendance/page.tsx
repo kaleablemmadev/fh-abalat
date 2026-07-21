@@ -81,7 +81,7 @@ export default function MonthlyAttendanceReportPage() {
     }
   };
 
-  const downloadPDF = async () => {
+  const downloadReport = async (format: 'pdf' | 'docx' = 'pdf') => {
     if (!reportData) return;
 
     setIsGenerating(true);
@@ -89,24 +89,29 @@ export default function MonthlyAttendanceReportPage() {
       const response = await fetch('/api/reports/monthly-attendance/download', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ months: reportData.months, data: reportData.data, attendanceType: reportData.attendanceType }),
+        body: JSON.stringify({
+          months: reportData.months,
+          data: reportData.data,
+          attendanceType: reportData.attendanceType,
+          format
+        }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to download PDF');
+        throw new Error(`Failed to download ${format.toUpperCase()}`);
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `attendance-report-${Date.now()}.pdf`;
+      a.download = `attendance-report-${Date.now()}.${format}`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to download PDF');
+      setError(err instanceof Error ? err.message : `Failed to download ${format.toUpperCase()}`);
     } finally {
       setIsGenerating(false);
     }
@@ -263,18 +268,33 @@ export default function MonthlyAttendanceReportPage() {
           </button>
 
           {reportData && (
-            <button
-              onClick={downloadPDF}
-              disabled={isGenerating}
-              className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150 disabled:opacity-50"
-              style={{
-                background: 'hsl(38 70% 32%)',
-                color: '#fff',
-              }}
-            >
-              <Download size={14} />
-              Download PDF
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => downloadReport('pdf')}
+                disabled={isGenerating}
+                className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150 disabled:opacity-50"
+                style={{
+                  background: 'hsl(38 70% 32%)',
+                  color: '#fff',
+                }}
+              >
+                <Download size={14} />
+                Download PDF
+              </button>
+
+              <button
+                onClick={() => downloadReport('docx')}
+                disabled={isGenerating}
+                className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150 disabled:opacity-50"
+                style={{
+                  background: 'hsl(210 70% 32%)',
+                  color: '#fff',
+                }}
+              >
+                <Download size={14} />
+                Download DOCX
+              </button>
+            </div>
           )}
         </div>
 

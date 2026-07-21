@@ -136,7 +136,6 @@ export class DocumentService {
                       left: { style: BorderStyle.SINGLE, size: 1 },
                       right: { style: BorderStyle.SINGLE, size: 1 },
                     },
-                    padding: { top: 50, bottom: 50, left: 50, right: 50 },
                   }),
                   new TableCell({
                     children: [new Paragraph({ 
@@ -149,7 +148,6 @@ export class DocumentService {
                       left: { style: BorderStyle.SINGLE, size: 1 },
                       right: { style: BorderStyle.SINGLE, size: 1 },
                     },
-                    padding: { top: 50, bottom: 50, left: 50, right: 50 },
                   }),
                   new TableCell({
                     children: [new Paragraph({ 
@@ -162,7 +160,6 @@ export class DocumentService {
                       left: { style: BorderStyle.SINGLE, size: 1 },
                       right: { style: BorderStyle.SINGLE, size: 1 },
                     },
-                    padding: { top: 50, bottom: 50, left: 50, right: 50 },
                   }),
                   new TableCell({
                     children: [new Paragraph({ 
@@ -175,7 +172,6 @@ export class DocumentService {
                       left: { style: BorderStyle.SINGLE, size: 1 },
                       right: { style: BorderStyle.SINGLE, size: 1 },
                     },
-                    padding: { top: 50, bottom: 50, left: 50, right: 50 },
                   }),
                 ],
               }),
@@ -199,7 +195,6 @@ export class DocumentService {
                         left: { style: BorderStyle.SINGLE, size: 1 },
                         right: { style: BorderStyle.SINGLE, size: 1 },
                       },
-                      padding: { top: 30, bottom: 30, left: 30, right: 30 },
                     }),
                     // Column 1 - Name
                     new TableCell({
@@ -213,7 +208,6 @@ export class DocumentService {
                         left: { style: BorderStyle.SINGLE, size: 1 },
                         right: { style: BorderStyle.SINGLE, size: 1 },
                       },
-                      padding: { top: 30, bottom: 30, left: 30, right: 30 },
                     }),
                     // Column 2 - Number
                     new TableCell({
@@ -228,7 +222,6 @@ export class DocumentService {
                         left: { style: BorderStyle.SINGLE, size: 1 },
                         right: { style: BorderStyle.SINGLE, size: 1 },
                       },
-                      padding: { top: 30, bottom: 30, left: 30, right: 30 },
                     }),
                     // Column 2 - Name
                     new TableCell({
@@ -242,7 +235,6 @@ export class DocumentService {
                         left: { style: BorderStyle.SINGLE, size: 1 },
                         right: { style: BorderStyle.SINGLE, size: 1 },
                       },
-                      padding: { top: 30, bottom: 30, left: 30, right: 30 },
                     }),
                   ],
                 });
@@ -307,9 +299,9 @@ export class DocumentService {
             const fontData = fs.readFileSync(fontPath);
             const base64Font = fontData.toString('base64');
             const fontName = path.basename(fontPath, '.ttf');
-            // @ts-ignore
+            // @ts-expeact-error
             doc.addFileToVFS(fontName + '.ttf', base64Font);
-            // @ts-ignore
+            // @ts-expeact-error
             doc.addFont(fontName + '.ttf', 'NotoSansEthiopic', 'normal');
             fontLoaded = true;
             console.log('✅ Amharic font loaded from:', fontPath);

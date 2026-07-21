@@ -1,7 +1,7 @@
 // src/services/eligibility.service.ts
 import prisma from '@/src/lib/prisma';
 import { dateToEthiopian } from '@/src/lib/ethiopiancal';
-import { checkMemberPermission } from './permission.service';
+import { checkMemberPermission, getMemberPermissions } from './permission.service';
 
 export interface EligibilityCheckResult {
   memberId: string;
@@ -84,6 +84,11 @@ export class EligibilityService {
       include: {
         event: true,
         attendanceType: true,
+        permission: {
+          include: {
+            permissionType: true,
+          },
+        },
       },
       orderBy: {
         event: {
@@ -91,6 +96,12 @@ export class EligibilityService {
         },
       },
     });
+
+    const activePermissionsRecords = await getMemberPermissions(memberId);
+    const activePermissions = activePermissionsRecords.map(p => ({
+      permissionType: p.permissionType.name,
+      reason: p.reason,
+    }));
 
     let choreScore = 0;
     let sundayScore = 0;
@@ -110,6 +121,8 @@ export class EligibilityService {
         eventDate: attendance.event?.date,
         attendanceType: attendance.attendanceType?.name || 'Unknown',
         value: value,
+        excused: !!attendance.permissionId,
+        permissionType: attendance.permission?.permissionType?.name,
       });
 
       if (eventType === 'CHORE') {
@@ -119,7 +132,7 @@ export class EligibilityService {
       }
     }
 
-    return { choreScore, sundayScore, totalScore, attendanceDetails };
+    return { choreScore, sundayScore, totalScore, attendanceDetails, activePermissions };
   }
 
   /**

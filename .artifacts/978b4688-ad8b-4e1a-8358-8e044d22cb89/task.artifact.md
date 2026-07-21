@@ -1,0 +1,7 @@
+- `[x]` Update `EligibilityService.calculateMemberScore` in `src/services/eligibility.service.ts`
+    - `[x]` Update Prisma query to include permission and permissionType
+    - `[x]` Fetch active permissions for the member
+    - `[x]` Map `attendanceDetails` with excused/permission info
+    - `[x]` Return `activePermissions`
+- `[x]` Verify build success
+- `[x]` Create walkthrough

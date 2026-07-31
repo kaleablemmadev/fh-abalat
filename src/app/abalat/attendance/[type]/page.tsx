@@ -191,7 +191,7 @@ export default async function MultiMonthAttendancePage({
   }
 
   // Fetch AttendanceTypes
-  let allAttendanceTypes = [];
+  let allAttendanceTypes: Array<{ id: string; name: string }> = [];
   try {
     allAttendanceTypes = await prisma.attendanceType.findMany({
       orderBy: { name: "asc" },
@@ -210,7 +210,14 @@ export default async function MultiMonthAttendancePage({
 
   // Fetch approved permissions for members in this view
   const memberIds = members.map(m => m.id);
-  let approvedPermissions = [];
+  let approvedPermissions: Array<{ 
+    memberId: string; 
+    permissionType: { 
+      appliesToChore: boolean; 
+      appliesToSunday: boolean; 
+    }; 
+    ethiopianStartDate: string | null;
+  }> = [];
   try {
     approvedPermissions = await prisma.permission.findMany({
       where: {
@@ -262,7 +269,12 @@ export default async function MultiMonthAttendancePage({
 
   // Fetch existing attendance
   const eventIds = generatedEvents.map(e => e.id);
-  let existingAttendances = [];
+  let existingAttendances: Array<{ 
+    memberId: string; 
+    eventId: string; 
+    attendanceTypeId: string; 
+    permissionId: string | null 
+  }> = [];
   try {
     existingAttendances = await prisma.attendance.findMany({
       where: {

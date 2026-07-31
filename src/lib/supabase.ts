@@ -1,0 +1,29 @@
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl) {
+  throw new Error("Missing env.NEXT_PUBLIC_SUPABASE_URL or env.SUPABASE_URL");
+}
+
+// Client for public access (anon)
+export const supabase = createClient(
+  supabaseUrl,
+  supabaseAnonKey || "",
+);
+
+// Admin client for server-side operations (service role)
+// Service key is optional here to prevent crash on client-side if this file is imported there,
+// but we check it for the admin client specifically.
+export const supabaseAdmin = createClient(
+  supabaseUrl,
+  supabaseServiceKey || "",
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);

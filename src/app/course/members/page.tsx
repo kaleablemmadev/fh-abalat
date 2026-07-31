@@ -1,0 +1,79 @@
+import prisma from "@/src/lib/prisma";
+import MemberListClient from "./components/MemberListClient";
+import Link from "next/link";
+import { Plus } from "lucide-react";
+
+export default async function CourseMembersPage() {
+  // Fetch students with their active enrollments
+  const students = await prisma.user.findMany({
+    where: {
+      type: "MEMBER",
+      memberType: "COURSE_STUDENT",
+    },
+    include: {
+      enrollments: {
+        where: {
+          status: "ACTIVE",
+        },
+        include: {
+          courseClass: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+    orderBy: {
+      fullName: "asc",
+    },
+  });
+
+  // Fetch all course classes for filtering
+  const courseClasses = await prisma.courseClass.findMany({
+    where: {
+      isActive: true,
+    },
+    orderBy: [
+      { year: "desc" },
+      { name: "asc" },
+    ],
+  });
+
+  return (
+    <div className="space-y-5 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1
+            className="text-xl font-bold tracking-tight"
+            style={{ color: "hsl(var(--foreground))" }}
+          >
+            Course Students
+          </h1>
+          <p
+            className="text-sm mt-0.5"
+            style={{ color: "hsl(var(--muted-foreground))" }}
+          >
+            Manage student enrollments and records
+          </p>
+        </div>
+
+        <Link
+          href="/course/members/new"
+          className="inline-flex items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 hover:bg-[hsl(217_70%_38%)]"
+          style={{
+            background: "hsl(217 70% 32%)",
+            color: "#fff",
+          }}
+        >
+          <Plus size={14} />
+          New Student
+        </Link>
+      </div>
+
+      <MemberListClient
+        students={students as any}
+        courseClasses={courseClasses as any}
+      />
+    </div>
+  );
+}

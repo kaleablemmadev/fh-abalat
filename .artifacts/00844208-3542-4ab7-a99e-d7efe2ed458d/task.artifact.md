@@ -1,0 +1,5 @@
+- [x] Update `src/services/permission.service.ts` to export `isMemberExcusedForEvent`
+- [x] Update `src/app/abalat/attendance/[type]/page.tsx` to fetch permissions and calculate auto-fills
+- [x] Update `src/app/abalat/attendance/components/MultiMonthGrid.tsx` to handle auto-fills and hide "Late" button
+- [x] Update `src/app/abalat/members/components/MemberDetailClient.tsx` with structured date inputs for permissions
+- [x] Verify all changes

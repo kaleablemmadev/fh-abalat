@@ -1,5 +1,5 @@
 // C:/Dev/fh-abalat/scratch/fix-event-types.ts
-import { PrismaClient } from '../src/generated/prisma/client/index.js';
+import { PrismaClient } from '../src/generated/prisma/client';
 
 const prisma = new PrismaClient();
 

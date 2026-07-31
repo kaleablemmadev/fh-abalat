@@ -2,6 +2,7 @@
 import prisma from "@/src/lib/prisma.ts";
 import { hashPassword } from '../src/lib/auth';
 import { getEthiopianToday, getChoreDaysInMonth, getSundaysInMonth, ethiopianDateToDate } from '../src/lib/ethiopiancal';
+import { generateAccessCode } from '../src/lib/utils';
 
 async function main() {
   console.log('🌱 Seeding database (preserving existing data)...');

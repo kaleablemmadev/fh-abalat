@@ -5,12 +5,17 @@ import { MezmurAttendanceService } from "@/src/services/mezmur-attendance.servic
 import { getEthiopianToday, ethMonthNames } from "@/src/lib/ethiopiancal";
 
 async function getAdminId() {
-  const admin = await prisma.user.findFirst({
-    where: { type: "ADMIN" }
-  }) || await prisma.user.findFirst({
-    where: { type: "SUPERADMIN" }
-  });
-  return admin?.id || "system-admin";
+  try {
+    const admin = await prisma.user.findFirst({
+      where: { type: "ADMIN" }
+    }) || await prisma.user.findFirst({
+      where: { type: "SUPERADMIN" }
+    });
+    return admin?.id || "system-admin";
+  } catch (error) {
+    console.error('Database connection error in getAdminId:', error);
+    return "system-admin";
+  }
 }
 
 const typeMap: Record<string, string> = {
@@ -57,7 +62,7 @@ export default async function MezmurAttendanceTypePage({
     await MezmurAttendanceService.generateSundayEvents(currentEthYear, currentEthMonth, adminId);
   }
 
-  let members = [];
+  let members: Array<{ id: string; fullName: string | null }> = [];
 
   if (type === "regular") {
     // Fetch only active REGULAR_MEMBER types from Abalat

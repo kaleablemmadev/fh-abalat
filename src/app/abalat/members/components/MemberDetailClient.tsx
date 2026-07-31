@@ -176,7 +176,9 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
       setShowAddPermission(false);
       setSelectedPermissionTypeId('');
       setPermissionReason('');
-      setEthiopianStartDate('');
+      setStartMonth('1');
+      setStartDay('1');
+      setStartYear('2017');
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to add permission');
     } finally {
@@ -637,7 +639,9 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                       setShowAddPermission(false);
                       setSelectedPermissionTypeId('');
                       setPermissionReason('');
-                      setEthiopianStartDate('');
+                      setStartMonth('1');
+                      setStartDay('1');
+                      setStartYear('2017');
                     }}
                     className="px-3 py-2 rounded text-xs font-medium transition-colors duration-150"
                     style={{

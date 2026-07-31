@@ -5,8 +5,13 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 async function getAdminId() {
-  const admin = await prisma.user.findFirst({ where: { type: "ADMIN" } }) || await prisma.user.findFirst({ where: { type: "SUPERADMIN" } });
-  return admin?.id || "system-admin";
+  try {
+    const admin = await prisma.user.findFirst({ where: { type: "ADMIN" } }) || await prisma.user.findFirst({ where: { type: "SUPERADMIN" } });
+    return admin?.id || "system-admin";
+  } catch (error) {
+    console.error('Database connection error in getAdminId:', error);
+    return "system-admin";
+  }
 }
 
 const eventToGroupMap: Record<string, string> = {

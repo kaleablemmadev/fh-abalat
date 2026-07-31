@@ -2,18 +2,29 @@ import prisma from "@/src/lib/prisma";
 import MusicUploadForm from "./components/MusicUploadForm";
 
 async function getAdminId() {
-  const admin = await prisma.user.findFirst({
-    where: { type: "ADMIN" }
-  }) || await prisma.user.findFirst({
-    where: { type: "SUPERADMIN" }
-  });
-  return admin?.id || "system-admin";
+  try {
+    const admin = await prisma.user.findFirst({
+      where: { type: "ADMIN" }
+    }) || await prisma.user.findFirst({
+      where: { type: "SUPERADMIN" }
+    });
+    return admin?.id || "system-admin";
+  } catch (error) {
+    console.error('Database connection error in getAdminId:', error);
+    return "system-admin";
+  }
 }
 
 export default async function MezmurMusicUploadPage() {
-  const categories = await prisma.musicCategory.findMany({
-    orderBy: { name: "asc" }
-  });
+  let categories: Array<any> = [];
+  try {
+    categories = await prisma.musicCategory.findMany({
+      orderBy: { name: "asc" }
+    });
+  } catch (error) {
+    console.error('Error fetching music categories:', error);
+    categories = [];
+  }
 
   const adminId = await getAdminId();
 

@@ -191,7 +191,7 @@ export default async function MultiMonthAttendancePage({
   }
 
   // Fetch AttendanceTypes
-  let allAttendanceTypes: Array<{ id: string; name: string }> = [];
+  let allAttendanceTypes: Array<{ id: string; name: string; value: number }> = [];
   try {
     allAttendanceTypes = await prisma.attendanceType.findMany({
       orderBy: { name: "asc" },

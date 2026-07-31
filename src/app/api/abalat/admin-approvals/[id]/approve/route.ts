@@ -43,15 +43,17 @@ export async function POST(
       },
     });
 
-    // Create audit log
-    await createAuditLog({
-      action: 'CREATE',
-      entityType: 'User',
-      entityId: admin.id,
-      entityName: admin.fullName || undefined,
-      mode: registration.mode,
-      performedById: reviewerId,
-    });
+    // Create audit log (only for ABALAT, COURSE, MEZMUR modes)
+    if (registration.mode === 'ABALAT' || registration.mode === 'COURSE' || registration.mode === 'MEZMUR') {
+      await createAuditLog({
+        action: 'CREATE',
+        entityType: 'User',
+        entityId: admin.id,
+        entityName: admin.fullName || undefined,
+        mode: registration.mode,
+        performedById: reviewerId,
+      });
+    }
 
     return NextResponse.json({ success: true, adminId: admin.id });
   } catch (error) {

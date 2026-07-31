@@ -5,12 +5,17 @@ import CourseAttendanceGrid from "./components/CourseAttendanceGrid";
 import { CourseAttendanceService } from "@/src/services/course-attendance.service";
 
 async function getAdminId() {
-  const admin = await prisma.user.findFirst({
-    where: { type: "ADMIN" }
-  }) || await prisma.user.findFirst({
-    where: { type: "SUPERADMIN" }
-  });
-  return admin?.id || "system-admin";
+  try {
+    const admin = await prisma.user.findFirst({
+      where: { type: "ADMIN" }
+    }) || await prisma.user.findFirst({
+      where: { type: "SUPERADMIN" }
+    });
+    return admin?.id || "system-admin";
+  } catch (error) {
+    console.error('Database connection error in getAdminId:', error);
+    return "system-admin";
+  }
 }
 
 export default async function CourseAttendancePage({ params }: { params: Promise<{ classId: string }> }) {

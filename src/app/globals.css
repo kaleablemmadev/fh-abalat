@@ -293,6 +293,55 @@ code {
 @media (max-width: 640px) {
   .users li,
   .panelHeader { flex-direction: column; align-items: flex-start; }
+  
+  /* Mobile-friendly form inputs */
+  input:not([type="checkbox"]):not([type="radio"]), 
+  select, 
+  textarea {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
+    min-height: 44px !important; /* Touch-friendly size */
+  }
+  
+  /* Better select dropdowns on mobile */
+  select {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+  
+  /* Mobile-friendly buttons */
+  button:not([style*="height"]) {
+    min-height: 44px !important;
+  }
+  
+  /* Mobile table handling - horizontal scroll */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Better spacing on mobile */
+  .grid-cols-3 {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Better padding on mobile */
+  .px-6 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .py-6 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  /* Mobile-safe bottom padding */
+  .pb-20 {
+    padding-bottom: 1rem !important;
+  }
 }
 
 /* ─── Members page ──────────────────────────────────────────────────────────── */

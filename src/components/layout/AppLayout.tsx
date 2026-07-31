@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   Home, Users, Calendar, CheckSquare, Shield, Settings, LogOut,
-  ChevronRight, FileText, BarChart3, LucideIcon, ArrowLeft, Clock, Lock
+  ChevronRight, FileText, BarChart3, LucideIcon, ArrowLeft, Clock, Lock, Menu, X
 } from 'lucide-react';
 
 export interface NavItem {
@@ -44,6 +44,7 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
   const router = useRouter();
   const [user, setUser] = useState<{ id: string; fullName: string; type: string } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isLoginPage = pathname.endsWith('/login');
   const isRegistrationPage = pathname.endsWith('/admin-registration');
@@ -134,6 +135,111 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row" style={{ background: 'hsl(var(--background))', color: 'hsl(var(--foreground))' }}>
+
+      {/* ── Mobile Menu Button ───────────────────────────────────────────── */}
+      <button
+        onClick={() => setMobileMenuOpen(true)}
+        className="md:hidden fixed top-14 left-3 z-50 p-2 rounded-lg transition-colors duration-150"
+        style={{
+          background: 'hsl(var(--card))',
+          border: '1px solid hsl(var(--border))',
+          color: 'hsl(var(--foreground))',
+        }}
+        aria-label="Open menu"
+      >
+        <Menu size={20} />
+      </button>
+
+      {/* ── Mobile Menu Overlay ──────────────────────────────────────────── */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          style={{ background: 'rgba(0, 0, 0, 0.5)' }}
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          <div
+            className="fixed left-0 top-0 bottom-0 w-72 h-full overflow-y-auto"
+            style={{ background: 'hsl(var(--card))' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Mobile menu header */}
+            <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'hsl(var(--border))' }}>
+              <span
+                className="text-xs font-bold tracking-widest uppercase"
+                style={{ color: 'hsl(var(--primary))' }}
+              >
+                {modeLabel === 'Abalat' ? 'አባላት ጉዳይ ክፍል' : modeLabel === 'Course' ? 'ኮርስ ክፍል' : 'መዝሙር ክፍል'}
+              </span>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1 rounded transition-colors duration-150"
+                style={{ color: 'hsl(var(--muted-foreground))' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Mobile menu items */}
+            <nav className="p-4 space-y-4">
+              {displayNavItems.map((section, idx) => (
+                <div key={idx} className="space-y-2">
+                  {section.label && (
+                    <p className="text-xs font-bold uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground) / 0.7)' }}>
+                      {section.label}
+                    </p>
+                  )}
+                  <div className="space-y-1">
+                    {section.items.map((item) => {
+                      const active = isActive(item.href);
+                      const LinkComponent = item.external ? 'a' : Link;
+                      const linkProps = item.external ? { href: item.href, target: "_blank", rel: "noopener noreferrer" } : { href: item.href };
+
+                      return (
+                        <LinkComponent
+                          key={item.name}
+                          {...(linkProps as any)}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-150"
+                          style={
+                            active
+                              ? {
+                                  color: 'hsl(var(--primary))',
+                                  background: 'hsl(var(--primary) / 0.08)',
+                                }
+                              : {
+                                  color: 'hsl(var(--muted-foreground))',
+                                }
+                          }
+                        >
+                          <item.icon
+                            size={18}
+                            style={{ color: active ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))' }}
+                            className="shrink-0"
+                          />
+                          <span className="truncate">{item.name}</span>
+                        </LinkComponent>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </nav>
+
+            {/* Mobile menu footer */}
+            <div className="p-4 border-t mt-auto" style={{ borderColor: 'hsl(var(--border))' }}>
+              <Link
+                href="/admin-portal"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-150"
+                style={{ color: 'hsl(var(--muted-foreground))' }}
+              >
+                <ArrowLeft size={18} />
+                <span>ወደዋና ገጽ ተመለስ</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Desktop Sidebar ─────────────────────────────────────────────── */}
       <aside
@@ -256,35 +362,37 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
       </aside>
 
       {/* ── Main content ────────────────────────────────────────────────── */}
-      <main className="flex-1 flex flex-col min-h-screen pb-20 md:pb-0 min-w-0">
+      <main className="flex-1 flex flex-col min-h-screen pb-0 md:pb-0 min-w-0 md:pl-0 pl-0">
 
         {/* Top bar */}
         <header
-          className="h-12 flex items-center justify-between px-5 sticky top-0 z-50 shrink-0"
+          className="h-14 md:h-12 flex items-center justify-between px-4 md:px-5 sticky top-0 z-40 shrink-0"
           style={{
             background: 'hsl(var(--background))',
             borderBottom: '1px solid hsl(var(--border))',
           }}
         >
-          <h2 className="text-sm font-semibold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
-            {pageTitle}
-          </h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-sm md:text-sm font-semibold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
+              {pageTitle}
+            </h2>
+          </div>
 
           {/* Mode switcher */}
           <div className="flex items-center gap-1 rounded p-0.5" style={{ background: 'hsl(var(--muted))' }}>
             <Link
               href="/abalat"
-              className="text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
+              className="text-[10px] md:text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
               style={{
                 color: modeLabel === 'Abalat' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
                 background: modeLabel === 'Abalat' ? 'hsl(var(--card))' : 'transparent',
               }}
             >
-              አባላት ጉዳይ
+              አባላት
             </Link>
             <Link
               href="/course"
-              className="text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
+              className="text-[10px] md:text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
               style={{
                 color: modeLabel === 'Course' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
                 background: modeLabel === 'Course' ? 'hsl(var(--card))' : 'transparent',
@@ -294,7 +402,7 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
             </Link>
             <Link
               href="/mezmur"
-              className="text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
+              className="text-[10px] md:text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
               style={{
                 color: modeLabel === 'Mezmur' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
                 background: modeLabel === 'Mezmur' ? 'hsl(var(--card))' : 'transparent',
@@ -338,31 +446,6 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
           </div>
         </div>
       </main>
-
-      {/* ── Mobile bottom nav ───────────────────────────────────────────── */}
-      <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 h-14 flex items-center overflow-x-auto no-scrollbar whitespace-nowrap snap-x z-50 px-1 pb-safe"
-        style={{
-          background: 'hsl(var(--card))',
-          borderTop: '1px solid hsl(var(--border))',
-          paddingBottom: 'env(safe-area-inset-bottom)',
-        }}
-      >
-        {allItems.slice(0, 5).map((item) => {
-          const active = isActive(item.href);
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="flex flex-col items-center justify-center min-w-[4.5rem] flex-1 h-full gap-1 snap-center transition-colors duration-150"
-              style={{ color: active ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))' }}
-            >
-              <item.icon size={18} strokeWidth={active ? 2.5 : 1.75} />
-              <span className="text-[9px] font-medium leading-none">{item.name}</span>
-            </Link>
-          );
-        })}
-      </nav>
     </div>
   );
 }

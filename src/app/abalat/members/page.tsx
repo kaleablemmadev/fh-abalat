@@ -106,15 +106,15 @@ export default function MembersPage() {
   return (
     <div className="space-y-5 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
+        <div className="min-w-0 flex-1">
           <h1
-            className="text-xl font-bold tracking-tight"
+            className="text-lg sm:text-xl font-bold tracking-tight"
             style={{ color: "hsl(var(--foreground))" }}
           >
             የአባላት መዝገብ
           </h1>
           <p
-            className="text-sm mt-0.5"
+            className="text-xs sm:text-sm mt-0.5"
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
             አባላትን መመዝገቢያና መከታተያ
@@ -130,7 +130,8 @@ export default function MembersPage() {
           }}
         >
           <Plus size={14} />
-          ዐዲስ አባል
+          <span className="hidden sm:inline">ዐዲስ አባል</span>
+          <span className="sm:hidden">አባል</span>
         </Link>
       </div>
 
@@ -212,7 +213,7 @@ export default function MembersPage() {
                 style={{ color: "hsl(var(--muted-foreground))" }}
               />
               <select
-                className="h-8 w-full rounded border pl-8 pr-3 text-xs appearance-none transition-all duration-150"
+                className="h-10 w-full rounded border pl-8 pr-3 text-xs md:text-xs appearance-none transition-all duration-150"
                 style={{
                   background: "hsl(var(--background))",
                   border: "1px solid hsl(var(--border))",

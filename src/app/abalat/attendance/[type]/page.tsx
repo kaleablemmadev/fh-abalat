@@ -178,7 +178,7 @@ export default async function MultiMonthAttendancePage({
   }
 
   // Fetch Members
-  let members = [];
+  let members: Array<{ id: string; fullName: string | null }> = [];
   try {
     members = await prisma.user.findMany({
       where: { type: "MEMBER", memberType: "REGULAR_MEMBER" },

@@ -15,25 +15,25 @@ interface BreadcrumbProps {
 
 export default function Breadcrumb({ items }: BreadcrumbProps) {
   return (
-    <nav className="flex items-center gap-2 text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>
+    <nav className="flex items-center gap-1.5 text-[11px] md:text-xs font-medium overflow-x-auto no-scrollbar whitespace-nowrap pb-1 -mb-1" style={{ color: 'hsl(var(--muted-foreground))' }}>
       <Link
-        href="/"
-        className="inline-flex items-center gap-1.5 font-medium transition-colors duration-150 hover:text-[hsl(var(--foreground))]"
+        href="/admin-portal"
+        className="inline-flex items-center gap-1.5 transition-colors duration-150 hover:text-[hsl(var(--foreground))] shrink-0"
       >
-        <Home size={14} />
+        <Home size={13} />
       </Link>
       {items.map((item, index) => (
-        <div key={index} className="flex items-center gap-2">
-          <ChevronRight size={12} className="shrink-0" />
+        <div key={index} className="flex items-center gap-1.5 shrink-0">
+          <ChevronRight size={12} className="shrink-0 opacity-40" />
           {item.href ? (
             <Link
               href={item.href}
-              className="font-medium transition-colors duration-150 hover:text-[hsl(var(--foreground))]"
+              className="transition-colors duration-150 hover:text-[hsl(var(--foreground))]"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="font-medium" style={{ color: 'hsl(var(--foreground))' }}>
+            <span className="text-[hsl(var(--foreground))] font-semibold">
               {item.label}
             </span>
           )}

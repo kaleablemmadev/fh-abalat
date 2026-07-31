@@ -229,71 +229,49 @@ export default function MultiMonthGrid({
     <div className="flex flex-col relative pb-20">
       {/* ── Attendance table ──────────────────────────────────────────── */}
       <div
-        className="rounded-lg overflow-hidden animate-slide-in"
-        style={{
-          background: 'hsl(var(--card))',
-          border: '1px solid hsl(var(--border))',
-        }}
+        className="rounded-xl overflow-hidden animate-slide-in bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-sm"
       >
         {members.length === 0 ? (
           <div
-            className="p-10 text-center text-sm"
-            style={{ color: 'hsl(var(--muted-foreground))' }}
+            className="p-12 text-center text-sm text-[hsl(var(--muted-foreground))]"
           >
-            <Users size={20} className="mx-auto mb-2" style={{ color: 'hsl(var(--muted-foreground))' }} />
+            <Users size={32} className="mx-auto mb-4 opacity-20" />
             ምንም አባል አልተገኘም ፥ መጀመሪያ አባላትን መዝግብ
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[hsl(var(--border))]">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr style={{ borderBottom: '1px solid hsl(var(--border))' }}>
+                <tr className="bg-[hsl(var(--muted))] border-b border-[hsl(var(--border))]">
                   <th
-                    className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider sticky left-0 z-10"
-                    style={{
-                      background: 'hsl(var(--muted))',
-                      color: 'hsl(var(--muted-foreground))',
-                      minWidth: '150px',
-                    }}
+                    className="px-4 py-4 text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))] sticky left-0 z-20 bg-[hsl(var(--muted))]"
+                    style={{ minWidth: '160px' }}
                   >
                     አባል
                   </th>
                   {events.map((event) => (
                     <th
                       key={event.id}
-                      className="px-3 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-center"
-                      style={{
-                        background: 'hsl(var(--muted))',
-                        color: 'hsl(var(--muted-foreground))',
-                        minWidth: '100px',
-                      }}
+                      className="px-4 py-4 text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))] text-center border-l border-[hsl(var(--border))/0.5]"
+                      style={{ minWidth: '120px' }}
                     >
                       {type === 'chore' ? 'Chore' : 'Sunday'}
                       <br />
-                      <span className="text-[10px] font-normal opacity-70">
+                      <span className="text-[11px] font-semibold text-[hsl(var(--foreground))]">
                         {event.ethDate.month.substring(0, 3)} {event.ethDate.day}
                       </span>
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody>
-                {members.map((member, idx) => (
+              <tbody className="divide-y divide-[hsl(var(--border))]">
+                {members.map((member) => (
                   <tr
                     key={member.id}
-                    className="transition-colors duration-100"
-                    style={{
-                      borderBottom: idx < members.length - 1 ? '1px solid hsl(var(--border))' : 'none',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'hsl(var(--accent))')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    className="hover:bg-[hsl(var(--accent)/0.3)] transition-colors group"
                   >
                     <td
-                      className="px-4 py-2.5 text-sm font-medium sticky left-0 z-10"
-                      style={{
-                        background: 'hsl(var(--card))',
-                        color: 'hsl(var(--foreground))',
-                      }}
+                      className="px-4 py-4 text-sm font-semibold text-[hsl(var(--foreground))] sticky left-0 z-10 bg-[hsl(var(--card))] group-hover:bg-[hsl(var(--accent)/0.5)] transition-colors shadow-[2px_0_5px_rgba(0,0,0,0.1)] md:shadow-none"
                     >
                       {member.fullName || 'Unknown'}
                     </td>
@@ -301,27 +279,26 @@ export default function MultiMonthGrid({
                       const key = `${member.id}_${event.id}`;
                       const currentAttendance = attendanceData[key];
                       return (
-                        <td key={event.id} className="px-3 py-2 text-center">
-                          <div className="flex flex-wrap gap-1 justify-center">
-                            {attendanceTypes.filter(t => t.name.toLowerCase() !== 'late').map((type) => {
-                              const isSelected = currentAttendance?.attendanceTypeId === type.id;
-                              const props = getPillStyle(type.name);
-                              const styleNow = isSelected ? props.selected : props.unselected;
+                        <td key={event.id} className="px-4 py-3 text-center border-l border-[hsl(var(--border))/0.5]">
+                          <div className="flex gap-2 justify-center">
+                            {attendanceTypes.filter(t => t.name.toLowerCase() !== 'late').map((t) => {
+                              const isSelected = currentAttendance?.attendanceTypeId === t.id;
+                              const props = getPillStyle(t.name);
 
                               return (
                                 <button
-                                  key={type.id}
+                                  key={t.id}
                                   type="button"
-                                  onClick={() => handleAttendanceChange(member.id, event.id, type.id)}
-                                  title={type.name}
-                                  className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold transition-all duration-150"
-                                  style={styleNow}
-                                  onMouseEnter={(e) => {
-                                    if (!isSelected) e.currentTarget.style.borderColor = props.hoverBorder;
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    if (!isSelected) e.currentTarget.style.borderColor = 'hsl(var(--border))';
-                                  }}
+                                  onClick={() => handleAttendanceChange(member.id, event.id, t.id)}
+                                  title={t.name}
+                                  className={`
+                                    w-10 h-10 flex items-center justify-center rounded-xl transition-all duration-200 active:scale-90
+                                    ${isSelected
+                                      ? 'shadow-inner scale-105'
+                                      : 'border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--primary)/0.5)] hover:bg-[hsl(var(--accent))]'
+                                    }
+                                  `}
+                                  style={isSelected ? props.selected : {}}
                                 >
                                   {props.icon}
                                 </button>
@@ -341,29 +318,29 @@ export default function MultiMonthGrid({
 
       {/* ── Save bar ───────────────────────────────────────────── */}
       <div
-        className="mt-6 px-5 py-3 rounded-lg flex items-center justify-between"
-        style={{
-          background: 'hsl(var(--card))',
-          border: '1px solid hsl(var(--border))',
-        }}
+        className="mt-8 px-4 py-4 md:px-6 md:py-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-lg"
       >
         {/* Status messages */}
         <div className="flex items-center gap-3">
           {error && (
             <p
-              className="text-sm font-medium animate-slide-in"
-              style={{ color: 'hsl(0 55% 62%)' }}
+              className="text-sm font-semibold text-[hsl(0,55%,62%)] animate-slide-in"
             >
               {error}
             </p>
           )}
           {saveSuccess && (
             <div
-              className="flex items-center gap-1.5 text-sm font-medium animate-slide-in"
-              style={{ color: 'hsl(160 55% 58%)' }}
+              className="flex items-center gap-2 text-sm font-semibold text-[hsl(160,55%,58%)] animate-slide-in"
             >
-              <CheckCircle2 size={15} />
+              <CheckCircle2 size={18} />
               <span>አቴንዳንስ ተመዝግቧል</span>
+            </div>
+          )}
+          {!error && !saveSuccess && (
+            <div className="flex items-center gap-2 text-[hsl(var(--muted-foreground))]">
+              <Users size={16} />
+              <span className="text-xs font-medium">{members.length} አባላት ተመርጠዋል</span>
             </div>
           )}
         </div>
@@ -371,15 +348,9 @@ export default function MultiMonthGrid({
         <button
           onClick={handleSave}
           disabled={isSaving}
-          className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{
-            background: 'hsl(160 70% 32%)',
-            color: '#fff',
-          }}
-          onMouseEnter={(e) => { if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 38%)'; }}
-          onMouseLeave={(e) => { if (!isSaving) e.currentTarget.style.background = 'hsl(160 70% 32%)'; }}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg px-6 py-2.5 text-sm font-bold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-[hsl(160,70%,32%)] text-white hover:bg-[hsl(160,70%,36%)] active:scale-95 shadow-md hover:shadow-lg shadow-[hsl(160,70%,32%)/0.2]"
         >
-          {isSaving && <Loader2 size={14} className="animate-spin" />}
+          {isSaving && <Loader2 size={16} className="animate-spin" />}
           {isSaving ? 'ምዝገባ ላይ…' : 'አቴንዳንስ መዝግብ'}
         </button>
       </div>

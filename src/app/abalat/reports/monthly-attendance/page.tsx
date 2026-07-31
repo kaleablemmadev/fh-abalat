@@ -118,7 +118,7 @@ export default function MonthlyAttendanceReportPage() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in pb-10">
       <Breadcrumb
         items={[
           { label: 'ሪፖርቶች', href: '/abalat/reports' },
@@ -127,40 +127,31 @@ export default function MonthlyAttendanceReportPage() {
       />
 
       <div>
-        <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
+        <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[hsl(var(--foreground))]">
           ወርኃዊ አቴንዳንስ ሪፖርት
         </h1>
-        <p className="text-sm mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
+        <p className="text-xs md:text-sm mt-1 text-[hsl(var(--muted-foreground))]">
           ለተመረጡ ወራት ዝርዝር አቴንዳንስ ሪፖርት (የተገኘ=1, ፈቃድ=0.5, ያልተገኘ=0)
         </p>
       </div>
 
       {/* Month Selection */}
       <div
-        className="rounded-lg p-6 space-y-4"
-        style={{
-          background: 'hsl(var(--card))',
-          border: '1px solid hsl(var(--border))',
-        }}
+        className="rounded-xl p-4 md:p-6 space-y-6 bg-[hsl(var(--card))] border border-[hsl(var(--border))]"
       >
-        <h2 className="text-base font-semibold" style={{ color: 'hsl(var(--foreground))' }}>
+        <h2 className="text-base font-semibold text-[hsl(var(--foreground))]">
           ወራትን ምረጡ
         </h2>
 
-        <div className="flex gap-3">
-          <div className="flex-1">
-            <label className="block text-sm font-semibold mb-1" style={{ color: 'hsl(var(--foreground))' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
               ወር
             </label>
             <select
               value={currentMonth}
               onChange={(e) => setCurrentMonth(e.target.value)}
-              className="w-full rounded border px-3 py-2 text-sm"
-              style={{
-                background: 'hsl(var(--background))',
-                border: '1px solid hsl(var(--border))',
-                color: 'hsl(var(--foreground))',
-              }}
+              className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] focus:border-[hsl(var(--primary))] transition-all"
             >
               <option value="">ወር ምረጥ...</option>
               {Object.values(ethMonthNames).map((month) => (
@@ -171,8 +162,8 @@ export default function MonthlyAttendanceReportPage() {
             </select>
           </div>
 
-          <div className="w-32">
-            <label className="block text-sm font-semibold mb-1" style={{ color: 'hsl(var(--foreground))' }}>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
               ዓመት
             </label>
             <input
@@ -180,30 +171,20 @@ export default function MonthlyAttendanceReportPage() {
               value={currentYear}
               onChange={(e) => setCurrentYear(e.target.value)}
               placeholder={today.year.toString()}
-              className="w-full rounded border px-3 py-2 text-sm"
-              style={{
-                background: 'hsl(var(--background))',
-                border: '1px solid hsl(var(--border))',
-                color: 'hsl(var(--foreground))',
-              }}
+              className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] focus:border-[hsl(var(--primary))] transition-all"
               min={2000}
               max={2100}
             />
           </div>
 
-          <div className="w-40">
-            <label className="block text-sm font-semibold mb-1" style={{ color: 'hsl(var(--foreground))' }}>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
               የአቴንዳንስ ዐይነት
             </label>
             <select
               value={attendanceType}
               onChange={(e) => setAttendanceType(e.target.value as 'CHORE' | 'SUNDAY' | 'ALL')}
-              className="w-full rounded border px-3 py-2 text-sm"
-              style={{
-                background: 'hsl(var(--background))',
-                border: '1px solid hsl(var(--border))',
-                color: 'hsl(var(--foreground))',
-              }}
+              className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] focus:border-[hsl(var(--primary))] transition-all"
             >
               <option value="ALL">ሁሉም ዐይነቶች</option>
               <option value="CHORE">የሠርክ አቴንዳንስ ብቻ</option>
@@ -215,36 +196,26 @@ export default function MonthlyAttendanceReportPage() {
             <button
               type="button"
               onClick={addMonth}
-              className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150"
-              style={{
-                background: 'hsl(160 40% 12%)',
-                color: 'hsl(160 60% 55%)',
-                border: '1px solid hsl(160 30% 20%)',
-              }}
+              className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-150 bg-[hsl(160,40%,12%)] text-[hsl(160,60%,55%)] border border-[hsl(160,30%,20%)] hover:bg-[hsl(160,40%,16%)] active:scale-95"
             >
-              <Plus size={14} />
+              <Plus size={16} />
               ጨምር
             </button>
           </div>
         </div>
 
         {selectedMonths.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 pt-2">
             {selectedMonths.map((month, index) => (
               <span
                 key={index}
-                className="inline-flex items-center gap-1 px-3 py-1.5 rounded text-sm font-medium"
-                style={{
-                  background: 'hsl(var(--muted))',
-                  color: 'hsl(var(--muted-foreground))',
-                  border: '1px solid hsl(var(--border))',
-                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))] animate-fade-in"
               >
                 {month.month} {month.year}
                 <button
                   type="button"
                   onClick={() => removeMonth(index)}
-                  className="hover:text-[hsl(var(--foreground))]"
+                  className="hover:text-[hsl(var(--foreground))] transition-colors p-0.5 rounded-full hover:bg-[hsl(var(--accent))]"
                 >
                   <X size={14} />
                 </button>
@@ -253,45 +224,33 @@ export default function MonthlyAttendanceReportPage() {
           </div>
         )}
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
             onClick={generateReport}
             disabled={selectedMonths.length === 0 || isGenerating}
-            className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150 disabled:opacity-50"
-            style={{
-              background: 'hsl(160 70% 32%)',
-              color: '#fff',
-            }}
+            className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed bg-[hsl(160,70%,32%)] text-white hover:bg-[hsl(160,70%,36%)] active:scale-95"
           >
-            {isGenerating && <Loader2 size={14} className="animate-spin" />}
+            {isGenerating && <Loader2 size={16} className="animate-spin" />}
             {isGenerating ? 'በማውጣት ላይ...' : 'ሪፖርት አውጣ'}
           </button>
 
           {reportData && (
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <button
                 onClick={() => downloadReport('pdf')}
                 disabled={isGenerating}
-                className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150 disabled:opacity-50"
-                style={{
-                  background: 'hsl(38 70% 32%)',
-                  color: '#fff',
-                }}
+                className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-150 disabled:opacity-50 bg-[hsl(38,70%,32%)] text-white hover:bg-[hsl(38,70%,36%)] active:scale-95"
               >
-                <Download size={14} />
+                <Download size={16} />
                 Download PDF
               </button>
 
               <button
                 onClick={() => downloadReport('docx')}
                 disabled={isGenerating}
-                className="inline-flex items-center gap-1.5 rounded px-4 py-2 text-sm font-semibold transition-colors duration-150 disabled:opacity-50"
-                style={{
-                  background: 'hsl(210 70% 32%)',
-                  color: '#fff',
-                }}
+                className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-150 disabled:opacity-50 bg-[hsl(210,70%,32%)] text-white hover:bg-[hsl(210,70%,36%)] active:scale-95"
               >
-                <Download size={14} />
+                <Download size={16} />
                 Download DOCX
               </button>
             </div>
@@ -300,12 +259,7 @@ export default function MonthlyAttendanceReportPage() {
 
         {error && (
           <div
-            className="rounded p-3 text-sm font-medium"
-            style={{
-              background: 'hsl(0 40% 10%)',
-              border: '1px solid hsl(0 40% 22%)',
-              color: 'hsl(0 55% 62%)',
-            }}
+            className="rounded-lg p-3 text-sm font-medium bg-[hsl(0,40%,10%)] border border-[hsl(0,40%,22%)] text-[hsl(0,55%,62%)] animate-slide-in"
           >
             {error}
           </div>
@@ -315,46 +269,41 @@ export default function MonthlyAttendanceReportPage() {
       {/* Report Table */}
       {reportData && (
         <div
-          className="rounded-lg overflow-hidden"
-          style={{
-            background: 'hsl(var(--card))',
-            border: '1px solid hsl(var(--border))',
-          }}
+          className="rounded-xl overflow-hidden bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-sm"
         >
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm border-collapse">
               <thead>
-                <tr style={{ background: 'hsl(var(--muted))' }}>
-                  <th className="px-4 py-3 text-left font-semibold" style={{ color: 'hsl(var(--foreground))' }}>
+                <tr className="bg-[hsl(var(--muted))] border-b border-[hsl(var(--border))]">
+                  <th className="px-4 py-4 text-left font-bold text-[hsl(var(--muted-foreground))] uppercase tracking-wider text-[10px]">
                     ተ.ቁ.
                   </th>
-                  <th className="px-4 py-3 text-left font-semibold" style={{ color: 'hsl(var(--foreground))' }}>
+                  <th className="px-4 py-4 text-left font-bold text-[hsl(var(--muted-foreground))] uppercase tracking-wider text-[10px]">
                     ስም
                   </th>
                   {reportData.months.map((month) => (
                     <th
                       key={`${month.month}-${month.year}`}
-                      className="px-4 py-3 text-center font-semibold"
-                      style={{ color: 'hsl(var(--foreground))' }}
+                      className="px-4 py-4 text-center font-bold text-[hsl(var(--muted-foreground))] uppercase tracking-wider text-[10px]"
                     >
                       {month.month} {month.year}
                     </th>
                   ))}
-                  <th className="px-4 py-3 text-center font-semibold" style={{ color: 'hsl(var(--foreground))' }}>
+                  <th className="px-4 py-4 text-center font-bold text-[hsl(var(--muted-foreground))] uppercase tracking-wider text-[10px]">
                     አጠቃላይ
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-[hsl(var(--border))]">
                 {reportData.data.map((member, index) => (
                   <tr
                     key={member.id}
-                    style={{ borderBottom: '1px solid hsl(var(--border))' }}
+                    className="hover:bg-[hsl(var(--accent)/0.5)] transition-colors"
                   >
-                    <td className="px-4 py-3" style={{ color: 'hsl(var(--foreground))' }}>
+                    <td className="px-4 py-3 text-[hsl(var(--muted-foreground))] font-medium">
                       {index + 1}
                     </td>
-                    <td className="px-4 py-3 font-medium" style={{ color: 'hsl(var(--foreground))' }}>
+                    <td className="px-4 py-3 font-semibold text-[hsl(var(--foreground))]">
                       {member.fullName || 'Unknown'}
                     </td>
                     {reportData.months.map((month) => {
@@ -363,16 +312,14 @@ export default function MonthlyAttendanceReportPage() {
                       return (
                         <td
                           key={`${month.month}-${month.year}`}
-                          className="px-4 py-3 text-center"
-                          style={{ color: 'hsl(var(--foreground))' }}
+                          className="px-4 py-3 text-center text-[hsl(var(--foreground))]"
                         >
                           {count}
                         </td>
                       );
                     })}
                     <td
-                      className="px-4 py-3 text-center font-bold"
-                      style={{ color: 'hsl(160 60% 55%)' }}
+                      className="px-4 py-3 text-center font-bold text-[hsl(160,60%,55%)] bg-[hsl(160,60%,55%)/0.03]"
                     >
                       {member.total}
                     </td>

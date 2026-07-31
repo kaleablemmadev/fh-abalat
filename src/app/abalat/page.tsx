@@ -48,95 +48,71 @@ export default function AbalatHomePage() {
   }, []);
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-8 animate-fade-in pb-10">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[hsl(var(--foreground))]">
           የአባላት ጉዳይ ገጽ
         </h1>
-        <p className="text-sm mt-0.5" style={{ color: 'hsl(var(--muted-foreground))' }}>
+        <p className="text-sm mt-1 text-[hsl(var(--muted-foreground))]">
           የአባላት አቴንዳንስና የአባላት መከታተያ ድኅረ ገጽ
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {stats.map((stat) => (
           <Link
             key={stat.label}
             href={stat.href}
-            className="group rounded-lg p-6 transition-all duration-150"
-            style={{
-              background: 'hsl(var(--card))',
-              border: '1px solid hsl(var(--border))',
-            }}
+            className="group rounded-xl p-6 transition-all duration-200 bg-[hsl(var(--card))] border border-[hsl(var(--border))] hover:border-[hsl(var(--primary)/0.4)] hover:shadow-lg hover:shadow-[hsl(var(--primary)/0.05)] active:scale-[0.98]"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                <p className="text-xs font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))]">
                   {stat.label}
                 </p>
-                <p className="text-2xl font-bold mt-2" style={{ color: 'hsl(var(--foreground))' }}>
+                <p className="text-3xl font-bold mt-3 text-[hsl(var(--foreground))]">
                   {stat.value}
                 </p>
               </div>
               <div
-                className="p-2 rounded transition-colors duration-150"
-                style={{
-                  background: 'hsl(var(--primary) / 0.1)',
-                  color: 'hsl(var(--primary))',
-                }}
+                className="p-3 rounded-xl transition-colors duration-150 bg-[hsl(var(--primary)/0.1)] text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-white"
               >
-                <stat.icon size={20} />
+                <stat.icon size={22} />
               </div>
             </div>
-            <div className="flex items-center gap-1 mt-4 text-xs font-medium" style={{ color: 'hsl(var(--primary))' }}>
-              ዝርዝር ተመልከቱ <ArrowRight size={14} />
+            <div className="flex items-center gap-1.5 mt-6 text-xs font-bold text-[hsl(var(--primary))] opacity-80 group-hover:opacity-100 transition-opacity">
+              ዝርዝር ተመልከቱ <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </div>
           </Link>
         ))}
       </div>
 
       <div
-        className="rounded-lg p-6"
-        style={{
-          background: 'hsl(var(--card))',
-          border: '1px solid hsl(var(--border))',
-        }}
+        className="rounded-xl p-6 bg-[hsl(var(--card))] border border-[hsl(var(--border))]"
       >
-        <h2 className="text-lg font-semibold mb-2" style={{ color: 'hsl(var(--foreground))' }}>
+        <h2 className="text-lg font-bold mb-4 text-[hsl(var(--foreground))]">
           Quick Actions
         </h2>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3">
           <Link
             href="/abalat/members/new"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-colors duration-150"
-            style={{
-              background: 'hsl(var(--primary))',
-              color: 'hsl(var(--primary-foreground))',
-            }}
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold transition-all duration-150 bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary)/0.9)] active:scale-95 shadow-md shadow-[hsl(var(--primary)/0.2)]"
           >
-            <Users size={16} />
+            <Users size={18} />
             ዐዲስ አባል
           </Link>
           <Link
             href="/abalat/events/new"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-colors duration-150"
-            style={{
-              background: 'hsl(var(--primary))',
-              color: 'hsl(var(--primary-foreground))',
-            }}
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold transition-all duration-150 bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary)/0.9)] active:scale-95 shadow-md shadow-[hsl(var(--primary)/0.2)]"
           >
-            <Calendar size={16} />
+            <Calendar size={18} />
             ዐዲስ በዓል
           </Link>
           <Link
             href="/abalat/attendance/chore"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-colors duration-150"
-            style={{
-              background: 'hsl(var(--primary))',
-              color: 'hsl(var(--primary-foreground))',
-            }}
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold transition-all duration-150 bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary)/0.9)] active:scale-95 shadow-md shadow-[hsl(var(--primary)/0.2)]"
           >
-            <CheckSquare size={16} />
+            <CheckSquare size={18} />
             አቴንዳንስ መዝግብ
           </Link>
         </div>

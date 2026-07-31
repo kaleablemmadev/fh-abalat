@@ -83,6 +83,14 @@
     outline: none;
     box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
   }
+
+  /* Mobile-friendly form inputs - base styles */
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevent iOS zoom on focus */
+    min-height: 44px; /* Touch-friendly size */
+  }
 }
 
 /* ─── Keyframes ─────────────────────────────────────────────────────────────── */
@@ -170,11 +178,13 @@
 
 .primary-button {
   transition: background 150ms ease-out, opacity 150ms ease-out;
+  min-height: 44px;
 }
 .primary-button:hover { opacity: 0.88; }
 
 .secondary-button {
   transition: border-color 150ms ease-out, background 150ms ease-out;
+  min-height: 44px;
 }
 .secondary-button:hover {
   border-color: hsl(var(--primary));
@@ -182,9 +192,15 @@
 }
 
 .shell {
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
+  padding: 1rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .shell {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
 }
 
 .hero { margin-bottom: 1.5rem; }
@@ -200,10 +216,14 @@
 
 h1 {
   margin: 0;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.3;
   letter-spacing: -0.02em;
+}
+
+@media (min-width: 640px) {
+  h1 { font-size: 1.35rem; }
 }
 
 .lede {
@@ -216,16 +236,30 @@ h1 {
 .panel {
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.25rem;
+  padding: 1rem;
   background: hsl(var(--card));
+}
+
+@media (min-width: 640px) {
+  .panel { padding: 1.25rem; }
 }
 
 .panelHeader {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 640px) {
+  .panelHeader {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
 }
 
 h2 {
@@ -257,15 +291,26 @@ time {
 
 .users li {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.5rem 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
   background: hsl(var(--card));
   transition: border-color 150ms ease-out, background 150ms ease-out;
 }
+
+@media (min-width: 640px) {
+  .users li {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
 .users li:hover {
   border-color: hsl(var(--border) / 1.5);
   background: hsl(var(--accent));
@@ -290,68 +335,20 @@ code {
   border: 1px solid hsl(var(--border));
 }
 
-@media (max-width: 640px) {
-  .users li,
-  .panelHeader { flex-direction: column; align-items: flex-start; }
-  
-  /* Mobile-friendly form inputs */
-  input:not([type="checkbox"]):not([type="radio"]), 
-  select, 
-  textarea {
-    font-size: 16px !important; /* Prevent iOS zoom on focus */
-    min-height: 44px !important; /* Touch-friendly size */
-  }
-  
-  /* Better select dropdowns on mobile */
-  select {
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
-  }
-  
-  /* Mobile-friendly buttons */
-  button:not([style*="height"]) {
-    min-height: 44px !important;
-  }
-  
-  /* Mobile table handling - horizontal scroll */
-  .overflow-x-auto {
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Better spacing on mobile */
-  .grid-cols-3 {
-    grid-template-columns: 1fr !important;
-  }
-  
-  .grid-cols-2 {
-    grid-template-columns: 1fr !important;
-  }
-  
-  /* Better padding on mobile */
-  .px-6 {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-  
-  .py-6 {
-    padding-top: 1rem !important;
-    padding-bottom: 1rem !important;
-  }
-  
-  /* Mobile-safe bottom padding */
-  .pb-20 {
-    padding-bottom: 1rem !important;
-  }
-}
-
 /* ─── Members page ──────────────────────────────────────────────────────────── */
 .membersPage { padding-bottom: 2rem; }
 
 .controls {
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 1fr;
   margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .controls {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
 }
 
 .searchInput,
@@ -362,9 +359,14 @@ code {
   border-radius: var(--radius);
   background: hsl(var(--card));
   color: hsl(var(--foreground));
-  font-size: 0.875rem;
+  font-size: 1rem;
   transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
 }
+
+@media (min-width: 640px) {
+  .searchInput, .selectInput { font-size: 0.875rem; }
+}
+
 .searchInput:focus,
 .selectInput:focus {
   outline: none;
@@ -393,11 +395,21 @@ code {
 
 .memberHeading {
   display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+@media (min-width: 640px) {
+  .memberHeading {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+    gap: 0.75rem;
+  }
+}
+
 .memberHeading h3 {
   margin: 0;
   font-size: 0.9rem;
@@ -424,11 +436,21 @@ code {
 
 .memberFooter {
   display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   color: hsl(var(--muted-foreground));
   font-size: 0.875rem;
 }
+
+@media (min-width: 640px) {
+  .memberFooter {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+}
+
 .memberFooter span,
 .detailFooter div { display: block; }
 
@@ -469,26 +491,32 @@ code {
 }
 
 .detailCard {
-  max-width: 44rem;
-  margin: 0 auto;
+  width: 100%;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  padding: 1.5rem;
+  padding: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .detailCard {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
 }
 
 .detailFooter {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0.75rem;
   margin-bottom: 1rem;
 }
 
-@media (max-width: 720px) {
-  .controls { grid-template-columns: 1fr; }
-  .memberFooter,
-  .memberHeading { flex-direction: column; align-items: flex-start; }
-  .detailFooter { grid-template-columns: 1fr; }
+@media (min-width: 640px) {
+  .detailFooter {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ─── Amharic Font Support ──────────────────────────────────────────────────── */

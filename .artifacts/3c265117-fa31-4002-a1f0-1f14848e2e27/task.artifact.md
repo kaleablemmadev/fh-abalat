@@ -1,0 +1,7 @@
+- [x] Refactor `globals.css` for mobile-first design
+- [x] Refactor `AppLayout.tsx` for improved mobile navigation
+- [x] Refactor `MonthlyAttendanceReportPage` (`/reports/monthly-attendance/page.tsx`)
+- [x] Refactor `MultiMonthGrid.tsx` for mobile attendance entry
+- [x] Refactor `Breadcrumb.tsx` for small screens
+- [x] Perform general UI cleanup on common layouts
+- [/] Verify build and responsiveness

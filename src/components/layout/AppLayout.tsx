@@ -134,57 +134,67 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
   const userType = user?.type === 'SUPERADMIN' ? 'ዋና አድሚን' : 'አድሚን';
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row" style={{ background: 'hsl(var(--background))', color: 'hsl(var(--foreground))' }}>
+    <div className="min-h-screen flex flex-col md:flex-row bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
 
-      {/* ── Mobile Menu Button ───────────────────────────────────────────── */}
-      <button
-        onClick={() => setMobileMenuOpen(true)}
-        className="md:hidden fixed top-14 left-3 z-50 p-2 rounded-lg transition-colors duration-150"
-        style={{
-          background: 'hsl(var(--card))',
-          border: '1px solid hsl(var(--border))',
-          color: 'hsl(var(--foreground))',
-        }}
-        aria-label="Open menu"
+      {/* ── Mobile Header ────────────────────────────────────────────────── */}
+      <header
+        className="md:hidden h-14 flex items-center justify-between px-4 sticky top-0 z-50 bg-[hsl(var(--card))] border-b border-[hsl(var(--border))]"
       >
-        <Menu size={20} />
-      </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="p-2 -ml-2 rounded-lg transition-colors duration-150 hover:bg-[hsl(var(--accent))]"
+            aria-label="Open menu"
+          >
+            <Menu size={22} />
+          </button>
+          <span
+            className="text-[10px] font-bold tracking-widest uppercase text-[hsl(var(--primary))]"
+          >
+            {modeLabel === 'Abalat' ? 'አባላት' : modeLabel === 'Course' ? 'ኮርስ' : 'መዝሙር'}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold bg-[hsl(var(--primary)/0.15)] text-[hsl(var(--primary))] border border-[hsl(var(--primary)/0.25)]"
+          >
+            {initials(userFullName)}
+          </div>
+        </div>
+      </header>
 
       {/* ── Mobile Menu Overlay ──────────────────────────────────────────── */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-50 md:hidden"
-          style={{ background: 'rgba(0, 0, 0, 0.5)' }}
+          className="fixed inset-0 z-[100] md:hidden bg-black/60 backdrop-blur-sm animate-fade-in"
           onClick={() => setMobileMenuOpen(false)}
         >
           <div
-            className="fixed left-0 top-0 bottom-0 w-72 h-full overflow-y-auto"
-            style={{ background: 'hsl(var(--card))' }}
+            className="fixed left-0 top-0 bottom-0 w-[280px] h-full overflow-y-auto bg-[hsl(var(--card))] animate-slide-in shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Mobile menu header */}
-            <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'hsl(var(--border))' }}>
+            <div className="flex items-center justify-between p-4 border-b border-[hsl(var(--border))]">
               <span
-                className="text-xs font-bold tracking-widest uppercase"
-                style={{ color: 'hsl(var(--primary))' }}
+                className="text-xs font-bold tracking-widest uppercase text-[hsl(var(--primary))]"
               >
                 {modeLabel === 'Abalat' ? 'አባላት ጉዳይ ክፍል' : modeLabel === 'Course' ? 'ኮርስ ክፍል' : 'መዝሙር ክፍል'}
               </span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-1 rounded transition-colors duration-150"
-                style={{ color: 'hsl(var(--muted-foreground))' }}
+                className="p-2 -mr-2 rounded-lg transition-colors duration-150 hover:bg-[hsl(var(--accent))] text-[hsl(var(--muted-foreground))]"
               >
                 <X size={20} />
               </button>
             </div>
 
             {/* Mobile menu items */}
-            <nav className="p-4 space-y-4">
+            <nav className="p-4 space-y-6">
               {displayNavItems.map((section, idx) => (
                 <div key={idx} className="space-y-2">
                   {section.label && (
-                    <p className="text-xs font-bold uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground) / 0.7)' }}>
+                    <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground)/0.7)]">
                       {section.label}
                     </p>
                   )}
@@ -199,22 +209,15 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
                           key={item.name}
                           {...(linkProps as any)}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-150"
-                          style={
+                          className={`flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-150 ${
                             active
-                              ? {
-                                  color: 'hsl(var(--primary))',
-                                  background: 'hsl(var(--primary) / 0.08)',
-                                }
-                              : {
-                                  color: 'hsl(var(--muted-foreground))',
-                                }
-                          }
+                              ? 'text-[hsl(var(--primary))] bg-[hsl(var(--primary)/0.08)]'
+                              : 'text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--foreground))]'
+                          }`}
                         >
                           <item.icon
                             size={18}
-                            style={{ color: active ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))' }}
-                            className="shrink-0"
+                            className={`shrink-0 ${active ? 'text-[hsl(var(--primary))]' : 'text-[hsl(var(--muted-foreground))]'}`}
                           />
                           <span className="truncate">{item.name}</span>
                         </LinkComponent>
@@ -226,16 +229,22 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
             </nav>
 
             {/* Mobile menu footer */}
-            <div className="p-4 border-t mt-auto" style={{ borderColor: 'hsl(var(--border))' }}>
+            <div className="p-4 border-t border-[hsl(var(--border))] mt-auto">
               <Link
                 href="/admin-portal"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all duration-150"
-                style={{ color: 'hsl(var(--muted-foreground))' }}
+                className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--foreground))] transition-all duration-150"
               >
                 <ArrowLeft size={18} />
                 <span>ወደዋና ገጽ ተመለስ</span>
               </Link>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive)/0.1)] transition-all duration-150 mt-2"
+              >
+                <LogOut size={18} />
+                <span>ውጣ (Logout)</span>
+              </button>
             </div>
           </div>
         </div>
@@ -243,32 +252,27 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
 
       {/* ── Desktop Sidebar ─────────────────────────────────────────────── */}
       <aside
-        className="hidden md:flex flex-col w-60 shrink-0"
-        style={{
-          background: 'hsl(var(--card))',
-          borderRight: '1px solid hsl(var(--border))',
-        }}
+        className="hidden md:flex flex-col w-64 shrink-0 bg-[hsl(var(--card))] border-r border-[hsl(var(--border))]"
       >
         {/* Logo */}
-        <div className="px-4 py-4 border-b flex items-center justify-between" style={{ borderColor: 'hsl(var(--border))' }}>
+        <div className="px-6 py-5 border-b border-[hsl(var(--border))] flex items-center justify-between">
           <span
-            className="text-xs font-bold tracking-widest uppercase"
-            style={{ color: 'hsl(var(--primary))' }}
+            className="text-xs font-bold tracking-widest uppercase text-[hsl(var(--primary))]"
           >
             {modeLabel === 'Abalat' ? 'አባላት ጉዳይ ክፍል' : modeLabel === 'Course' ? 'ኮርስ ክፍል' : 'መዝሙር ክፍል'}
           </span>
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-4 px-3 space-y-6 overflow-y-auto no-scrollbar">
+        <nav className="flex-1 py-6 px-4 space-y-8 overflow-y-auto no-scrollbar">
           {displayNavItems.map((section, idx) => (
-            <div key={idx} className="space-y-1">
+            <div key={idx} className="space-y-2">
               {section.label && (
-                <p className="px-3 text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'hsl(var(--muted-foreground) / 0.7)' }}>
+                <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground)/0.7)] mb-3">
                   {section.label}
                 </p>
               )}
-              <div className="space-y-0.5">
+              <div className="space-y-1">
                 {section.items.map((item) => {
                   const active = isActive(item.href);
                   const LinkComponent = item.external ? 'a' : Link;
@@ -278,28 +282,17 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
                     <LinkComponent
                       key={item.name}
                       {...(linkProps as any)}
-                      className="group flex items-center gap-2.5 px-3 py-2 rounded text-sm font-medium transition-all duration-150"
-                      style={
+                      className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
                         active
-                          ? {
-                              color: 'hsl(var(--primary))',
-                              background: 'hsl(var(--primary) / 0.08)',
-                              borderLeft: '2px solid hsl(var(--primary))',
-                              paddingLeft: '10px',
-                            }
-                          : {
-                              color: 'hsl(var(--muted-foreground))',
-                              borderLeft: '2px solid transparent',
-                              paddingLeft: '10px',
-                            }
-                      }
+                          ? 'text-[hsl(var(--primary))] bg-[hsl(var(--primary)/0.08)] shadow-sm'
+                          : 'text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--foreground))]'
+                      }`}
                     >
                       <item.icon
-                        size={15}
-                        style={{ color: active ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))' }}
-                        className="shrink-0 transition-colors duration-150 group-hover:text-zinc-200"
+                        size={16}
+                        className={`shrink-0 transition-colors duration-150 ${active ? 'text-[hsl(var(--primary))]' : 'text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--foreground))]'}`}
                       />
-                      <span className="transition-colors duration-150 group-hover:text-zinc-200 truncate">
+                      <span className="truncate">
                         {item.name}
                       </span>
                     </LinkComponent>
@@ -311,137 +304,92 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
         </nav>
 
         {/* Bottom links */}
-        <div className="px-3 py-2 space-y-0.5" style={{ borderTop: '1px solid hsl(var(--border))' }}>
+        <div className="px-4 py-3 border-t border-[hsl(var(--border))]">
           <Link
             href="/admin-portal"
-            className="group flex items-center gap-2.5 px-3 py-2 rounded text-sm font-medium transition-all duration-150"
-            style={{ color: 'hsl(var(--muted-foreground))' }}
+            className="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--foreground))] transition-all duration-150"
           >
-            <ArrowLeft size={15} className="shrink-0 transition-colors duration-150 group-hover:text-zinc-200" />
-            <span className="transition-colors duration-150 group-hover:text-zinc-200">
-              ወደዋና ገጽ ተመለስ
-            </span>
+            <ArrowLeft size={16} className="shrink-0" />
+            <span>ወደዋና ገጽ ተመለስ</span>
           </Link>
         </div>
 
         {/* User area */}
         <div
-          className="px-3 py-3 flex items-center gap-2.5"
-          style={{ borderTop: '1px solid hsl(var(--border))' }}
+          className="px-4 py-4 border-t border-[hsl(var(--border))] flex items-center gap-3"
         >
-          {/* Initials avatar */}
           <div
-            className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0"
-            style={{
-              background: 'hsl(var(--primary) / 0.15)',
-              color: 'hsl(var(--primary))',
-              border: '1px solid hsl(var(--primary) / 0.25)',
-            }}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold bg-[hsl(var(--primary)/0.15)] text-[hsl(var(--primary))] border border-[hsl(var(--primary)/0.25)] shrink-0"
           >
             {initials(userFullName)}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold leading-none truncate" style={{ color: 'hsl(var(--foreground))' }}>
+            <p className="text-xs font-semibold leading-none truncate text-[hsl(var(--foreground))]">
               {userFullName}
             </p>
-            <p className="text-[10px] mt-0.5 truncate" style={{ color: 'hsl(var(--muted-foreground))' }}>
+            <p className="text-[10px] mt-1 truncate text-[hsl(var(--muted-foreground))]">
               {userType}
             </p>
           </div>
           <button
             onClick={handleLogout}
             aria-label="Log out"
-            className="transition-colors duration-150 shrink-0"
-            style={{ color: 'hsl(var(--muted-foreground))' }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = 'hsl(0 55% 55%)')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'hsl(var(--muted-foreground))')}
+            className="p-2 rounded-lg text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive)/0.1)] transition-all duration-150 shrink-0"
           >
-            <LogOut size={14} />
+            <LogOut size={16} />
           </button>
         </div>
       </aside>
 
       {/* ── Main content ────────────────────────────────────────────────── */}
-      <main className="flex-1 flex flex-col min-h-screen pb-0 md:pb-0 min-w-0 md:pl-0 pl-0">
+      <main className="flex-1 flex flex-col min-h-screen min-w-0">
 
-        {/* Top bar */}
+        {/* Desktop Top bar */}
         <header
-          className="h-14 md:h-12 flex items-center justify-between px-4 md:px-5 sticky top-0 z-40 shrink-0"
-          style={{
-            background: 'hsl(var(--background))',
-            borderBottom: '1px solid hsl(var(--border))',
-          }}
+          className="hidden md:flex h-14 items-center justify-between px-6 sticky top-0 z-40 bg-[hsl(var(--background)/0.8)] backdrop-blur-md border-b border-[hsl(var(--border))] shrink-0"
         >
-          <div className="flex items-center gap-3">
-            <h2 className="text-sm md:text-sm font-semibold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
+          <div className="flex items-center gap-4">
+            <h2 className="text-sm font-semibold tracking-tight text-[hsl(var(--foreground))]">
               {pageTitle}
             </h2>
           </div>
 
-          {/* Mode switcher */}
-          <div className="flex items-center gap-1 rounded p-0.5" style={{ background: 'hsl(var(--muted))' }}>
-            <Link
-              href="/abalat"
-              className="text-[10px] md:text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
-              style={{
-                color: modeLabel === 'Abalat' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
-                background: modeLabel === 'Abalat' ? 'hsl(var(--card))' : 'transparent',
-              }}
-            >
-              አባላት
-            </Link>
-            <Link
-              href="/course"
-              className="text-[10px] md:text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
-              style={{
-                color: modeLabel === 'Course' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
-                background: modeLabel === 'Course' ? 'hsl(var(--card))' : 'transparent',
-              }}
-            >
-              ኮርስ
-            </Link>
-            <Link
-              href="/mezmur"
-              className="text-[10px] md:text-[10px] font-medium px-2 py-1 rounded transition-colors duration-150"
-              style={{
-                color: modeLabel === 'Mezmur' ? 'hsl(var(--primary))' : 'hsl(var(--muted-foreground))',
-                background: modeLabel === 'Mezmur' ? 'hsl(var(--card))' : 'transparent',
-              }}
-            >
-              መዝሙር
-            </Link>
-          </div>
+          <div className="flex items-center gap-6">
+            {/* Mode switcher */}
+            <div className="flex items-center gap-1 bg-[hsl(var(--muted))] rounded-lg p-1">
+              {['Abalat', 'Course', 'Mezmur'].map((m) => (
+                <Link
+                  key={m}
+                  href={`/${m.toLowerCase()}`}
+                  className={`text-[10px] font-bold px-3 py-1.5 rounded-md transition-all duration-150 ${
+                    modeLabel === m
+                      ? 'bg-[hsl(var(--card))] text-[hsl(var(--primary))] shadow-sm'
+                      : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
+                  }`}
+                >
+                  {m === 'Abalat' ? 'አባላት' : m === 'Course' ? 'ኮርስ' : 'መዝሙር'}
+                </Link>
+              ))}
+            </div>
 
-          {/* Right-side: user avatar visible on all sizes */}
-          <div className="flex items-center gap-3">
-            {/* Role badge — desktop only */}
-            <span
-              className="hidden md:inline-flex text-[10px] font-semibold px-1.5 py-0.5 rounded"
-              style={{
-                background: 'hsl(var(--primary) / 0.12)',
-                color: 'hsl(var(--primary))',
-                border: '1px solid hsl(var(--primary) / 0.2)',
-              }}
-            >
-              {userType}
-            </span>
-            {/* Initials avatar */}
-            <div
-              className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold"
-              style={{
-                background: 'hsl(var(--primary) / 0.15)',
-                color: 'hsl(var(--primary))',
-                border: '1px solid hsl(var(--primary) / 0.25)',
-              }}
-            >
-              {initials(userFullName)}
+            <div className="flex items-center gap-3 border-l border-[hsl(var(--border))] pl-6">
+              <span
+                className="text-[10px] font-bold px-2 py-0.5 rounded bg-[hsl(var(--primary)/0.12)] text-[hsl(var(--primary))] border border-[hsl(var(--primary)/0.2)]"
+              >
+                {userType}
+              </span>
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold bg-[hsl(var(--primary)/0.15)] text-[hsl(var(--primary))] border border-[hsl(var(--primary)/0.25)]"
+              >
+                {initials(userFullName)}
+              </div>
             </div>
           </div>
         </header>
 
         {/* Page content */}
         <div className="flex-1 overflow-auto">
-          <div className="px-4 py-5 md:px-6 md:py-6 max-w-7xl mx-auto w-full animate-fade-in">
+          <div className="px-4 py-6 md:px-8 md:py-8 max-w-7xl mx-auto w-full animate-fade-in">
             {children}
           </div>
         </div>

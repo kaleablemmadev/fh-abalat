@@ -1,7 +1,5 @@
 // C:/Dev/fh-abalat/scratch/fix-event-types.ts
-import { PrismaClient } from '../src/generated/prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from "@/src/lib/prisma";
 
 async function main() {
   console.log('🔄 Fixing event types for system attendances...');

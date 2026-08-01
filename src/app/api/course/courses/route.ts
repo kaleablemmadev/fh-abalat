@@ -6,11 +6,20 @@ import { z } from "zod";
 // Zod schema for Course creation/update
 const courseSchema = z.object({
   name: z.string().min(1),
-  description: z.string().optional(),
-  topics: z.array(z.string()).optional(),
-  credits: z.number().int().optional(),
+  description: z.string().nullish(),
+  topics: z.array(z.string()).nullish(),
+  credits: z.number().int().nullish(),
   instructorId: z.string().min(1),
   departmentId: z.string().min(1),
+  isGiven: z.boolean().optional(),
+  classTypes: z.array(z.enum(["KEDAMAY", "KALEAY", "SALSAY", "RABEAY", "KEREMT"])).min(1),
+  semesterPreference: z.enum(["FIRST", "SECOND", "BOTH"]).optional(),
+  teacherHandoutUrl: z.string().nullish(),
+  studentHandoutUrl: z.string().nullish(),
+  attendanceWeight: z.number().min(0).max(100).optional(),
+  midExamWeight: z.number().min(0).max(100).optional(),
+  assignmentWeight: z.number().min(0).max(100).optional(),
+  finalExamWeight: z.number().min(0).max(100).optional(),
 });
 
 export async function GET() {
@@ -43,13 +52,18 @@ export async function POST(request: NextRequest) {
     // Validate with Zod
     const validation = courseSchema.safeParse(body);
     if (!validation.success) {
+      console.error("Validation error:", validation.error.format());
       return NextResponse.json(
         { error: validation.error.flatten() },
         { status: 400 },
       );
     }
 
-    const { name, description, topics, credits, instructorId, departmentId } = validation.data;
+    const {
+      name, description, topics, credits, instructorId, departmentId, isGiven, classTypes,
+      semesterPreference, teacherHandoutUrl, studentHandoutUrl,
+      attendanceWeight, midExamWeight, assignmentWeight, finalExamWeight
+    } = validation.data;
 
     // Check if course name already exists
     const existing = await prisma.course.findUnique({
@@ -87,15 +101,70 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const course = await prisma.course.create({
-      data: {
-        name: name.trim(),
-        description,
-        topics: topics || [],
-        credits,
-        instructorId,
-        departmentId,
-      },
+    const course = await prisma.$transaction(async (tx) => {
+      const newCourse = await tx.course.create({
+        data: {
+          name: name.trim(),
+          description: description || null,
+          topics: topics || [],
+          credits: credits ?? null,
+          instructorId,
+          departmentId,
+          isGiven: isGiven ?? true,
+          classTypes: classTypes,
+          semesterPreference: semesterPreference || "FIRST",
+          teacherHandoutUrl: teacherHandoutUrl || null,
+          studentHandoutUrl: studentHandoutUrl || null,
+          attendanceWeight: attendanceWeight ?? 10,
+          midExamWeight: midExamWeight ?? 25,
+          assignmentWeight: assignmentWeight ?? 15,
+          finalExamWeight: finalExamWeight ?? 50,
+        },
+      });
+
+      // Automatically assign to all ACTIVE Academic Years that have matching classes
+      const activeYears = await tx.academicYear.findMany({
+        where: { isActive: true },
+        include: { classes: true }
+      });
+
+      for (const year of activeYears) {
+        const matchingClasses = year.classes.filter(c => classTypes.includes(c.name as any));
+
+        for (const cls of matchingClasses) {
+          // Determine which semesters to create records for
+          const targetSemesters: ("FIRST" | "SECOND")[] = [];
+          if (newCourse.semesterPreference === "BOTH") {
+            targetSemesters.push("FIRST", "SECOND");
+          } else {
+            targetSemesters.push(newCourse.semesterPreference as any);
+          }
+
+          for (const sem of targetSemesters) {
+             // Determine dates from year
+             const startDate = sem === "FIRST" ? (year.s1Start || year.startDate) : (year.s2Start || year.startDate);
+             const endDate = sem === "FIRST" ? (year.s1End || year.endDate) : (year.s2End || year.endDate);
+
+             await tx.courseYear.create({
+              data: {
+                courseId: newCourse.id,
+                courseClassId: cls.id,
+                year: year.year,
+                semester: sem,
+                startDate,
+                endDate,
+                attendanceWeight: newCourse.attendanceWeight,
+                midExamWeight: newCourse.midExamWeight,
+                assignmentWeight: newCourse.assignmentWeight,
+                finalExamWeight: newCourse.finalExamWeight,
+                isActive: true,
+              }
+            });
+          }
+        }
+      }
+
+      return newCourse;
     });
 
     return NextResponse.json(course, { status: 201 });

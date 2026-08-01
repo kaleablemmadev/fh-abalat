@@ -1,0 +1,629 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model CourseRegistration {
+  id             String                 @id @default(cuid())
+  memberId       String
+  formType       CourseRegistrationType
+  phoneNumber    String
+  secondaryPhone String?
+  age            Int
+  academicLevel  String?
+  address        String
+  rawClassLabel  String?
+  submittedAt    DateTime
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  member         User                   @relation(fields: [memberId], references: [id])
+
+  @@index([memberId])
+  @@index([formType])
+}
+
+model User {
+  id                    String               @id @default(cuid())
+  email                 String?              @unique
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  mustChangePassword    Boolean              @default(false)
+  address               String?
+  age                   Int?
+  christianName         String?
+  courseClassId         String?
+  departmentId          String?
+  ethiopianCreatedAt    String?
+  fullName              String?
+  gender                genderType           @default(MALE)
+  isActive              Boolean              @default(true)
+  memberType            memberType?          @default(REGULAR_MEMBER)
+  mode                  appMode?
+  privateId             String?              @unique
+  passwordHash          String?
+  phoneNumber           String?
+  registerDate          String?
+  type                  userType             @default(MEMBER)
+  reviewedRegistrations AdminRegistration[]  @relation("RegistrationReviewer")
+  markedAttendances     Attendance[]         @relation("MarkedByAdmin")
+  attendances           Attendance[]         @relation("MemberAttendances")
+  performedAuditLogs    AuditLog[]           @relation("AuditLogPerformer")
+  enrollments           CourseEnrollment[]
+  registrations         CourseRegistration[]
+  createdEvents         Event[]              @relation("EventCreatedBy")
+  marks                 Mark[]
+  mezmurEnrollments     MezmurEnrollment[]
+  uploadedMusicFiles    MusicFile[]          @relation("MusicUploadedBy")
+  targetNotifications   Notification[]       @relation("NotificationTarget")
+  permissions           Permission[]         @relation("MemberPermissions")
+  reviewedPermissions   Permission[]         @relation("ReviewedByAdmin")
+  playlists             Playlist[]
+  courseClass           CourseClass?         @relation(fields: [courseClassId], references: [id])
+  department            Department?          @relation(fields: [departmentId], references: [id])
+
+  @@index([type])
+  @@index([memberType])
+  @@index([isActive])
+  @@index([departmentId])
+}
+
+model AcademicYear {
+  id                     String        @id @default(cuid())
+  year                   String        @unique
+  startDate              DateTime
+  endDate                DateTime
+  isActive               Boolean       @default(false)
+  s1Start                DateTime?
+  s1End                  DateTime?
+  s2Start                DateTime?
+  s2End                  DateTime?
+  s1MidExamDate          DateTime?
+  s1FinalExamDate        DateTime?
+  s2MidExamDate          DateTime?
+  s2FinalExamDate        DateTime?
+  midExamMinAttendance   Int           @default(5)
+  finalExamMinAttendance Int           @default(5)
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  classes                CourseClass[]
+}
+
+model Event {
+  id                String           @id @default(cuid())
+  title             String
+  description       String?
+  date              DateTime
+  location          String?
+  ethiopianYear     Int?
+  ethiopianMonth    Int?
+  ethiopianDay      Int?
+  eventType         eventType        @default(EVENT)
+  isRecurring       Boolean          @default(false)
+  recurringMonth    Int?
+  recurringDay      Int?
+  eligibilityRuleId String?
+  targetMemberTypes memberType[]
+  createdById       String
+  courseClassId     String?
+  isActive          Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  attendances       Attendance[]
+  courseClass       CourseClass?     @relation(fields: [courseClassId], references: [id])
+  createdBy         User             @relation("EventCreatedBy", fields: [createdById], references: [id])
+  eligibilityRule   EligibilityRule? @relation(fields: [eligibilityRuleId], references: [id])
+
+  @@index([date])
+  @@index([ethiopianYear, ethiopianMonth])
+  @@index([isRecurring])
+  @@index([eventType])
+  @@index([courseClassId])
+  @@index([isActive])
+}
+
+model AttendanceType {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  value       Float
+  isDefault   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  attendances Attendance[]
+}
+
+model Attendance {
+  id                    String         @id @default(cuid())
+  memberId              String
+  eventId               String
+  attendanceTypeId      String
+  permissionId          String?
+  markedById            String
+  note                  String?
+  countedForEligibility Boolean?       @default(false)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  attendanceType        AttendanceType @relation(fields: [attendanceTypeId], references: [id])
+  event                 Event          @relation(fields: [eventId], references: [id])
+  markedBy              User           @relation("MarkedByAdmin", fields: [markedById], references: [id])
+  member                User           @relation("MemberAttendances", fields: [memberId], references: [id])
+  permission            Permission?    @relation(fields: [permissionId], references: [id])
+
+  @@unique([memberId, eventId])
+  @@index([eventId])
+  @@index([memberId])
+  @@index([attendanceTypeId])
+  @@index([permissionId])
+}
+
+model PermissionType {
+  id               String                 @id @default(cuid())
+  name             String                 @unique
+  description      String?
+  category         permissionTypeCategory @default(DURATION_BASED)
+  durationMonths   Int?
+  durationYears    Int?
+  appliesToChore   Boolean                @default(false)
+  appliesToSunday  Boolean                @default(false)
+  specificDays     Int[]
+  appliesToSundays Boolean                @default(false)
+  isActive         Boolean                @default(true)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  permissions      Permission[]
+
+  @@index([category])
+  @@index([isActive])
+}
+
+model Permission {
+  id                 String           @id @default(cuid())
+  memberId           String
+  permissionTypeId   String
+  reason             String?
+  status             permissionStatus @default(PENDING)
+  reviewedById       String?
+  reviewNote         String?
+  reviewedAt         DateTime?
+  ethiopianStartDate String?
+  ethiopianEndDate   String?
+  mode               appMode          @default(ABALAT)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  attendances        Attendance[]
+  member             User             @relation("MemberPermissions", fields: [memberId], references: [id])
+  permissionType     PermissionType   @relation(fields: [permissionTypeId], references: [id])
+  reviewedBy         User?            @relation("ReviewedByAdmin", fields: [reviewedById], references: [id])
+
+  @@index([memberId])
+  @@index([permissionTypeId])
+  @@index([status])
+  @@index([reviewedById])
+  @@index([mode])
+}
+
+model EligibilityRule {
+  id          String                @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean               @default(true)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  criteria    EligibilityCriteria[]
+  events      Event[]
+
+  @@index([isActive])
+}
+
+model EligibilityCriteria {
+  id                String          @id @default(cuid())
+  eligibilityRuleId String
+  eventType         String
+  minAttendances    Int
+  lookbackMonths    Int
+  isTotalAttendance Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  eligibilityRule   EligibilityRule @relation(fields: [eligibilityRuleId], references: [id], onDelete: Cascade)
+}
+
+model Course {
+  id                 String                 @id @default(cuid())
+  name               String                 @unique
+  description        String?
+  topics             String[]
+  isGiven            Boolean                @default(true)
+  credits            Int?
+  instructorId       String
+  courseClassId      String?
+  departmentId       String
+  classTypes         CourseClassType[]
+  semesterPreference CourseOfferingSemester @default(FIRST)
+  teacherHandoutUrl  String?
+  studentHandoutUrl  String?
+  attendanceWeight   Float                  @default(10)
+  midExamWeight      Float                  @default(25)
+  assignmentWeight   Float                  @default(15)
+  finalExamWeight    Float                  @default(50)
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+  courseClass        CourseClass?           @relation(fields: [courseClassId], references: [id])
+  department         Department             @relation(fields: [departmentId], references: [id])
+  instructor         Instructor             @relation(fields: [instructorId], references: [id])
+  courseYears        CourseYear[]
+
+  @@index([instructorId])
+  @@index([isGiven])
+}
+
+enum CourseOfferingSemester {
+  FIRST
+  SECOND
+  BOTH
+}
+
+model Instructor {
+  id           String     @id @default(cuid())
+  fullName     String     @unique
+  email        String?    @unique
+  phoneNumber  String?
+  departmentId String
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  courses      Course[]
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  @@index([departmentId])
+  @@index([isActive])
+}
+
+model Department {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  code        String?      @unique
+  description String?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  courses     Course[]
+  instructors Instructor[]
+  members     User[]
+
+  @@index([isActive])
+}
+
+model CourseClass {
+  id                String             @id @default(cuid())
+  name              CourseClassType    @default(KEDAMAY)
+  year              String
+  startDate         DateTime?
+  endDate           DateTime?
+  isActive          Boolean            @default(true)
+  academicYearId    String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  academicYear      AcademicYear?      @relation(fields: [academicYearId], references: [id])
+  courses           Course[]
+  courseEnrollments CourseEnrollment[]
+  courseYears       CourseYear[]
+  events            Event[]
+  users             User[]
+
+  @@unique([name, year])
+  @@index([isActive])
+}
+
+model CourseEnrollment {
+  id                 String           @id @default(cuid())
+  studentId          String
+  courseClassId      String?
+  status             EnrollmentStatus @default(PENDING)
+  passStatus         String?
+  enrolledDate       String
+  unenrollmentDate   DateTime?
+  unenrollmentReason String?
+  finalGrade         Float?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  courseClass        CourseClass?     @relation(fields: [courseClassId], references: [id])
+  student            User             @relation(fields: [studentId], references: [id])
+
+  @@unique([courseClassId, studentId])
+  @@index([studentId])
+  @@index([courseClassId])
+  @@index([status])
+}
+
+model CourseYear {
+  id               String      @id @default(cuid())
+  courseId         String
+  courseClassId    String
+  year             String
+  semester         Semester    @default(FIRST)
+  isTwoSemesters   Boolean     @default(false)
+  startDate        DateTime
+  endDate          DateTime
+  attendanceWeight Float       @default(10)
+  midExamWeight    Float       @default(25)
+  assignmentWeight Float       @default(15)
+  finalExamWeight  Float       @default(50)
+  isActive         Boolean     @default(true)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  courseClass      CourseClass @relation(fields: [courseClassId], references: [id])
+  course           Course      @relation(fields: [courseId], references: [id])
+  marks            Mark[]
+
+  @@unique([courseId, courseClassId, year])
+  @@index([courseId])
+  @@index([courseClassId])
+  @@index([year])
+  @@index([isActive])
+}
+
+model Mark {
+  id              String     @id @default(cuid())
+  studentId       String
+  courseYearId    String
+  midExamScore    Float?
+  assignmentScore Float?
+  finalExamScore  Float?
+  computedScore   Float?
+  letterGrade     String?
+  passStatus      String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  courseYear      CourseYear @relation(fields: [courseYearId], references: [id])
+  student         User       @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, courseYearId])
+  @@index([studentId])
+  @@index([courseYearId])
+}
+
+model MezmurEnrollment {
+  id                 String           @id @default(cuid())
+  studentId          String
+  groupType          MezmurGroupType
+  status             EnrollmentStatus @default(ACTIVE)
+  enrolledDate       String
+  unenrollmentDate   DateTime?
+  unenrollmentReason String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  student            User             @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, groupType])
+  @@index([studentId])
+  @@index([groupType])
+}
+
+model MusicCategory {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  musicFiles  MusicFile[] @relation("MusicFileToCategory")
+}
+
+model MusicFile {
+  id               String                  @id @default(cuid())
+  title            String
+  fileKey          String                  @unique
+  fileUrl          String?
+  fileSize         Int
+  duration         Int?
+  language         MusicLanguage           @default(AMHARIC)
+  lyrics           String
+  interpretation   String?
+  alignment        TextAlignment           @default(LEFT)
+  uploadedById     String
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+  uploadedBy       User                    @relation("MusicUploadedBy", fields: [uploadedById], references: [id])
+  categories       MusicCategory[]         @relation("MusicFileToCategory")
+  playlists        Playlist[]              @relation("PlaylistToMusicFile")
+  monthlySchedules MonthlyMezmurSchedule[] @relation("MusicFileToMonthlySchedule")
+
+  @@index([uploadedById])
+}
+
+model Playlist {
+  id          String      @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id])
+  musicFiles  MusicFile[] @relation("PlaylistToMusicFile")
+
+  @@index([userId])
+}
+
+model MonthlyMezmurSchedule {
+  id        String   @id @default(cuid())
+  month     Int
+  year      Int
+  day       Int // 1, 12, 21, 23, or 24
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  musicFiles MusicFile[] @relation("MusicFileToMonthlySchedule")
+
+  @@unique([year, month, day])
+  @@index([year, month])
+}
+
+model ModePassword {
+  id            String   @id @default(cuid())
+  mode          appMode  @unique
+  passwordHash  String
+  lastChangedBy String?
+  lastChangedAt DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([mode])
+}
+
+model AdminRegistration {
+  id           String             @id @default(cuid())
+  email        String             @unique
+  fullName     String
+  passwordHash String
+  mode         appMode
+  status       registrationStatus @default(PENDING)
+  reviewedById String?
+  reviewedAt   DateTime?
+  reviewNote   String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  reviewedBy   User?              @relation("RegistrationReviewer", fields: [reviewedById], references: [id])
+
+  @@index([mode])
+  @@index([status])
+  @@index([reviewedById])
+}
+
+model AuditLog {
+  id            String         @id @default(cuid())
+  action        auditAction
+  entityType    String
+  entityId      String
+  entityName    String?
+  changes       String?
+  mode          appMode
+  performedById String
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime       @default(now())
+  performedBy   User           @relation("AuditLogPerformer", fields: [performedById], references: [id])
+  notifications Notification[]
+
+  @@index([mode])
+  @@index([entityType])
+  @@index([performedById])
+  @@index([createdAt])
+}
+
+model Notification {
+  id           String    @id @default(cuid())
+  title        String
+  message      String
+  type         String
+  mode         appMode
+  isRead       Boolean   @default(false)
+  readAt       DateTime?
+  targetUserId String?
+  auditLogId   String?
+  createdAt    DateTime  @default(now())
+  auditLog     AuditLog? @relation(fields: [auditLogId], references: [id])
+  targetUser   User?     @relation("NotificationTarget", fields: [targetUserId], references: [id])
+
+  @@index([mode])
+  @@index([targetUserId])
+  @@index([isRead])
+  @@index([createdAt])
+}
+
+enum CourseRegistrationType {
+  BEGA
+  KEREMT
+}
+
+enum userType {
+  ADMIN
+  MEMBER
+  SUPERADMIN
+}
+
+enum appMode {
+  ABALAT
+  COURSE
+  MEZMUR
+  MEMBER
+}
+
+enum genderType {
+  MALE
+  FEMALE
+}
+
+enum memberType {
+  COURSE_STUDENT
+  REGULAR_MEMBER
+  YOUTH_STUDENT
+}
+
+enum eventType {
+  EVENT
+  CHORE
+  SUNDAY
+  MEZMUR_REGULAR
+  MEZMUR_BEGINNERS
+  MEZMUR_CONTINUOUS
+}
+
+enum permissionTypeCategory {
+  DURATION_BASED
+  DAY_BASED
+}
+
+enum permissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CourseClassType {
+  KEDAMAY
+  KALEAY
+  SALSAY
+  RABEAY
+  KEREMT
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  PENDING
+  WITHDREW
+  CANCELLED
+}
+
+enum Semester {
+  FIRST
+  SECOND
+}
+
+enum MezmurGroupType {
+  BEGINNERS
+  CONTINUOUS
+}
+
+enum MusicLanguage {
+  GEEZ
+  AMHARIC
+}
+
+enum TextAlignment {
+  LEFT
+  RIGHT
+}
+
+enum registrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum auditAction {
+  CREATE
+  UPDATE
+  DELETE
+}

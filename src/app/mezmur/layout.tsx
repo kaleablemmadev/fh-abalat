@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AppLayout, { NavSection } from '@/src/components/layout/AppLayout';
-import { Home, Music, ListMusic, Users, Calendar, Shield, CheckSquare, Mic2 } from 'lucide-react';
+import { Home, Music, ListMusic, Users, Calendar, Shield, CheckSquare, Mic2, Clock, FileText } from 'lucide-react';
 
 const mezmurNavItems: NavSection[] = [
   {
@@ -22,6 +22,7 @@ const mezmurNavItems: NavSection[] = [
     items: [
       { name: 'Members', href: '/mezmur/members', icon: Users },
       { name: 'Attendance', href: '/mezmur/attendance', icon: CheckSquare },
+      { name: 'Permissions', href: '/mezmur/permissions', icon: Clock },
       { name: 'Eligibility', href: '/mezmur/eligibility', icon: Shield },
     ]
   },
@@ -29,6 +30,14 @@ const mezmurNavItems: NavSection[] = [
     label: 'Planning',
     items: [
       { name: 'Schedule', href: '/mezmur/schedule', icon: Calendar },
+      { name: 'Monthly Plan', href: '/mezmur/monthly-plan', icon: ListMusic },
+    ]
+  },
+  {
+    label: 'Reports',
+    items: [
+      { name: 'Eligibility Reports', href: '/mezmur/reports/eligibility', icon: Shield },
+      { name: 'Monthly Attendance', href: '/mezmur/reports/monthly-attendance', icon: FileText },
     ]
   }
 ];

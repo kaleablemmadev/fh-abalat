@@ -1,0 +1,6 @@
+- `[ ]` Implement Bulk Upload and Category Songs APIs
+- `[ ]` Create `BulkMusicUploadModal` and `MusicPickerModal` components
+- `[ ]` Implement Category Detail Page with bulk actions
+- `[ ]` Update Playlist Detail Page with bulk actions
+- `[ ]` Add general Bulk Upload to Music Library
+- `[ ]` Verify all bulk operations

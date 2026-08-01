@@ -3,7 +3,7 @@
 
 import React from 'react';
 import AppLayout, { NavSection } from '@/src/components/layout/AppLayout';
-import { Home, ClipboardList, Bell, User } from 'lucide-react';
+import { Home, ClipboardList, Bell, User, Calendar, Music, ListMusic } from 'lucide-react';
 
 const memberNavItems: NavSection[] = [
   {
@@ -11,6 +11,14 @@ const memberNavItems: NavSection[] = [
       { name: 'Dashboard', href: '/member', icon: Home },
       { name: 'Attendance History', href: '/member/attendance', icon: ClipboardList },
       { name: 'Notifications', href: '/member/notifications', icon: Bell },
+    ]
+  },
+  {
+    label: 'Mezmur',
+    items: [
+      { name: 'Monthly Plan', href: '/member/mezmur-plan', icon: Calendar },
+      { name: 'Music Library', href: '/member/music', icon: Music },
+      { name: 'Categories', href: '/member/music-categories', icon: ListMusic },
     ]
   },
   {

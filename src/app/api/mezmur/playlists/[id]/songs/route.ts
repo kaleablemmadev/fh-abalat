@@ -7,17 +7,20 @@ export async function POST(
 ) {
   try {
     const { id: playlistId } = await params;
-    const { musicFileId } = await request.json();
+    const body = await request.json();
+    const { musicFileId, musicFileIds } = body;
 
-    if (!musicFileId) {
-      return NextResponse.json({ error: "MusicFileId is required" }, { status: 400 });
+    const idsToConnect = musicFileIds || (musicFileId ? [musicFileId] : []);
+
+    if (idsToConnect.length === 0) {
+      return NextResponse.json({ error: "At least one musicFileId is required" }, { status: 400 });
     }
 
     const playlist = await prisma.playlist.update({
       where: { id: playlistId },
       data: {
         musicFiles: {
-          connect: { id: musicFileId },
+          connect: idsToConnect.map((id: string) => ({ id })),
         },
       },
     });
@@ -25,7 +28,7 @@ export async function POST(
     return NextResponse.json(playlist);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Failed to add song to playlist" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to add song(s) to playlist" }, { status: 500 });
   }
 }
 

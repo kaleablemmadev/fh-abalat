@@ -58,6 +58,7 @@ export default async function MezmurMusicPage() {
         initialFiles={files as any}
         categories={categories as any}
         playlists={playlists as any}
+        adminId={adminId}
       />
     </div>
   );

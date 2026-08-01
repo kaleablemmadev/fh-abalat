@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Search, Filter, Plus, Edit, Users, GraduationCap } from "lucide-react";
+import { Search, Plus, Edit, Users, GraduationCap, Download, Loader2 } from "lucide-react";
 
 interface Student {
   id: string;
@@ -11,6 +11,7 @@ interface Student {
   age: number | null;
   phoneNumber: string | null;
   address: string | null;
+  privateId: string | null;
   enrollments: {
     id: string;
     status: string;
@@ -35,6 +36,7 @@ const genderLabels: Record<string, string> = {
 export default function MemberListClient({ students, courseClasses }: MemberListClientProps) {
   const [searchText, setSearchText] = useState("");
   const [classFilter, setClassFilter] = useState("");
+  const [isExporting, setIsExporting] = useState(false);
 
   const filteredStudents = useMemo(() => {
     const normalizedSearch = searchText.trim().toLowerCase();
@@ -48,6 +50,7 @@ export default function MemberListClient({ students, courseClasses }: MemberList
         student.fullName ?? "",
         student.phoneNumber ?? "",
         student.address ?? "",
+        student.privateId ?? "",
         className,
         classYear,
       ]
@@ -74,82 +77,77 @@ export default function MemberListClient({ students, courseClasses }: MemberList
     [filteredStudents]
   );
 
+  const handleExport = async () => {
+    setIsExporting(true);
+    try {
+      window.location.href = '/api/course/members/export';
+    } finally {
+      setTimeout(() => setIsExporting(false), 2000);
+    }
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 animate-fade-in pb-10">
       <div
-        className="rounded-lg overflow-hidden"
-        style={{
-          background: "hsl(var(--card))",
-          border: "1px solid hsl(var(--border))",
-        }}
+        className="rounded-xl overflow-hidden bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-sm"
       >
         <div
-          className="px-4 py-3 space-y-3"
-          style={{ borderBottom: "1px solid hsl(var(--border))" }}
+          className="px-4 py-4 space-y-4 border-b border-[hsl(var(--border))]"
         >
           <div
-            className="flex flex-wrap items-center gap-3 text-xs"
-            style={{ color: "hsl(var(--muted-foreground))" }}
+            className="flex flex-wrap items-center gap-4 text-xs font-medium text-[hsl(var(--muted-foreground))]"
           >
-            <div className="flex items-center gap-1.5">
-              <GraduationCap size={13} />
-              <span
-                className="font-semibold"
-                style={{ color: "hsl(var(--foreground))" }}
-              >
+            <div className="flex items-center gap-2 bg-[hsl(var(--accent)/0.5)] px-2.5 py-1 rounded-full border border-[hsl(var(--border))]">
+              <GraduationCap size={14} className="text-[hsl(217,70%,32%)]" />
+              <span className="text-[hsl(var(--foreground))] font-bold">
                 {totals.total}
               </span>
-              <span>students shown</span>
+              <span>Students</span>
             </div>
 
-            <span style={{ color: "hsl(var(--border))" }}>|</span>
+            <div className="flex gap-4">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="font-bold text-[hsl(var(--foreground))]">{totals.active}</span> Active
+              </span>
+            </div>
 
-            <span>
-              <span className="font-semibold" style={{ color: "hsl(160 55% 55%)" }}>
-                {totals.active}
-              </span>{" "}
-              active
-            </span>
+            <button
+              onClick={handleExport}
+              disabled={isExporting}
+              className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent))] transition-all disabled:opacity-50 border border-[hsl(var(--border))]"
+            >
+              {isExporting ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
+              Export CSV
+            </button>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col md:flex-row gap-3">
             <div className="relative flex-1">
               <Search
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
-                size={13}
-                style={{ color: "hsl(var(--muted-foreground))" }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[hsl(var(--muted-foreground))]"
+                size={16}
               />
               <input
-                className="h-8 w-full rounded border pl-8 pr-3 text-xs transition-all duration-150"
-                style={{
-                  background: "hsl(var(--background))",
-                  border: "1px solid hsl(var(--border))",
-                  color: "hsl(var(--foreground))",
-                }}
+                className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-10 pr-4 text-sm text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(217,70%,32%)/0.2] focus:border-[hsl(217,70%,32%)] transition-all"
                 type="search"
                 value={searchText}
                 onChange={(event) => setSearchText(event.target.value)}
-                placeholder="በስም፣ በስልክ፣ በአድራሻ ፈልግ"
+                placeholder="Search by name, code, phone..."
               />
             </div>
 
-            <div className="relative w-full sm:w-48">
-              <Filter
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
-                size={13}
-                style={{ color: "hsl(var(--muted-foreground))" }}
+            <div className="relative w-full md:w-64">
+              <Users
+                className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-[hsl(var(--muted-foreground))]"
+                size={16}
               />
               <select
-                className="h-8 w-full rounded border pl-8 pr-3 text-xs appearance-none transition-all duration-150"
-                style={{
-                  background: "hsl(var(--background))",
-                  border: "1px solid hsl(var(--border))",
-                  color: "hsl(var(--foreground))",
-                }}
+                className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] pl-10 pr-4 text-sm text-[hsl(var(--foreground))] focus:outline-none appearance-none"
                 value={classFilter}
                 onChange={(event) => setClassFilter(event.target.value)}
               >
-                <option value="">ሁሉም ክፍሎች</option>
+                <option value="">All Classes</option>
                 {courseClasses.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name} ({c.year})
@@ -157,88 +155,80 @@ export default function MemberListClient({ students, courseClasses }: MemberList
                 ))}
               </select>
             </div>
+
+            <Link
+              href="/course/members/new"
+              className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-all bg-[hsl(217,70%,32%)] text-white hover:bg-[hsl(217,70%,36%)] active:scale-95 shadow-md shadow-[hsl(217,70%,32%)/0.2]"
+            >
+              <Plus size={18} />
+              New Student
+            </Link>
           </div>
         </div>
 
-        <div className="p-3">
+        <div className="p-4">
           {students.length === 0 ? (
-            <div className="rounded p-12 text-center">
-              <Users
-                size={24}
-                className="mx-auto mb-2 opacity-20"
-                style={{ color: "hsl(var(--foreground))" }}
-              />
-              <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
-                No students enrolled in courses yet.
-              </p>
+            <div className="py-20 text-center">
+              <Users size={48} className="mx-auto mb-4 text-[hsl(var(--muted-foreground))] opacity-20" />
+              <p className="text-lg font-semibold text-[hsl(var(--foreground))]">No students enrolled yet.</p>
+              <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">Register your first student to get started.</p>
             </div>
           ) : filteredStudents.length === 0 ? (
-            <div className="rounded p-12 text-center">
-              <Search
-                size={24}
-                className="mx-auto mb-2 opacity-20"
-                style={{ color: "hsl(var(--foreground))" }}
-              />
-              <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
-                No students match your search or filter.
-              </p>
+            <div className="py-20 text-center">
+              <Search size={48} className="mx-auto mb-4 text-[hsl(var(--muted-foreground))] opacity-20" />
+              <p className="text-lg font-semibold text-[hsl(var(--foreground))]">No students match your search.</p>
+              <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">Try adjusting your filters.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredStudents.map((student) => {
                 const enrollment = student.enrollments[0];
                 const courseClass = enrollment?.courseClass;
 
                 return (
-                  <div
+                  <li
                     key={student.id}
-                    className="group relative rounded border p-3 transition-all duration-150 flex flex-col justify-between"
-                    style={{
-                      background: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                    }}
+                    className="group relative rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 transition-all duration-200 flex flex-col hover:border-[hsl(217,70%,32%)/0.4] hover:shadow-lg"
                   >
                     <Link
-                      href={`/course/members/${student.id}`}
-                      className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-                      style={{ color: "hsl(var(--muted-foreground))" }}
+                      href={`/course/members/${student.id}/edit`}
+                      className="absolute top-4 right-4 p-2 rounded-lg bg-[hsl(var(--accent))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100 transition-all hover:text-[hsl(217,70%,32%)] hover:bg-[hsl(217,70%,32%)/0.1] shadow-sm"
                     >
-                      <Edit size={13} />
+                      <Edit size={16} />
                     </Link>
 
-                    <div className="mb-2.5">
+                    <div className="mb-4 pr-8">
                       <h3
-                        className="text-sm font-semibold leading-tight truncate pr-5"
-                        style={{ color: "hsl(var(--foreground))" }}
+                        className="text-base font-bold text-[hsl(var(--foreground))] leading-tight truncate"
                       >
                         {student.fullName ?? "Unnamed student"}
                       </h3>
                       <p
-                        className="text-[10px] mt-0.5"
-                        style={{ color: "hsl(var(--muted-foreground))" }}
+                        className="text-xs mt-1 font-medium text-[hsl(var(--muted-foreground))]"
                       >
                         {genderLabels[student.gender] ?? student.gender} · {student.age ?? "?"} ዓመት
                       </p>
                     </div>
 
-                    <div className="space-y-1.5">
-                      <div className="text-[11px] flex items-center justify-between">
-                        <span style={{ color: "hsl(var(--muted-foreground))" }}>Class:</span>
-                        <span className="font-medium" style={{ color: "hsl(var(--foreground))" }}>
-                          {courseClass ? `${courseClass.name} (${courseClass.year})` : "Not enrolled"}
-                        </span>
+                    <div className="space-y-3 flex-1">
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center justify-between text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
+                          <span>Student Code</span>
+                          <span className="font-mono font-bold text-sky-500">{student.privateId ?? "None"}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
+                          <span>Current Class</span>
+                          <span className="text-[hsl(var(--foreground))]">{courseClass ? `${courseClass.name} (${courseClass.year})` : "Not enrolled"}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
+                          <span>Phone Number</span>
+                          <span className="text-[hsl(var(--foreground))]">{student.phoneNumber ?? "N/A"}</span>
+                        </div>
                       </div>
 
-                      <div className="text-[11px] flex items-center justify-between">
-                        <span style={{ color: "hsl(var(--muted-foreground))" }}>Phone:</span>
-                        <span style={{ color: "hsl(var(--foreground))" }}>
-                          {student.phoneNumber ?? "-"}
-                        </span>
-                      </div>
-
-                      <div className="pt-1.5 flex items-center justify-between border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                      <div className="flex items-center justify-between pt-4 mt-auto border-t border-[hsl(var(--border))]">
                         <span
-                          className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase ${
+                          className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
                             enrollment?.status === "ACTIVE"
                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               : "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"
@@ -249,17 +239,16 @@ export default function MemberListClient({ students, courseClasses }: MemberList
 
                         <Link
                           href={`/course/members/${student.id}`}
-                          className="text-[10px] font-medium transition-colors duration-150"
-                          style={{ color: "hsl(var(--primary))" }}
+                          className="text-xs font-bold text-[hsl(217,70%,32%)] hover:underline underline-offset-4 decoration-2 transition-all"
                         >
                           Details →
                         </Link>
                       </div>
                     </div>
-                  </div>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           )}
         </div>
       </div>

@@ -1,12 +1,20 @@
 import prisma from "@/src/lib/prisma";
 import { z } from 'zod';
 import { NextResponse, NextRequest } from "next/server";
-import { genderType } from "@/src/generated/prisma/enums";
+import { genderType } from "@/src/generated/prisma";
+import { generateCourseStudentCode } from "@/src/lib/utils";
+import { getEthiopianToday } from "@/src/lib/ethiopiancal";
 
 export async function GET() {
     try {
         const courseMember = await prisma.user.findMany({
             where: { memberType: "COURSE_STUDENT" },
+            include: {
+                enrollments: {
+                    where: { status: "ACTIVE" },
+                    include: { courseClass: true }
+                }
+            },
             orderBy: { fullName: "asc" },
         });
         return NextResponse.json(courseMember);
@@ -23,33 +31,62 @@ export async function POST(req: NextRequest) {
         const studentSchema = z.object({
             fullName: z.string().min(2),
             gender: z.nativeEnum(genderType),
-            age: z.number().min(10),
-            christianName: z.string().optional(),
-            registerDateDay: z.number().optional(),
-            registerDateMonth: z.string().optional(),
-            registerDateYear: z.number().optional(),
-            address: z.string().optional()
+            age: z.number().min(5),
+            phoneNumber: z.string().optional(),
+            address: z.string().optional(),
+            courseClassId: z.string().min(1, "Course Class is required")
         });
         
-        const student = studentSchema.parse(body);
+        const validatedData = studentSchema.parse(body);
+        const ethToday = getEthiopianToday();
+
+        // Generate a unique privateId with the new FHC format
+        let privateId = generateCourseStudentCode(ethToday.year);
+        let isUnique = false;
+        let attempts = 0;
+        while (!isUnique && attempts < 10) {
+            const existing = await prisma.user.findUnique({
+                where: { privateId },
+            });
+            if (!existing) {
+                isUnique = true;
+            } else {
+                privateId = generateCourseStudentCode(ethToday.year);
+                attempts++;
+            }
+        }
 
         const courseMember = await prisma.user.create({
             data: {
-                fullName: student.fullName,
-                gender: student.gender,
-                age: student.age,
-                christianName: student.christianName,
-                registerDateDay: student.registerDateDay,
-                registerDateMonth: student.registerDateMonth,
-                registerDateYear: student.registerDateYear,
-                address: student.address,
-                memberType: "COURSE_STUDENT"
+                fullName: validatedData.fullName,
+                gender: validatedData.gender,
+                age: validatedData.age,
+                phoneNumber: validatedData.phoneNumber,
+                address: validatedData.address,
+                memberType: "COURSE_STUDENT",
+                type: "MEMBER",
+                privateId,
+                enrollments: {
+                    create: {
+                        courseClassId: validatedData.courseClassId,
+                        enrolledDate: new Date().toLocaleDateString(),
+                        status: "ACTIVE"
+                    }
+                }
+            },
+            include: {
+                enrollments: {
+                    include: { courseClass: true }
+                }
             }
         });
 
         return NextResponse.json(courseMember);
     } catch(error) {
-        console.error(error);
+        console.error("Error creating student:", error);
+        if (error instanceof z.ZodError) {
+            return NextResponse.json({ error: error.issues[0].message }, { status: 400 });
+        }
         return NextResponse.json({error: "Failed to create course student"}, {status: 500});
     }
 }

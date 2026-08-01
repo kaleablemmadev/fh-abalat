@@ -2,11 +2,15 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, X, Loader2, Music, CheckCircle2, AlertCircle, Type, Languages, AlignLeft, AlignRight } from "lucide-react";
+import { Upload, X, Loader2, Music, CheckCircle2, AlertCircle, Type, Languages, Plus, Trash2 } from "lucide-react";
 
 interface MusicUploadFormProps {
   categories: { id: string; name: string }[];
   adminId: string;
+}
+
+interface Zemach {
+  text: string;
 }
 
 export default function MusicUploadForm({ categories, adminId }: MusicUploadFormProps) {
@@ -15,9 +19,8 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [language, setLanguage] = useState<"GEEZ" | "AMHARIC">("AMHARIC");
-  const [lyrics, setLyrics] = useState("");
+  const [zemachs, setZemachs] = useState<Zemach[]>([{ text: "" }]);
   const [interpretation, setInterpretation] = useState("");
-  const [alignment, setAlignment] = useState<"LEFT" | "RIGHT">("LEFT");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -77,22 +80,44 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
     );
   };
 
+  const addZemach = () => {
+    setZemachs(prev => [...prev, { text: "" }]);
+  };
+
+  const removeZemach = (index: number) => {
+    if (zemachs.length === 1) return; // Keep at least one
+    setZemachs(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const updateZemach = (index: number, text: string) => {
+    setZemachs(prev => prev.map((z, i) => i === index ? { text } : z));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !title) return;
+
+    const hasContent = zemachs.some(z => z.text.trim().length > 0);
+    if (!hasContent) {
+      alert("Please add at least one Zemach with content.");
+      return;
+    }
 
     setIsUploading(true);
     setStatus("idle");
     setErrorMessage("");
     setUploadProgress(0);
 
+    // Store zemachs as JSON string in the lyrics field
+    const lyricsJson = JSON.stringify(zemachs.map(z => ({ text: z.text })));
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("title", title);
     formData.append("uploadedById", adminId);
     formData.append("language", language);
-    formData.append("lyrics", lyrics);
-    formData.append("alignment", alignment);
+    formData.append("lyrics", lyricsJson);
+    formData.append("alignment", "LEFT"); // kept for DB compat, display is automatic
     if (language === "GEEZ") {
       formData.append("interpretation", interpretation);
     }
@@ -223,66 +248,87 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
         </div>
 
         <div className="pt-4 border-t border-[hsl(var(--border))] space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <label className="text-xs font-bold uppercase tracking-wider opacity-60 flex items-center gap-2">
-                <Languages size={14} /> Language
-              </label>
-              <div className="flex p-1 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
-                <button
-                  type="button"
-                  onClick={() => setLanguage("AMHARIC")}
-                  className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${language === "AMHARIC" ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
-                >
-                  Amharic
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage("GEEZ")}
-                  className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${language === "GEEZ" ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
-                >
-                  Ge'ez
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold uppercase tracking-wider opacity-60 flex items-center gap-2">
-                <AlignLeft size={14} /> Alignment
-              </label>
-              <div className="flex p-1 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
-                <button
-                  type="button"
-                  onClick={() => setAlignment("LEFT")}
-                  className={`p-1.5 rounded-md transition-all ${alignment === "LEFT" ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
-                  title="Align Left"
-                >
-                  <AlignLeft size={16} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAlignment("RIGHT")}
-                  className={`p-1.5 rounded-md transition-all ${alignment === "RIGHT" ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
-                  title="Align Right"
-                >
-                  <AlignRight size={16} />
-                </button>
-              </div>
+          {/* Language Selector */}
+          <div className="space-y-1">
+            <label className="text-xs font-bold uppercase tracking-wider opacity-60 flex items-center gap-2">
+              <Languages size={14} /> Language
+            </label>
+            <div className="flex p-1 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
+              <button
+                type="button"
+                onClick={() => setLanguage("AMHARIC")}
+                className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${language === "AMHARIC" ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
+              >
+                Amharic
+              </button>
+              <button
+                type="button"
+                onClick={() => setLanguage("GEEZ")}
+                className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${language === "GEEZ" ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
+              >
+                Ge'ez
+              </button>
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider opacity-60 flex items-center gap-2">
-              <Type size={14} /> Lyrics ({language === "GEEZ" ? "Ge'ez" : "Amharic"})
-            </label>
-            <textarea
-              className={`w-full h-40 rounded-lg border px-4 py-3 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] resize-none ${alignment === "RIGHT" ? "text-right" : "text-left"}`}
-              style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
-              placeholder={`Write the ${language.toLowerCase()} lyrics here...`}
-              value={lyrics}
-              onChange={(e) => setLyrics(e.target.value)}
-              required
-            />
+          {/* Zemachs (Verses/Parts) */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold uppercase tracking-wider opacity-60 flex items-center gap-2">
+                <Type size={14} /> Lyrics ({language === "GEEZ" ? "Ge'ez" : "Amharic"}) — Zemachs
+              </label>
+              <span className="text-[10px] opacity-40 italic">1st zemach → left, 2nd → right, alternating</span>
+            </div>
+
+            <div className="space-y-3">
+              {zemachs.map((zemach, index) => {
+                const isLeft = index % 2 === 0;
+                return (
+                  <div key={index} className="relative group">
+                    <div className="flex items-center justify-between mb-1">
+                      <span
+                        className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded"
+                        style={{
+                          background: isLeft ? "hsl(25 70% 45% / 0.15)" : "hsl(210 70% 45% / 0.15)",
+                          color: isLeft ? "hsl(25 70% 50%)" : "hsl(210 70% 55%)"
+                        }}
+                      >
+                        Zemach {index + 1} · {isLeft ? "← Left" : "Right →"}
+                      </span>
+                      {zemachs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeZemach(index)}
+                          className="p-1 rounded hover:bg-red-500/10 text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                          title="Remove this zemach"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      )}
+                    </div>
+                    <textarea
+                      className={`w-full h-36 rounded-lg border px-4 py-3 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] resize-none font-amharic ${isLeft ? "text-left" : "text-right"}`}
+                      style={{
+                        background: "hsl(var(--card))",
+                        borderColor: isLeft ? "hsl(25 70% 45% / 0.3)" : "hsl(210 70% 45% / 0.3)"
+                      }}
+                      placeholder={`Write zemach ${index + 1} lyrics here... (multiple paragraphs allowed)`}
+                      value={zemach.text}
+                      onChange={(e) => updateZemach(index, e.target.value)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={addZemach}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border-2 border-dashed text-xs font-bold uppercase tracking-wider transition-all opacity-50 hover:opacity-100"
+              style={{ borderColor: "hsl(var(--border))" }}
+            >
+              <Plus size={14} /> Add Zemach
+            </button>
           </div>
 
           {language === "GEEZ" && (
@@ -291,7 +337,7 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
                 <Languages size={14} /> Amharic Interpretation
               </label>
               <textarea
-                className={`w-full h-32 rounded-lg border px-4 py-3 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] resize-none ${alignment === "RIGHT" ? "text-right" : "text-left"}`}
+                className="w-full h-32 rounded-lg border px-4 py-3 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] resize-none"
                 style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
                 placeholder="Write the Amharic interpretation of the Ge'ez text..."
                 value={interpretation}

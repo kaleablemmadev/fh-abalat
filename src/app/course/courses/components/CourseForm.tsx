@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Save, X, Plus, X as XIcon, Loader2, BookOpen } from "lucide-react";
+import { Save, X, Plus, X as XIcon, Loader2, BookOpen, Layers, Calculator, FileUp, Info } from "lucide-react";
+import { courseClassTypeValues, courseClassTypeDisplayNames } from "../../constants/courseEnum";
+import { supabase } from "@/src/lib/supabase";
 
 interface CourseFormProps {
   initialData?: {
@@ -13,6 +15,15 @@ interface CourseFormProps {
     credits?: number;
     instructorId?: string;
     departmentId?: string;
+    isGiven?: boolean;
+    classTypes?: string[];
+    semesterPreference?: "FIRST" | "SECOND" | "BOTH";
+    teacherHandoutUrl?: string;
+    studentHandoutUrl?: string;
+    attendanceWeight?: number;
+    midExamWeight?: number;
+    assignmentWeight?: number;
+    finalExamWeight?: number;
   };
   isEditMode?: boolean;
   instructors: Array<{
@@ -43,7 +54,19 @@ export default function CourseForm({ initialData, isEditMode = false, instructor
     credits: initialData?.credits || "",
     instructorId: initialData?.instructorId || "",
     departmentId: initialData?.departmentId || "",
+    isGiven: initialData?.isGiven ?? true,
+    classTypes: initialData?.classTypes || ["KEDAMAY"],
+    semesterPreference: initialData?.semesterPreference || "FIRST",
+    teacherHandoutUrl: initialData?.teacherHandoutUrl || "",
+    studentHandoutUrl: initialData?.studentHandoutUrl || "",
+    attendanceWeight: initialData?.attendanceWeight || 10,
+    midExamWeight: initialData?.midExamWeight || 25,
+    assignmentWeight: initialData?.assignmentWeight || 15,
+    finalExamWeight: initialData?.finalExamWeight || 50,
   });
+  const [teacherFile, setTeacherFile] = useState<File | null>(null);
+  const [studentFile, setStudentFile] = useState<File | null>(null);
+  const [uploadingFiles, setUploadingFiles] = useState(false);
   const [newTopic, setNewTopic] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +77,35 @@ export default function CourseForm({ initialData, isEditMode = false, instructor
     setError(null);
 
     try {
+      let teacherUrl = formData.teacherHandoutUrl;
+      let studentUrl = formData.studentHandoutUrl;
+
+      if (teacherFile || studentFile) {
+        setUploadingFiles(true);
+        if (teacherFile) {
+          const fileExt = teacherFile.name.split('.').pop();
+          const fileName = `${Math.random()}.${fileExt}`;
+          const filePath = `teacher/${fileName}`;
+          const { error: uploadError } = await supabase.storage
+            .from('course-handouts')
+            .upload(filePath, teacherFile);
+          if (uploadError) throw uploadError;
+          const { data } = supabase.storage.from('course-handouts').getPublicUrl(filePath);
+          teacherUrl = data.publicUrl;
+        }
+        if (studentFile) {
+          const fileExt = studentFile.name.split('.').pop();
+          const fileName = `${Math.random()}.${fileExt}`;
+          const filePath = `student/${fileName}`;
+          const { error: uploadError } = await supabase.storage
+            .from('course-handouts')
+            .upload(filePath, studentFile);
+          if (uploadError) throw uploadError;
+          const { data } = supabase.storage.from('course-handouts').getPublicUrl(filePath);
+          studentUrl = data.publicUrl;
+        }
+      }
+
       const url = isEditMode
         ? `/api/course/courses/${initialData?.id}`
         : "/api/course/courses";
@@ -64,13 +116,24 @@ export default function CourseForm({ initialData, isEditMode = false, instructor
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          teacherHandoutUrl: teacherUrl,
+          studentHandoutUrl: studentUrl,
           credits: formData.credits ? parseInt(formData.credits.toString()) : null,
         }),
       });
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || "Failed to save course");
+        let message = "Failed to save course";
+        if (typeof errorData.error === 'string') {
+          message = errorData.error;
+        } else if (errorData.error?.fieldErrors) {
+          // Handle Zod flattened errors
+          const firstField = Object.keys(errorData.error.fieldErrors)[0];
+          const firstError = errorData.error.fieldErrors[firstField][0];
+          message = `${firstField}: ${firstError}`;
+        }
+        throw new Error(message);
       }
 
       router.push("/course/courses");
@@ -82,7 +145,7 @@ export default function CourseForm({ initialData, isEditMode = false, instructor
     }
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | number | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -258,6 +321,165 @@ export default function CourseForm({ initialData, isEditMode = false, instructor
               ))}
             </select>
           </div>
+
+          <div className="space-y-1.5 sm:col-span-2">
+            <label className="block text-xs font-semibold mb-2" style={{ color: "hsl(var(--foreground))" }}>
+              Permanent Class Assignment *
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-3 rounded-lg border bg-[hsl(var(--muted)/0.3)]" style={{ borderColor: "hsl(var(--border))" }}>
+              {courseClassTypeValues.map((type) => (
+                <label key={type} className="flex items-center gap-2 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    className="w-4 h-4 rounded border-gray-300 text-[hsl(217,70%,32%)] focus:ring-[hsl(217,70%,32%)]"
+                    checked={formData.classTypes.includes(type)}
+                    onChange={(e) => {
+                      const newTypes = e.target.checked
+                        ? [...formData.classTypes, type]
+                        : formData.classTypes.filter(t => t !== type);
+                      setFormData(prev => ({ ...prev, classTypes: newTypes }));
+                    }}
+                  />
+                  <span className="text-xs font-medium group-hover:text-[hsl(var(--primary))] transition-colors">
+                    {courseClassTypeDisplayNames[type as keyof typeof courseClassTypeDisplayNames]}
+                  </span>
+                </label>
+              ))}
+            </div>
+            <p className="text-[10px] opacity-50 italic mt-1">Select one or more classes where this course will be taught every year.</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold" style={{ color: "hsl(var(--foreground))" }}>
+              Offered In *
+            </label>
+            <select
+              {...fieldBase}
+              value={formData.semesterPreference}
+              onChange={(e) => handleChange("semesterPreference", e.target.value)}
+              required
+            >
+              <option value="FIRST">1st Semester Only</option>
+              <option value="SECOND">2nd Semester Only</option>
+              <option value="BOTH">Both Semesters</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="space-y-4 pt-4 border-t" style={{ borderColor: "hsl(var(--border))" }}>
+          <div className="flex items-center gap-2 mb-2">
+            <FileUp size={14} className="opacity-50" />
+            <p className="text-[10px] font-bold uppercase tracking-widest opacity-50">Course Handouts</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold" style={{ color: "hsl(var(--foreground))" }}>
+                Teacher Handout (PDF/Doc)
+              </label>
+              <input
+                type="file"
+                className="block w-full text-[10px] text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-[hsl(var(--primary)/0.1)] file:text-[hsl(var(--primary))] hover:file:bg-[hsl(var(--primary)/0.2)]"
+                onChange={(e) => setTeacherFile(e.target.files?.[0] || null)}
+              />
+              {formData.teacherHandoutUrl && (
+                <p className="text-[9px] text-emerald-500">Current file exists</p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold" style={{ color: "hsl(var(--foreground))" }}>
+                Student Handout (PDF/Doc)
+              </label>
+              <input
+                type="file"
+                className="block w-full text-[10px] text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-semibold file:bg-[hsl(var(--primary)/0.1)] file:text-[hsl(var(--primary))] hover:file:bg-[hsl(var(--primary)/0.2)]"
+                onChange={(e) => setStudentFile(e.target.files?.[0] || null)}
+              />
+              {formData.studentHandoutUrl && (
+                <p className="text-[9px] text-emerald-500">Current file exists</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4 pt-4 border-t" style={{ borderColor: "hsl(var(--border))" }}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Calculator size={14} className="opacity-50" />
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-50">Assessment Weights</p>
+            </div>
+            <span
+              className={`text-xs font-bold ${
+                Math.abs((formData.attendanceWeight + formData.midExamWeight + formData.assignmentWeight + formData.finalExamWeight) - 100) < 0.01 ? "text-emerald-400" : "text-amber-400"
+              }`}
+            >
+              Total: {formData.attendanceWeight + formData.midExamWeight + formData.assignmentWeight + formData.finalExamWeight}%
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">Attendance</label>
+              <input
+                {...fieldBase}
+                type="number"
+                min="0"
+                max="100"
+                value={formData.attendanceWeight}
+                onChange={(e) => handleChange("attendanceWeight", parseFloat(e.target.value) || 0)}
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">Mid Exam</label>
+              <input
+                {...fieldBase}
+                type="number"
+                min="0"
+                max="100"
+                value={formData.midExamWeight}
+                onChange={(e) => handleChange("midExamWeight", parseFloat(e.target.value) || 0)}
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">Assignment</label>
+              <input
+                {...fieldBase}
+                type="number"
+                min="0"
+                max="100"
+                value={formData.assignmentWeight}
+                onChange={(e) => handleChange("assignmentWeight", parseFloat(e.target.value) || 0)}
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">Final Exam</label>
+              <input
+                {...fieldBase}
+                type="number"
+                min="0"
+                max="100"
+                value={formData.finalExamWeight}
+                onChange={(e) => handleChange("finalExamWeight", parseFloat(e.target.value) || 0)}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 pt-2 border-t" style={{ borderColor: "hsl(var(--border))" }}>
+          <input
+            type="checkbox"
+            id="isGiven"
+            checked={formData.isGiven}
+            onChange={(e) => setFormData(prev => ({ ...prev, isGiven: e.target.checked }))}
+            className="w-4 h-4 rounded border-gray-300 text-[hsl(217,70%,32%)] focus:ring-[hsl(217,70%,32%)]"
+          />
+          <label htmlFor="isGiven" className="text-xs font-semibold" style={{ color: "hsl(var(--foreground))" }}>
+            Currently Active (Given this term)
+          </label>
         </div>
       </div>
 

@@ -13,18 +13,23 @@ export default async function CourseAdminApprovalsPage() {
   });
 
   return (
-    <div className="space-y-5 animate-fade-in">
+    <div className="space-y-6 animate-fade-in pb-10">
       <Breadcrumb
         items={[
-          { label: 'Home', href: '/course' },
-          { label: 'Admin Approvals' },
+          { label: 'ዋና ገጽ', href: '/course' },
+          { label: 'አድሚን መቀበያ' },
         ]}
       />
 
-      <div className="space-y-4">
-        <h1 className="text-xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
-          Course Admin Registration Approvals
-        </h1>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-[hsl(var(--foreground))]">
+            Course Admin Registration Approvals
+          </h1>
+          <p className="text-sm mt-1 text-[hsl(var(--muted-foreground))]">
+            Review and manage requests for administrative access to the Course module.
+          </p>
+        </div>
 
         <ApprovalsClient initialRegistrations={pendingRegistrations} mode="course" />
       </div>

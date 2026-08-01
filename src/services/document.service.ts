@@ -27,6 +27,10 @@ export class DocumentService {
   static async generateMonthlyAttendanceDOCX(options: MonthlyAttendanceOptions): Promise<Buffer> {
     const { months, data, attendanceType } = options;
 
+    // Load font for DOCX
+    const fontPath = path.join(process.cwd(), 'src', 'assets', 'fonts', 'NotoSansEthiopic-VariableFont_wdth,wght.ttf');
+    const fontBuffer = fs.readFileSync(fontPath);
+
     const doc = new Document({
       sections: [{
         properties: {

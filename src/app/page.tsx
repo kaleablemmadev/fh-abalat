@@ -45,11 +45,16 @@ export default function MemberAccessPage() {
         userId: user.id,
         userType: 'MEMBER',
         fullName: user.fullName,
+        memberType: user.memberType,
         mode: 'MEMBER',
         timestamp: Date.now(),
       })}; path=/; max-age=86400`; // 24 hours
 
-      router.push('/member');
+      if (user.memberType === 'COURSE_STUDENT') {
+        router.push('/student');
+      } else {
+        router.push('/member');
+      }
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid code. Please try again.');

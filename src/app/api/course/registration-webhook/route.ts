@@ -85,19 +85,21 @@ export async function POST(request: NextRequest) {
 
     // 6. Find or Create User + Registration + Enrollment in a transaction
     const result = await prisma.$transaction(async (tx) => {
-      // Find matching CourseClass
-      // Use any to bypass strict type checking if Prisma types are problematic in this environment
-      const courseClass = await (tx.courseClass as any).findUnique({
+      // Find Active Academic Year
+      const activeYear = await tx.academicYear.findFirst({
+        where: { isActive: true }
+      });
+
+      // Find matching CourseClass for the active year
+      const courseClass = await (tx.courseClass as any).findFirst({
         where: {
-          name_year: {
-            name: targetClassType,
-            year: ethYear,
-          },
+          name: targetClassType,
+          ...(activeYear ? { academicYearId: activeYear.id } : { year: ethYear }),
         },
       });
 
       if (!courseClass) {
-        throw new Error(`Course class ${targetClassType} for year ${ethYear} not found in system.`);
+        throw new Error(`Course class ${targetClassType} for ${activeYear ? `year ${activeYear.year}` : `Ethiopian year ${ethYear}`} not found in system.`);
       }
 
       // Find or create User

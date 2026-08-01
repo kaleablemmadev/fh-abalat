@@ -2,9 +2,18 @@ import prisma from "@/src/lib/prisma";
 import Link from "next/link";
 import { Layers, ArrowRight, Calendar, Users } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export default async function CourseAttendanceDashboard() {
-  const courseClasses = await prisma.courseClass.findMany({
+  const activeYear = await prisma.academicYear.findFirst({
     where: { isActive: true },
+  });
+
+  const courseClasses = await prisma.courseClass.findMany({
+    where: {
+      isActive: true,
+      ...(activeYear && { academicYearId: activeYear.id })
+    },
     include: {
       _count: {
         select: {
@@ -23,14 +32,33 @@ export default async function CourseAttendanceDashboard() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Course Attendance
-        </h1>
-        <p className="text-sm mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>
-          Select a class to manage student attendance records
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
+            Course Attendance
+          </h1>
+          <p className="text-sm mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>
+            {activeYear ? `Active Academic Year: ${activeYear.year}` : "Select a class to manage student attendance records"}
+          </p>
+        </div>
+        <Link
+          href="/course/academic-years"
+          className="text-xs font-bold px-3 py-1.5 rounded bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] transition-colors"
+        >
+          Manage Years
+        </Link>
       </div>
+
+      {!activeYear && (
+        <div className="rounded-lg border-2 border-dashed p-12 text-center" style={{ borderColor: "hsl(var(--border))" }}>
+          <Layers size={32} className="mx-auto mb-3 opacity-20" />
+          <h3 className="text-sm font-semibold" style={{ color: "hsl(var(--foreground))" }}>No active academic year found</h3>
+          <p className="text-xs mt-1" style={{ color: "hsl(var(--muted-foreground))" }}>Initialize an academic year to start tracking attendance.</p>
+          <Link href="/course/academic-years" className="inline-flex mt-4 text-xs font-medium" style={{ color: "hsl(var(--primary))" }}>
+            Setup Academic Year →
+          </Link>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {courseClasses.map((c) => (

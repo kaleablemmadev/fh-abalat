@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -69,6 +69,27 @@ model User {
   @@index([memberType])
   @@index([isActive])
   @@index([departmentId])
+}
+
+model AcademicYear {
+  id                      String        @id @default(cuid())
+  year                    String        @unique
+  startDate               DateTime
+  endDate                 DateTime
+  isActive                Boolean       @default(false)
+  s1Start                 DateTime?
+  s1End                   DateTime?
+  s2Start                 DateTime?
+  s2End                   DateTime?
+  s1MidExamDate           DateTime?
+  s1FinalExamDate         DateTime?
+  s2MidExamDate           DateTime?
+  s2FinalExamDate         DateTime?
+  midExamMinAttendance    Int           @default(5)
+  finalExamMinAttendance  Int           @default(5)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+  classes                 CourseClass[]
 }
 
 model Event {
@@ -169,6 +190,7 @@ model Permission {
   reviewedAt         DateTime?
   ethiopianStartDate String?
   ethiopianEndDate   String?
+  mode               appMode          @default(ABALAT)
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
   attendances        Attendance[]
@@ -180,6 +202,7 @@ model Permission {
   @@index([permissionTypeId])
   @@index([status])
   @@index([reviewedById])
+  @@index([mode])
 }
 
 model EligibilityRule {
@@ -208,24 +231,38 @@ model EligibilityCriteria {
 }
 
 model Course {
-  id            String       @id @default(cuid())
-  name          String       @unique
-  description   String?
-  topics        String[]
-  isGiven       Boolean      @default(false)
-  credits       Int?
-  instructorId  String
-  courseClassId String?
-  departmentId  String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  courseClass   CourseClass? @relation(fields: [courseClassId], references: [id])
-  department    Department   @relation(fields: [departmentId], references: [id])
-  instructor    Instructor   @relation(fields: [instructorId], references: [id])
-  courseYears   CourseYear[]
+  id                 String       @id @default(cuid())
+  name               String       @unique
+  description        String?
+  topics             String[]
+  isGiven            Boolean      @default(true)
+  credits            Int?
+  instructorId       String
+  courseClassId      String?
+  departmentId       String
+  classTypes         CourseClassType[]
+  semesterPreference CourseOfferingSemester @default(FIRST)
+  teacherHandoutUrl  String?
+  studentHandoutUrl  String?
+  attendanceWeight   Float        @default(10)
+  midExamWeight      Float        @default(25)
+  assignmentWeight   Float        @default(15)
+  finalExamWeight    Float        @default(50)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  courseClass        CourseClass? @relation(fields: [courseClassId], references: [id])
+  department         Department   @relation(fields: [departmentId], references: [id])
+  instructor         Instructor   @relation(fields: [instructorId], references: [id])
+  courseYears        CourseYear[]
 
   @@index([instructorId])
   @@index([isGiven])
+}
+
+enum CourseOfferingSemester {
+  FIRST
+  SECOND
+  BOTH
 }
 
 model Instructor {
@@ -266,8 +303,10 @@ model CourseClass {
   startDate         DateTime?
   endDate           DateTime?
   isActive          Boolean            @default(true)
+  academicYearId    String?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+  academicYear      AcademicYear?      @relation(fields: [academicYearId], references: [id])
   courses           Course[]
   courseEnrollments CourseEnrollment[]
   courseYears       CourseYear[]
@@ -389,6 +428,7 @@ model MusicFile {
   uploadedBy     User            @relation("MusicUploadedBy", fields: [uploadedById], references: [id])
   categories     MusicCategory[] @relation("MusicFileToCategory")
   playlists      Playlist[]      @relation("PlaylistToMusicFile")
+  monthlySchedules MonthlyMezmurSchedule[] @relation("MusicFileToMonthlySchedule")
 
   @@index([uploadedById])
 }
@@ -404,6 +444,20 @@ model Playlist {
   musicFiles  MusicFile[] @relation("PlaylistToMusicFile")
 
   @@index([userId])
+}
+
+model MonthlyMezmurSchedule {
+  id        String      @id @default(cuid())
+  month     Int
+  year      Int
+  day       Int         // 1, 12, 21, 23, or 24
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  
+  musicFiles MusicFile[] @relation("MusicFileToMonthlySchedule")
+
+  @@unique([year, month, day])
+  @@index([year, month])
 }
 
 model ModePassword {

@@ -35,7 +35,6 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
-    // Simple update for lyrics/alignment/interpretation
     const updated = await prisma.musicFile.update({
       where: { id },
       data: {
@@ -44,7 +43,16 @@ export async function PATCH(
         lyrics: body.lyrics,
         interpretation: body.interpretation,
         alignment: body.alignment,
+        categories: body.categoryIds ? {
+          set: body.categoryIds.map((catId: string) => ({ id: catId }))
+        } : undefined
       },
+      include: {
+        categories: true,
+        uploadedBy: {
+          select: { fullName: true }
+        }
+      }
     });
 
     return NextResponse.json(updated);

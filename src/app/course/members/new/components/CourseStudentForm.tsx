@@ -42,13 +42,12 @@ export default function CourseStudentForm({ courseClasses }: StudentFormProps) {
     setError(null);
 
     try {
-      const res = await fetch("/api/abalat/members", {
+      const res = await fetch("/api/course/members", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
           age: Number(formData.age),
-          memberType: "COURSE_STUDENT",
         }),
       });
 

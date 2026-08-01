@@ -20,6 +20,10 @@ export default async function PlaylistPage({ params }: { params: Promise<{ id: s
 
   if (!playlist) notFound();
 
+  const allCategories = await prisma.musicCategory.findMany({ select: { id: true, name: true } });
+  const admin = await prisma.user.findFirst({ where: { type: "ADMIN" } }) || await prisma.user.findFirst({ where: { type: "SUPERADMIN" } });
+  const adminId = admin?.id || "system-admin";
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
@@ -29,6 +33,8 @@ export default async function PlaylistPage({ params }: { params: Promise<{ id: s
 
       <PlaylistDetailsClient
         playlist={playlist as any}
+        allCategories={allCategories}
+        adminId={adminId}
       />
     </div>
   );

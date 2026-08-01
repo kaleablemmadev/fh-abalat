@@ -2,7 +2,28 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Search, Filter, Plus, Music, Play, Pause, Trash2, Loader2, Download, FileText, X as CloseIcon, AlignLeft, AlignRight, Languages, ListMusic, CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, Plus, Music, Trash2, Loader2, Download, FileText, X as CloseIcon, Languages, ListMusic, Edit, Save, Upload } from "lucide-react";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+
+import BulkMusicUploadModal from "./BulkMusicUploadModal";
+
+// --- Zemach helpers ---
+interface Zemach { text: string; }
+
+function parseLyrics(raw: string): Zemach[] {
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed as Zemach[];
+  } catch {}
+  // Legacy plain text: treat as single zemach
+  return [{ text: raw }];
+}
+
+function serializeLyrics(zemachs: Zemach[]): string {
+  return JSON.stringify(zemachs);
+}
 
 interface Playlist {
   id: string;
@@ -27,9 +48,11 @@ interface MusicLibraryClientProps {
   initialFiles: MusicFile[];
   categories: { id: string; name: string }[];
   playlists: Playlist[];
+  adminId: string;
 }
 
-export default function MusicLibraryClient({ initialFiles, categories, playlists }: MusicLibraryClientProps) {
+export default function MusicLibraryClient({ initialFiles, categories, playlists, adminId }: MusicLibraryClientProps) {
+  const router = useRouter();
   const [files, setFiles] = useState(initialFiles);
   const [searchText, setSearchText] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
@@ -39,6 +62,8 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [addingToPlaylist, setAddingToPlaylist] = useState<string | null>(null);
   const [isAddingStatus, setIsAddingStatus] = useState<string | null>(null);
+  const [editingFile, setEditingFile] = useState<MusicFile | null>(null);
+  const [isBulkUploading, setIsBulkUploading] = useState(false);
 
   const handleDownload = async (file: MusicFile) => {
     if (!file.fileUrl) return;
@@ -81,29 +106,43 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
     }
   };
 
-  const handleUpdateAlignment = async (alignment: "LEFT" | "RIGHT") => {
-    if (!viewingLyrics || isUpdating) return;
+  // Zemach state for the edit modal
+  const [editingZemachs, setEditingZemachs] = useState<Zemach[]>([{ text: "" }]);
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingFile || isUpdating) return;
 
     setIsUpdating(true);
     try {
-      const res = await fetch(`/api/mezmur/music/${viewingLyrics.id}`, {
+      const res = await fetch(`/api/mezmur/music/${editingFile.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ alignment }),
+        body: JSON.stringify({
+          title: editingFile.title,
+          language: editingFile.language,
+          lyrics: serializeLyrics(editingZemachs),
+          interpretation: editingFile.interpretation,
+          alignment: "LEFT", // kept for DB compat
+          categoryIds: editingFile.categories.map(c => c.id)
+        }),
       });
 
-      if (!res.ok) throw new Error("Failed to update alignment");
+      if (!res.ok) throw new Error("Failed to update");
 
       const updated = await res.json();
-
-      // Update local state
-      setFiles(files.map(f => f.id === updated.id ? { ...f, alignment: updated.alignment } : f));
-      setViewingLyrics({ ...viewingLyrics, alignment: updated.alignment });
+      setFiles(files.map(f => f.id === updated.id ? updated : f));
+      setEditingFile(null);
     } catch (err) {
-      alert("Error updating alignment");
+      alert("Error updating music info");
     } finally {
       setIsUpdating(false);
     }
+  };
+
+  const openEditModal = (file: MusicFile) => {
+    setEditingFile(file);
+    setEditingZemachs(parseLyrics(file.lyrics));
   };
 
   const filteredFiles = useMemo(() => {
@@ -165,11 +204,19 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
 
         <Link
           href="/mezmur/music/upload"
-          className="h-10 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold flex items-center gap-2 transition-colors shrink-0"
+          className="h-10 px-4 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] text-[hsl(var(--foreground))] text-sm font-bold flex items-center gap-2 transition-colors shrink-0 border border-[hsl(var(--border))]"
         >
           <Plus size={16} />
-          Upload Song
+          Single Upload
         </Link>
+
+        <button
+          onClick={() => setIsBulkUploading(true)}
+          className="h-10 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold flex items-center gap-2 transition-colors shrink-0"
+        >
+          <Upload size={16} />
+          Bulk Upload
+        </button>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -201,13 +248,21 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                 <h3 className="font-bold text-sm truncate" style={{ color: "hsl(var(--foreground))" }}>{file.title}</h3>
                 <p className="text-[10px] opacity-50 mt-0.5">Uploaded by {file.uploadedBy.fullName || "Admin"}</p>
               </div>
-              <button
-                onClick={() => handleDelete(file.id)}
-                disabled={isDeleting === file.id}
-                className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-500/10 text-red-500 transition-all"
-              >
-                {isDeleting === file.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-              </button>
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                <button
+                  onClick={() => openEditModal(file)}
+                  className="p-1.5 rounded-lg hover:bg-emerald-500/10 text-emerald-500 transition-all"
+                >
+                  <Edit size={14} />
+                </button>
+                <button
+                  onClick={() => handleDelete(file.id)}
+                  disabled={isDeleting === file.id}
+                  className="p-1.5 rounded-lg hover:bg-red-500/10 text-red-500 transition-all"
+                >
+                  {isDeleting === file.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                </button>
+              </div>
             </div>
 
             <div className="flex flex-wrap gap-1 mb-4">
@@ -217,11 +272,25 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
             </div>
 
             <div className="mt-auto space-y-4">
-              <div className="bg-[hsl(var(--muted)/0.3)] rounded-lg p-1.5 border border-[hsl(var(--border))]">
-                <audio controls className="w-full h-8 opacity-90 filter invert brightness-100 scale-95 origin-center">
-                    <source src={file.fileUrl || ""} type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                </audio>
+              <div className="rounded-lg overflow-hidden border border-[hsl(var(--border))]">
+                {file.fileUrl ? (
+                  <AudioPlayer
+                    src={file.fileUrl}
+                    showJumpControls={false}
+                    layout="horizontal-reverse"
+                    customAdditionalControls={[]}
+                    customVolumeControls={[]}
+                    style={{
+                      background: "hsl(var(--muted)/0.3)",
+                      boxShadow: "none",
+                      padding: "4px 8px"
+                    }}
+                  />
+                ) : (
+                  <div className="h-10 flex items-center justify-center text-[10px] opacity-40 font-bold uppercase tracking-widest italic bg-[hsl(var(--muted)/0.3)]">
+                    No Audio File
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center justify-between gap-2">
@@ -265,89 +334,100 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
       </div>
 
       {/* Lyrics Modal */}
-      {viewingLyrics && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-          <div
-            className="w-full max-w-2xl max-h-[90vh] rounded-2xl border border-[hsl(var(--border))] flex flex-col shadow-2xl animate-in zoom-in-95 duration-200"
-            style={{ background: "hsl(var(--card))" }}
-          >
-            {/* Modal Header */}
-            <div className="p-4 border-b border-[hsl(var(--border))] flex items-center justify-between">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="p-2 rounded-lg bg-[hsl(25_70%_45%)]/10 text-[hsl(25_70%_45%)] shrink-0">
-                  <FileText size={18} />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-sm truncate">{viewingLyrics.title}</h3>
-                  <p className="text-[10px] opacity-40 uppercase tracking-widest font-bold">
-                    {viewingLyrics.language} · {viewingLyrics.alignment} ALIGN
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setViewingLyrics(null)}
-                className="p-2 rounded-full hover:bg-[hsl(var(--muted))] opacity-60 transition-all"
-              >
-                <CloseIcon size={20} />
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-8 no-scrollbar">
-              {/* Primary Lyrics */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between border-b border-[hsl(var(--border))] pb-2">
-                    <span className="text-[10px] font-black uppercase tracking-widest opacity-30">Lyrics</span>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => handleUpdateAlignment("LEFT")}
-                            className={`p-1 rounded ${viewingLyrics.alignment === "LEFT" ? "bg-[hsl(25_70%_45%)] text-white" : "opacity-30 hover:opacity-100"}`}
-                            title="Align Left"
-                        >
-                            <AlignLeft size={14} />
-                        </button>
-                        <button
-                            onClick={() => handleUpdateAlignment("RIGHT")}
-                            className={`p-1 rounded ${viewingLyrics.alignment === "RIGHT" ? "bg-[hsl(25_70%_45%)] text-white" : "opacity-30 hover:opacity-100"}`}
-                            title="Align Right"
-                        >
-                            <AlignRight size={14} />
-                        </button>
-                    </div>
-                </div>
-                <div
-                  className={`text-lg font-amharic leading-relaxed whitespace-pre-wrap ${viewingLyrics.alignment === "RIGHT" ? "text-right" : "text-left"}`}
-                  style={{ color: "hsl(var(--foreground))" }}
-                >
-                  {viewingLyrics.lyrics}
-                </div>
-              </div>
-
-              {/* Interpretation (if Ge'ez) */}
-              {viewingLyrics.language === "GEEZ" && viewingLyrics.interpretation && (
-                <div className="space-y-3 pt-6 border-t border-[hsl(var(--border))]">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Languages size={14} className="text-emerald-500" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Amharic Interpretation</span>
+      {viewingLyrics && (() => {
+        const zemachs = parseLyrics(viewingLyrics.lyrics);
+        return (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+            <div
+              className="w-full max-w-2xl max-h-[90vh] rounded-2xl border border-[hsl(var(--border))] flex flex-col shadow-2xl animate-in zoom-in-95 duration-200"
+              style={{ background: "hsl(var(--card))" }}
+            >
+              {/* Modal Header */}
+              <div className="p-4 border-b border-[hsl(var(--border))] flex items-center justify-between">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2 rounded-lg bg-[hsl(25_70%_45%)]/10 text-[hsl(25_70%_45%)] shrink-0">
+                    <FileText size={18} />
                   </div>
-                  <div
-                    className={`text-sm italic opacity-80 font-amharic leading-relaxed whitespace-pre-wrap ${viewingLyrics.alignment === "RIGHT" ? "text-right" : "text-left"}`}
-                  >
-                    {viewingLyrics.interpretation}
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-sm truncate">{viewingLyrics.title}</h3>
+                    <p className="text-[10px] opacity-40 uppercase tracking-widest font-bold">
+                      {viewingLyrics.language} · {zemachs.length} zemach{zemachs.length !== 1 ? "s" : ""}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setViewingLyrics(null)}
+                  className="p-2 rounded-full hover:bg-[hsl(var(--muted))] opacity-60 transition-all"
+                >
+                  <CloseIcon size={20} />
+                </button>
+              </div>
+
+              {/* Audio Player in Modal */}
+              {viewingLyrics.fileUrl && (
+                <div className="px-6 py-4 border-b border-[hsl(var(--border))] bg-[hsl(var(--muted)/0.1)]">
+                  <div className="rounded-lg overflow-hidden border border-[hsl(var(--border))]">
+                    <AudioPlayer
+                      src={viewingLyrics.fileUrl}
+                      showJumpControls={false}
+                      layout="horizontal-reverse"
+                      customAdditionalControls={[]}
+                      customVolumeControls={[]}
+                      style={{
+                        background: "hsl(var(--muted)/0.3)",
+                        boxShadow: "none",
+                        padding: "8px 12px"
+                      }}
+                    />
                   </div>
                 </div>
               )}
-            </div>
 
-            {/* Modal Footer */}
-            <div className="p-4 bg-[hsl(var(--muted)/0.3)] border-t border-[hsl(var(--border))] rounded-b-2xl">
-              <p className="text-[10px] opacity-30 text-center font-medium">
-                Admin Tip: Use the alignment buttons above to flip text direction persistently.
-              </p>
+              {/* Modal Content — Zemachs */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
+                {zemachs.map((zemach, index) => {
+                  const isLeft = index % 2 === 0;
+                  return (
+                    <div key={index} className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded"
+                          style={{
+                            background: isLeft ? "hsl(25 70% 45% / 0.12)" : "hsl(210 70% 45% / 0.12)",
+                            color: isLeft ? "hsl(25 70% 55%)" : "hsl(210 70% 60%)"
+                          }}
+                        >
+                          Zemach {index + 1}
+                        </span>
+                        <div className="flex-1 h-px opacity-10" style={{ background: "hsl(var(--foreground))" }} />
+                      </div>
+                      <div
+                        className={`text-lg font-amharic leading-relaxed whitespace-pre-wrap ${isLeft ? "text-left" : "text-right"}`}
+                        style={{ color: "hsl(var(--foreground))" }}
+                      >
+                        {zemach.text}
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Interpretation (if Ge'ez) */}
+                {viewingLyrics.language === "GEEZ" && viewingLyrics.interpretation && (
+                  <div className="space-y-3 pt-6 border-t border-[hsl(var(--border))]">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Languages size={14} className="text-emerald-500" />
+                      <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Amharic Interpretation</span>
+                    </div>
+                    <div className="text-sm italic opacity-80 font-amharic leading-relaxed whitespace-pre-wrap text-left">
+                      {viewingLyrics.interpretation}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Playlist Selector Modal */}
       {addingToPlaylist && (
@@ -387,6 +467,168 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
             </div>
           </div>
         </div>
+      )}
+
+      {/* Edit Music Modal */}
+      {editingFile && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+          <div
+            className="w-full max-w-xl max-h-[90vh] rounded-2xl border border-[hsl(var(--border))] flex flex-col shadow-2xl animate-in zoom-in-95 duration-200"
+            style={{ background: "hsl(var(--card))" }}
+          >
+            <div className="p-4 border-b border-[hsl(var(--border))] flex items-center justify-between">
+              <h3 className="font-bold text-sm uppercase tracking-wider">Edit Music Info</h3>
+              <button onClick={() => setEditingFile(null)} className="opacity-50 hover:opacity-100 transition-opacity">
+                <CloseIcon size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleEditSubmit} className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Song Title</label>
+                <input
+                  className="w-full h-10 rounded-lg border px-4 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)]"
+                  style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
+                  value={editingFile.title}
+                  onChange={e => setEditingFile({...editingFile, title: e.target.value})}
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Language</label>
+                <select
+                  className="w-full h-10 rounded-lg border px-3 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] appearance-none"
+                  style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
+                  value={editingFile.language}
+                  onChange={e => setEditingFile({...editingFile, language: e.target.value as any})}
+                >
+                  <option value="AMHARIC">Amharic</option>
+                  <option value="GEEZ">Ge'ez</option>
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Categories</label>
+                <div className="flex flex-wrap gap-2 p-3 rounded-lg border bg-[hsl(var(--muted)/0.2)]" style={{ borderColor: "hsl(var(--border))" }}>
+                  {categories.map(cat => (
+                    <label key={cat.id} className="flex items-center gap-2 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        className="w-3.5 h-3.5 rounded border-gray-300 text-[hsl(25_70%_45%)] focus:ring-[hsl(25_70%_45%)]"
+                        checked={editingFile.categories.some(c => c.id === cat.id)}
+                        onChange={(e) => {
+                          const newCats = e.target.checked
+                            ? [...editingFile.categories, cat]
+                            : editingFile.categories.filter(c => c.id !== cat.id);
+                          setEditingFile({...editingFile, categories: newCats});
+                        }}
+                      />
+                      <span className="text-[10px] font-medium group-hover:text-[hsl(var(--primary))] transition-colors">{cat.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Zemachs Editor */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Lyrics — Zemachs</label>
+                  <span className="text-[9px] opacity-30 italic">1st=left, 2nd=right, alternating</span>
+                </div>
+                <div className="space-y-3">
+                  {editingZemachs.map((zemach, index) => {
+                    const isLeft = index % 2 === 0;
+                    return (
+                      <div key={index} className="relative group/zemach">
+                        <div className="flex items-center justify-between mb-1">
+                          <span
+                            className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded"
+                            style={{
+                              background: isLeft ? "hsl(25 70% 45% / 0.15)" : "hsl(210 70% 45% / 0.15)",
+                              color: isLeft ? "hsl(25 70% 50%)" : "hsl(210 70% 55%)"
+                            }}
+                          >
+                            Zemach {index + 1} · {isLeft ? "← Left" : "Right →"}
+                          </span>
+                          {editingZemachs.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => setEditingZemachs(prev => prev.filter((_, i) => i !== index))}
+                              className="p-1 rounded hover:bg-red-500/10 text-red-400 opacity-0 group-hover/zemach:opacity-100 transition-all"
+                            >
+                              <Trash2 size={11} />
+                            </button>
+                          )}
+                        </div>
+                        <textarea
+                          className={`w-full h-28 rounded-lg border px-4 py-2 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] resize-none font-amharic ${isLeft ? "text-left" : "text-right"}`}
+                          style={{
+                            background: "hsl(var(--background))",
+                            borderColor: isLeft ? "hsl(25 70% 45% / 0.3)" : "hsl(210 70% 45% / 0.3)"
+                          }}
+                          value={zemach.text}
+                          onChange={e => setEditingZemachs(prev => prev.map((z, i) => i === index ? { text: e.target.value } : z))}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setEditingZemachs(prev => [...prev, { text: "" }])}
+                  className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border-2 border-dashed text-[10px] font-bold uppercase tracking-wider opacity-40 hover:opacity-80 transition-all"
+                  style={{ borderColor: "hsl(var(--border))" }}
+                >
+                  <Plus size={12} /> Add Zemach
+                </button>
+              </div>
+
+              {editingFile.language === "GEEZ" && (
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Interpretation (Amharic)</label>
+                  <textarea
+                    className="w-full h-32 rounded-lg border px-4 py-2 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] resize-none font-amharic"
+                    style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
+                    value={editingFile.interpretation || ""}
+                    onChange={e => setEditingFile({...editingFile, interpretation: e.target.value})}
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-[hsl(var(--border))]">
+                <button
+                  type="button"
+                  onClick={() => setEditingFile(null)}
+                  className="px-4 py-2 text-sm font-medium opacity-50 hover:opacity-100 transition-opacity"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isUpdating}
+                  className="px-8 py-2 rounded-lg bg-[hsl(25_70%_45%)] text-white text-sm font-bold flex items-center gap-2 transition-all disabled:opacity-50"
+                >
+                  {isUpdating ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Upload Modal */}
+      {isBulkUploading && (
+        <BulkMusicUploadModal
+            categories={categories}
+            adminId={adminId}
+            onClose={() => setIsBulkUploading(false)}
+            onSuccess={() => {
+                router.refresh();
+                window.location.reload();
+            }}
+        />
       )}
     </div>
   );

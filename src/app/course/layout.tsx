@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AppLayout, { NavSection } from '@/src/components/layout/AppLayout';
-import { Home, CheckSquare, GraduationCap, Shield, Users, BookOpen, Layers, CalendarDays, ClipboardList, ExternalLink } from 'lucide-react';
+import { Home, CheckSquare, GraduationCap, Shield, Users, BookOpen, Layers, CalendarDays, ClipboardList, ExternalLink, Clock } from 'lucide-react';
 
 const courseNavItems: NavSection[] = [
   {
@@ -15,7 +15,8 @@ const courseNavItems: NavSection[] = [
     items: [
       { name: 'Attendance', href: '/course/attendance', icon: CheckSquare },
       { name: 'Marks', href: '/course/marks', icon: GraduationCap },
-      { name: 'Eligibility', href: '/course/eligibility', icon: Shield },
+      { name: 'Eligibility', href: '/course/eligibility/report', icon: Shield },
+      { name: 'Permissions', href: '/course/permissions', icon: Clock },
     ]
   },
   {
@@ -29,8 +30,14 @@ const courseNavItems: NavSection[] = [
   {
     label: 'Setup',
     items: [
-      { name: 'Course Classes', href: '/course/course-classes', icon: Layers },
-      { name: 'Academic Years', href: '/course/course-years', icon: CalendarDays },
+      { name: 'Term Setup', href: '/course/academic-years', icon: CalendarDays },
+    ]
+  },
+  {
+    label: 'Infrastructure',
+    items: [
+      { name: 'Instructors', href: '/course/instructors', icon: Users },
+      { name: 'Departments', href: '/course/departments', icon: Layers },
     ]
   },
   {

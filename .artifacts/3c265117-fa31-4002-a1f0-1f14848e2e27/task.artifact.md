@@ -1,7 +1,14 @@
-- [x] Refactor `globals.css` for mobile-first design
-- [x] Refactor `AppLayout.tsx` for improved mobile navigation
-- [x] Refactor `MonthlyAttendanceReportPage` (`/reports/monthly-attendance/page.tsx`)
-- [x] Refactor `MultiMonthGrid.tsx` for mobile attendance entry
-- [x] Refactor `Breadcrumb.tsx` for small screens
-- [x] Perform general UI cleanup on common layouts
-- [/] Verify build and responsiveness
+- [x] Dynamic Course Dashboard
+    - [x] Create `/api/course/stats` endpoint
+    - [x] Update `src/app/course/page.tsx` UI & fetching
+- [x] Data Export Capabilities
+    - [x] Create `/api/course/courses/export` endpoint
+    - [x] Create `/api/course/members/export` endpoint
+    - [x] Add export buttons to `CourseListClient.tsx` and `MemberListClient.tsx`
+- [x] Course Details View
+    - [x] Create `src/app/course/courses/[id]/page.tsx`
+- [x] Deletion Safety & Integrity
+    - [x] Update `DELETE` in `/api/course/courses/[id]/route.ts` with dependency checks
+- [x] General UI Refresh (Mobile-First)
+    - [x] Refactor Course List UI
+    - [x] Refactor Student List UI

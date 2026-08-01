@@ -3,6 +3,8 @@ import MemberListClient from "./components/MemberListClient";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export default async function CourseMembersPage() {
   // Fetch students with their active enrollments
   const students = await prisma.user.findMany({

@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
         id: member.id,
         fullName: member.fullName,
         type: member.type,
+        memberType: member.memberType,
         mode: 'MEMBER'
       }
     });

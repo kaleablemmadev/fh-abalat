@@ -1,21 +1,27 @@
 // src/lib/prisma.ts
 import { PrismaClient } from '@/src/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import pg from 'pg';
 
-// Force client refresh to pick up new models (like Playlist)
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
+  pool: pg.Pool | undefined;
 };
 
-const adapter = new PrismaPg({
+// Reuse or create the pool
+const pool = globalForPrisma.pool ?? new pg.Pool({
   connectionString: process.env.DATABASE_URL,
 });
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.pool = pool;
+
+const adapter = new PrismaPg(pool);
 
 // Create client
 const prismaClient = new PrismaClient({ adapter });
 
-// If the cached client exists but is missing new models (like playlist), we need to refresh it
-if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).playlist) {
+// If the cached client exists but is missing new models, we need to refresh it
+if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).academicYear) {
     globalForPrisma.prisma = undefined;
 }
 

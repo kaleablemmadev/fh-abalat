@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Plus, ListMusic, Trash2, Loader2, ArrowRight, X, Save } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Plus, ListMusic, Trash2, Loader2, ArrowRight, X, Save, Edit } from "lucide-react";
 
 interface Playlist {
   id: string;
@@ -17,8 +18,10 @@ interface PlaylistListClientProps {
 }
 
 export default function PlaylistListClient({ initialPlaylists, userId }: PlaylistListClientProps) {
+  const router = useRouter();
   const [playlists, setPlaylists] = useState(initialPlaylists);
   const [isCreating, setIsCreating] = useState(false);
+  const [editingPlaylist, setEditingPlaylist] = useState<Playlist | null>(null);
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +48,33 @@ export default function PlaylistListClient({ initialPlaylists, userId }: Playlis
       setIsCreating(false);
     } catch (err) {
       alert("Error creating playlist");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPlaylist || !editingPlaylist.name.trim()) return;
+
+    setIsLoading(true);
+    try {
+      const res = await fetch(`/api/mezmur/playlists/${editingPlaylist.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editingPlaylist.name,
+          description: editingPlaylist.description
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update");
+
+      const updated = await res.json();
+      setPlaylists(playlists.map(p => p.id === updated.id ? { ...updated, _count: p._count } : p));
+      setEditingPlaylist(null);
+    } catch (err) {
+      alert("Error updating playlist");
     } finally {
       setIsLoading(false);
     }
@@ -126,13 +156,21 @@ export default function PlaylistListClient({ initialPlaylists, userId }: Playlis
                 <div className="p-2.5 rounded-xl bg-[hsl(25_70%_45%)]/10 text-[hsl(25_70%_45%)]">
                   <ListMusic size={24} />
                 </div>
-                <button
-                  onClick={() => handleDelete(pl.id)}
-                  disabled={deletingId === pl.id}
-                  className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-all"
-                >
-                  {deletingId === pl.id ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
-                </button>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
+                  <button
+                    onClick={() => setEditingPlaylist(pl)}
+                    className="p-2 rounded-lg hover:bg-emerald-500/10 text-emerald-500 transition-all"
+                  >
+                    <Edit size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(pl.id)}
+                    disabled={deletingId === pl.id}
+                    className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-all"
+                  >
+                    {deletingId === pl.id ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                  </button>
+                </div>
               </div>
               <h3 className="font-bold text-lg mt-4 truncate">{pl.name}</h3>
               <p className="text-xs opacity-50 line-clamp-1">{pl.description || "Personal collection"}</p>
@@ -158,6 +196,66 @@ export default function PlaylistListClient({ initialPlaylists, userId }: Playlis
           </div>
         )}
       </div>
+
+      {/* Edit Playlist Modal */}
+      {editingPlaylist && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div
+            className="w-full max-w-md rounded-2xl border border-[hsl(var(--border))] p-6 shadow-2xl animate-in zoom-in-95 duration-200"
+            style={{ background: "hsl(var(--card))" }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                <Edit size={16} /> Edit Playlist
+              </h3>
+              <button onClick={() => setEditingPlaylist(null)} className="opacity-50 hover:opacity-100 transition-opacity">
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdate} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Playlist Name</label>
+                <input
+                  className="w-full h-10 rounded-lg border px-4 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)]"
+                  style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
+                  value={editingPlaylist.name}
+                  onChange={(e) => setEditingPlaylist({ ...editingPlaylist, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Description</label>
+                <input
+                  className="w-full h-10 rounded-lg border px-4 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)]"
+                  style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
+                  value={editingPlaylist.description || ""}
+                  onChange={(e) => setEditingPlaylist({ ...editingPlaylist, description: e.target.value })}
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setEditingPlaylist(null)}
+                  className="px-4 py-2 text-sm font-medium opacity-50 hover:opacity-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading || !editingPlaylist.name.trim()}
+                  className="px-8 py-2 rounded-lg bg-[hsl(25_70%_45%)] hover:bg-[hsl(25_70%_40%)] text-white text-sm font-bold flex items-center justify-center gap-2 transition-all"
+                >
+                  {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -177,10 +177,10 @@ export default function CourseAttendanceGrid({
         });
       });
 
-      const res = await fetch('/api/abalat/attendance/bulk', {
+      const res = await fetch('/api/course/attendance/bulk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ attendance: attendanceUpdates }),
+        body: JSON.stringify(attendanceUpdates),
       });
 
       if (!res.ok) {

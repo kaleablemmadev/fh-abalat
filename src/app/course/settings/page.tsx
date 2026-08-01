@@ -68,102 +68,92 @@ export default function CourseSettingsPage() {
   };
 
   return (
-    <div className="space-y-5 animate-fade-in">
+    <div className="space-y-6 animate-fade-in max-w-2xl mx-auto pb-10">
       <Breadcrumb
         items={[
-          { label: 'Home', href: '/course' },
-          { label: 'Settings' },
+          { label: 'ዋና ገጽ', href: '/course' },
+          { label: 'ቅንብሮች' },
         ]}
       />
 
-      <div className="space-y-4">
-        <h1 className="text-xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
-          Settings
-        </h1>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-[hsl(var(--foreground))]">
+            Course Settings
+          </h1>
+          <p className="text-sm mt-1 text-[hsl(var(--muted-foreground))]">
+            Manage your account security and application preferences.
+          </p>
+        </div>
 
-        <div className="rounded border p-6 space-y-6" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+        <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 sm:p-8 space-y-8 shadow-sm">
           <div>
-            <h2 className="text-lg font-semibold mb-4" style={{ color: 'hsl(var(--foreground))' }}>
+            <h2 className="text-lg font-bold text-[hsl(var(--foreground))] mb-6 flex items-center gap-2">
+              <Lock size={20} className="text-[hsl(var(--primary))]" />
               Change Mode Password
             </h2>
-            <form onSubmit={handlePasswordChange} className="space-y-4">
-              <div className="space-y-2">
-                <label htmlFor="currentPassword" className="text-sm font-medium" style={{ color: 'hsl(var(--foreground))' }}>
+            <form onSubmit={handlePasswordChange} className="space-y-5">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
                   Current Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2" size={16} style={{ color: 'hsl(var(--muted-foreground))' }} />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" size={16} />
                   <input
-                    id="currentPassword"
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    placeholder="Enter current password"
-                    className="w-full pl-10 pr-4 py-2 rounded border text-sm"
-                    style={{
-                      background: 'hsl(var(--background))',
-                      borderColor: 'hsl(var(--border))',
-                      color: 'hsl(var(--foreground))',
-                    }}
+                    placeholder="Verify with current password"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] focus:border-[hsl(var(--primary))] transition-all"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="newPassword" className="text-sm font-medium" style={{ color: 'hsl(var(--foreground))' }}>
-                  New Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2" size={16} style={{ color: 'hsl(var(--muted-foreground))' }} />
-                  <input
-                    id="newPassword"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password"
-                    className="w-full pl-10 pr-4 py-2 rounded border text-sm"
-                    style={{
-                      background: 'hsl(var(--background))',
-                      borderColor: 'hsl(var(--border))',
-                      color: 'hsl(var(--foreground))',
-                    }}
-                    required
-                  />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-[hsl(var(--border))]">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
+                    New Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" size={16} />
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] focus:border-[hsl(var(--primary))] transition-all"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="text-sm font-medium" style={{ color: 'hsl(var(--foreground))' }}>
-                  Confirm New Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2" size={16} style={{ color: 'hsl(var(--muted-foreground))' }} />
-                  <input
-                    id="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm new password"
-                    className="w-full pl-10 pr-4 py-2 rounded border text-sm"
-                    style={{
-                      background: 'hsl(var(--background))',
-                      borderColor: 'hsl(var(--border))',
-                      color: 'hsl(var(--foreground))',
-                    }}
-                    required
-                  />
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
+                    Confirm New Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))]" size={16} />
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Repeat new password"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] focus:border-[hsl(var(--primary))] transition-all"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
               {error && (
-                <div className="p-3 rounded text-sm" style={{ background: 'hsl(0 40% 12%)', color: 'hsl(0 55% 55%)' }}>
+                <div className="p-3 rounded-lg text-xs font-medium bg-[hsl(0,40%,10%)] text-[hsl(0,55%,62%)] border border-[hsl(0,40%,22%)] animate-slide-in">
                   {error}
                 </div>
               )}
 
               {success && (
-                <div className="p-3 rounded text-sm" style={{ background: 'hsl(160 40% 12%)', color: 'hsl(160 60% 55%)' }}>
+                <div className="p-3 rounded-lg text-xs font-medium bg-[hsl(160,40%,12%)] text-[hsl(160,60%,55%)] border border-[hsl(160,30%,20%)] animate-slide-in">
                   Password changed successfully
                 </div>
               )}
@@ -171,36 +161,27 @@ export default function CourseSettingsPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-2 px-4 rounded text-sm font-medium transition-colors duration-150 disabled:opacity-50 flex items-center justify-center gap-2"
-                style={{
-                  background: 'hsl(160 70% 32%)',
-                  color: '#fff',
-                }}
+                className="w-full py-3 px-4 rounded-lg text-sm font-bold transition-all duration-150 bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary)/0.9)] active:scale-[0.98] shadow-md shadow-[hsl(var(--primary)/0.2)] disabled:opacity-50"
               >
                 {isLoading ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    Changing Password...
-                  </>
+                  <div className="flex items-center justify-center gap-2">
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Processing...</span>
+                  </div>
                 ) : (
-                  'Change Password'
+                  'Update Password'
                 )}
               </button>
             </form>
           </div>
 
-          <div className="pt-6 border-t" style={{ borderColor: 'hsl(var(--border))' }}>
+          <div className="pt-8 border-t border-[hsl(var(--border))] flex justify-center">
             <button
               onClick={handleLogout}
-              className="w-full py-2 px-4 rounded text-sm font-medium transition-colors duration-150 flex items-center justify-center gap-2"
-              style={{
-                background: 'hsl(var(--muted))',
-                color: 'hsl(var(--foreground))',
-                border: '1px solid hsl(var(--border))',
-              }}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] transition-all"
             >
               <ArrowLeft size={16} />
-              Logout
+              Logout from Session
             </button>
           </div>
         </div>

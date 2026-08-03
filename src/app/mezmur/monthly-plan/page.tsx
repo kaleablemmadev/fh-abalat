@@ -20,8 +20,8 @@ export default async function MonthlyPlanPage() {
   return (
     <div className="space-y-6 animate-fade-in pb-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Monthly Mezmur Schedule</h1>
-        <p className="text-sm opacity-70">Assign Mezmurs for the 5 designated days each month.</p>
+        <h1 className="text-2xl font-bold tracking-tight">ወርኃዊ የአገልግሎት መዝሙራት</h1>
+        <p className="text-sm opacity-70">በወር ውስጥ ባሉት የአገልግሎት ቀናት የሚዘመሩትን መዝሙራት አስቀምጡ</p>
       </div>
       <MonthlyPlanClient musicFiles={musicFiles} currentEthiopianDate={today} />
     </div>

@@ -89,18 +89,17 @@ export default function SingerEditForm({ memberId, initialData }: SingerEditForm
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-lg mx-auto py-6 animate-fade-in">
       <div className="space-y-1 text-center">
-        <h2 className="text-2xl font-bold tracking-tight">Edit Singer</h2>
-        <p className="text-sm opacity-50">Profile changes affect all system modes</p>
+        <h2 className="text-2xl font-bold tracking-tight">አባል መረጃ ማስተካከያ</h2>
       </div>
 
       <div className="space-y-4">
         <div className="rounded-xl border border-[hsl(var(--border))] p-6 space-y-4" style={{ background: "hsl(var(--card))" }}>
           <h3 className="text-[10px] font-bold uppercase tracking-widest opacity-40 flex items-center gap-2">
-            <User size={14} /> Shared Profile
+            <User size={14} /> የአባል መረጃዎች
           </h3>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold">Full Name *</label>
+            <label className="text-xs font-semibold">ሙሉ ስም *</label>
             <input
                 {...fieldBase}
                 value={formData.fullName}
@@ -111,7 +110,7 @@ export default function SingerEditForm({ memberId, initialData }: SingerEditForm
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-                <label className="text-xs font-semibold">Phone Number</label>
+                <label className="text-xs font-semibold">ስልክ ቁጥር</label>
                 <input
                     {...fieldBase}
                     value={formData.phoneNumber}
@@ -119,7 +118,7 @@ export default function SingerEditForm({ memberId, initialData }: SingerEditForm
                 />
             </div>
             <div className="space-y-1.5">
-                <label className="text-xs font-semibold">Age</label>
+                <label className="text-xs font-semibold">ዕድሜ</label>
                 <input
                     {...fieldBase}
                     type="number"
@@ -130,7 +129,7 @@ export default function SingerEditForm({ memberId, initialData }: SingerEditForm
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold">Address</label>
+            <label className="text-xs font-semibold">አድራሻ</label>
             <input
                 {...fieldBase}
                 value={formData.address}
@@ -141,19 +140,19 @@ export default function SingerEditForm({ memberId, initialData }: SingerEditForm
 
         <div className="rounded-xl border border-[hsl(var(--border))] p-6 space-y-4" style={{ background: "hsl(var(--card))" }}>
           <h3 className="text-[10px] font-bold uppercase tracking-widest opacity-40 flex items-center gap-2">
-            <Mic2 size={14} /> Mezmur Group
+            <Mic2 size={14} /> የመዝሙር ምድብ
           </h3>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-                <label className="text-xs font-semibold">Group Type</label>
+                <label className="text-xs font-semibold">ምድብ ዐይነት</label>
                 <select
                     {...fieldBase}
                     value={formData.groupType}
                     onChange={e => setFormData({...formData, groupType: e.target.value})}
                 >
-                    <option value="BEGINNERS">Beginners (ጀማሪ)</option>
-                    <option value="CONTINUOUS">Continuous (ቀጣይ)</option>
+                    <option value="BEGINNERS">ጀማሪ ተማሪዎች</option>
+                    <option value="CONTINUOUS">ተከታታይ ጥናቶች</option>
                 </select>
             </div>
             <div className="space-y-1.5">

@@ -22,7 +22,7 @@ export default async function MezmurSchedulePage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Mezmur Schedule</h1>
+          <h1 className="text-2xl font-bold tracking-tight">የመዝሙር መርሐ ግብር</h1>
           <p className="text-sm opacity-50">{formatEthiopianDate(today)}</p>
         </div>
 
@@ -31,7 +31,7 @@ export default async function MezmurSchedulePage() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[hsl(25_70%_45%)] hover:bg-[hsl(25_70%_40%)] text-white text-sm font-bold transition-all"
         >
           <Plus size={16} />
-          Manual Event
+          ዐዲስ መርሐ ግብር
         </Link>
       </div>
 

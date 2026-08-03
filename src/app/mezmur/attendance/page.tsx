@@ -5,24 +5,24 @@ export default function MezmurAttendanceDashboard() {
   const groups = [
     {
       id: "REGULAR",
-      name: "Regular Group",
-      description: "Sunday morning service members",
+      name: "መደበኛ ወጣት",
+      description: "እሑድ ቋሚ መዝሙር ጥናት",
       icon: Music,
       href: "/mezmur/attendance/regular",
       color: "hsl(200 65% 55%)",
     },
     {
       id: "BEGINNERS",
-      name: "Beginners Group",
-      description: "New students and learners",
+      name: "ጀማሪ ተማሪዎች",
+      description: "ዐዳዲስ መዝሙር ተማሪዎች",
       icon: Users,
       href: "/mezmur/attendance/beginners",
       color: "hsl(160 60% 55%)",
     },
     {
       id: "CONTINUOUS",
-      name: "Continuous Group",
-      description: "Advanced students and practice sessions",
+      name: "ተከታታይ ጥናቶች",
+      description: "ለበዓላት አገልግሎት የሚሆኑ ተከታታይ መዝሙር ጥናቶች",
       icon: Users,
       href: "/mezmur/attendance/continuous",
       color: "hsl(38 65% 55%)",
@@ -33,10 +33,10 @@ export default function MezmurAttendanceDashboard() {
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Mezmur Attendance
+          የመዝሙር ጥናት አቴንዳንስ
         </h1>
         <p className="text-sm mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>
-          Select a group to track and manage attendance records
+          አቴንዳንስ ለመያዝ ከሚከተሉት ምድቦች መካከል ምረጥ
         </p>
       </div>
 
@@ -66,7 +66,7 @@ export default function MezmurAttendanceDashboard() {
             </div>
 
             <div className="flex items-center gap-1 mt-6 text-xs font-medium" style={{ color: group.color }}>
-              Track Attendance <ArrowRight size={14} className="transition-transform duration-150 group-hover:translate-x-0.5" />
+              አቴንዳንስ መዝግብ <ArrowRight size={14} className="transition-transform duration-150 group-hover:translate-x-0.5" />
             </div>
           </Link>
         ))}

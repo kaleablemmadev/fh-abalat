@@ -276,7 +276,9 @@ export class EligibilityService {
         type: 'MEMBER',
         ...(event.targetMemberTypes.length > 0 ? {
           memberType: { in: event.targetMemberTypes },
-        } : {}),
+        } : {
+          memberType: 'REGULAR_MEMBER',
+        }),
       },
       select: { id: true, fullName: true }
     });
@@ -370,7 +372,9 @@ export class EligibilityService {
         type: 'MEMBER',
         ...(event.targetMemberTypes.length > 0 ? {
           memberType: { in: event.targetMemberTypes },
-        } : {}),
+        } : {
+          memberType: 'REGULAR_MEMBER',
+        }),
       },
       select: { id: true, fullName: true }
     });

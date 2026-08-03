@@ -136,11 +136,11 @@ export default function MezmurAttendanceGrid({
   };
 
   if (members.length === 0) {
-    return <div className="p-12 text-center opacity-50">No members found in this group.</div>;
+    return <div className="p-12 text-center opacity-50">በዚህ ምድብ ምንም አባል አልተገኘም</div>;
   }
 
   if (events.length === 0) {
-    return <div className="p-12 text-center opacity-50">No events found for this period.</div>;
+    return <div className="p-12 text-center opacity-50">ለዚህ ጊዜ ምንም በዓላት አልተመደቡም</div>;
   }
 
   return (
@@ -197,9 +197,9 @@ export default function MezmurAttendanceGrid({
       <div className="sticky bottom-4 rounded-lg p-4 flex items-center justify-between border border-[hsl(var(--border))]" style={{ background: "hsl(var(--card))", boxShadow: "0 8px 30px rgba(0,0,0,0.2)" }}>
         <div className="flex items-center gap-4 text-xs">
           <Users size={14} className="opacity-50" />
-          <span className="font-medium">{members.length} members</span>
+          <span className="font-medium">{members.length} አባላት</span>
           <span className="opacity-20">|</span>
-          <span className="font-medium">{events.length} events</span>
+          <span className="font-medium">{events.length} ቀናት</span>
         </div>
 
         <div className="flex items-center gap-3">

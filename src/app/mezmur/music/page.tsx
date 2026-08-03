@@ -47,10 +47,10 @@ export default async function MezmurMusicPage() {
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Music Library
+          የመዝሙራት መዝገብ
         </h1>
         <p className="text-sm mt-0.5 opacity-50">
-          Browse and play Mezmur recordings and practice files
+          መዝሙራትንና ወረቦችን ለተማሪዎች ማጥኛ እንዲሆኑ አስገቡ
         </p>
       </div>
 

@@ -77,7 +77,7 @@ export class MezmurAttendanceService {
 
     const totalWeight = attendances.reduce((acc, curr) => acc + (curr.attendanceType?.value || 0), 0);
 
-    // Count total Mezmur events in the same period
+    // Count total Mezmur attendance events in the same period (excluding custom MEZMUR_EVENT)
     const totalEvents = await prisma.event.count({
         where: {
             date: { gte: cutoffDate, lt: targetDate },

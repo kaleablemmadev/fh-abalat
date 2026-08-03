@@ -22,7 +22,7 @@ interface MezmurMemberListClientProps {
 }
 
 const groupLabels: Record<string, string> = {
-  REGULAR: "Regular (ቅዳሴ)",
+  REGULAR: "ወጣት (መደበኛ)",
   BEGINNERS: "ጀማሪ",
   CONTINUOUS: "ቀጣይ",
 };
@@ -97,7 +97,7 @@ export default function MezmurMemberListClient({ members }: MezmurMemberListClie
               >
                 {totals.total}
               </span>
-              <span>members shown</span>
+              <span>የሚታዩ አባላት</span>
             </div>
 
             <span style={{ color: "hsl(var(--border))" }}>|</span>
@@ -106,7 +106,7 @@ export default function MezmurMemberListClient({ members }: MezmurMemberListClie
               <span className="font-semibold" style={{ color: "hsl(200 55% 55%)" }}>
                 {totals.regular}
               </span>{" "}
-              Regular
+              ወጣት
             </span>
 
             <span>
@@ -162,7 +162,7 @@ export default function MezmurMemberListClient({ members }: MezmurMemberListClie
                 onChange={(event) => setGroupFilter(event.target.value)}
               >
                 <option value="">ሁሉም ተመዝጋቢዎች</option>
-                <option value="REGULAR">Regular Group</option>
+                <option value="REGULAR">መደበኛ ወጣት</option>
                 <option value="BEGINNERS">ጀማሪዎች</option>
                 <option value="CONTINUOUS">ቀጣይ ተማሪዎች</option>
               </select>
@@ -179,7 +179,7 @@ export default function MezmurMemberListClient({ members }: MezmurMemberListClie
                 style={{ color: "hsl(var(--foreground))" }}
               />
               <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
-                No members enrolled in Mezmur groups yet.
+                በመዝሙር ጥናት ውስጥ የተመደቡ አባላት የሉም
               </p>
             </div>
           ) : filteredMembers.length === 0 ? (
@@ -190,7 +190,7 @@ export default function MezmurMemberListClient({ members }: MezmurMemberListClie
                 style={{ color: "hsl(var(--foreground))" }}
               />
               <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
-                No members match your search.
+                ምንም አባል አልተገኘም
               </p>
             </div>
           ) : (
@@ -224,7 +224,7 @@ export default function MezmurMemberListClient({ members }: MezmurMemberListClie
 
                     <div className="space-y-1.5">
                       <div className="text-[11px] flex items-center justify-between">
-                        <span style={{ color: "hsl(var(--muted-foreground))" }}>Group:</span>
+                        <span style={{ color: "hsl(var(--muted-foreground))" }}>ምድብ:</span>
                         <span className="font-medium" style={{ color: "hsl(var(--foreground))" }}>
                           {enrollment ? groupLabels[enrollment.groupType] : groupLabels["REGULAR"]}
                         </span>
@@ -246,7 +246,7 @@ export default function MezmurMemberListClient({ members }: MezmurMemberListClie
                           className="text-[10px] font-medium transition-colors duration-150"
                           style={{ color: "hsl(var(--primary))" }}
                         >
-                          Details →
+                          ዝርዝር →
                         </Link>
                       </div>
                     </div>

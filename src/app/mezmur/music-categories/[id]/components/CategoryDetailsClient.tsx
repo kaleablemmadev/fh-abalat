@@ -83,7 +83,7 @@ export default function CategoryDetailsClient({ category, allCategories, adminId
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <Link href="/mezmur/music-categories" className="inline-flex items-center gap-2 text-sm opacity-50 hover:opacity-100 transition-opacity">
-          <ArrowLeft size={16} /> Back to Categories
+          <ArrowLeft size={16} /> ወደ ምድቦች ተመለስ
         </Link>
 
         <div className="flex gap-2">
@@ -91,13 +91,13 @@ export default function CategoryDetailsClient({ category, allCategories, adminId
                 onClick={() => setIsPickingSongs(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] text-xs font-bold transition-all border border-[hsl(var(--border))]"
             >
-                <Plus size={14} /> Add from Library
+                <Plus size={14} /> ከመዝገብ ጨምር
             </button>
             <button
                 onClick={() => setIsBulkUploading(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[hsl(25_70%_45%)] hover:bg-[hsl(25_70%_40%)] text-white text-xs font-bold transition-all"
             >
-                <Upload size={14} /> Bulk Upload
+                <Upload size={14} /> ብዙ መዝሙር
             </button>
         </div>
       </div>
@@ -106,7 +106,7 @@ export default function CategoryDetailsClient({ category, allCategories, adminId
         {songs.length === 0 ? (
           <div className="p-20 text-center opacity-30">
             <Music size={48} className="mx-auto mb-4" />
-            <p className="text-sm font-bold">No songs in this category.</p>
+            <p className="text-sm font-bold">በዚህ ምድብ ውስጥ ምንም መዝሙር የለም</p>
           </div>
         ) : (
           <div className="divide-y divide-[hsl(var(--border))]">
@@ -114,7 +114,7 @@ export default function CategoryDetailsClient({ category, allCategories, adminId
               <div key={song.id} className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[hsl(var(--accent)/0.3)] transition-colors">
                 <div className="flex-1 min-w-0 pr-4">
                   <h4 className="font-bold text-sm truncate">{song.title}</h4>
-                  <p className="text-[10px] opacity-40 mt-0.5 uppercase tracking-widest font-bold">Uploaded by {song.uploadedBy.fullName || "Admin"}</p>
+                  <p className="text-[10px] opacity-40 mt-0.5 uppercase tracking-widest font-bold">በ{song.uploadedBy.fullName || "Admin"} የተጫነ</p>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -136,7 +136,7 @@ export default function CategoryDetailsClient({ category, allCategories, adminId
                       <button
                         onClick={() => handleRemove(song.id)}
                         disabled={isRemoving === song.id}
-                        className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-all" title="Remove from Category"
+                        className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-all" title="ከምድብ አውጣ"
                       >
                         {isRemoving === song.id ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                       </button>

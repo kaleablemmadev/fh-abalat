@@ -5,7 +5,7 @@ import { Shield, ArrowRight, Music, Users, CheckCircle2 } from "lucide-react";
 export default async function MezmurEligibilityDashboard() {
   const events = await prisma.event.findMany({
     where: {
-      eventType: { in: ["MEZMUR_REGULAR", "MEZMUR_BEGINNERS", "MEZMUR_CONTINUOUS"] },
+      eventType: "MEZMUR_EVENT",
       isActive: true,
     },
     include: {
@@ -19,8 +19,8 @@ export default async function MezmurEligibilityDashboard() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Mezmur Eligibility</h1>
-        <p className="text-sm opacity-50">Track singer eligibility for services based on their attendance scores</p>
+        <h1 className="text-2xl font-bold tracking-tight">የመዝሙር በዓላት ማሟላት</h1>
+        <p className="text-sm opacity-50">የዘማሪዎች አቴንዳንስ መሰረት ለበዓላት ማሟላት መከታተያ</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -37,7 +37,7 @@ export default async function MezmurEligibilityDashboard() {
                   <Shield size={20} />
                 </div>
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[hsl(var(--muted))] opacity-50 uppercase">
-                  {e.eventType.replace("MEZMUR_", "")}
+                  {e.eventType === "MEZMUR_EVENT" ? "EVENT" : e.eventType.replace("MEZMUR_", "")}
                 </span>
               </div>
               <h3 className="font-bold text-sm truncate">{e.title}</h3>
@@ -64,7 +64,7 @@ export default async function MezmurEligibilityDashboard() {
         {events.length === 0 && (
             <div className="col-span-full py-20 text-center opacity-30 border-2 border-dashed rounded-xl" style={{ borderColor: "hsl(var(--border))" }}>
                 <Shield size={48} className="mx-auto mb-4" />
-                <p className="text-sm font-medium">Create a Mezmur event to start tracking eligibility.</p>
+                <p className="text-sm font-medium">የመዝሙር በዓል ፈጥሮ ማሟላት መከታተያን ጀምር</p>
             </div>
         )}
       </div>

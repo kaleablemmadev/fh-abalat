@@ -19,9 +19,9 @@ interface MezmurEventListProps {
 }
 
 const typeLabels: Record<string, string> = {
-  MEZMUR_REGULAR: "Regular",
-  MEZMUR_BEGINNERS: "Beginners",
-  MEZMUR_CONTINUOUS: "Continuous",
+  MEZMUR_REGULAR: "ወጣት",
+  MEZMUR_BEGINNERS: "ጀማሪ",
+  MEZMUR_CONTINUOUS: "ተከታታይ ጥናት",
 };
 
 const typeColors: Record<string, string> = {
@@ -55,7 +55,7 @@ export default function MezmurEventList({ initialEvents }: MezmurEventListProps)
         {events.length === 0 ? (
           <div className="p-20 text-center opacity-30 flex flex-col items-center">
             <Calendar size={48} className="mb-4" />
-            <p className="text-sm font-medium">No Mezmur events scheduled.</p>
+            <p className="text-sm font-medium">ምንም የታቀዱ የመዝሙር መርሐ ግብራት የሉም</p>
           </div>
         ) : (
           <div className="divide-y divide-[hsl(var(--border))]">
@@ -73,7 +73,7 @@ export default function MezmurEventList({ initialEvents }: MezmurEventListProps)
                     <p className="text-[10px] opacity-50 flex items-center gap-2">
                         <span>{ethDate.month} {ethDate.day}፣ {ethDate.year} ዓ.ም.</span>
                         <span className="opacity-30">|</span>
-                        <span className="flex items-center gap-1"><Users size={10} /> {e._count.attendances} attending</span>
+                        <span className="flex items-center gap-1"><Users size={10} /> {e._count.attendances} ተሳትፈዋል</span>
                     </p>
                   </div>
 

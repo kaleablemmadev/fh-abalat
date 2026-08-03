@@ -53,8 +53,8 @@ export default function MusicPickerModal({ onClose, onAdd, alreadyAddedIds }: Mu
       <div className="w-full max-w-xl max-h-[80vh] rounded-2xl border border-[hsl(var(--border))] flex flex-col shadow-2xl bg-[hsl(var(--card))]" onClick={e => e.stopPropagation()}>
         <div className="p-4 border-b border-[hsl(var(--border))] flex items-center justify-between">
           <div>
-            <h3 className="font-bold text-sm uppercase tracking-wider">Add Songs from Library</h3>
-            <p className="text-[10px] opacity-40 font-bold uppercase tracking-widest">{selectedIds.length} selected</p>
+            <h3 className="font-bold text-sm uppercase tracking-wider">መዝሙራትን ጨምር</h3>
+            <p className="text-[10px] opacity-40 font-bold uppercase tracking-widest">{selectedIds.length} ተመርጠዋል</p>
           </div>
           <button onClick={onClose} className="opacity-50 hover:opacity-100 transition-opacity"><X size={20} /></button>
         </div>
@@ -65,7 +65,7 @@ export default function MusicPickerModal({ onClose, onAdd, alreadyAddedIds }: Mu
             <input
               type="text"
               className="w-full h-10 pl-10 pr-4 bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))] rounded-lg text-sm outline-none"
-              placeholder="Search library..."
+              placeholder="መዝሙራትን ወይም ወረቦችን ፈልግ..."
               value={searchText}
               onChange={e => setSearchText(e.target.value)}
             />
@@ -76,7 +76,7 @@ export default function MusicPickerModal({ onClose, onAdd, alreadyAddedIds }: Mu
           {isLoading ? (
             <div className="p-20 text-center"><Loader2 className="animate-spin mx-auto opacity-20" size={32} /></div>
           ) : filteredSongs.length === 0 ? (
-            <div className="p-20 text-center opacity-30 italic text-sm">No available songs found.</div>
+            <div className="p-20 text-center opacity-30 italic text-sm">ምንም መዝሙራት አልተገኙም</div>
           ) : (
             <div className="grid grid-cols-1 gap-1">
               {filteredSongs.map(song => (
@@ -101,14 +101,14 @@ export default function MusicPickerModal({ onClose, onAdd, alreadyAddedIds }: Mu
         </div>
 
         <div className="p-4 bg-[hsl(var(--muted)/0.3)] border-t border-[hsl(var(--border))] flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-xs font-bold opacity-50 hover:opacity-100">Cancel</button>
+          <button onClick={onClose} className="px-4 py-2 text-xs font-bold opacity-50 hover:opacity-100">ተመለስ</button>
           <button
             onClick={handleSave}
             disabled={isSaving || selectedIds.length === 0}
             className="px-8 py-2 bg-[hsl(25_70%_45%)] text-white rounded-lg text-xs font-bold flex items-center gap-2 disabled:opacity-30"
           >
             {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-            Add {selectedIds.length} Songs
+            {selectedIds.length} መዝሙራትን ጨምር
           </button>
         </div>
       </div>

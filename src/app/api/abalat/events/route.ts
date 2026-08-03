@@ -25,6 +25,7 @@ export async function GET() {
     const events = await prisma.event.findMany({
       where: {
         eventType: 'EVENT',
+        courseClassId: null,
         OR: [
           { isRecurring: false },
           {

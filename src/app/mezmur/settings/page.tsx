@@ -1,19 +1,39 @@
 // /mezmur/settings/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Lock, Loader2, ArrowLeft } from 'lucide-react';
+import { Lock, Loader2, ArrowLeft, Shield } from 'lucide-react';
 import Breadcrumb from '@/src/components/navigation/Breadcrumb';
 
 export default function MezmurSettingsPage() {
   const router = useRouter();
+  const [currentUser, setCurrentUser] = useState<{ id: string; type: string } | null>(null);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // Get current user from session
+    const sessionCookie = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('mode_session='));
+    
+    if (sessionCookie) {
+      try {
+        const session = JSON.parse(sessionCookie.split('=')[1]);
+        setCurrentUser({
+          id: session.userId,
+          type: session.userType
+        });
+      } catch (e) {
+        console.error('Failed to parse session');
+      }
+    }
+  }, []);
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,6 +100,19 @@ export default function MezmurSettingsPage() {
         <h1 className="text-xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
           Settings
         </h1>
+
+        {currentUser?.type === 'SUPERADMIN' && (
+          <div className="rounded border p-4" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
+            <a
+              href="/mezmur/superadmin-settings"
+              className="flex items-center gap-2 text-sm font-medium transition-colors duration-150"
+              style={{ color: 'hsl(25 60% 55%)' }}
+            >
+              <Shield size={16} />
+              Superadmin Settings
+            </a>
+          </div>
+        )}
 
         <div className="rounded border p-6 space-y-6" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <div>
@@ -163,7 +196,7 @@ export default function MezmurSettingsPage() {
               )}
 
               {success && (
-                <div className="p-3 rounded text-sm" style={{ background: 'hsl(160 40% 12%)', color: 'hsl(160 60% 55%)' }}>
+                <div className="p-3 rounded text-sm" style={{ background: 'hsl(25 40% 12%)', color: 'hsl(25 60% 55%)' }}>
                   Password changed successfully
                 </div>
               )}
@@ -173,7 +206,7 @@ export default function MezmurSettingsPage() {
                 disabled={isLoading}
                 className="w-full py-2 px-4 rounded text-sm font-medium transition-colors duration-150 disabled:opacity-50 flex items-center justify-center gap-2"
                 style={{
-                  background: 'hsl(160 70% 32%)',
+                  background: 'hsl(25 70% 32%)',
                   color: '#fff',
                 }}
               >

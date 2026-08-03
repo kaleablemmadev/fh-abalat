@@ -23,7 +23,7 @@ export default async function MezmurAdminApprovalsPage() {
 
       <div className="space-y-4">
         <h1 className="text-xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
-          Mezmur Admin Registration Approvals
+          የመዝሙር አድሚን ምዝገባ መቀበያ
         </h1>
 
         <ApprovalsClient initialRegistrations={pendingRegistrations} mode="mezmur" />

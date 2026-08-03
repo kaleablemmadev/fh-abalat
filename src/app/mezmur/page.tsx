@@ -26,20 +26,20 @@ export default async function MezmurHomePage() {
   ]);
 
   const stats = [
-    { label: "Active Members", value: personnelCount.toString(), icon: Users, href: "/mezmur/members", color: "hsl(160 60% 55%)" },
-    { label: "Library Songs", value: songCount.toString(), icon: Music, href: "/mezmur/music", color: "hsl(200 65% 55%)" },
-    { label: "Scheduled Events", value: eventCount.toString(), icon: CheckSquare, href: "/mezmur/schedule", color: "hsl(38 65% 55%)" },
-    { label: "Music Categories", value: categoryCount.toString(), icon: ListMusic, href: "/mezmur/music-categories", color: "hsl(25 70% 45%)" },
+    { label: "ያሉ አባላት", value: personnelCount.toString(), icon: Users, href: "/mezmur/members", color: "hsl(160 60% 55%)" },
+    { label: "የመዝሙራት ብዛት", value: songCount.toString(), icon: Music, href: "/mezmur/music", color: "hsl(200 65% 55%)" },
+    { label: "በዓላት", value: eventCount.toString(), icon: CheckSquare, href: "/mezmur/schedule", color: "hsl(38 65% 55%)" },
+    { label: "የመዝሙር ምድቦች", value: categoryCount.toString(), icon: ListMusic, href: "/mezmur/music-categories", color: "hsl(25 70% 45%)" },
   ];
 
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
         <h1 className="text-3xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Mezmur Dashboard
+          የመዝሙር ዋና ገጽ
         </h1>
         <p className="text-sm mt-1 opacity-50">
-          Ethiopian Orthodox Hymn & Choir Management
+          የኢትዮጵያ ኦርቶዶክስ መዝሙራትና አገልግሎት መከታተያ
         </p>
       </div>
 
@@ -66,7 +66,7 @@ export default async function MezmurHomePage() {
               <p className="text-xs font-medium opacity-50">{stat.label}</p>
             </div>
             <div className="mt-6 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[hsl(25_70%_45%)] opacity-0 group-hover:opacity-100 transition-opacity">
-              Manage <ArrowRight size={12} />
+              ተመልከት <ArrowRight size={12} />
             </div>
           </Link>
         ))}
@@ -86,8 +86,8 @@ export default async function MezmurHomePage() {
                 <Upload size={18} />
               </div>
               <div>
-                <p className="text-sm font-bold">Upload Song</p>
-                <p className="text-[10px] opacity-40">Add to library</p>
+                <p className="text-sm font-bold">ዐዲስ መዝሙር</p>
+                <p className="text-[10px] opacity-40">ወደ መዝሙር መዝገብ አስገባ</p>
               </div>
             </Link>
 
@@ -99,8 +99,8 @@ export default async function MezmurHomePage() {
                 <UserPlus size={18} />
               </div>
               <div>
-                <p className="text-sm font-bold">Enroll Member</p>
-                <p className="text-[10px] opacity-40">Assign to group</p>
+                <p className="text-sm font-bold">ዐዲስ አጥኚ አባል</p>
+                <p className="text-[10px] opacity-40">ወደ ቡድን መድብ</p>
               </div>
             </Link>
 
@@ -112,8 +112,8 @@ export default async function MezmurHomePage() {
                 <CheckSquare size={18} />
               </div>
               <div>
-                <p className="text-sm font-bold">Take Attendance</p>
-                <p className="text-[10px] opacity-40">Mark sessions</p>
+                <p className="text-sm font-bold">አቴንዳንስ ያዝ</p>
+                <p className="text-[10px] opacity-40">የመዝሙር ጥናት አቴንዳንስ አስገባ</p>
               </div>
             </Link>
 
@@ -125,8 +125,8 @@ export default async function MezmurHomePage() {
                 <Shield size={18} />
               </div>
               <div>
-                <p className="text-sm font-bold">Eligibility</p>
-                <p className="text-[10px] opacity-40">View reports</p>
+                <p className="text-sm font-bold">የአገልግሎት መስፈርት</p>
+                <p className="text-[10px] opacity-40">ሪፖርት ተመልከት</p>
               </div>
             </Link>
           </div>
@@ -134,15 +134,15 @@ export default async function MezmurHomePage() {
 
         <div className="rounded-xl border border-[hsl(var(--border))] p-6" style={{ background: "hsl(var(--card))" }}>
           <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <Calendar size={18} className="opacity-50" /> Upcoming
+            <Calendar size={18} className="opacity-50" /> ወደፊት አገልግሎቶች
           </h2>
           <div className="space-y-4">
-            <p className="text-sm opacity-40 italic py-8 text-center">No upcoming events found. Check the schedule to create one.</p>
+            <p className="text-sm opacity-40 italic py-8 text-center">ምንም የወደፊት በዓላት አልተመዘገቡም። ቀናቱን ተመልክታችሁ ዐዲስ በዓል መዝግቡ።</p>
             <Link
               href="/mezmur/schedule"
               className="w-full h-10 rounded-lg border border-[hsl(var(--border))] flex items-center justify-center text-xs font-bold opacity-60 hover:opacity-100 transition-opacity"
             >
-              View Full Schedule
+              ሙሉ መርሐ ግብር ተመልከት
             </Link>
           </div>
         </div>

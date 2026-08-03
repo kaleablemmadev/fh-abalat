@@ -39,13 +39,13 @@ export default async function MezmurMembersPage() {
             className="text-xl font-bold tracking-tight"
             style={{ color: "hsl(var(--foreground))" }}
           >
-            Mezmur Personnel
+            መዝሙር አጥኚ አባላት
           </h1>
           <p
             className="text-sm mt-0.5"
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
-            Manage Mezmur group enrollments and records
+            መዝሙር አጥኚ አባላትን መከታተያ
           </p>
         </div>
 
@@ -58,7 +58,7 @@ export default async function MezmurMembersPage() {
           }}
         >
           <Plus size={14} />
-          Enroll Member
+          ዐዲስ አባል
         </Link>
       </div>
 

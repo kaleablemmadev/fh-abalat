@@ -6,13 +6,17 @@ export default async function MezmurEligibilityReportPage() {
   const events = await prisma.event.findMany({
     where: {
       isActive: true,
-      eventType: 'EVENT',
+      eventType: 'MEZMUR_EVENT',
       ethiopianYear: { not: null },
       ethiopianMonth: { not: null },
       ethiopianDay: { not: null },
     },
     include: {
-      eligibilityRule: true,
+      eligibilityRule: {
+        include: {
+          criteria: true,
+        },
+      },
       attendances: {
         include: {
           member: {
@@ -66,10 +70,10 @@ export default async function MezmurEligibilityReportPage() {
     <div className="space-y-6 animate-fade-in pb-10">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Mezmur Eligibility Reports
+          የአገልግሎት መስፈርት ማሟላት ሪፖርቶች
         </h1>
         <p className="text-sm mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>
-          View and download eligibility reports for mezmur events
+          ለአገልግሎቶች የሚሆኑ የመዝሙር ጥናት መስፈርቶችን ተመልከቱ
         </p>
       </div>
 

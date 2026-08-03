@@ -41,9 +41,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get all members
+    // Get all members - default to REGULAR_MEMBER only
     const members = await prisma.user.findMany({
-      where: { type: 'MEMBER' },
+      where: { 
+        type: 'MEMBER',
+        memberType: 'REGULAR_MEMBER',
+      },
       orderBy: { fullName: 'asc' },
     });
 

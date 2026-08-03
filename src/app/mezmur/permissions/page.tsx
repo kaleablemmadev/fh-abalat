@@ -33,10 +33,10 @@ export default async function MezmurPermissionsPage() {
     <div className="space-y-6 animate-fade-in pb-10">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Mezmur Member Permissions
+          የመዝሙር ጥናት ፈቃዶች
         </h1>
         <p className="text-sm mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>
-          Manage excused absences and permissions for Mezmur choir members.
+          ለመዝሙር ጥናቶች ላለመገኘት አባላት የሚሰጣቸውን ፈቃዶች መከታተያ
         </p>
       </div>
 

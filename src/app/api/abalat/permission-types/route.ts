@@ -6,6 +6,7 @@ import prisma from '@/src/lib/prisma';
 export async function GET() {
   try {
     const permissionTypes = await prisma.permissionType.findMany({
+      where: { mode: 'ABALAT' },
       orderBy: { name: 'asc' },
     });
 
@@ -53,6 +54,7 @@ export async function POST(request: NextRequest) {
         appliesToSunday: category === 'DURATION_BASED' ? appliesToSunday || false : false,
         specificDays: category === 'DAY_BASED' ? specificDays || [] : [],
         appliesToSundays: category === 'DAY_BASED' ? appliesToSundays || false : false,
+        mode: 'ABALAT',
       },
     });
 

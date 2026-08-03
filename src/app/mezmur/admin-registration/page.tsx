@@ -60,20 +60,20 @@ export default function MezmurAdminRegistrationPage() {
     <div className="space-y-5 animate-fade-in p-6 max-w-2xl mx-auto">
       <Breadcrumb
         items={[
-          { label: 'Portal', href: '/' },
-          { label: 'Mezmur Mode', href: '/mezmur' },
-          { label: 'Admin Registration' },
+          { label: 'ዋና ገጽ', href: '/' },
+          { label: 'መዝሙር', href: '/mezmur' },
+          { label: 'አድሚን ምዝገባ' },
         ]}
       />
 
       <div className="space-y-4">
         <h1 className="text-xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
-          Mezmur Admin Registration
+          የመዝሙር አድሚን ምዝገባ
         </h1>
 
         <div className="rounded border p-6 space-y-6" style={{ background: 'hsl(var(--card))', borderColor: 'hsl(var(--border))' }}>
           <p className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>
-            Register as an admin for the Mezmur mode. Your application will be reviewed by the superadmin.
+            ለመዝሙር ክፍል እንደ አድሚን (ክፍል አባል) ተመዝገቡ። ከተመዘገባችሁ በኋላ የክፍል ኀላፊ ዐይቶ ያስገባችኋል።
           </p>
 
           <form onSubmit={handleRegister} className="space-y-4">
@@ -83,7 +83,7 @@ export default function MezmurAdminRegistrationPage() {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter your full name"
+                placeholder="ሙሉ ስም አስገባ"
                 className="w-full px-4 py-2 rounded border text-sm"
                 style={{ background: 'hsl(var(--background))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
                 required
@@ -96,7 +96,7 @@ export default function MezmurAdminRegistrationPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="ኢሜይል ጻፍ"
                 className="w-full px-4 py-2 rounded border text-sm"
                 style={{ background: 'hsl(var(--background))', borderColor: 'hsl(var(--border))', color: 'hsl(var(--foreground))' }}
                 required

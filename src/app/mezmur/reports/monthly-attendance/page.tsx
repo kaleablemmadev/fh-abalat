@@ -52,10 +52,10 @@ export default async function MezmurMonthlyAttendanceReportPage() {
     <div className="space-y-6 animate-fade-in pb-10">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Monthly Attendance Report
+          ወርኃሚ አቴንዳንስ ሪፖርት
         </h1>
         <p className="text-sm mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>
-          Generate monthly attendance reports for mezmur members
+          የአባላት ወርኃዊ የመዝሙር ጥናት አቴንዳንስ ሪፖርቶች
         </p>
       </div>
 

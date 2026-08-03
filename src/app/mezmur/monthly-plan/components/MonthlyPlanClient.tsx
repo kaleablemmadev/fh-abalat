@@ -21,7 +21,8 @@ interface MonthlyPlanClientProps {
   currentEthiopianDate: { year: number; month: string; day: number };
 }
 
-const DAYS = [1, 12, 21, 23, 24];
+const DEFAULT_DAYS = [1, 12, 21, 23, 24];
+const PAGUME_DAYS = [1]; // Pagume only has 5-6 days, so only day 1 is valid
 
 export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: MonthlyPlanClientProps) {
   // Infer month number from month name
@@ -36,9 +37,20 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
   const [year, setYear] = useState(currentEthiopianDate.year);
   const [month, setMonth] = useState(initialMonthNumber);
   
+  // Get available days based on month (Pagume month 13 only has day 1)
+  const getAvailableDays = (monthNum: number) => {
+    return monthNum === 13 ? PAGUME_DAYS : DEFAULT_DAYS;
+  };
+  
+  const availableDays = getAvailableDays(month);
+  
   // State to hold selected music IDs for each day
-  const [dayPlans, setDayPlans] = useState<Record<number, string[]>>({
-    1: [], 12: [], 21: [], 23: [], 24: []
+  const [dayPlans, setDayPlans] = useState<Record<number, string[]>>(() => {
+    const initialPlans: Record<number, string[]> = {};
+    availableDays.forEach(day => {
+      initialPlans[day] = [];
+    });
+    return initialPlans;
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -74,10 +86,16 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
       const res = await fetch(`/api/mezmur/monthly-plan?year=${year}&month=${month}`);
       if (res.ok) {
         const data = await res.json();
-        const newPlans: Record<number, string[]> = { 1: [], 12: [], 21: [], 23: [], 24: [] };
+        const currentDays = getAvailableDays(month);
+        
+        // Initialize plans with current available days
+        const newPlans: Record<number, string[]> = {};
+        currentDays.forEach(day => {
+          newPlans[day] = [];
+        });
         
         for (const schedule of data) {
-          if (DAYS.includes(schedule.day)) {
+          if (currentDays.includes(schedule.day)) {
             newPlans[schedule.day] = schedule.musicFiles.map((m: any) => m.id);
           }
         }
@@ -88,11 +106,25 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
     } finally {
       setIsLoading(false);
     }
-  }, [year, month]);
+  }, [year, month, getAvailableDays]);
 
   useEffect(() => {
     fetchPlan();
   }, [fetchPlan]);
+
+  // Update available days when month changes
+  useEffect(() => {
+    const newDays = getAvailableDays(month);
+    setDayPlans(prev => {
+      const newPlans: Record<number, string[]> = {};
+      newDays.forEach(day => {
+        newPlans[day] = prev[day] || [];
+      });
+      return newPlans;
+    });
+    // Fetch plan after updating days
+    fetchPlan();
+  }, [month, fetchPlan]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -166,7 +198,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
       );
 
       // Process each day
-      for (const day of DAYS) {
+      for (const day of availableDays) {
         const dayMusicIds = dayPlans[day];
         if (dayMusicIds.length === 0) continue;
 
@@ -295,7 +327,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
       
       let yPos = 40;
 
-      for (const day of DAYS) {
+      for (const day of availableDays) {
         const dayMusicIds = dayPlans[day];
         if (dayMusicIds.length === 0) continue;
 
@@ -383,7 +415,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
       <div className="p-4 bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
           <Calendar className="opacity-50" size={18} />
-          <span className="font-bold">Select Period:</span>
+          <span className="font-bold">ወር ምረጥ:</span>
         </div>
         <select
           value={month}
@@ -450,10 +482,10 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {DAYS.map(day => (
+          {availableDays.map(day => (
             <div key={day} className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-5 shadow-sm">
               <div className="flex justify-between items-center mb-4 pb-2 border-b border-[hsl(var(--border))]">
-                <h3 className="font-bold text-lg">Day {day}</h3>
+                <h3 className="font-bold text-lg">{Object.entries(ethMonthNames).map(([num, name]) => num === month.toLocaleString() ? name : null)} {day}</h3>
                 <button
                   onClick={() => setIsSelectingForDay(day)}
                   className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 transition-colors"
@@ -464,7 +496,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
 
               <div className="space-y-2">
                 {dayPlans[day].length === 0 ? (
-                  <p className="text-sm opacity-50 italic text-center py-4">No Mezmurs assigned</p>
+                  <p className="text-sm opacity-50 italic text-center py-4">ምንም መዝሙር አልተመዘገበም</p>
                 ) : (
                   dayPlans[day].map(musicId => {
                     const file = musicFiles.find(m => m.id === musicId);
@@ -492,7 +524,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
           <div className="bg-[hsl(var(--background))] w-full max-w-md rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
             <div className="p-4 border-b border-[hsl(var(--border))] flex justify-between items-center bg-[hsl(var(--muted))]">
-              <h3 className="font-bold text-lg">Select Mezmur for Day {isSelectingForDay}</h3>
+              <h3 className="font-bold text-lg">ለ{isSelectingForDay} መዝሙራትን ምረጥ</h3>
               <button
                 onClick={() => { setIsSelectingForDay(null); setSearchTerm(""); }}
                 className="opacity-50 hover:opacity-100"
@@ -506,7 +538,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 opacity-50" size={16} />
                 <input
                   type="text"
-                  placeholder="Search Mezmurs..."
+                  placeholder="መዝሙራትን ፈልግ..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   className="w-full pl-9 pr-4 py-2 rounded-lg bg-[hsl(var(--card))] border border-[hsl(var(--border))] focus:outline-none"
@@ -516,7 +548,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
             
             <div className="flex-1 overflow-y-auto p-2">
               {filteredMusic.length === 0 ? (
-                <p className="p-4 text-center opacity-50">No mezmurs found</p>
+                <p className="p-4 text-center opacity-50">ምንም መዝሙር አልተገኘም</p>
               ) : (
                 <div className="space-y-1">
                   {filteredMusic.map(m => {

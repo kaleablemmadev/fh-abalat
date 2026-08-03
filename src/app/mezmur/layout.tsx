@@ -2,42 +2,48 @@
 
 import React from 'react';
 import AppLayout, { NavSection } from '@/src/components/layout/AppLayout';
-import { Home, Music, ListMusic, Users, Calendar, Shield, CheckSquare, Mic2, Clock, FileText } from 'lucide-react';
+import { Home, Music, ListMusic, Users, Calendar, Shield, CheckSquare, Mic2, Clock, FileText, Settings } from 'lucide-react';
 
 const mezmurNavItems: NavSection[] = [
   {
     items: [
-      { name: 'Dashboard', href: '/mezmur', icon: Home },
+      { name: 'ዋና ገጽ', href: '/mezmur', icon: Home },
     ]
   },
   {
-    label: 'Library',
+    label: 'መዝሙራት',
     items: [
-      { name: 'Music Library', href: '/mezmur/music', icon: Music },
-      { name: 'Categories', href: '/mezmur/music-categories', icon: ListMusic },
+      { name: 'የመዝሙር መዝገብ', href: '/mezmur/music', icon: Music },
+      { name: 'የመዝሙር ምድብ', href: '/mezmur/music-categories', icon: ListMusic },
     ]
   },
   {
-    label: 'Personnel',
+    label: 'የአባላት መዝገብ',
     items: [
-      { name: 'Members', href: '/mezmur/members', icon: Users },
-      { name: 'Attendance', href: '/mezmur/attendance', icon: CheckSquare },
-      { name: 'Permissions', href: '/mezmur/permissions', icon: Clock },
-      { name: 'Eligibility', href: '/mezmur/eligibility', icon: Shield },
+      { name: 'አባላት', href: '/mezmur/members', icon: Users },
+      { name: 'አቴንዳንስ', href: '/mezmur/attendance', icon: CheckSquare },
+      { name: 'ፈቃዶች', href: '/mezmur/permissions', icon: Clock },
+      { name: 'የአገልግሎት መስፈርት', href: '/mezmur/eligibility', icon: Shield },
     ]
   },
   {
-    label: 'Planning',
+    label: 'ጊዜያዊ',
     items: [
-      { name: 'Schedule', href: '/mezmur/schedule', icon: Calendar },
-      { name: 'Monthly Plan', href: '/mezmur/monthly-plan', icon: ListMusic },
+      { name: 'መርሐ ግብር', href: '/mezmur/schedule', icon: Calendar },
+      { name: 'የወር መዝሙራት', href: '/mezmur/monthly-plan', icon: ListMusic },
     ]
   },
   {
-    label: 'Reports',
+    label: 'ሪፖርቶች',
     items: [
-      { name: 'Eligibility Reports', href: '/mezmur/reports/eligibility', icon: Shield },
-      { name: 'Monthly Attendance', href: '/mezmur/reports/monthly-attendance', icon: FileText },
+      { name: 'መስፈርት ማሟላት ሪፖርት', href: '/mezmur/reports/eligibility', icon: Shield },
+      { name: 'የአቴንዳንስ ሪፖርት', href: '/mezmur/reports/monthly-attendance', icon: FileText },
+    ]
+  },
+  {
+    label: 'አስተዳደር',
+    items: [
+      { name: 'Settings', href: '/mezmur/settings', icon: Settings },
     ]
   }
 ];

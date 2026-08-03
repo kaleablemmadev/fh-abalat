@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AppLayout, { NavSection } from '@/src/components/layout/AppLayout';
-import { Home, Users, Calendar, CheckSquare, Shield, FileText, BarChart3, ScrollText } from 'lucide-react';
+import { Home, Users, Calendar, CheckSquare, Shield, FileText, BarChart3, ScrollText, Settings } from 'lucide-react';
 
 const abalatNavItems: NavSection[] = [
   {
@@ -30,6 +30,12 @@ const abalatNavItems: NavSection[] = [
     label: 'ገለጻ',
     items: [
       { name: 'ሪፖርቶች', href: '/abalat/reports/monthly-attendance', icon: BarChart3 },
+    ]
+  },
+  {
+    label: 'አስተዳደር',
+    items: [
+      { name: 'ቅድሚያ አስተዳደር', href: '/abalat/settings', icon: Settings },
     ]
   }
 ];

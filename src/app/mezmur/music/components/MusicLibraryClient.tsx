@@ -196,7 +196,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
           <input
             className="w-full h-10 rounded-lg border pl-10 pr-4 text-sm transition-all"
             style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
-            placeholder="Search by title or singer..."
+            placeholder="በመዝሙር ወይም ወረብ ስም ፈልግ..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
@@ -207,7 +207,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
           className="h-10 px-4 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] text-[hsl(var(--foreground))] text-sm font-bold flex items-center gap-2 transition-colors shrink-0 border border-[hsl(var(--border))]"
         >
           <Plus size={16} />
-          Single Upload
+          መዝሙር አስገባ
         </Link>
 
         <button
@@ -215,7 +215,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
           className="h-10 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold flex items-center gap-2 transition-colors shrink-0"
         >
           <Upload size={16} />
-          Bulk Upload
+          ብዙ መዝሙራት
         </button>
       </div>
 
@@ -246,7 +246,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
             <div className="flex justify-between items-start mb-3">
               <div className="flex-1 min-w-0 pr-2">
                 <h3 className="font-bold text-sm truncate" style={{ color: "hsl(var(--foreground))" }}>{file.title}</h3>
-                <p className="text-[10px] opacity-50 mt-0.5">Uploaded by {file.uploadedBy.fullName || "Admin"}</p>
+                <p className="text-[10px] opacity-50 mt-0.5">በ{file.uploadedBy.fullName || "Admin"} ተጫነ</p>
               </div>
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
                 <button
@@ -288,7 +288,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                   />
                 ) : (
                   <div className="h-10 flex items-center justify-center text-[10px] opacity-40 font-bold uppercase tracking-widest italic bg-[hsl(var(--muted)/0.3)]">
-                    No Audio File
+                    ምንም መዝሙር የለም
                   </div>
                 )}
               </div>
@@ -299,7 +299,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                         onClick={() => setViewingLyrics(file)}
                         className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[hsl(25_70%_45%)]/10 text-[hsl(25_70%_45%)] border border-[hsl(25_70%_45%)]/20 hover:bg-[hsl(25_70%_45%)]/20 transition-all"
                     >
-                        <FileText size={12} /> Lyrics
+                        <FileText size={12} /> ቃላት
                     </button>
                     <button
                         onClick={() => handleDownload(file)}
@@ -307,13 +307,13 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                         className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20 transition-all disabled:opacity-50"
                     >
                         {downloadingId === file.id ? <Loader2 size={12} className="animate-spin" /> : <Download size={12} />}
-                        Save
+                        Download
                     </button>
                     <button
                         onClick={() => setAddingToPlaylist(file.id)}
                         className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/20 transition-all"
                     >
-                        <ListMusic size={12} /> Add
+                        <ListMusic size={12} /> ምድብ
                     </button>
                 </div>
                 <div className="flex flex-col items-end text-[9px] opacity-30 font-bold uppercase tracking-tighter">
@@ -328,7 +328,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
         {filteredFiles.length === 0 && (
           <div className="col-span-full py-20 text-center opacity-30 flex flex-col items-center">
             <Music size={48} className="mb-4" />
-            <p className="text-sm font-medium">No songs found in the library.</p>
+            <p className="text-sm font-medium">በመዝገብ ውስጥ ምንም መዝሙር አልተገኘም</p>
           </div>
         )}
       </div>
@@ -351,7 +351,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                   <div className="min-w-0">
                     <h3 className="font-bold text-sm truncate">{viewingLyrics.title}</h3>
                     <p className="text-[10px] opacity-40 uppercase tracking-widest font-bold">
-                      {viewingLyrics.language} · {zemachs.length} zemach{zemachs.length !== 1 ? "s" : ""}
+                      {viewingLyrics.language} · {zemachs.length} ዘማች{zemachs.length !== 1 ? "s" : ""}
                     </p>
                   </div>
                 </div>
@@ -397,7 +397,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                             color: isLeft ? "hsl(25 70% 55%)" : "hsl(210 70% 60%)"
                           }}
                         >
-                          Zemach {index + 1}
+                          አዝማች {index + 1}
                         </span>
                         <div className="flex-1 h-px opacity-10" style={{ background: "hsl(var(--foreground))" }} />
                       </div>
@@ -477,7 +477,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
             style={{ background: "hsl(var(--card))" }}
           >
             <div className="p-4 border-b border-[hsl(var(--border))] flex items-center justify-between">
-              <h3 className="font-bold text-sm uppercase tracking-wider">Edit Music Info</h3>
+              <h3 className="font-bold text-sm uppercase tracking-wider">መዝሙር መረጃ አስተካክል</h3>
               <button onClick={() => setEditingFile(null)} className="opacity-50 hover:opacity-100 transition-opacity">
                 <CloseIcon size={18} />
               </button>
@@ -485,7 +485,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
 
             <form onSubmit={handleEditSubmit} className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Song Title</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">የመዝሙር ስም</label>
                 <input
                   className="w-full h-10 rounded-lg border px-4 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)]"
                   style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
@@ -496,20 +496,20 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Language</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">ቋንቋ</label>
                 <select
                   className="w-full h-10 rounded-lg border px-3 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] appearance-none"
                   style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
                   value={editingFile.language}
                   onChange={e => setEditingFile({...editingFile, language: e.target.value as any})}
                 >
-                  <option value="AMHARIC">Amharic</option>
-                  <option value="GEEZ">Ge'ez</option>
+                  <option value="AMHARIC">ዐማርኛ</option>
+                  <option value="GEEZ">ግእዝ</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Categories</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">ምድብ</label>
                 <div className="flex flex-wrap gap-2 p-3 rounded-lg border bg-[hsl(var(--muted)/0.2)]" style={{ borderColor: "hsl(var(--border))" }}>
                   {categories.map(cat => (
                     <label key={cat.id} className="flex items-center gap-2 cursor-pointer group">
@@ -533,8 +533,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
               {/* Zemachs Editor */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Lyrics — Zemachs</label>
-                  <span className="text-[9px] opacity-30 italic">1st=left, 2nd=right, alternating</span>
+                  <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">የመዝሙር ቃላት</label>
                 </div>
                 <div className="space-y-3">
                   {editingZemachs.map((zemach, index) => {
@@ -549,7 +548,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                               color: isLeft ? "hsl(25 70% 50%)" : "hsl(210 70% 55%)"
                             }}
                           >
-                            Zemach {index + 1} · {isLeft ? "← Left" : "Right →"}
+                            አዝማች {index + 1} · {isLeft ? "← ግራ" : "ቀኝ →"}
                           </span>
                           {editingZemachs.length > 1 && (
                             <button
@@ -580,7 +579,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                   className="w-full flex items-center justify-center gap-2 py-2 rounded-lg border-2 border-dashed text-[10px] font-bold uppercase tracking-wider opacity-40 hover:opacity-80 transition-all"
                   style={{ borderColor: "hsl(var(--border))" }}
                 >
-                  <Plus size={12} /> Add Zemach
+                  <Plus size={12} /> አዝማጭ ጨምር
                 </button>
               </div>
 
@@ -602,7 +601,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                   onClick={() => setEditingFile(null)}
                   className="px-4 py-2 text-sm font-medium opacity-50 hover:opacity-100 transition-opacity"
                 >
-                  Cancel
+                  ተመለስ
                 </button>
                 <button
                   type="submit"
@@ -610,7 +609,7 @@ export default function MusicLibraryClient({ initialFiles, categories, playlists
                   className="px-8 py-2 rounded-lg bg-[hsl(25_70%_45%)] text-white text-sm font-bold flex items-center gap-2 transition-all disabled:opacity-50"
                 >
                   {isUpdating ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                  Save Changes
+                  አስተካክል
                 </button>
               </div>
             </form>

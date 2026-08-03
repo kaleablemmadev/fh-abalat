@@ -9,8 +9,8 @@ export default async function MezmurCategoriesPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Music Categories</h1>
-        <p className="text-sm opacity-50">Organize your music library with custom tags and groups</p>
+        <h1 className="text-2xl font-bold tracking-tight">የመዝሙራት ምድቦች</h1>
+        <p className="text-sm opacity-50">የመዝገቡን መዝሙራትን በምድቦች ውስጥ መድብ</p>
       </div>
 
       <CategoryList initialCategories={categories as any} />

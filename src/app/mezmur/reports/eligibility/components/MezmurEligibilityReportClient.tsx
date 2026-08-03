@@ -16,6 +16,9 @@ interface Event {
     id: string;
     name: string;
     criteria: {
+      id: string;
+      eligibilityRuleId: string;
+      eventType: string;
       minAttendances: number;
       lookbackMonths: number;
     }[];
@@ -81,9 +84,9 @@ export default function MezmurEligibilityReportClient({ events, members, permiss
 
       if (event.eligibilityRule) {
         const rule = event.eligibilityRule;
-        const minRequired = rule.criteria[0]?.minAttendances || 0;
+        const minRequired = (rule.criteria && rule.criteria.length > 0) ? rule.criteria[0].minAttendances : 0;
         
-        if (attendanceScore < minRequired && !hasPermission) {
+        if (minRequired > 0 && attendanceScore < minRequired && !hasPermission) {
           isEligible = false;
           eligibilityReason = `Insufficient attendance (${attendanceScore}/${minRequired})`;
         }
@@ -287,7 +290,7 @@ export default function MezmurEligibilityReportClient({ events, members, permiss
       {/* Event Selection */}
       <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4" style={{ color: "hsl(var(--foreground))" }}>
-          Select Event
+          በዓል ምረጥ
         </h2>
         
         <select
@@ -296,7 +299,7 @@ export default function MezmurEligibilityReportClient({ events, members, permiss
           className="w-full h-10 px-3 rounded-lg border bg-[hsl(var(--background))] text-[hsl(var(--foreground))] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)]"
           style={{ borderColor: "hsl(var(--border))" }}
         >
-          <option value="">Select an event...</option>
+          <option value="">በዓልን ምረጥ...</option>
           {events.map(event => (
             <option key={event.id} value={event.id}>
               {event.title} - {event.ethiopianMonth}/{event.ethiopianDay}/{event.ethiopianYear}
@@ -345,22 +348,22 @@ export default function MezmurEligibilityReportClient({ events, members, permiss
       {selectedEventId && currentEligibility.length > 0 && (
         <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-6">
           <h2 className="text-lg font-semibold mb-4" style={{ color: "hsl(var(--foreground))" }}>
-            Eligibility Results
+            የሪፖርቱ ውጤቶች
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-[hsl(var(--muted))] rounded-lg p-4">
-              <p className="text-sm opacity-60">Total Members</p>
+              <p className="text-sm opacity-60">አጠቃላይ አባላት</p>
               <p className="text-2xl font-bold">{currentEligibility.length}</p>
             </div>
             <div className="bg-emerald-500/10 rounded-lg p-4">
-              <p className="text-sm opacity-60">Eligible</p>
+              <p className="text-sm opacity-60">መስፈርት ያሟሉ</p>
               <p className="text-2xl font-bold text-emerald-500">
                 {currentEligibility.filter(d => d.isEligible).length}
               </p>
             </div>
             <div className="bg-red-500/10 rounded-lg p-4">
-              <p className="text-sm opacity-60">Ineligible</p>
+              <p className="text-sm opacity-60">መስፈርት ያላሟሉ</p>
               <p className="text-2xl font-bold text-red-500">
                 {currentEligibility.filter(d => !d.isEligible).length}
               </p>
@@ -379,10 +382,10 @@ export default function MezmurEligibilityReportClient({ events, members, permiss
               >
                 <div>
                   <p className="font-medium" style={{ color: "hsl(var(--foreground))" }}>
-                    {data.member.fullName || 'Unknown'}
+                    {data.member.fullName || 'አይታወቅም'}
                   </p>
                   <p className="text-xs opacity-60">
-                    Attendance: {data.attendanceScore} | Permission: {data.hasPermission ? 'Yes' : 'No'}
+                    Attendance: {data.attendanceScore} | Permission: {data.hasPermission ? 'አለው' : 'የለውም'}
                   </p>
                 </div>
                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${
@@ -390,7 +393,7 @@ export default function MezmurEligibilityReportClient({ events, members, permiss
                     ? 'bg-emerald-500/20 text-emerald-500'
                     : 'bg-red-500/20 text-red-500'
                 }`}>
-                  {data.isEligible ? 'Eligible' : 'Ineligible'}
+                  {data.isEligible ? 'አሟልቷል' : 'አላሟላም'}
                 </div>
               </div>
             ))}

@@ -161,13 +161,22 @@ export default function MultiMonthGrid({
 
   const handleAttendanceChange = (memberId: string, eventId: string, attendanceTypeId: string) => {
     const key = `${memberId}_${eventId}`;
-    setAttendanceData((prev) => ({
-      ...prev,
-      [key]: {
-        attendanceTypeId,
-        permissionId: null, // Always null — permissions are linked separately
-      },
-    }));
+    setAttendanceData((prev) => {
+      // If clicking the same attendance type that's already selected, deselect it
+      if (prev[key]?.attendanceTypeId === attendanceTypeId) {
+        const newState = { ...prev };
+        delete newState[key];
+        return newState;
+      }
+      // Otherwise, select the new attendance type
+      return {
+        ...prev,
+        [key]: {
+          attendanceTypeId,
+          permissionId: null, // Always null — permissions are linked separately
+        },
+      };
+    });
     setSaveSuccess(false);
   };
 

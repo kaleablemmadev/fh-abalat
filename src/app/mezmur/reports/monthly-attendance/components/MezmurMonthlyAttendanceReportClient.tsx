@@ -308,20 +308,20 @@ export default function MezmurMonthlyAttendanceReportClient({
       {/* Month Selection */}
       <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-6">
         <h2 className="text-lg font-semibold mb-4" style={{ color: "hsl(var(--foreground))" }}>
-          Select Months
+          ወራትን ምረጥ
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-1.5">
             <label className="block text-xs font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
-              Month
+              ወር
             </label>
             <select
               value={currentMonth}
               onChange={(e) => setCurrentMonth(e.target.value)}
               className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm text-[hsl(var(--foreground))] focus:outline-none"
             >
-              <option value="">Select month...</option>
+              <option value="">ወር ምረጥ...</option>
               {Object.values(ethMonthNames).map((month) => (
                 <option key={month} value={month}>
                   {month}
@@ -332,7 +332,7 @@ export default function MezmurMonthlyAttendanceReportClient({
 
           <div className="space-y-1.5">
             <label className="block text-xs font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
-              Year
+              ዓመት
             </label>
             <input
               type="number"
@@ -352,7 +352,7 @@ export default function MezmurMonthlyAttendanceReportClient({
               className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all bg-[hsl(25_70%_45%)] text-white hover:bg-[hsl(25_70%_40%)]"
             >
               <Plus size={16} />
-              Add Month
+              ወር ጨምር
             </button>
           </div>
         </div>
@@ -389,7 +389,7 @@ export default function MezmurMonthlyAttendanceReportClient({
             disabled={selectedMonths.length === 0}
             className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all bg-[hsl(25_70%_45%)] text-white hover:bg-[hsl(25_70%_40%)] disabled:opacity-50"
           >
-            Generate Report
+            ሪፖርት አውጣ
           </button>
         </div>
       </div>
@@ -399,7 +399,7 @@ export default function MezmurMonthlyAttendanceReportClient({
         <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold" style={{ color: "hsl(var(--foreground))" }}>
-              Report Results
+              የሪፖርት ውጤቶች
             </h2>
             <div className="flex gap-2">
               <button
@@ -425,14 +425,14 @@ export default function MezmurMonthlyAttendanceReportClient({
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[hsl(var(--border))]">
-                  <th className="text-left p-3 font-semibold">No.</th>
-                  <th className="text-left p-3 font-semibold">Name</th>
+                  <th className="text-left p-3 font-semibold">ተ.ቁ.</th>
+                  <th className="text-left p-3 font-semibold">ስም</th>
                   {reportData.months.map(month => (
                     <th key={`${month.month}-${month.year}`} className="text-center p-3 font-semibold">
                       {month.month} {month.year}
                     </th>
                   ))}
-                  <th className="text-center p-3 font-semibold">Total</th>
+                  <th className="text-center p-3 font-semibold">አጠቃላይ</th>
                 </tr>
               </thead>
               <tbody>

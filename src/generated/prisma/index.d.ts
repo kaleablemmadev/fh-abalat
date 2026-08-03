@@ -207,7 +207,8 @@ export const eventType: {
   SUNDAY: 'SUNDAY',
   MEZMUR_REGULAR: 'MEZMUR_REGULAR',
   MEZMUR_BEGINNERS: 'MEZMUR_BEGINNERS',
-  MEZMUR_CONTINUOUS: 'MEZMUR_CONTINUOUS'
+  MEZMUR_CONTINUOUS: 'MEZMUR_CONTINUOUS',
+  MEZMUR_EVENT: 'MEZMUR_EVENT'
 };
 
 export type eventType = (typeof eventType)[keyof typeof eventType]
@@ -12031,6 +12032,7 @@ export namespace Prisma {
     appliesToChore: boolean | null
     appliesToSunday: boolean | null
     appliesToSundays: boolean | null
+    mode: $Enums.appMode | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -12046,6 +12048,7 @@ export namespace Prisma {
     appliesToChore: boolean | null
     appliesToSunday: boolean | null
     appliesToSundays: boolean | null
+    mode: $Enums.appMode | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -12062,6 +12065,7 @@ export namespace Prisma {
     appliesToSunday: number
     specificDays: number
     appliesToSundays: number
+    mode: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -12091,6 +12095,7 @@ export namespace Prisma {
     appliesToChore?: true
     appliesToSunday?: true
     appliesToSundays?: true
+    mode?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -12106,6 +12111,7 @@ export namespace Prisma {
     appliesToChore?: true
     appliesToSunday?: true
     appliesToSundays?: true
+    mode?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -12122,6 +12128,7 @@ export namespace Prisma {
     appliesToSunday?: true
     specificDays?: true
     appliesToSundays?: true
+    mode?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -12225,6 +12232,7 @@ export namespace Prisma {
     appliesToSunday: boolean
     specificDays: number[]
     appliesToSundays: boolean
+    mode: $Enums.appMode
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -12260,6 +12268,7 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: boolean
     appliesToSundays?: boolean
+    mode?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -12278,6 +12287,7 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: boolean
     appliesToSundays?: boolean
+    mode?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -12294,6 +12304,7 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: boolean
     appliesToSundays?: boolean
+    mode?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -12310,12 +12321,13 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: boolean
     appliesToSundays?: boolean
+    mode?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PermissionTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "category" | "durationMonths" | "durationYears" | "appliesToChore" | "appliesToSunday" | "specificDays" | "appliesToSundays" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["permissionType"]>
+  export type PermissionTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "category" | "durationMonths" | "durationYears" | "appliesToChore" | "appliesToSunday" | "specificDays" | "appliesToSundays" | "mode" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["permissionType"]>
   export type PermissionTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     permissions?: boolean | PermissionType$permissionsArgs<ExtArgs>
     _count?: boolean | PermissionTypeCountOutputTypeDefaultArgs<ExtArgs>
@@ -12339,6 +12351,7 @@ export namespace Prisma {
       appliesToSunday: boolean
       specificDays: number[]
       appliesToSundays: boolean
+      mode: $Enums.appMode
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -12776,6 +12789,7 @@ export namespace Prisma {
     readonly appliesToSunday: FieldRef<"PermissionType", 'Boolean'>
     readonly specificDays: FieldRef<"PermissionType", 'Int[]'>
     readonly appliesToSundays: FieldRef<"PermissionType", 'Boolean'>
+    readonly mode: FieldRef<"PermissionType", 'appMode'>
     readonly isActive: FieldRef<"PermissionType", 'Boolean'>
     readonly createdAt: FieldRef<"PermissionType", 'DateTime'>
     readonly updatedAt: FieldRef<"PermissionType", 'DateTime'>
@@ -35687,6 +35701,7 @@ export namespace Prisma {
     appliesToSunday: 'appliesToSunday',
     specificDays: 'specificDays',
     appliesToSundays: 'appliesToSundays',
+    mode: 'mode',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -37023,6 +37038,7 @@ export namespace Prisma {
     appliesToSunday?: BoolFilter<"PermissionType"> | boolean
     specificDays?: IntNullableListFilter<"PermissionType">
     appliesToSundays?: BoolFilter<"PermissionType"> | boolean
+    mode?: EnumappModeFilter<"PermissionType"> | $Enums.appMode
     isActive?: BoolFilter<"PermissionType"> | boolean
     createdAt?: DateTimeFilter<"PermissionType"> | Date | string
     updatedAt?: DateTimeFilter<"PermissionType"> | Date | string
@@ -37040,6 +37056,7 @@ export namespace Prisma {
     appliesToSunday?: SortOrder
     specificDays?: SortOrder
     appliesToSundays?: SortOrder
+    mode?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -37048,10 +37065,11 @@ export namespace Prisma {
 
   export type PermissionTypeWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    name?: string
+    name_mode?: PermissionTypeNameModeCompoundUniqueInput
     AND?: PermissionTypeWhereInput | PermissionTypeWhereInput[]
     OR?: PermissionTypeWhereInput[]
     NOT?: PermissionTypeWhereInput | PermissionTypeWhereInput[]
+    name?: StringFilter<"PermissionType"> | string
     description?: StringNullableFilter<"PermissionType"> | string | null
     category?: EnumpermissionTypeCategoryFilter<"PermissionType"> | $Enums.permissionTypeCategory
     durationMonths?: IntNullableFilter<"PermissionType"> | number | null
@@ -37060,11 +37078,12 @@ export namespace Prisma {
     appliesToSunday?: BoolFilter<"PermissionType"> | boolean
     specificDays?: IntNullableListFilter<"PermissionType">
     appliesToSundays?: BoolFilter<"PermissionType"> | boolean
+    mode?: EnumappModeFilter<"PermissionType"> | $Enums.appMode
     isActive?: BoolFilter<"PermissionType"> | boolean
     createdAt?: DateTimeFilter<"PermissionType"> | Date | string
     updatedAt?: DateTimeFilter<"PermissionType"> | Date | string
     permissions?: PermissionListRelationFilter
-  }, "id" | "name">
+  }, "id" | "name_mode">
 
   export type PermissionTypeOrderByWithAggregationInput = {
     id?: SortOrder
@@ -37077,6 +37096,7 @@ export namespace Prisma {
     appliesToSunday?: SortOrder
     specificDays?: SortOrder
     appliesToSundays?: SortOrder
+    mode?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -37101,6 +37121,7 @@ export namespace Prisma {
     appliesToSunday?: BoolWithAggregatesFilter<"PermissionType"> | boolean
     specificDays?: IntNullableListFilter<"PermissionType">
     appliesToSundays?: BoolWithAggregatesFilter<"PermissionType"> | boolean
+    mode?: EnumappModeWithAggregatesFilter<"PermissionType"> | $Enums.appMode
     isActive?: BoolWithAggregatesFilter<"PermissionType"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"PermissionType"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PermissionType"> | Date | string
@@ -39482,6 +39503,7 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: PermissionTypeCreatespecificDaysInput | number[]
     appliesToSundays?: boolean
+    mode?: $Enums.appMode
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39499,6 +39521,7 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: PermissionTypeCreatespecificDaysInput | number[]
     appliesToSundays?: boolean
+    mode?: $Enums.appMode
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39516,6 +39539,7 @@ export namespace Prisma {
     appliesToSunday?: BoolFieldUpdateOperationsInput | boolean
     specificDays?: PermissionTypeUpdatespecificDaysInput | number[]
     appliesToSundays?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39533,6 +39557,7 @@ export namespace Prisma {
     appliesToSunday?: BoolFieldUpdateOperationsInput | boolean
     specificDays?: PermissionTypeUpdatespecificDaysInput | number[]
     appliesToSundays?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39550,6 +39575,7 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: PermissionTypeCreatespecificDaysInput | number[]
     appliesToSundays?: boolean
+    mode?: $Enums.appMode
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -39566,6 +39592,7 @@ export namespace Prisma {
     appliesToSunday?: BoolFieldUpdateOperationsInput | boolean
     specificDays?: PermissionTypeUpdatespecificDaysInput | number[]
     appliesToSundays?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -39582,6 +39609,7 @@ export namespace Prisma {
     appliesToSunday?: BoolFieldUpdateOperationsInput | boolean
     specificDays?: PermissionTypeUpdatespecificDaysInput | number[]
     appliesToSundays?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42223,6 +42251,18 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type EnumappModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
+    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumappModeFilter<$PrismaModel> | $Enums.appMode
+  }
+
+  export type PermissionTypeNameModeCompoundUniqueInput = {
+    name: string
+    mode: $Enums.appMode
+  }
+
   export type PermissionTypeCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -42234,6 +42274,7 @@ export namespace Prisma {
     appliesToSunday?: SortOrder
     specificDays?: SortOrder
     appliesToSundays?: SortOrder
+    mode?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -42255,6 +42296,7 @@ export namespace Prisma {
     appliesToChore?: SortOrder
     appliesToSunday?: SortOrder
     appliesToSundays?: SortOrder
+    mode?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -42270,6 +42312,7 @@ export namespace Prisma {
     appliesToChore?: SortOrder
     appliesToSunday?: SortOrder
     appliesToSundays?: SortOrder
+    mode?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -42291,18 +42334,21 @@ export namespace Prisma {
     _max?: NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
   }
 
+  export type EnumappModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
+    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumappModeWithAggregatesFilter<$PrismaModel> | $Enums.appMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumappModeFilter<$PrismaModel>
+    _max?: NestedEnumappModeFilter<$PrismaModel>
+  }
+
   export type EnumpermissionStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.permissionStatus | EnumpermissionStatusFieldRefInput<$PrismaModel>
     in?: $Enums.permissionStatus[] | ListEnumpermissionStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.permissionStatus[] | ListEnumpermissionStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumpermissionStatusFilter<$PrismaModel> | $Enums.permissionStatus
-  }
-
-  export type EnumappModeFilter<$PrismaModel = never> = {
-    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
-    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    not?: NestedEnumappModeFilter<$PrismaModel> | $Enums.appMode
   }
 
   export type PermissionTypeScalarRelationFilter = {
@@ -42371,16 +42417,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumpermissionStatusFilter<$PrismaModel>
     _max?: NestedEnumpermissionStatusFilter<$PrismaModel>
-  }
-
-  export type EnumappModeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
-    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    not?: NestedEnumappModeWithAggregatesFilter<$PrismaModel> | $Enums.appMode
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumappModeFilter<$PrismaModel>
-    _max?: NestedEnumappModeFilter<$PrismaModel>
   }
 
   export type EligibilityCriteriaListRelationFilter = {
@@ -44465,6 +44501,10 @@ export namespace Prisma {
     push?: number | number[]
   }
 
+  export type EnumappModeFieldUpdateOperationsInput = {
+    set?: $Enums.appMode
+  }
+
   export type PermissionUpdateManyWithoutPermissionTypeNestedInput = {
     create?: XOR<PermissionCreateWithoutPermissionTypeInput, PermissionUncheckedCreateWithoutPermissionTypeInput> | PermissionCreateWithoutPermissionTypeInput[] | PermissionUncheckedCreateWithoutPermissionTypeInput[]
     connectOrCreate?: PermissionCreateOrConnectWithoutPermissionTypeInput | PermissionCreateOrConnectWithoutPermissionTypeInput[]
@@ -44527,10 +44567,6 @@ export namespace Prisma {
 
   export type EnumpermissionStatusFieldUpdateOperationsInput = {
     set?: $Enums.permissionStatus
-  }
-
-  export type EnumappModeFieldUpdateOperationsInput = {
-    set?: $Enums.appMode
   }
 
   export type AttendanceUpdateManyWithoutPermissionNestedInput = {
@@ -46082,6 +46118,13 @@ export namespace Prisma {
     not?: NestedEnumpermissionTypeCategoryFilter<$PrismaModel> | $Enums.permissionTypeCategory
   }
 
+  export type NestedEnumappModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
+    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumappModeFilter<$PrismaModel> | $Enums.appMode
+  }
+
   export type NestedEnumpermissionTypeCategoryWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.permissionTypeCategory | EnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.permissionTypeCategory[] | ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
@@ -46092,18 +46135,21 @@ export namespace Prisma {
     _max?: NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
   }
 
+  export type NestedEnumappModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
+    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumappModeWithAggregatesFilter<$PrismaModel> | $Enums.appMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumappModeFilter<$PrismaModel>
+    _max?: NestedEnumappModeFilter<$PrismaModel>
+  }
+
   export type NestedEnumpermissionStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.permissionStatus | EnumpermissionStatusFieldRefInput<$PrismaModel>
     in?: $Enums.permissionStatus[] | ListEnumpermissionStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.permissionStatus[] | ListEnumpermissionStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumpermissionStatusFilter<$PrismaModel> | $Enums.permissionStatus
-  }
-
-  export type NestedEnumappModeFilter<$PrismaModel = never> = {
-    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
-    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    not?: NestedEnumappModeFilter<$PrismaModel> | $Enums.appMode
   }
 
   export type NestedEnumpermissionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -46114,16 +46160,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumpermissionStatusFilter<$PrismaModel>
     _max?: NestedEnumpermissionStatusFilter<$PrismaModel>
-  }
-
-  export type NestedEnumappModeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
-    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    not?: NestedEnumappModeWithAggregatesFilter<$PrismaModel> | $Enums.appMode
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumappModeFilter<$PrismaModel>
-    _max?: NestedEnumappModeFilter<$PrismaModel>
   }
 
   export type NestedEnumCourseOfferingSemesterFilter<$PrismaModel = never> = {
@@ -48784,6 +48820,7 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: PermissionTypeCreatespecificDaysInput | number[]
     appliesToSundays?: boolean
+    mode?: $Enums.appMode
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -48800,6 +48837,7 @@ export namespace Prisma {
     appliesToSunday?: boolean
     specificDays?: PermissionTypeCreatespecificDaysInput | number[]
     appliesToSundays?: boolean
+    mode?: $Enums.appMode
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -49012,6 +49050,7 @@ export namespace Prisma {
     appliesToSunday?: BoolFieldUpdateOperationsInput | boolean
     specificDays?: PermissionTypeUpdatespecificDaysInput | number[]
     appliesToSundays?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49028,6 +49067,7 @@ export namespace Prisma {
     appliesToSunday?: BoolFieldUpdateOperationsInput | boolean
     specificDays?: PermissionTypeUpdatespecificDaysInput | number[]
     appliesToSundays?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -140,10 +140,19 @@ export default function AttendanceGrid({
   }, [saveSuccess]);
 
   const handleAttendanceChange = (memberId: string, attendanceTypeId: string) => {
-    setAttendanceData((prev) => ({
-      ...prev,
-      [memberId]: attendanceTypeId,
-    }));
+    setAttendanceData((prev) => {
+      // If clicking the same attendance type that's already selected, deselect it
+      if (prev[memberId] === attendanceTypeId) {
+        const newState = { ...prev };
+        delete newState[memberId];
+        return newState;
+      }
+      // Otherwise, select the new attendance type
+      return {
+        ...prev,
+        [memberId]: attendanceTypeId,
+      };
+    });
   };
 
   const handleSave = async () => {

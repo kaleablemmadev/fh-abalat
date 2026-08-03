@@ -97,7 +97,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
         <div className="rounded-xl border border-[hsl(var(--border))]" style={{ background: "hsl(var(--card))" }}>
           <div className="p-4 border-b border-[hsl(var(--border))] flex items-center gap-2">
             <ListMusic size={18} className="opacity-50" />
-            <h3 className="font-bold text-sm uppercase tracking-wider">Existing Categories</h3>
+            <h3 className="font-bold text-sm uppercase tracking-wider">ያሉ የመዝሙር ምድቦች</h3>
           </div>
           <div className="divide-y divide-[hsl(var(--border))]">
             {categories.map((cat) => (
@@ -124,7 +124,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
               </div>
             ))}
             {categories.length === 0 && (
-              <div className="p-12 text-center opacity-30 text-sm italic">No categories yet.</div>
+              <div className="p-12 text-center opacity-30 text-sm italic">ምንም ምድቦች የሉም</div>
             )}
           </div>
         </div>
@@ -134,16 +134,16 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
       <div className="space-y-4">
         <form onSubmit={handleAdd} className="rounded-xl border border-[hsl(var(--border))] p-6 sticky top-20" style={{ background: "hsl(var(--card))" }}>
           <h3 className="font-bold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
-            <Plus size={16} /> Add Category
+            <Plus size={16} /> ምድብ ጨምር
           </h3>
 
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Name</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">ስም</label>
               <input
                 className="w-full h-9 rounded-lg border px-3 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)]"
                 style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
-                placeholder="e.g., Lent Songs"
+                placeholder="ምሳሌ... ሚያዚያ 23 ወረብ፣ ሐምሌ 26፣ ወዘተ..."
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 required
@@ -151,11 +151,11 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Description</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">ማብራሪያ</label>
               <textarea
                 className="w-full h-24 rounded-lg border px-3 py-2 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] resize-none"
                 style={{ background: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}
-                placeholder="Brief description..."
+                placeholder="አጭር ማብራሪያ..."
                 value={newDesc}
                 onChange={(e) => setNewDesc(e.target.value)}
               />
@@ -167,7 +167,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
               className="w-full h-10 rounded-lg bg-[hsl(25_70%_45%)] hover:bg-[hsl(25_70%_40%)] text-white text-sm font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50"
             >
               {isAdding ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
-              Save Category
+              ምድቡን መዝግብ
             </button>
           </div>
         </form>
@@ -182,7 +182,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-bold text-sm uppercase tracking-wider flex items-center gap-2">
-                <Edit size={16} /> Edit Category
+                <Edit size={16} /> ምድብ አስተካክል
               </h3>
               <button onClick={() => setEditingCategory(null)} className="opacity-50 hover:opacity-100 transition-opacity">
                 <X size={20} />
@@ -217,7 +217,7 @@ export default function CategoryList({ initialCategories }: CategoryListProps) {
                   onClick={() => setEditingCategory(null)}
                   className="px-4 py-2 text-sm font-medium opacity-50 hover:opacity-100"
                 >
-                  Cancel
+                  ተመለስ
                 </button>
                 <button
                   type="submit"

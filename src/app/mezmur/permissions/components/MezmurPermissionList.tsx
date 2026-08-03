@@ -89,7 +89,7 @@ export default function MezmurPermissionList({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 opacity-50" size={16} />
           <input
             type="text"
-            placeholder="Search member or reason..."
+            placeholder="በአባልና በምክንያት ፈልግ..."
             className="w-full h-10 pl-10 pr-4 bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-lg text-sm focus:outline-none"
             value={searchText}
             onChange={e => setSearchText(e.target.value)}
@@ -111,7 +111,7 @@ export default function MezmurPermissionList({
             className="flex items-center gap-2 px-4 py-2 bg-[hsl(25_70%_45%)] text-white rounded-lg font-semibold text-sm whitespace-nowrap hover:bg-[hsl(25_70%_40%)]"
           >
             <Plus size={16} />
-            Add Permission
+            ዐዲስ ፈቃድ
           </button>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default function MezmurPermissionList({
         <form onSubmit={handleCreate} className="p-6 bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl shadow-lg space-y-4 animate-slide-in">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-bold uppercase opacity-50">Member</label>
+              <label className="text-xs font-bold uppercase opacity-50">አባል</label>
               <select
                 className="w-full h-10 px-3 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-lg text-sm"
                 value={newPermission.memberId}
@@ -132,14 +132,14 @@ export default function MezmurPermissionList({
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-bold uppercase opacity-50">Permission Type</label>
+              <label className="text-xs font-bold uppercase opacity-50">የፈቃድ ዐይነት</label>
               <select
                 className="w-full h-10 px-3 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-lg text-sm"
                 value={newPermission.permissionTypeId}
                 onChange={e => setNewPermission({ ...newPermission, permissionTypeId: e.target.value })}
                 required
               >
-                <option value="">Select Type</option>
+                <option value="">ዐይነት ምረጥ</option>
                 {permissionTypes.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
               </select>
             </div>
@@ -181,7 +181,7 @@ export default function MezmurPermissionList({
               onClick={() => setIsAdding(false)}
               className="px-4 py-2 text-sm font-medium text-[hsl(var(--muted-foreground))]"
             >
-              Cancel
+              ተመለስ
             </button>
             <button
               type="submit"
@@ -250,7 +250,7 @@ export default function MezmurPermissionList({
         {filteredPermissions.length === 0 && (
           <div className="py-20 text-center opacity-30">
             <Clock size={48} className="mx-auto mb-4" />
-            <p className="text-lg font-bold">No permissions found</p>
+            <p className="text-lg font-bold">ምንም ፈቃድ አልተገኘም</p>
           </div>
         )}
       </div>

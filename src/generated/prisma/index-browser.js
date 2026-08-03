@@ -234,6 +234,7 @@ exports.Prisma.PermissionTypeScalarFieldEnum = {
   appliesToSunday: 'appliesToSunday',
   specificDays: 'specificDays',
   appliesToSundays: 'appliesToSundays',
+  mode: 'mode',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -530,7 +531,8 @@ exports.eventType = exports.$Enums.eventType = {
   SUNDAY: 'SUNDAY',
   MEZMUR_REGULAR: 'MEZMUR_REGULAR',
   MEZMUR_BEGINNERS: 'MEZMUR_BEGINNERS',
-  MEZMUR_CONTINUOUS: 'MEZMUR_CONTINUOUS'
+  MEZMUR_CONTINUOUS: 'MEZMUR_CONTINUOUS',
+  MEZMUR_EVENT: 'MEZMUR_EVENT'
 };
 
 exports.permissionTypeCategory = exports.$Enums.permissionTypeCategory = {

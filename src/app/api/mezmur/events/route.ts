@@ -1,69 +1,193 @@
+// /api/mezmur/events/route.ts
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-import { gregorianToEthiopianDate } from "@/src/lib/ethiopiancal";
+import { dateToEthiopian } from "@/src/lib/ethiopiancal";
 
-const eventSchema = z.object({
-  title: z.string().min(1),
-  date: z.string(),
-  eventType: z.enum(["MEZMUR_REGULAR", "MEZMUR_BEGINNERS", "MEZMUR_CONTINUOUS"]),
-  description: z.string().optional(),
-  location: z.string().optional(),
-  createdById: z.string(),
-});
+type EventPayload = {
+  title: string;
+  description?: string;
+  date: string;
+  location?: string;
+  ethiopianYear?: number;
+  ethiopianMonth?: number;
+  ethiopianDay?: number;
+  isRecurring?: boolean;
+  recurringMonth?: number | null;
+  recurringDay?: number | null;
+  eligibilityRuleId?: string;
+  targetMemberTypes?: string[];
+};
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const eventType = searchParams.get("type");
-
     const events = await prisma.event.findMany({
       where: {
-        eventType: eventType ? (eventType as any) : { in: ["MEZMUR_REGULAR", "MEZMUR_BEGINNERS", "MEZMUR_CONTINUOUS"] },
-        isActive: true,
+        eventType: 'MEZMUR_EVENT',
+        OR: [
+          { isRecurring: false },
+          {
+            isRecurring: true,
+            ethiopianYear: new Date().getFullYear() - 8,
+          }
+        ]
       },
-      orderBy: { date: "desc" },
+      include: {
+        eligibilityRule: true,
+        _count: {
+          select: { attendances: true },
+        },
+      },
+      orderBy: { date: "asc" },
     });
-    return NextResponse.json(events);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to load events" }, { status: 500 });
+
+    const serialized = events.map((event) => ({
+      id: event.id,
+      title: event.title,
+      description: event.description,
+      date: event.date.toISOString(),
+      location: event.location,
+      ethiopianYear: event.ethiopianYear,
+      ethiopianMonth: event.ethiopianMonth,
+      ethiopianDay: event.ethiopianDay,
+      isRecurring: event.isRecurring,
+      recurringMonth: event.recurringMonth,
+      recurringDay: event.recurringDay,
+      eligibilityRule: event.eligibilityRule?.name ?? "",
+      eligibilityRuleId: event.eligibilityRuleId,
+      targetMemberTypes: Array.isArray(event.targetMemberTypes)
+        ? event.targetMemberTypes.map(t => String(t))
+        : [],
+      ethDate: dateToEthiopian(new Date(event.date)),
+      _count: event._count,
+    }));
+
+    return NextResponse.json(serialized);
+  } catch (error: any) {
+    console.error("GET /api/mezmur/events error:", error);
+    return NextResponse.json(
+      { error: "Failed to load events", details: error?.message },
+      { status: 500 }
+    );
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const validation = eventSchema.safeParse(body);
-    if (!validation.success) {
-      return NextResponse.json({ error: validation.error.flatten() }, { status: 400 });
+    const rawBody = await request.text();
+    console.log("POST /api/mezmur/events raw body:", rawBody);
+    
+    const body = JSON.parse(rawBody) as Partial<EventPayload>;
+    console.log("POST /api/mezmur/events parsed body:", JSON.stringify(body, null, 2));
+
+    // Validation
+    if (!body.title || typeof body.title !== 'string' || body.title.trim() === '') {
+      return NextResponse.json(
+        { error: "title is required and must be a non-empty string" },
+        { status: 400 }
+      );
     }
 
-    const { title, date, eventType, description, location, createdById } = validation.data;
-    const gregDate = new Date(date);
-    const ethDate = gregorianToEthiopianDate({
-      year: gregDate.getFullYear(),
-      month: gregDate.getMonth() + 1,
-      day: gregDate.getDate(),
-    });
+    if (!body.date || typeof body.date !== 'string') {
+      return NextResponse.json(
+        { error: "date is required and must be a string" },
+        { status: 400 }
+      );
+    }
 
-    const event = await prisma.event.create({
-      data: {
-        title,
-        date: gregDate,
-        eventType,
-        description,
-        location,
-        createdById,
-        ethiopianYear: ethDate.year,
-        ethiopianMonth: ethDate.month,
-        ethiopianDay: ethDate.day,
-      },
-    });
+    const eventDate = new Date(body.date);
+    if (isNaN(eventDate.getTime())) {
+      return NextResponse.json(
+        { error: `Invalid date format: "${body.date}"` },
+        { status: 400 }
+      );
+    }
 
+    // Get admin user
+    let adminUser = await prisma.user.findFirst({ where: { type: "ADMIN" } });
+    if (!adminUser) {
+      adminUser = await prisma.user.findFirst({ where: { type: "SUPERADMIN" } });
+    }
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { error: "No admin user found to create event" },
+        { status: 400 }
+      );
+    }
+
+    console.log("Admin user found:", adminUser.id);
+
+    // Build create data
+    const createData: any = {
+      title: body.title.trim(),
+      description: body.description || null,
+      date: eventDate,
+      location: body.location || null,
+      ethiopianYear: body.ethiopianYear ?? null,
+      ethiopianMonth: body.ethiopianMonth ?? null,
+      ethiopianDay: body.ethiopianDay ?? null,
+      isRecurring: body.isRecurring === true,
+      recurringMonth: body.isRecurring ? (body.recurringMonth ?? null) : null,
+      recurringDay: body.isRecurring ? (body.recurringDay ?? null) : null,
+      eligibilityRuleId: body.eligibilityRuleId || null,
+      targetMemberTypes: body.targetMemberTypes || [],
+      eventType: 'MEZMUR_EVENT',
+      createdById: adminUser.id,
+    };
+
+    console.log("Creating mezmur event with data:", JSON.stringify(createData, null, 2));
+
+    const event = await prisma.event.create({ data: createData });
+
+    console.log("Mezmur event created successfully:", event.id);
     return NextResponse.json(event, { status: 201 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to create event" }, { status: 500 });
+
+  } catch (error: any) {
+    console.error("POST /api/mezmur/events error:", error);
+    console.error("Error stack:", error?.stack);
+    return NextResponse.json(
+      { 
+        error: "Failed to create event", 
+        details: error?.message || "Unknown error",
+        code: error?.code || "UNKNOWN"
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const body = await request.json();
+    
+    if (!body.ids || !Array.isArray(body.ids) || body.ids.length === 0) {
+      return NextResponse.json(
+        { error: "ids array is required" },
+        { status: 400 }
+      );
+    }
+
+    await prisma.$transaction([
+      prisma.attendance.deleteMany({
+        where: { eventId: { in: body.ids } },
+      }),
+      prisma.event.deleteMany({
+        where: { 
+          id: { in: body.ids },
+          eventType: 'MEZMUR_EVENT',
+        },
+      }),
+    ]);
+
+    return NextResponse.json(
+      { message: `${body.ids.length} event(s) deleted successfully` },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("DELETE /api/mezmur/events error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete events", details: error?.message },
+      { status: 500 }
+    );
   }
 }

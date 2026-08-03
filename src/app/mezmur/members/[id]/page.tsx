@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Mic2, Calendar, User, Phone, MapPin, Edit, ArrowLeft, CheckCircle2 } from "lucide-react";
 
 const groupLabels: Record<string, string> = {
-  BEGINNERS: "ጀማሪ (Beginners)",
-  CONTINUOUS: "ቀጣይ (Continuous)",
+  BEGINNERS: "ጀማሪ አባላት",
+  CONTINUOUS: "ተከታታይ ጥናት",
 };
 
 const statusColors: Record<string, string> = {
@@ -42,13 +42,13 @@ export default async function MezmurSingerDetailsPage({ params }: { params: Prom
     <div className="max-w-4xl mx-auto space-y-8 animate-fade-in py-6">
       <div className="flex items-center justify-between">
         <Link href="/mezmur/members" className="flex items-center gap-2 text-sm opacity-60 hover:opacity-100 transition-opacity">
-          <ArrowLeft size={16} /> Back to Singers
+          <ArrowLeft size={16} /> ወደ አባላት ገጽ
         </Link>
         <Link
           href={`/mezmur/members/${id}/edit`}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[hsl(var(--muted))] border border-[hsl(var(--border))] text-sm font-bold hover:bg-[hsl(var(--accent))] transition-all"
         >
-          <Edit size={16} /> Edit Profile
+          <Edit size={16} /> አስተካክል
         </Link>
       </div>
 
@@ -59,34 +59,34 @@ export default async function MezmurSingerDetailsPage({ params }: { params: Prom
             <div className="w-20 h-20 rounded-full bg-[hsl(25_70%_45%)]/10 text-[hsl(25_70%_45%)] flex items-center justify-center mx-auto mb-4 border-2 border-[hsl(25_70%_45%)]/20">
               <User size={40} />
             </div>
-            <h2 className="text-xl font-bold">{member.fullName || "Unnamed"}</h2>
-            <p className="text-xs opacity-50 uppercase tracking-widest mt-1 font-bold">Singer Profile</p>
+            <h2 className="text-xl font-bold">{member.fullName || "አልተመዘገበም"}</h2>
+            <p className="text-xs opacity-50 uppercase tracking-widest mt-1 font-bold">የመዝሙር ጥናት አባላት</p>
           </div>
 
           <div className="rounded-2xl border border-[hsl(var(--border))] p-6 space-y-4" style={{ background: "hsl(var(--card))" }}>
-            <h3 className="text-[10px] font-bold uppercase tracking-widest opacity-40">Contact Details</h3>
+            <h3 className="text-[10px] font-bold uppercase tracking-widest opacity-40">የአባል መረጃዎች</h3>
 
             <div className="flex items-center gap-3">
               <Phone size={14} className="opacity-40" />
               <div className="min-w-0">
-                <p className="text-[10px] opacity-40 uppercase font-bold">Phone</p>
-                <p className="text-sm font-medium truncate">{member.phoneNumber || "Not provided"}</p>
+                <p className="text-[10px] opacity-40 uppercase font-bold">ስልክ ቁጥር</p>
+                <p className="text-sm font-medium truncate">{member.phoneNumber || "አልተመዘገበም"}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               <MapPin size={14} className="opacity-40" />
               <div className="min-w-0">
-                <p className="text-[10px] opacity-40 uppercase font-bold">Address</p>
-                <p className="text-sm font-medium truncate">{member.address || "Not provided"}</p>
+                <p className="text-[10px] opacity-40 uppercase font-bold">አድራሻ</p>
+                <p className="text-sm font-medium truncate">{member.address || "አልተመዘገበም"}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               <Calendar size={14} className="opacity-40" />
               <div className="min-w-0">
-                <p className="text-[10px] opacity-40 uppercase font-bold">Age</p>
-                <p className="text-sm font-medium">{member.age ? `${member.age} years` : "Unknown"}</p>
+                <p className="text-[10px] opacity-40 uppercase font-bold">ዕድሜ</p>
+                <p className="text-sm font-medium">{member.age ? `${member.age} ዓመት` : "አልተመዘገበም"}</p>
               </div>
             </div>
           </div>
@@ -97,14 +97,14 @@ export default async function MezmurSingerDetailsPage({ params }: { params: Prom
           <div className="rounded-2xl border border-[hsl(var(--border))] overflow-hidden" style={{ background: "hsl(var(--card))" }}>
             <div className="p-4 border-b border-[hsl(var(--border))] flex items-center gap-2">
               <Mic2 size={18} className="opacity-50" />
-              <h3 className="font-bold text-sm uppercase tracking-wider">Group Enrollment</h3>
+              <h3 className="font-bold text-sm uppercase tracking-wider">ምድቦች</h3>
             </div>
             <div className="divide-y divide-[hsl(var(--border))]">
               {member.mezmurEnrollments.map((en) => (
                 <div key={en.id} className="p-4 flex items-center justify-between">
                   <div>
                     <p className="text-sm font-bold">{groupLabels[en.groupType]}</p>
-                    <p className="text-[10px] opacity-40 mt-0.5">Enrolled on {en.enrolledDate}</p>
+                    <p className="text-[10px] opacity-40 mt-0.5">በ{en.enrolledDate} ላይ</p>
                   </div>
                   <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase ${statusColors[en.status]}`}>
                     {en.status}
@@ -112,7 +112,7 @@ export default async function MezmurSingerDetailsPage({ params }: { params: Prom
                 </div>
               ))}
               {member.mezmurEnrollments.length === 0 && (
-                <div className="p-12 text-center opacity-30 text-sm italic">Not enrolled in any groups.</div>
+                <div className="p-12 text-center opacity-30 text-sm italic">በምንም ምድብ ውስጥ አልተመዘገበም/ችም</div>
               )}
             </div>
           </div>
@@ -120,7 +120,7 @@ export default async function MezmurSingerDetailsPage({ params }: { params: Prom
           <div className="rounded-2xl border border-[hsl(var(--border))] overflow-hidden" style={{ background: "hsl(var(--card))" }}>
             <div className="p-4 border-b border-[hsl(var(--border))] flex items-center gap-2">
               <CheckCircle2 size={18} className="opacity-50" />
-              <h3 className="font-bold text-sm uppercase tracking-wider">Recent Attendance</h3>
+              <h3 className="font-bold text-sm uppercase tracking-wider">የቅርብ ጊዜ አቴንዳንሶች</h3>
             </div>
             <div className="divide-y divide-[hsl(var(--border))]">
               {member.attendances.map((at) => (
@@ -135,7 +135,7 @@ export default async function MezmurSingerDetailsPage({ params }: { params: Prom
                 </div>
               ))}
               {member.attendances.length === 0 && (
-                <div className="p-12 text-center opacity-30 text-sm italic">No recent attendance records.</div>
+                <div className="p-12 text-center opacity-30 text-sm italic">ምንም የተመዘገበ አቴንዳንስ የለም</div>
               )}
             </div>
           </div>

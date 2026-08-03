@@ -87,7 +87,7 @@ export default function BulkMusicUploadModal({
       <div className="w-full max-w-2xl max-h-[90vh] rounded-2xl border border-[hsl(var(--border))] flex flex-col shadow-2xl bg-[hsl(var(--card))]" onClick={e => e.stopPropagation()}>
         <div className="p-4 border-b border-[hsl(var(--border))] flex items-center justify-between">
           <h3 className="font-bold text-sm uppercase tracking-wider flex items-center gap-2">
-            <Upload size={16} /> Bulk Upload Music
+            <Upload size={16} /> ብዙ መዝሙራትን አስገባ
           </h3>
           <button onClick={onClose} className="opacity-50 hover:opacity-100 transition-opacity"><X size={20} /></button>
         </div>
@@ -136,14 +136,14 @@ export default function BulkMusicUploadModal({
                         onClick={() => setLanguage(lang as any)}
                         className={`flex-1 py-1.5 rounded-md text-[10px] font-bold transition-all ${language === lang ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
                       >
-                        {lang === "AMHARIC" ? "Amharic" : "Ge'ez"}
+                        {lang === "AMHARIC" ? "ዐማርኛ" : "ግእዝ"}
                       </button>
                     ))}
                   </div>
                </div>
 
                <div className="space-y-1">
-                  <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Alignment (Batch)</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Alignment</label>
                   <div className="flex p-1 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
                     <button
                       type="button"
@@ -164,7 +164,7 @@ export default function BulkMusicUploadModal({
             </div>
 
             <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Categories (Batch)</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">የመዝሙር ምድቦች</label>
                 <div className="flex flex-wrap gap-1.5 p-3 rounded-xl border bg-[hsl(var(--muted)/0.2)]" style={{ borderColor: "hsl(var(--border))" }}>
                   {categories.map(cat => (
                     <button
@@ -198,7 +198,7 @@ export default function BulkMusicUploadModal({
 
           {status === "success" && (
             <div className="mb-4 p-2 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold rounded flex items-center gap-2">
-              <CheckCircle2 size={14} /> Batch uploaded successfully!
+              <CheckCircle2 size={14} /> መዝሙራት በትክክል ተጭነዋል!
             </div>
           )}
 
@@ -209,14 +209,14 @@ export default function BulkMusicUploadModal({
           )}
 
           <div className="flex justify-end gap-3">
-            <button onClick={onClose} className="px-4 py-2 text-xs font-bold opacity-50 hover:opacity-100 transition-opacity">Cancel</button>
+            <button onClick={onClose} className="px-4 py-2 text-xs font-bold opacity-50 hover:opacity-100 transition-opacity">ተመለስ</button>
             <button
               onClick={handleSubmit}
               disabled={isUploading || files.length === 0}
               className="px-8 py-2 bg-[hsl(25_70%_45%)] hover:bg-[hsl(25_70%_40%)] text-white rounded-lg text-xs font-bold transition-all disabled:opacity-30 flex items-center gap-2"
             >
               {isUploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
-              Start Batch Upload
+              መዝሙራቱን አስገባ
             </button>
           </div>
         </div>

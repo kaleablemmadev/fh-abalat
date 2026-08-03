@@ -160,8 +160,8 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-xl mx-auto animate-fade-in">
       <div className="space-y-1">
-        <h2 className="text-xl font-bold tracking-tight">Upload Song</h2>
-        <p className="text-sm opacity-50">Add a new recording to the practice library</p>
+        <h2 className="text-xl font-bold tracking-tight">መዝሙር አስገባ</h2>
+        <p className="text-sm opacity-50">ወደ መዝገቡ ዐዲስ መዝሙር ወይም ወረብ ጨምር</p>
       </div>
 
       <div
@@ -215,11 +215,11 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
 
       <div className="space-y-4">
         <div className="space-y-1.5">
-          <label className="text-xs font-bold uppercase tracking-wider opacity-60">Song Title</label>
+          <label className="text-xs font-bold uppercase tracking-wider opacity-60">የመዝሙር ስም</label>
           <input
             className="w-full h-10 rounded-lg border px-4 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)]"
             style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
-            placeholder="Enter the title of the mezmur..."
+            placeholder="የመዝሙር ወይም ወረብ ስም ጻፍ..."
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -227,7 +227,7 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-bold uppercase tracking-wider opacity-60">Categories</label>
+          <label className="text-xs font-bold uppercase tracking-wider opacity-60">ምድቦች</label>
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -251,7 +251,7 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
           {/* Language Selector */}
           <div className="space-y-1">
             <label className="text-xs font-bold uppercase tracking-wider opacity-60 flex items-center gap-2">
-              <Languages size={14} /> Language
+              <Languages size={14} /> ቋንቋ
             </label>
             <div className="flex p-1 rounded-lg bg-[hsl(var(--muted)/0.5)] border border-[hsl(var(--border))]">
               <button
@@ -259,14 +259,14 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
                 onClick={() => setLanguage("AMHARIC")}
                 className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${language === "AMHARIC" ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
               >
-                Amharic
+                ዐማርኛ
               </button>
               <button
                 type="button"
                 onClick={() => setLanguage("GEEZ")}
                 className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${language === "GEEZ" ? "bg-[hsl(25_70%_45%)] text-white shadow-lg" : "opacity-50"}`}
               >
-                Ge'ez
+                ግእዝ
               </button>
             </div>
           </div>
@@ -275,9 +275,8 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold uppercase tracking-wider opacity-60 flex items-center gap-2">
-                <Type size={14} /> Lyrics ({language === "GEEZ" ? "Ge'ez" : "Amharic"}) — Zemachs
+                <Type size={14} /> የመዝሙር ቃላት ({language === "GEEZ" ? "ግእዝ" : "ዐማርኛ"}) — አዝማቾች
               </label>
-              <span className="text-[10px] opacity-40 italic">1st zemach → left, 2nd → right, alternating</span>
             </div>
 
             <div className="space-y-3">
@@ -293,14 +292,14 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
                           color: isLeft ? "hsl(25 70% 50%)" : "hsl(210 70% 55%)"
                         }}
                       >
-                        Zemach {index + 1} · {isLeft ? "← Left" : "Right →"}
+                        አዝማች {index + 1} · {isLeft ? "← ግራ" : "ቀኝ →"}
                       </span>
                       {zemachs.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeZemach(index)}
                           className="p-1 rounded hover:bg-red-500/10 text-red-400 opacity-0 group-hover:opacity-100 transition-all"
-                          title="Remove this zemach"
+                          title="ይህንን አዝማች አጥፋ"
                         >
                           <Trash2 size={12} />
                         </button>
@@ -312,7 +311,7 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
                         background: "hsl(var(--card))",
                         borderColor: isLeft ? "hsl(25 70% 45% / 0.3)" : "hsl(210 70% 45% / 0.3)"
                       }}
-                      placeholder={`Write zemach ${index + 1} lyrics here... (multiple paragraphs allowed)`}
+                      placeholder={`አዝማች ${index + 1} ቃላትን ጻፍ...`}
                       value={zemach.text}
                       onChange={(e) => updateZemach(index, e.target.value)}
                     />
@@ -327,19 +326,19 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border-2 border-dashed text-xs font-bold uppercase tracking-wider transition-all opacity-50 hover:opacity-100"
               style={{ borderColor: "hsl(var(--border))" }}
             >
-              <Plus size={14} /> Add Zemach
+              <Plus size={14} /> አዝማች ጨምር
             </button>
           </div>
 
           {language === "GEEZ" && (
             <div className="space-y-1.5 animate-in fade-in slide-in-from-top-2">
               <label className="text-xs font-bold uppercase tracking-wider opacity-60 flex items-center gap-2 text-emerald-500">
-                <Languages size={14} /> Amharic Interpretation
+                <Languages size={14} /> ዐማርኛ ትርጉም
               </label>
               <textarea
                 className="w-full h-32 rounded-lg border px-4 py-3 text-sm transition-all outline-none focus:border-[hsl(25_70%_40%)] resize-none"
                 style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
-                placeholder="Write the Amharic interpretation of the Ge'ez text..."
+                placeholder="የግእዝ መዝሙሩን ዐማርኛ ትርጉም ጻፉ ..."
                 value={interpretation}
                 onChange={(e) => setInterpretation(e.target.value)}
               />
@@ -373,7 +372,7 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
       {status === "success" && (
         <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-500/10 text-emerald-500 text-xs font-medium border border-emerald-500/20">
           <CheckCircle2 size={16} />
-          Song uploaded successfully! Redirecting...
+          መዝሙራቱ በትክክል ተጭነዋል! Redirecting...
         </div>
       )}
 
@@ -384,7 +383,7 @@ export default function MusicUploadForm({ categories, adminId }: MusicUploadForm
           className="px-5 py-2 rounded-lg text-sm font-bold border transition-all opacity-60 hover:opacity-100"
           style={{ borderColor: "hsl(var(--border))" }}
         >
-          Cancel
+          ተመለስ
         </button>
         <button
           type="submit"

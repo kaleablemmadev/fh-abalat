@@ -1,5 +1,6 @@
 import prisma from "@/src/lib/prisma";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import MezmurAttendanceGrid from "../components/MezmurAttendanceGrid";
 import { MezmurAttendanceService } from "@/src/services/mezmur-attendance.service";
 import { getEthiopianToday, ethMonthNames } from "@/src/lib/ethiopiancal";
@@ -29,6 +30,22 @@ const groupTypeMap: Record<string, string> = {
   beginners: "BEGINNERS",
   continuous: "CONTINUOUS",
 };
+
+// Helper function to get previous month/year
+function getPreviousMonth(year: number, month: number): { year: number; month: number } {
+  if (month === 1) {
+    return { year: year - 1, month: 13 };
+  }
+  return { year, month: month - 1 };
+}
+
+// Helper function to get next month/year
+function getNextMonth(year: number, month: number): { year: number; month: number } {
+  if (month === 13) {
+    return { year: year + 1, month: 1 };
+  }
+  return { year, month: month + 1 };
+}
 
 export default async function MezmurAttendanceTypePage({
   params,
@@ -107,16 +124,33 @@ export default async function MezmurAttendanceTypePage({
     select: { memberId: true, eventId: true, attendanceTypeId: true },
   });
 
+  const prevMonth = getPreviousMonth(currentEthYear, currentEthMonth);
+  const nextMonth = getNextMonth(currentEthYear, currentEthMonth);
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight capitalize" style={{ color: "hsl(var(--foreground))" }}>
-            {type} Attendance
+            የ{type === "regular" ? "መደበኛ" : type === "beginners" ? "ጀማሪ" : "ተከታታይ"} መዝሙር ጥናት አቴንዳንስ
           </h1>
           <p className="text-sm opacity-50">
             {ethMonthNames[currentEthMonth]} {currentEthYear} ዓ.ም.
           </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/mezmur/attendance/${type}?month=${prevMonth.month}&year=${prevMonth.year}`}
+            className="px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
+          >
+            ← ቀድሞ
+          </Link>
+          <Link
+            href={`/mezmur/attendance/${type}?month=${nextMonth.month}&year=${nextMonth.year}`}
+            className="px-3 py-1 rounded-md border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
+          >
+            ቀጣይ →
+          </Link>
         </div>
       </div>
 

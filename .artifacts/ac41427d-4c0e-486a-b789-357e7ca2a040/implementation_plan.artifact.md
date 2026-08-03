@@ -1,48 +1,52 @@
-# Implementation Plan - Bulk Operations & Enhanced Audio Player
+# Implementation Plan - Mezmur Lyrics Alignment and Zemachs
 
-Improve Mezmur mode with bulk management capabilities and a robust third-party audio player to resolve playback issues.
+This plan addresses the requirement to remove manual alignment options for lyrics in Mezmur mode and implement a "multiple Zemach" structure with automatic alternating alignment.
 
 ## User Review Required
 
+> [!NOTE]
+> The "multiple Zemach" functionality and automatic alternating alignment are already partially implemented in the current codebase. This plan focuses on removing the remaining manual alignment options and ensuring consistency across all Mezmur-related views.
+
 > [!IMPORTANT]
-> - **New Audio Player**: I will install and integrate `react-h5-audio-player`. This is a professional-grade React component that handles cross-browser audio compatibility much better than the standard HTML5 tag.
-> - **Bulk Upload**: You will be able to select and upload multiple files at once.
-> - **Music Picker**: A new tool to select multiple existing songs and link them to categories or playlists in one click.
+> I will hide the "Alignment" selector in all UI components but keep the `alignment` field in the database (defaulting to `LEFT`) to maintain backward compatibility and avoid breaking existing data.
 
 ## Proposed Changes
 
-### [Audio Playback]
+### UI Components
 
-#### [NPM] Install Package
-- Install `react-h5-audio-player`.
+#### [MODIFY] [BulkMusicUploadModal.tsx](file:///C:/Dev/fh-abalat/src/app/mezmur/music/components/BulkMusicUploadModal.tsx)
+- Remove the "Alignment" selector section from the form.
+- Update `handleSubmit` to hardcode `alignment` to `"LEFT"`.
 
 #### [MODIFY] [MusicLibraryClient.tsx](file:///C:/Dev/fh-abalat/src/app/mezmur/music/components/MusicLibraryClient.tsx)
-- Replace standard `<audio>` tags with the `AudioPlayer` component.
-- Configure it to handle Supabase URLs correctly.
+- Ensure the "viewing lyrics" and "editing lyrics" modals do not mention manual alignment.
+- Verify alternating alignment logic in both viewing and editing modes.
 
-### [Bulk Operations]
+#### [MODIFY] [MusicUploadForm.tsx](file:///C:/Dev/fh-abalat/src/app/mezmur/music/upload/components/MusicUploadForm.tsx)
+- Double-check that `alignment` is hidden and hardcoded to `LEFT`.
+- (Optional) Improve the labeling of Zemachs to be more descriptive.
 
-#### [NEW] [Bulk Upload API](file:///C:/Dev/fh-abalat/src/app/api/mezmur/music/bulk-upload/route.ts)
-- Support multiple file uploads in a single request.
-- Batch database creation for files.
+#### [MODIFY] [CategoryDetailsClient.tsx](file:///C:/Dev/fh-abalat/src/app/mezmur/music-categories/[id]/components/CategoryDetailsClient.tsx)
+- Verify that lyrics display uses alternating alignment.
 
-#### [NEW] [BulkMusicUploadModal](file:///C:/Dev/fh-abalat/src/app/mezmur/music/components/BulkMusicUploadModal.tsx)
-- Allow selecting multiple files and setting common metadata (category, language) for the batch.
+#### [MODIFY] [PlaylistDetailsClient.tsx](file:///C:/Dev/fh-abalat/src/app/mezmur/playlists/[id]/components/PlaylistDetailsClient.tsx)
+- Verify that lyrics display uses alternating alignment.
 
-#### [NEW] [MusicPickerModal](file:///C:/Dev/fh-abalat/src/app/mezmur/music/components/MusicPickerModal.tsx)
-- A searchable checklist for adding existing library songs to a category/playlist.
+#### [MODIFY] [MemberMezmurPlanClient.tsx](file:///C:/Dev/fh-abalat/src/app/member/mezmur-plan/components/MemberMezmurPlanClient.tsx)
+- Verify that the member view for lyrics uses alternating alignment.
 
-### [UI Cleanup]
+### API Routes
 
-#### [NEW] Category Detail Page
-- Create `src/app/mezmur/music-categories/[id]/page.tsx` to manage a specific category's songs.
+#### [MODIFY] [upload/route.ts](file:///C:/Dev/fh-abalat/src/app/api/mezmur/music/upload/route.ts)
+- Update to default `alignment` to `"LEFT"` if not provided.
 
-#### [MODIFY] Playlist and Category UIs
-- Add **"Bulk Upload"** and **"Add from Library"** buttons to these pages.
+#### [MODIFY] [bulk-upload/route.ts](file:///C:/Dev/fh-abalat/src/app/api/mezmur/music/bulk-upload/route.ts)
+- Update to default `alignment` to `"LEFT"` if not provided.
 
 ## Verification Plan
 
 ### Manual Verification
-1. Click play on any song and verify smooth playback with the new UI.
-2. Perform a bulk upload of 5 files and verify they all appear.
-3. Use the Music Picker to add 3 existing songs to a playlist and verify the update.
+- **Bulk Upload**: Open the bulk upload modal and verify that the Alignment selector is no longer visible. Perform a bulk upload and verify it defaults to LEFT.
+- **Lyrics View**: Open the lyrics for a song with multiple Zemachs and verify they alternate between left and right alignment.
+- **Lyrics Edit**: Edit a song's lyrics, add a new Zemach, and verify it automatically shows the correct alignment label (e.g., "አዝማች 3 · ← ግራ").
+- **Member View**: Log in as a member, go to the Mezmur Plan, and verify lyrics display correctly with alternating alignment.

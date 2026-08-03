@@ -55,13 +55,22 @@ interface MemberStats {
   notifications: any[];
 }
 
+function getMonthNumber(monthName: string): number {
+  for (const [key, value] of Object.entries(ethMonthNames)) {
+    if (value === monthName) return Number(key);
+  }
+  return 1;
+}
+
 export default function MemberDashboard() {
   const [stats, setStats] = useState<MemberStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
-  const [selectedMonth, setSelectedMonth] = useState(getEthiopianToday().month);
-  const [selectedYear, setSelectedYear] = useState(getEthiopianToday().year);
+  const todayEthWords = getEthiopianToday();
+  const [selectedMonth, setSelectedMonth] = useState<number>(getMonthNumber(todayEthWords.month));
+  const [selectedYear, setSelectedYear] = useState<number>(todayEthWords.year);
   const [ethToday, setEthToday] = useState(getEthiopianToday());
+
 
   useEffect(() => {
     const sessionCookie = document.cookie
@@ -78,16 +87,7 @@ export default function MemberDashboard() {
 
   const fetchStats = async (userId: string) => {
     try {
-      // Find month number from month name
-      let monthNum = 1;
-      for (const [key, value] of Object.entries(ethMonthNames)) {
-        if (value === selectedMonth) {
-          monthNum = parseInt(key);
-          break;
-        }
-      }
-      
-      const res = await fetch(`/api/member/stats?memberId=${userId}&month=${monthNum}&year=${selectedYear}`);
+      const res = await fetch(`/api/member/stats?memberId=${userId}&month=${selectedMonth}&year=${selectedYear}`);
       if (res.ok) {
         const data = await res.json();
         setStats(data);
@@ -105,7 +105,7 @@ export default function MemberDashboard() {
     }
   }, [selectedMonth, selectedYear]);
 
-  const handleMonthChange = (month: string, year: number) => {
+  const handleMonthChange = (month: number, year: number) => {
     setSelectedMonth(month);
     setSelectedYear(year);
   };
@@ -200,11 +200,11 @@ export default function MemberDashboard() {
           <div className="flex gap-2">
             <select
               value={selectedMonth}
-              onChange={(e) => handleMonthChange(e.target.value, selectedYear)}
+              onChange={(e) => handleMonthChange(Number(e.target.value), selectedYear)}
               className="flex-1 bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm text-white"
             >
               {Object.entries(ethMonthNames).map(([key, value]) => (
-                <option key={key} value={value}>{value}</option>
+                <option key={key} value={key}>{value}</option>
               ))}
             </select>
             <input

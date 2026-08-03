@@ -7,7 +7,7 @@ import { getEthiopianToday, formatEthiopianDate } from "@/src/lib/ethiopiancal";
 export default async function MezmurSchedulePage() {
   const events = await prisma.event.findMany({
     where: {
-      eventType: { in: ["MEZMUR_REGULAR", "MEZMUR_BEGINNERS", "MEZMUR_CONTINUOUS"] },
+      eventType: "MEZMUR_EVENT",
       isActive: true,
     },
     include: {

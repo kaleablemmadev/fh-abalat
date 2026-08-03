@@ -1,29 +1,28 @@
-# Walkthrough - Mezmur Mode Fixes & Full CRUD
+# Walkthrough - Mezmur Events Counting and Display Fix
 
-I have resolved the music playback issues and completed the full set of CRUD operations for the Mezmur mode.
+I have successfully separated attendance sessions from actual events in the Mezmur mode. Customly created events are now the only items counted and displayed in the "Events" and "Schedule" sections.
 
-## Key Improvements
+## Changes
 
-### 1. Reliable Music Playback
-- **Audio Player Fix**: Updated the audio player in the [Music Library](file:///C:/Dev/fh-abalat/src/app/mezmur/music) to be more robust.
-- **Direct Source Injection**: Instead of using internal `<source>` tags, I'm now injecting the `fileUrl` directly into the `src` attribute of the `<audio>` element. This is significantly more reliable when dealing with dynamically loaded files from external storage like Supabase.
-- **Improved Visibility**: Removed transparency filters (`opacity-80`) that were potentially interfering with mouse clicks and ensured the player controls have adequate height.
+### Mezmur Dashboard
+- Updated the stats counter to only count records with `eventType: "MEZMUR_EVENT"`.
+- This ensures that regular attendance sessions (Regular, Beginners, Continuous) do not inflate the event count.
 
-### 2. Full Playlist Management
-- **New Edit Feature**: Added an **Edit** button to all playlists in the [Playlists](file:///C:/Dev/fh-abalat/src/app/mezmur/playlists) page.
-- **Modal Editor**: Clicking the edit button opens a modal to quickly rename a playlist or update its description.
-- **Patch API**: Integrated the `PATCH` endpoint to allow metadata updates without losing the songs assigned to the playlist.
+### Mezmur Schedule
+- Updated the schedule page query to filter exclusively for `MEZMUR_EVENT`.
+- Attendance-only sessions are now correctly hidden from the schedule list.
 
-### 3. Stability & Diagnostics
-- **Error Handling**: Added a console diagnostic to the audio player. If a file fails to load in the future, it will log the specific reason (e.g., Network, Format, etc.) to help with troubleshooting.
-- **Type Safety**: Verified that all changes are 100% type-safe and consistent with the project's architecture.
+### Event List Component
+- Added support for the `MEZMUR_EVENT` type in the `MezmurEventList` component.
+- Added a specific label ("በዓል") and color coding (Purple) for actual events.
+- Updated the navigation link for `MEZMUR_EVENT` to point directly to the specific event's attendance page (`/mezmur/events/[id]/attendance`).
 
 ## Verification Results
-- **Player Diagnostics**: Verified that the `<audio>` tag correctly handles URLs and reloads when switched.
-- **CRUD Operations**: Successfully implemented and verified `PATCH` operations for Music Metadata, Categories, and Playlists.
-- **TypeScript**: The project passes `npx tsc --noEmit` with zero errors.
 
-## How to use the updated features:
-1.  **Play a Song**: Open the **Music Library**. The player controls are now fully active. Click Play and the audio will stream directly from Supabase.
-2.  **Edit a Playlist**: Go to **Library > Playlists**, hover over a collection, click the emerald **Edit icon**, and update the name or description.
-3.  **Manage Categories**: (Previously implemented) Go to **Library > Categories** to rename or organize your music tags.
+### Automated Tests
+- Verified that the project structure and queries align with the `MEZMUR_EVENT` type defined in the Prisma schema.
+
+### Manual Verification
+- Checked the dashboard stats query: `eventType: "MEZMUR_EVENT"` is now used.
+- Checked the schedule query: `eventType: "MEZMUR_EVENT"` is now used.
+- Verified `typeLabels` and `typeColors` in `MezmurEventList.tsx` include the new event type.

@@ -10,7 +10,7 @@ interface MezmurEvent {
   title: string;
   description: string | null;
   date: string;
-  eventType: "MEZMUR_REGULAR" | "MEZMUR_BEGINNERS" | "MEZMUR_CONTINUOUS";
+  eventType: "MEZMUR_REGULAR" | "MEZMUR_BEGINNERS" | "MEZMUR_CONTINUOUS" | "MEZMUR_EVENT";
   _count: { attendances: number };
 }
 
@@ -22,12 +22,14 @@ const typeLabels: Record<string, string> = {
   MEZMUR_REGULAR: "ወጣት",
   MEZMUR_BEGINNERS: "ጀማሪ",
   MEZMUR_CONTINUOUS: "ተከታታይ ጥናት",
+  MEZMUR_EVENT: "በዓል",
 };
 
 const typeColors: Record<string, string> = {
   MEZMUR_REGULAR: "bg-blue-500/10 text-blue-400 border-blue-500/20",
   MEZMUR_BEGINNERS: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   MEZMUR_CONTINUOUS: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  MEZMUR_EVENT: "bg-purple-500/10 text-purple-400 border-purple-500/20",
 };
 
 export default function MezmurEventList({ initialEvents }: MezmurEventListProps) {
@@ -79,7 +81,11 @@ export default function MezmurEventList({ initialEvents }: MezmurEventListProps)
 
                   <div className="flex items-center gap-3">
                     <Link
-                      href={`/mezmur/attendance/${e.eventType.replace("MEZMUR_", "").toLowerCase()}?month=${ethDate.year % 100}&year=${ethDate.year}`}
+                      href={
+                        e.eventType === "MEZMUR_EVENT"
+                          ? `/mezmur/events/${e.id}/attendance`
+                          : `/mezmur/attendance/${e.eventType.replace("MEZMUR_", "").toLowerCase()}?month=${ethDate.year % 100}&year=${ethDate.year}`
+                      }
                       className="p-2 rounded-lg bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] transition-all opacity-0 group-hover:opacity-100"
                     >
                       <ChevronRight size={14} />

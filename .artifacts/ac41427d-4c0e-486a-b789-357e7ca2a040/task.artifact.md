@@ -1,6 +1,6 @@
-- `[ ]` Implement Bulk Upload and Category Songs APIs
-- `[ ]` Create `BulkMusicUploadModal` and `MusicPickerModal` components
-- `[ ]` Implement Category Detail Page with bulk actions
-- `[ ]` Update Playlist Detail Page with bulk actions
-- `[ ]` Add general Bulk Upload to Music Library
-- `[ ]` Verify all bulk operations
+- [x] Update Mezmur Dashboard stats (`src/app/mezmur/page.tsx`)
+- [x] Update Mezmur Schedule query (`src/app/mezmur/schedule/page.tsx`)
+- [x] Update `MezmurEventList` component (`src/app/mezmur/schedule/components/MezmurEventList.tsx`)
+    - [x] Update `eventType` in `MezmurEvent` interface
+    - [x] Add `MEZMUR_EVENT` to `typeLabels` and `typeColors`
+    - [x] Update navigation link for actual events

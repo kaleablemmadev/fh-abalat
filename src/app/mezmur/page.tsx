@@ -18,7 +18,7 @@ export default async function MezmurHomePage() {
     prisma.musicFile.count(),
     prisma.event.count({
       where: {
-        eventType: { in: ["MEZMUR_REGULAR", "MEZMUR_BEGINNERS", "MEZMUR_CONTINUOUS"] },
+        eventType: "MEZMUR_EVENT",
         isActive: true
       }
     }),

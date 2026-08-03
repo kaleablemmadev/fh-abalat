@@ -5,7 +5,7 @@ import { Shield, ArrowRight, Music, Users, CheckCircle2 } from "lucide-react";
 export default async function MezmurEligibilityDashboard() {
   const events = await prisma.event.findMany({
     where: {
-      eventType: "MEZMUR_EVENT",
+      mode: "MEZMUR",
       isActive: true,
     },
     include: {

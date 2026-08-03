@@ -30,7 +30,7 @@ export default function MezmurEligibilityRulesPage() {
   const fetchRules = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("/api/abalat/eligibility-rules"); // Rules are shared
+      const res = await fetch("/api/mezmur/eligibility-rules");
       if (!res.ok) throw new Error("Failed to load");
       const data = await res.json();
       setRules(data);
@@ -42,11 +42,11 @@ export default function MezmurEligibilityRulesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure? This will affect both Abalat and Mezmur modes.")) return;
+    if (!confirm("Are you sure you want to delete this Mezmur eligibility rule?")) return;
 
     setDeletingId(id);
     try {
-      const res = await fetch(`/api/abalat/eligibility-rules/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/mezmur/eligibility-rules/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete");
       setRules(rules.filter(r => r.id !== id));
     } catch (err) {
@@ -64,13 +64,13 @@ export default function MezmurEligibilityRulesPage() {
                 <ArrowLeft size={18} />
             </Link>
             <div>
-                <h1 className="text-2xl font-bold tracking-tight">Eligibility Rules</h1>
-                <p className="text-sm opacity-50">Rules are shared across all system modes</p>
+                <h1 className="text-2xl font-bold tracking-tight">የመዝሙር ማሟላት መስፈርቶች</h1>
+                <p className="text-sm opacity-50">የመዝሙር በዓላት ብቻ የሚጠቀሙ መስፈርቶች</p>
             </div>
         </div>
 
         <Link
-          href="/abalat/eligibility-rules/new" // Redirect to the primary rule creator
+          href="/mezmur/eligibility-rules/new"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[hsl(25_70%_45%)] hover:bg-[hsl(25_70%_40%)] text-white text-sm font-bold transition-all"
         >
           <Plus size={16} /> Create New Rule
@@ -107,7 +107,7 @@ export default function MezmurEligibilityRulesPage() {
 
                 <div className="flex items-center gap-3">
                   <Link
-                    href={`/abalat/eligibility-rules/${rule.id}/edit`}
+                    href={`/mezmur/eligibility-rules/${rule.id}/edit`}
                     className="p-2 rounded-lg hover:bg-[hsl(var(--muted))] opacity-0 group-hover:opacity-100 transition-all"
                   >
                     <Edit size={14} className="opacity-50" />

@@ -8367,6 +8367,7 @@ export namespace Prisma {
     createdById: string | null
     courseClassId: string | null
     isActive: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8388,6 +8389,7 @@ export namespace Prisma {
     createdById: string | null
     courseClassId: string | null
     isActive: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8410,6 +8412,7 @@ export namespace Prisma {
     createdById: number
     courseClassId: number
     isActive: number
+    mode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8449,6 +8452,7 @@ export namespace Prisma {
     createdById?: true
     courseClassId?: true
     isActive?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8470,6 +8474,7 @@ export namespace Prisma {
     createdById?: true
     courseClassId?: true
     isActive?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8492,6 +8497,7 @@ export namespace Prisma {
     createdById?: true
     courseClassId?: true
     isActive?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8601,6 +8607,7 @@ export namespace Prisma {
     createdById: string
     courseClassId: string | null
     isActive: boolean
+    mode: $Enums.appMode
     createdAt: Date
     updatedAt: Date
     _count: EventCountAggregateOutputType | null
@@ -8642,6 +8649,7 @@ export namespace Prisma {
     createdById?: boolean
     courseClassId?: boolean
     isActive?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     attendances?: boolean | Event$attendancesArgs<ExtArgs>
@@ -8669,6 +8677,7 @@ export namespace Prisma {
     createdById?: boolean
     courseClassId?: boolean
     isActive?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     courseClass?: boolean | Event$courseClassArgs<ExtArgs>
@@ -8694,6 +8703,7 @@ export namespace Prisma {
     createdById?: boolean
     courseClassId?: boolean
     isActive?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     courseClass?: boolean | Event$courseClassArgs<ExtArgs>
@@ -8719,11 +8729,12 @@ export namespace Prisma {
     createdById?: boolean
     courseClassId?: boolean
     isActive?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "date" | "location" | "ethiopianYear" | "ethiopianMonth" | "ethiopianDay" | "eventType" | "isRecurring" | "recurringMonth" | "recurringDay" | "eligibilityRuleId" | "targetMemberTypes" | "createdById" | "courseClassId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "date" | "location" | "ethiopianYear" | "ethiopianMonth" | "ethiopianDay" | "eventType" | "isRecurring" | "recurringMonth" | "recurringDay" | "eligibilityRuleId" | "targetMemberTypes" | "createdById" | "courseClassId" | "isActive" | "mode" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attendances?: boolean | Event$attendancesArgs<ExtArgs>
     courseClass?: boolean | Event$courseClassArgs<ExtArgs>
@@ -8768,6 +8779,7 @@ export namespace Prisma {
       createdById: string
       courseClassId: string | null
       isActive: boolean
+      mode: $Enums.appMode
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["event"]>
@@ -9214,6 +9226,7 @@ export namespace Prisma {
     readonly createdById: FieldRef<"Event", 'String'>
     readonly courseClassId: FieldRef<"Event", 'String'>
     readonly isActive: FieldRef<"Event", 'Boolean'>
+    readonly mode: FieldRef<"Event", 'appMode'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
   }
@@ -9722,6 +9735,7 @@ export namespace Prisma {
     name: string | null
     value: number | null
     isDefault: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9731,6 +9745,7 @@ export namespace Prisma {
     name: string | null
     value: number | null
     isDefault: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9740,6 +9755,7 @@ export namespace Prisma {
     name: number
     value: number
     isDefault: number
+    mode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9759,6 +9775,7 @@ export namespace Prisma {
     name?: true
     value?: true
     isDefault?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9768,6 +9785,7 @@ export namespace Prisma {
     name?: true
     value?: true
     isDefault?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9777,6 +9795,7 @@ export namespace Prisma {
     name?: true
     value?: true
     isDefault?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9873,6 +9892,7 @@ export namespace Prisma {
     name: string
     value: number
     isDefault: boolean
+    mode: $Enums.appMode
     createdAt: Date
     updatedAt: Date
     _count: AttendanceTypeCountAggregateOutputType | null
@@ -9901,6 +9921,7 @@ export namespace Prisma {
     name?: boolean
     value?: boolean
     isDefault?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     attendances?: boolean | AttendanceType$attendancesArgs<ExtArgs>
@@ -9912,6 +9933,7 @@ export namespace Prisma {
     name?: boolean
     value?: boolean
     isDefault?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["attendanceType"]>
@@ -9921,6 +9943,7 @@ export namespace Prisma {
     name?: boolean
     value?: boolean
     isDefault?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["attendanceType"]>
@@ -9930,11 +9953,12 @@ export namespace Prisma {
     name?: boolean
     value?: boolean
     isDefault?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AttendanceTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "value" | "isDefault" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceType"]>
+  export type AttendanceTypeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "value" | "isDefault" | "mode" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceType"]>
   export type AttendanceTypeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attendances?: boolean | AttendanceType$attendancesArgs<ExtArgs>
     _count?: boolean | AttendanceTypeCountOutputTypeDefaultArgs<ExtArgs>
@@ -9952,6 +9976,7 @@ export namespace Prisma {
       name: string
       value: number
       isDefault: boolean
+      mode: $Enums.appMode
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["attendanceType"]>
@@ -10382,6 +10407,7 @@ export namespace Prisma {
     readonly name: FieldRef<"AttendanceType", 'String'>
     readonly value: FieldRef<"AttendanceType", 'Float'>
     readonly isDefault: FieldRef<"AttendanceType", 'Boolean'>
+    readonly mode: FieldRef<"AttendanceType", 'appMode'>
     readonly createdAt: FieldRef<"AttendanceType", 'DateTime'>
     readonly updatedAt: FieldRef<"AttendanceType", 'DateTime'>
   }
@@ -10838,6 +10864,7 @@ export namespace Prisma {
     markedById: string | null
     note: string | null
     countedForEligibility: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -10851,6 +10878,7 @@ export namespace Prisma {
     markedById: string | null
     note: string | null
     countedForEligibility: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -10864,6 +10892,7 @@ export namespace Prisma {
     markedById: number
     note: number
     countedForEligibility: number
+    mode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -10879,6 +10908,7 @@ export namespace Prisma {
     markedById?: true
     note?: true
     countedForEligibility?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10892,6 +10922,7 @@ export namespace Prisma {
     markedById?: true
     note?: true
     countedForEligibility?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -10905,6 +10936,7 @@ export namespace Prisma {
     markedById?: true
     note?: true
     countedForEligibility?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -10991,6 +11023,7 @@ export namespace Prisma {
     markedById: string
     note: string | null
     countedForEligibility: boolean | null
+    mode: $Enums.appMode
     createdAt: Date
     updatedAt: Date
     _count: AttendanceCountAggregateOutputType | null
@@ -11021,6 +11054,7 @@ export namespace Prisma {
     markedById?: boolean
     note?: boolean
     countedForEligibility?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     attendanceType?: boolean | AttendanceTypeDefaultArgs<ExtArgs>
@@ -11039,6 +11073,7 @@ export namespace Prisma {
     markedById?: boolean
     note?: boolean
     countedForEligibility?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     attendanceType?: boolean | AttendanceTypeDefaultArgs<ExtArgs>
@@ -11057,6 +11092,7 @@ export namespace Prisma {
     markedById?: boolean
     note?: boolean
     countedForEligibility?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     attendanceType?: boolean | AttendanceTypeDefaultArgs<ExtArgs>
@@ -11075,11 +11111,12 @@ export namespace Prisma {
     markedById?: boolean
     note?: boolean
     countedForEligibility?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "eventId" | "attendanceTypeId" | "permissionId" | "markedById" | "note" | "countedForEligibility" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
+  export type AttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "memberId" | "eventId" | "attendanceTypeId" | "permissionId" | "markedById" | "note" | "countedForEligibility" | "mode" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
   export type AttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attendanceType?: boolean | AttendanceTypeDefaultArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
@@ -11120,6 +11157,7 @@ export namespace Prisma {
       markedById: string
       note: string | null
       countedForEligibility: boolean | null
+      mode: $Enums.appMode
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["attendance"]>
@@ -11558,6 +11596,7 @@ export namespace Prisma {
     readonly markedById: FieldRef<"Attendance", 'String'>
     readonly note: FieldRef<"Attendance", 'String'>
     readonly countedForEligibility: FieldRef<"Attendance", 'Boolean'>
+    readonly mode: FieldRef<"Attendance", 'appMode'>
     readonly createdAt: FieldRef<"Attendance", 'DateTime'>
     readonly updatedAt: FieldRef<"Attendance", 'DateTime'>
   }
@@ -14475,6 +14514,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     isActive: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14484,6 +14524,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     isActive: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -14493,6 +14534,7 @@ export namespace Prisma {
     name: number
     description: number
     isActive: number
+    mode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -14504,6 +14546,7 @@ export namespace Prisma {
     name?: true
     description?: true
     isActive?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14513,6 +14556,7 @@ export namespace Prisma {
     name?: true
     description?: true
     isActive?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -14522,6 +14566,7 @@ export namespace Prisma {
     name?: true
     description?: true
     isActive?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -14604,6 +14649,7 @@ export namespace Prisma {
     name: string
     description: string | null
     isActive: boolean
+    mode: $Enums.appMode
     createdAt: Date
     updatedAt: Date
     _count: EligibilityRuleCountAggregateOutputType | null
@@ -14630,6 +14676,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     isActive?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     criteria?: boolean | EligibilityRule$criteriaArgs<ExtArgs>
@@ -14642,6 +14689,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     isActive?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["eligibilityRule"]>
@@ -14651,6 +14699,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     isActive?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["eligibilityRule"]>
@@ -14660,11 +14709,12 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     isActive?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EligibilityRuleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["eligibilityRule"]>
+  export type EligibilityRuleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "isActive" | "mode" | "createdAt" | "updatedAt", ExtArgs["result"]["eligibilityRule"]>
   export type EligibilityRuleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     criteria?: boolean | EligibilityRule$criteriaArgs<ExtArgs>
     events?: boolean | EligibilityRule$eventsArgs<ExtArgs>
@@ -14684,6 +14734,7 @@ export namespace Prisma {
       name: string
       description: string | null
       isActive: boolean
+      mode: $Enums.appMode
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["eligibilityRule"]>
@@ -15115,6 +15166,7 @@ export namespace Prisma {
     readonly name: FieldRef<"EligibilityRule", 'String'>
     readonly description: FieldRef<"EligibilityRule", 'String'>
     readonly isActive: FieldRef<"EligibilityRule", 'Boolean'>
+    readonly mode: FieldRef<"EligibilityRule", 'appMode'>
     readonly createdAt: FieldRef<"EligibilityRule", 'DateTime'>
     readonly updatedAt: FieldRef<"EligibilityRule", 'DateTime'>
   }
@@ -15605,6 +15657,7 @@ export namespace Prisma {
     minAttendances: number | null
     lookbackMonths: number | null
     isTotalAttendance: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15616,6 +15669,7 @@ export namespace Prisma {
     minAttendances: number | null
     lookbackMonths: number | null
     isTotalAttendance: boolean | null
+    mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -15627,6 +15681,7 @@ export namespace Prisma {
     minAttendances: number
     lookbackMonths: number
     isTotalAttendance: number
+    mode: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -15650,6 +15705,7 @@ export namespace Prisma {
     minAttendances?: true
     lookbackMonths?: true
     isTotalAttendance?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15661,6 +15717,7 @@ export namespace Prisma {
     minAttendances?: true
     lookbackMonths?: true
     isTotalAttendance?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -15672,6 +15729,7 @@ export namespace Prisma {
     minAttendances?: true
     lookbackMonths?: true
     isTotalAttendance?: true
+    mode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -15770,6 +15828,7 @@ export namespace Prisma {
     minAttendances: number
     lookbackMonths: number
     isTotalAttendance: boolean
+    mode: $Enums.appMode
     createdAt: Date
     updatedAt: Date
     _count: EligibilityCriteriaCountAggregateOutputType | null
@@ -15800,6 +15859,7 @@ export namespace Prisma {
     minAttendances?: boolean
     lookbackMonths?: boolean
     isTotalAttendance?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     eligibilityRule?: boolean | EligibilityRuleDefaultArgs<ExtArgs>
@@ -15812,6 +15872,7 @@ export namespace Prisma {
     minAttendances?: boolean
     lookbackMonths?: boolean
     isTotalAttendance?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     eligibilityRule?: boolean | EligibilityRuleDefaultArgs<ExtArgs>
@@ -15824,6 +15885,7 @@ export namespace Prisma {
     minAttendances?: boolean
     lookbackMonths?: boolean
     isTotalAttendance?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     eligibilityRule?: boolean | EligibilityRuleDefaultArgs<ExtArgs>
@@ -15836,11 +15898,12 @@ export namespace Prisma {
     minAttendances?: boolean
     lookbackMonths?: boolean
     isTotalAttendance?: boolean
+    mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EligibilityCriteriaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eligibilityRuleId" | "eventType" | "minAttendances" | "lookbackMonths" | "isTotalAttendance" | "createdAt" | "updatedAt", ExtArgs["result"]["eligibilityCriteria"]>
+  export type EligibilityCriteriaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eligibilityRuleId" | "eventType" | "minAttendances" | "lookbackMonths" | "isTotalAttendance" | "mode" | "createdAt" | "updatedAt", ExtArgs["result"]["eligibilityCriteria"]>
   export type EligibilityCriteriaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     eligibilityRule?: boolean | EligibilityRuleDefaultArgs<ExtArgs>
   }
@@ -15863,6 +15926,7 @@ export namespace Prisma {
       minAttendances: number
       lookbackMonths: number
       isTotalAttendance: boolean
+      mode: $Enums.appMode
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["eligibilityCriteria"]>
@@ -16295,6 +16359,7 @@ export namespace Prisma {
     readonly minAttendances: FieldRef<"EligibilityCriteria", 'Int'>
     readonly lookbackMonths: FieldRef<"EligibilityCriteria", 'Int'>
     readonly isTotalAttendance: FieldRef<"EligibilityCriteria", 'Boolean'>
+    readonly mode: FieldRef<"EligibilityCriteria", 'appMode'>
     readonly createdAt: FieldRef<"EligibilityCriteria", 'DateTime'>
     readonly updatedAt: FieldRef<"EligibilityCriteria", 'DateTime'>
   }
@@ -35655,6 +35720,7 @@ export namespace Prisma {
     createdById: 'createdById',
     courseClassId: 'courseClassId',
     isActive: 'isActive',
+    mode: 'mode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -35667,6 +35733,7 @@ export namespace Prisma {
     name: 'name',
     value: 'value',
     isDefault: 'isDefault',
+    mode: 'mode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -35683,6 +35750,7 @@ export namespace Prisma {
     markedById: 'markedById',
     note: 'note',
     countedForEligibility: 'countedForEligibility',
+    mode: 'mode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -35734,6 +35802,7 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     isActive: 'isActive',
+    mode: 'mode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -35748,6 +35817,7 @@ export namespace Prisma {
     minAttendances: 'minAttendances',
     lookbackMonths: 'lookbackMonths',
     isTotalAttendance: 'isTotalAttendance',
+    mode: 'mode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -36754,6 +36824,7 @@ export namespace Prisma {
     createdById?: StringFilter<"Event"> | string
     courseClassId?: StringNullableFilter<"Event"> | string | null
     isActive?: BoolFilter<"Event"> | boolean
+    mode?: EnumappModeFilter<"Event"> | $Enums.appMode
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     attendances?: AttendanceListRelationFilter
@@ -36780,6 +36851,7 @@ export namespace Prisma {
     createdById?: SortOrder
     courseClassId?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     attendances?: AttendanceOrderByRelationAggregateInput
@@ -36809,6 +36881,7 @@ export namespace Prisma {
     createdById?: StringFilter<"Event"> | string
     courseClassId?: StringNullableFilter<"Event"> | string | null
     isActive?: BoolFilter<"Event"> | boolean
+    mode?: EnumappModeFilter<"Event"> | $Enums.appMode
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     attendances?: AttendanceListRelationFilter
@@ -36835,6 +36908,7 @@ export namespace Prisma {
     createdById?: SortOrder
     courseClassId?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EventCountOrderByAggregateInput
@@ -36865,6 +36939,7 @@ export namespace Prisma {
     createdById?: StringWithAggregatesFilter<"Event"> | string
     courseClassId?: StringNullableWithAggregatesFilter<"Event"> | string | null
     isActive?: BoolWithAggregatesFilter<"Event"> | boolean
+    mode?: EnumappModeWithAggregatesFilter<"Event"> | $Enums.appMode
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
   }
@@ -36877,6 +36952,7 @@ export namespace Prisma {
     name?: StringFilter<"AttendanceType"> | string
     value?: FloatFilter<"AttendanceType"> | number
     isDefault?: BoolFilter<"AttendanceType"> | boolean
+    mode?: EnumappModeFilter<"AttendanceType"> | $Enums.appMode
     createdAt?: DateTimeFilter<"AttendanceType"> | Date | string
     updatedAt?: DateTimeFilter<"AttendanceType"> | Date | string
     attendances?: AttendanceListRelationFilter
@@ -36887,6 +36963,7 @@ export namespace Prisma {
     name?: SortOrder
     value?: SortOrder
     isDefault?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     attendances?: AttendanceOrderByRelationAggregateInput
@@ -36895,21 +36972,24 @@ export namespace Prisma {
   export type AttendanceTypeWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     name?: string
+    name_mode?: AttendanceTypeNameModeCompoundUniqueInput
     AND?: AttendanceTypeWhereInput | AttendanceTypeWhereInput[]
     OR?: AttendanceTypeWhereInput[]
     NOT?: AttendanceTypeWhereInput | AttendanceTypeWhereInput[]
     value?: FloatFilter<"AttendanceType"> | number
     isDefault?: BoolFilter<"AttendanceType"> | boolean
+    mode?: EnumappModeFilter<"AttendanceType"> | $Enums.appMode
     createdAt?: DateTimeFilter<"AttendanceType"> | Date | string
     updatedAt?: DateTimeFilter<"AttendanceType"> | Date | string
     attendances?: AttendanceListRelationFilter
-  }, "id" | "name">
+  }, "id" | "name" | "name_mode">
 
   export type AttendanceTypeOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     value?: SortOrder
     isDefault?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AttendanceTypeCountOrderByAggregateInput
@@ -36927,6 +37007,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"AttendanceType"> | string
     value?: FloatWithAggregatesFilter<"AttendanceType"> | number
     isDefault?: BoolWithAggregatesFilter<"AttendanceType"> | boolean
+    mode?: EnumappModeWithAggregatesFilter<"AttendanceType"> | $Enums.appMode
     createdAt?: DateTimeWithAggregatesFilter<"AttendanceType"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AttendanceType"> | Date | string
   }
@@ -36943,6 +37024,7 @@ export namespace Prisma {
     markedById?: StringFilter<"Attendance"> | string
     note?: StringNullableFilter<"Attendance"> | string | null
     countedForEligibility?: BoolNullableFilter<"Attendance"> | boolean | null
+    mode?: EnumappModeFilter<"Attendance"> | $Enums.appMode
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
     updatedAt?: DateTimeFilter<"Attendance"> | Date | string
     attendanceType?: XOR<AttendanceTypeScalarRelationFilter, AttendanceTypeWhereInput>
@@ -36961,6 +37043,7 @@ export namespace Prisma {
     markedById?: SortOrder
     note?: SortOrderInput | SortOrder
     countedForEligibility?: SortOrderInput | SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     attendanceType?: AttendanceTypeOrderByWithRelationInput
@@ -36983,6 +37066,7 @@ export namespace Prisma {
     markedById?: StringFilter<"Attendance"> | string
     note?: StringNullableFilter<"Attendance"> | string | null
     countedForEligibility?: BoolNullableFilter<"Attendance"> | boolean | null
+    mode?: EnumappModeFilter<"Attendance"> | $Enums.appMode
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
     updatedAt?: DateTimeFilter<"Attendance"> | Date | string
     attendanceType?: XOR<AttendanceTypeScalarRelationFilter, AttendanceTypeWhereInput>
@@ -37001,6 +37085,7 @@ export namespace Prisma {
     markedById?: SortOrder
     note?: SortOrderInput | SortOrder
     countedForEligibility?: SortOrderInput | SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AttendanceCountOrderByAggregateInput
@@ -37020,6 +37105,7 @@ export namespace Prisma {
     markedById?: StringWithAggregatesFilter<"Attendance"> | string
     note?: StringNullableWithAggregatesFilter<"Attendance"> | string | null
     countedForEligibility?: BoolNullableWithAggregatesFilter<"Attendance"> | boolean | null
+    mode?: EnumappModeWithAggregatesFilter<"Attendance"> | $Enums.appMode
     createdAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Attendance"> | Date | string
   }
@@ -37239,6 +37325,7 @@ export namespace Prisma {
     name?: StringFilter<"EligibilityRule"> | string
     description?: StringNullableFilter<"EligibilityRule"> | string | null
     isActive?: BoolFilter<"EligibilityRule"> | boolean
+    mode?: EnumappModeFilter<"EligibilityRule"> | $Enums.appMode
     createdAt?: DateTimeFilter<"EligibilityRule"> | Date | string
     updatedAt?: DateTimeFilter<"EligibilityRule"> | Date | string
     criteria?: EligibilityCriteriaListRelationFilter
@@ -37250,6 +37337,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     criteria?: EligibilityCriteriaOrderByRelationAggregateInput
@@ -37258,23 +37346,26 @@ export namespace Prisma {
 
   export type EligibilityRuleWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    name_mode?: EligibilityRuleNameModeCompoundUniqueInput
     AND?: EligibilityRuleWhereInput | EligibilityRuleWhereInput[]
     OR?: EligibilityRuleWhereInput[]
     NOT?: EligibilityRuleWhereInput | EligibilityRuleWhereInput[]
     name?: StringFilter<"EligibilityRule"> | string
     description?: StringNullableFilter<"EligibilityRule"> | string | null
     isActive?: BoolFilter<"EligibilityRule"> | boolean
+    mode?: EnumappModeFilter<"EligibilityRule"> | $Enums.appMode
     createdAt?: DateTimeFilter<"EligibilityRule"> | Date | string
     updatedAt?: DateTimeFilter<"EligibilityRule"> | Date | string
     criteria?: EligibilityCriteriaListRelationFilter
     events?: EventListRelationFilter
-  }, "id">
+  }, "id" | "name_mode">
 
   export type EligibilityRuleOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EligibilityRuleCountOrderByAggregateInput
@@ -37290,6 +37381,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"EligibilityRule"> | string
     description?: StringNullableWithAggregatesFilter<"EligibilityRule"> | string | null
     isActive?: BoolWithAggregatesFilter<"EligibilityRule"> | boolean
+    mode?: EnumappModeWithAggregatesFilter<"EligibilityRule"> | $Enums.appMode
     createdAt?: DateTimeWithAggregatesFilter<"EligibilityRule"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"EligibilityRule"> | Date | string
   }
@@ -37304,6 +37396,7 @@ export namespace Prisma {
     minAttendances?: IntFilter<"EligibilityCriteria"> | number
     lookbackMonths?: IntFilter<"EligibilityCriteria"> | number
     isTotalAttendance?: BoolFilter<"EligibilityCriteria"> | boolean
+    mode?: EnumappModeFilter<"EligibilityCriteria"> | $Enums.appMode
     createdAt?: DateTimeFilter<"EligibilityCriteria"> | Date | string
     updatedAt?: DateTimeFilter<"EligibilityCriteria"> | Date | string
     eligibilityRule?: XOR<EligibilityRuleScalarRelationFilter, EligibilityRuleWhereInput>
@@ -37316,6 +37409,7 @@ export namespace Prisma {
     minAttendances?: SortOrder
     lookbackMonths?: SortOrder
     isTotalAttendance?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     eligibilityRule?: EligibilityRuleOrderByWithRelationInput
@@ -37331,6 +37425,7 @@ export namespace Prisma {
     minAttendances?: IntFilter<"EligibilityCriteria"> | number
     lookbackMonths?: IntFilter<"EligibilityCriteria"> | number
     isTotalAttendance?: BoolFilter<"EligibilityCriteria"> | boolean
+    mode?: EnumappModeFilter<"EligibilityCriteria"> | $Enums.appMode
     createdAt?: DateTimeFilter<"EligibilityCriteria"> | Date | string
     updatedAt?: DateTimeFilter<"EligibilityCriteria"> | Date | string
     eligibilityRule?: XOR<EligibilityRuleScalarRelationFilter, EligibilityRuleWhereInput>
@@ -37343,6 +37438,7 @@ export namespace Prisma {
     minAttendances?: SortOrder
     lookbackMonths?: SortOrder
     isTotalAttendance?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EligibilityCriteriaCountOrderByAggregateInput
@@ -37362,6 +37458,7 @@ export namespace Prisma {
     minAttendances?: IntWithAggregatesFilter<"EligibilityCriteria"> | number
     lookbackMonths?: IntWithAggregatesFilter<"EligibilityCriteria"> | number
     isTotalAttendance?: BoolWithAggregatesFilter<"EligibilityCriteria"> | boolean
+    mode?: EnumappModeWithAggregatesFilter<"EligibilityCriteria"> | $Enums.appMode
     createdAt?: DateTimeWithAggregatesFilter<"EligibilityCriteria"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"EligibilityCriteria"> | Date | string
   }
@@ -39199,6 +39296,7 @@ export namespace Prisma {
     recurringDay?: number | null
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceCreateNestedManyWithoutEventInput
@@ -39225,6 +39323,7 @@ export namespace Prisma {
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutEventInput
@@ -39245,6 +39344,7 @@ export namespace Prisma {
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUpdateManyWithoutEventNestedInput
@@ -39271,6 +39371,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutEventNestedInput
@@ -39294,6 +39395,7 @@ export namespace Prisma {
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39313,6 +39415,7 @@ export namespace Prisma {
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39335,6 +39438,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39344,6 +39448,7 @@ export namespace Prisma {
     name: string
     value: number
     isDefault?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceCreateNestedManyWithoutAttendanceTypeInput
@@ -39354,6 +39459,7 @@ export namespace Prisma {
     name: string
     value: number
     isDefault?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutAttendanceTypeInput
@@ -39364,6 +39470,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     value?: FloatFieldUpdateOperationsInput | number
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUpdateManyWithoutAttendanceTypeNestedInput
@@ -39374,6 +39481,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     value?: FloatFieldUpdateOperationsInput | number
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutAttendanceTypeNestedInput
@@ -39384,6 +39492,7 @@ export namespace Prisma {
     name: string
     value: number
     isDefault?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39393,6 +39502,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     value?: FloatFieldUpdateOperationsInput | number
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39402,6 +39512,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     value?: FloatFieldUpdateOperationsInput | number
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39410,6 +39521,7 @@ export namespace Prisma {
     id?: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendanceType: AttendanceTypeCreateNestedOneWithoutAttendancesInput
@@ -39428,6 +39540,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39436,6 +39549,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendanceType?: AttendanceTypeUpdateOneRequiredWithoutAttendancesNestedInput
@@ -39454,6 +39568,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39467,6 +39582,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39475,6 +39591,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39488,6 +39605,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39733,6 +39851,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     criteria?: EligibilityCriteriaCreateNestedManyWithoutEligibilityRuleInput
@@ -39744,6 +39863,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     criteria?: EligibilityCriteriaUncheckedCreateNestedManyWithoutEligibilityRuleInput
@@ -39755,6 +39875,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     criteria?: EligibilityCriteriaUpdateManyWithoutEligibilityRuleNestedInput
@@ -39766,6 +39887,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     criteria?: EligibilityCriteriaUncheckedUpdateManyWithoutEligibilityRuleNestedInput
@@ -39777,6 +39899,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39786,6 +39909,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39795,6 +39919,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39805,6 +39930,7 @@ export namespace Prisma {
     minAttendances: number
     lookbackMonths: number
     isTotalAttendance?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     eligibilityRule: EligibilityRuleCreateNestedOneWithoutCriteriaInput
@@ -39817,6 +39943,7 @@ export namespace Prisma {
     minAttendances: number
     lookbackMonths: number
     isTotalAttendance?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39827,6 +39954,7 @@ export namespace Prisma {
     minAttendances?: IntFieldUpdateOperationsInput | number
     lookbackMonths?: IntFieldUpdateOperationsInput | number
     isTotalAttendance?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     eligibilityRule?: EligibilityRuleUpdateOneRequiredWithoutCriteriaNestedInput
@@ -39839,6 +39967,7 @@ export namespace Prisma {
     minAttendances?: IntFieldUpdateOperationsInput | number
     lookbackMonths?: IntFieldUpdateOperationsInput | number
     isTotalAttendance?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39850,6 +39979,7 @@ export namespace Prisma {
     minAttendances: number
     lookbackMonths: number
     isTotalAttendance?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39860,6 +39990,7 @@ export namespace Prisma {
     minAttendances?: IntFieldUpdateOperationsInput | number
     lookbackMonths?: IntFieldUpdateOperationsInput | number
     isTotalAttendance?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39871,6 +40002,7 @@ export namespace Prisma {
     minAttendances?: IntFieldUpdateOperationsInput | number
     lookbackMonths?: IntFieldUpdateOperationsInput | number
     isTotalAttendance?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42007,6 +42139,13 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type EnumappModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
+    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumappModeFilter<$PrismaModel> | $Enums.appMode
+  }
+
   export type EligibilityRuleNullableScalarRelationFilter = {
     is?: EligibilityRuleWhereInput | null
     isNot?: EligibilityRuleWhereInput | null
@@ -42030,6 +42169,7 @@ export namespace Prisma {
     createdById?: SortOrder
     courseClassId?: SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42059,6 +42199,7 @@ export namespace Prisma {
     createdById?: SortOrder
     courseClassId?: SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42080,6 +42221,7 @@ export namespace Prisma {
     createdById?: SortOrder
     courseClassId?: SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42102,6 +42244,16 @@ export namespace Prisma {
     _max?: NestedEnumeventTypeFilter<$PrismaModel>
   }
 
+  export type EnumappModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
+    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumappModeWithAggregatesFilter<$PrismaModel> | $Enums.appMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumappModeFilter<$PrismaModel>
+    _max?: NestedEnumappModeFilter<$PrismaModel>
+  }
+
   export type FloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -42113,11 +42265,17 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type AttendanceTypeNameModeCompoundUniqueInput = {
+    name: string
+    mode: $Enums.appMode
+  }
+
   export type AttendanceTypeCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     value?: SortOrder
     isDefault?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42131,6 +42289,7 @@ export namespace Prisma {
     name?: SortOrder
     value?: SortOrder
     isDefault?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42140,6 +42299,7 @@ export namespace Prisma {
     name?: SortOrder
     value?: SortOrder
     isDefault?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42198,6 +42358,7 @@ export namespace Prisma {
     markedById?: SortOrder
     note?: SortOrder
     countedForEligibility?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42211,6 +42372,7 @@ export namespace Prisma {
     markedById?: SortOrder
     note?: SortOrder
     countedForEligibility?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42224,6 +42386,7 @@ export namespace Prisma {
     markedById?: SortOrder
     note?: SortOrder
     countedForEligibility?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42249,13 +42412,6 @@ export namespace Prisma {
     hasEvery?: number[] | ListIntFieldRefInput<$PrismaModel>
     hasSome?: number[] | ListIntFieldRefInput<$PrismaModel>
     isEmpty?: boolean
-  }
-
-  export type EnumappModeFilter<$PrismaModel = never> = {
-    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
-    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    not?: NestedEnumappModeFilter<$PrismaModel> | $Enums.appMode
   }
 
   export type PermissionTypeNameModeCompoundUniqueInput = {
@@ -42332,16 +42488,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
     _max?: NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
-  }
-
-  export type EnumappModeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
-    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    not?: NestedEnumappModeWithAggregatesFilter<$PrismaModel> | $Enums.appMode
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumappModeFilter<$PrismaModel>
-    _max?: NestedEnumappModeFilter<$PrismaModel>
   }
 
   export type EnumpermissionStatusFilter<$PrismaModel = never> = {
@@ -42429,11 +42575,17 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type EligibilityRuleNameModeCompoundUniqueInput = {
+    name: string
+    mode: $Enums.appMode
+  }
+
   export type EligibilityRuleCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42443,6 +42595,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42452,6 +42605,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     isActive?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42468,6 +42622,7 @@ export namespace Prisma {
     minAttendances?: SortOrder
     lookbackMonths?: SortOrder
     isTotalAttendance?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42484,6 +42639,7 @@ export namespace Prisma {
     minAttendances?: SortOrder
     lookbackMonths?: SortOrder
     isTotalAttendance?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -42495,6 +42651,7 @@ export namespace Prisma {
     minAttendances?: SortOrder
     lookbackMonths?: SortOrder
     isTotalAttendance?: SortOrder
+    mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44292,6 +44449,10 @@ export namespace Prisma {
     push?: $Enums.memberType | $Enums.memberType[]
   }
 
+  export type EnumappModeFieldUpdateOperationsInput = {
+    set?: $Enums.appMode
+  }
+
   export type AttendanceUpdateManyWithoutEventNestedInput = {
     create?: XOR<AttendanceCreateWithoutEventInput, AttendanceUncheckedCreateWithoutEventInput> | AttendanceCreateWithoutEventInput[] | AttendanceUncheckedCreateWithoutEventInput[]
     connectOrCreate?: AttendanceCreateOrConnectWithoutEventInput | AttendanceCreateOrConnectWithoutEventInput[]
@@ -44499,10 +44660,6 @@ export namespace Prisma {
   export type PermissionTypeUpdatespecificDaysInput = {
     set?: number[]
     push?: number | number[]
-  }
-
-  export type EnumappModeFieldUpdateOperationsInput = {
-    set?: $Enums.appMode
   }
 
   export type PermissionUpdateManyWithoutPermissionTypeNestedInput = {
@@ -46072,6 +46229,13 @@ export namespace Prisma {
     not?: NestedEnumeventTypeFilter<$PrismaModel> | $Enums.eventType
   }
 
+  export type NestedEnumappModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
+    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumappModeFilter<$PrismaModel> | $Enums.appMode
+  }
+
   export type NestedEnumeventTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.eventType | EnumeventTypeFieldRefInput<$PrismaModel>
     in?: $Enums.eventType[] | ListEnumeventTypeFieldRefInput<$PrismaModel>
@@ -46080,6 +46244,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumeventTypeFilter<$PrismaModel>
     _max?: NestedEnumeventTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumappModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
+    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumappModeWithAggregatesFilter<$PrismaModel> | $Enums.appMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumappModeFilter<$PrismaModel>
+    _max?: NestedEnumappModeFilter<$PrismaModel>
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -46118,13 +46292,6 @@ export namespace Prisma {
     not?: NestedEnumpermissionTypeCategoryFilter<$PrismaModel> | $Enums.permissionTypeCategory
   }
 
-  export type NestedEnumappModeFilter<$PrismaModel = never> = {
-    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
-    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    not?: NestedEnumappModeFilter<$PrismaModel> | $Enums.appMode
-  }
-
   export type NestedEnumpermissionTypeCategoryWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.permissionTypeCategory | EnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.permissionTypeCategory[] | ListEnumpermissionTypeCategoryFieldRefInput<$PrismaModel>
@@ -46133,16 +46300,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
     _max?: NestedEnumpermissionTypeCategoryFilter<$PrismaModel>
-  }
-
-  export type NestedEnumappModeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel>
-    in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel>
-    not?: NestedEnumappModeWithAggregatesFilter<$PrismaModel> | $Enums.appMode
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumappModeFilter<$PrismaModel>
-    _max?: NestedEnumappModeFilter<$PrismaModel>
   }
 
   export type NestedEnumpermissionStatusFilter<$PrismaModel = never> = {
@@ -46535,6 +46692,7 @@ export namespace Prisma {
     id?: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendanceType: AttendanceTypeCreateNestedOneWithoutAttendancesInput
@@ -46551,6 +46709,7 @@ export namespace Prisma {
     permissionId?: string | null
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -46569,6 +46728,7 @@ export namespace Prisma {
     id?: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendanceType: AttendanceTypeCreateNestedOneWithoutAttendancesInput
@@ -46585,6 +46745,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -46726,6 +46887,7 @@ export namespace Prisma {
     recurringDay?: number | null
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceCreateNestedManyWithoutEventInput
@@ -46750,6 +46912,7 @@ export namespace Prisma {
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     courseClassId?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutEventInput
@@ -47152,6 +47315,7 @@ export namespace Prisma {
     markedById?: StringFilter<"Attendance"> | string
     note?: StringNullableFilter<"Attendance"> | string | null
     countedForEligibility?: BoolNullableFilter<"Attendance"> | boolean | null
+    mode?: EnumappModeFilter<"Attendance"> | $Enums.appMode
     createdAt?: DateTimeFilter<"Attendance"> | Date | string
     updatedAt?: DateTimeFilter<"Attendance"> | Date | string
   }
@@ -47309,6 +47473,7 @@ export namespace Prisma {
     createdById?: StringFilter<"Event"> | string
     courseClassId?: StringNullableFilter<"Event"> | string | null
     isActive?: BoolFilter<"Event"> | boolean
+    mode?: EnumappModeFilter<"Event"> | $Enums.appMode
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
   }
@@ -47678,6 +47843,7 @@ export namespace Prisma {
     id?: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendanceType: AttendanceTypeCreateNestedOneWithoutAttendancesInput
@@ -47694,6 +47860,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -47829,6 +47996,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     criteria?: EligibilityCriteriaCreateNestedManyWithoutEligibilityRuleInput
@@ -47839,6 +48007,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     criteria?: EligibilityCriteriaUncheckedCreateNestedManyWithoutEligibilityRuleInput
@@ -48009,6 +48178,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     criteria?: EligibilityCriteriaUpdateManyWithoutEligibilityRuleNestedInput
@@ -48019,6 +48189,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     criteria?: EligibilityCriteriaUncheckedUpdateManyWithoutEligibilityRuleNestedInput
@@ -48028,6 +48199,7 @@ export namespace Prisma {
     id?: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     event: EventCreateNestedOneWithoutAttendancesInput
@@ -48044,6 +48216,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48079,6 +48252,7 @@ export namespace Prisma {
     name: string
     value: number
     isDefault?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48088,6 +48262,7 @@ export namespace Prisma {
     name: string
     value: number
     isDefault?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48112,6 +48287,7 @@ export namespace Prisma {
     recurringDay?: number | null
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     courseClass?: CourseClassCreateNestedOneWithoutEventsInput
@@ -48137,6 +48313,7 @@ export namespace Prisma {
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -48357,6 +48534,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     value?: FloatFieldUpdateOperationsInput | number
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48366,6 +48544,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     value?: FloatFieldUpdateOperationsInput | number
     isDefault?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48396,6 +48575,7 @@ export namespace Prisma {
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseClass?: CourseClassUpdateOneWithoutEventsNestedInput
@@ -48421,6 +48601,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -48700,6 +48881,7 @@ export namespace Prisma {
     id?: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendanceType: AttendanceTypeCreateNestedOneWithoutAttendancesInput
@@ -48716,6 +48898,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -49164,6 +49347,7 @@ export namespace Prisma {
     minAttendances: number
     lookbackMonths: number
     isTotalAttendance?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -49174,6 +49358,7 @@ export namespace Prisma {
     minAttendances: number
     lookbackMonths: number
     isTotalAttendance?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -49203,6 +49388,7 @@ export namespace Prisma {
     recurringDay?: number | null
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceCreateNestedManyWithoutEventInput
@@ -49227,6 +49413,7 @@ export namespace Prisma {
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutEventInput
@@ -49268,6 +49455,7 @@ export namespace Prisma {
     minAttendances?: IntFilter<"EligibilityCriteria"> | number
     lookbackMonths?: IntFilter<"EligibilityCriteria"> | number
     isTotalAttendance?: BoolFilter<"EligibilityCriteria"> | boolean
+    mode?: EnumappModeFilter<"EligibilityCriteria"> | $Enums.appMode
     createdAt?: DateTimeFilter<"EligibilityCriteria"> | Date | string
     updatedAt?: DateTimeFilter<"EligibilityCriteria"> | Date | string
   }
@@ -49293,6 +49481,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     events?: EventCreateNestedManyWithoutEligibilityRuleInput
@@ -49303,6 +49492,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     events?: EventUncheckedCreateNestedManyWithoutEligibilityRuleInput
@@ -49329,6 +49519,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     events?: EventUpdateManyWithoutEligibilityRuleNestedInput
@@ -49339,6 +49530,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     events?: EventUncheckedUpdateManyWithoutEligibilityRuleNestedInput
@@ -50245,6 +50437,7 @@ export namespace Prisma {
     recurringDay?: number | null
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceCreateNestedManyWithoutEventInput
@@ -50269,6 +50462,7 @@ export namespace Prisma {
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     createdById: string
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
     attendances?: AttendanceUncheckedCreateNestedManyWithoutEventInput
@@ -52667,6 +52861,7 @@ export namespace Prisma {
     permissionId?: string | null
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52679,6 +52874,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52740,6 +52936,7 @@ export namespace Prisma {
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     courseClassId?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52876,6 +53073,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendanceType?: AttendanceTypeUpdateOneRequiredWithoutAttendancesNestedInput
@@ -52892,6 +53090,7 @@ export namespace Prisma {
     permissionId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52904,6 +53103,7 @@ export namespace Prisma {
     permissionId?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52912,6 +53112,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendanceType?: AttendanceTypeUpdateOneRequiredWithoutAttendancesNestedInput
@@ -52928,6 +53129,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52940,6 +53142,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53081,6 +53284,7 @@ export namespace Prisma {
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUpdateManyWithoutEventNestedInput
@@ -53105,6 +53309,7 @@ export namespace Prisma {
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutEventNestedInput
@@ -53127,6 +53332,7 @@ export namespace Prisma {
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53472,6 +53678,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53480,6 +53687,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendanceType?: AttendanceTypeUpdateOneRequiredWithoutAttendancesNestedInput
@@ -53496,6 +53704,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53508,6 +53717,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53520,6 +53730,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53528,6 +53739,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     event?: EventUpdateOneRequiredWithoutAttendancesNestedInput
@@ -53544,6 +53756,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53556,6 +53769,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53630,6 +53844,7 @@ export namespace Prisma {
     markedById: string
     note?: string | null
     countedForEligibility?: boolean | null
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53638,6 +53853,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendanceType?: AttendanceTypeUpdateOneRequiredWithoutAttendancesNestedInput
@@ -53654,6 +53870,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53666,6 +53883,7 @@ export namespace Prisma {
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     countedForEligibility?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53676,6 +53894,7 @@ export namespace Prisma {
     minAttendances: number
     lookbackMonths: number
     isTotalAttendance?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53697,6 +53916,7 @@ export namespace Prisma {
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -53707,6 +53927,7 @@ export namespace Prisma {
     minAttendances?: IntFieldUpdateOperationsInput | number
     lookbackMonths?: IntFieldUpdateOperationsInput | number
     isTotalAttendance?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53717,6 +53938,7 @@ export namespace Prisma {
     minAttendances?: IntFieldUpdateOperationsInput | number
     lookbackMonths?: IntFieldUpdateOperationsInput | number
     isTotalAttendance?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53727,6 +53949,7 @@ export namespace Prisma {
     minAttendances?: IntFieldUpdateOperationsInput | number
     lookbackMonths?: IntFieldUpdateOperationsInput | number
     isTotalAttendance?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -53746,6 +53969,7 @@ export namespace Prisma {
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUpdateManyWithoutEventNestedInput
@@ -53770,6 +53994,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutEventNestedInput
@@ -53792,6 +54017,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -54268,6 +54494,7 @@ export namespace Prisma {
     targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
     createdById: string
     isActive?: boolean
+    mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -54467,6 +54694,7 @@ export namespace Prisma {
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUpdateManyWithoutEventNestedInput
@@ -54491,6 +54719,7 @@ export namespace Prisma {
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attendances?: AttendanceUncheckedUpdateManyWithoutEventNestedInput
@@ -54513,6 +54742,7 @@ export namespace Prisma {
     targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -197,6 +197,7 @@ exports.Prisma.EventScalarFieldEnum = {
   createdById: 'createdById',
   courseClassId: 'courseClassId',
   isActive: 'isActive',
+  mode: 'mode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -206,6 +207,7 @@ exports.Prisma.AttendanceTypeScalarFieldEnum = {
   name: 'name',
   value: 'value',
   isDefault: 'isDefault',
+  mode: 'mode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -219,6 +221,7 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   markedById: 'markedById',
   note: 'note',
   countedForEligibility: 'countedForEligibility',
+  mode: 'mode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -261,6 +264,7 @@ exports.Prisma.EligibilityRuleScalarFieldEnum = {
   name: 'name',
   description: 'description',
   isActive: 'isActive',
+  mode: 'mode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -272,6 +276,7 @@ exports.Prisma.EligibilityCriteriaScalarFieldEnum = {
   minAttendances: 'minAttendances',
   lookbackMonths: 'lookbackMonths',
   isTotalAttendance: 'isTotalAttendance',
+  mode: 'mode',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

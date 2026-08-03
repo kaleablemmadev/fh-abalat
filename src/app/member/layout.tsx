@@ -8,23 +8,23 @@ import { Home, ClipboardList, Bell, User, Calendar, Music, ListMusic } from 'luc
 const memberNavItems: NavSection[] = [
   {
     items: [
-      { name: 'Dashboard', href: '/member', icon: Home },
-      { name: 'Attendance History', href: '/member/attendance', icon: ClipboardList },
-      { name: 'Notifications', href: '/member/notifications', icon: Bell },
+      { name: 'ዋና ገጽ', href: '/member', icon: Home },
+      { name: 'የአቴንዳንስ መዝገብ', href: '/member/attendance', icon: ClipboardList },
+      { name: 'ማስታወቂያና መረጃዎች', href: '/member/notifications', icon: Bell },
     ]
   },
   {
-    label: 'Mezmur',
+    label: 'መዝሙር',
     items: [
-      { name: 'Monthly Plan', href: '/member/mezmur-plan', icon: Calendar },
-      { name: 'Music Library', href: '/member/music', icon: Music },
-      { name: 'Categories', href: '/member/music-categories', icon: ListMusic },
+      { name: 'የአገልግሎት መዝሙራት', href: '/member/mezmur-plan', icon: Calendar },
+      { name: 'የመዝሙር መዝገብ', href: '/member/music', icon: Music },
+      { name: 'የመዝሙር ምድቦች', href: '/member/music-categories', icon: ListMusic },
     ]
   },
   {
-    label: 'Account',
+    label: 'አካውንት',
     items: [
-      { name: 'My Profile', href: '/member/profile', icon: User },
+      { name: 'የግል መረጃዎች', href: '/member/profile', icon: User },
     ]
   }
 ];

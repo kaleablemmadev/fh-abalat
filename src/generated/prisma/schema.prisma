@@ -110,6 +110,7 @@ model Event {
   createdById       String
   courseClassId     String?
   isActive          Boolean          @default(true)
+  mode              appMode          @default(ABALAT)
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   attendances       Attendance[]
@@ -123,6 +124,7 @@ model Event {
   @@index([eventType])
   @@index([courseClassId])
   @@index([isActive])
+  @@index([mode])
 }
 
 model AttendanceType {
@@ -130,9 +132,13 @@ model AttendanceType {
   name        String       @unique
   value       Float
   isDefault   Boolean      @default(false)
+  mode        appMode      @default(ABALAT)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   attendances Attendance[]
+
+  @@unique([name, mode])
+  @@index([mode])
 }
 
 model Attendance {
@@ -144,6 +150,7 @@ model Attendance {
   markedById            String
   note                  String?
   countedForEligibility Boolean?       @default(false)
+  mode                  appMode        @default(ABALAT)
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @updatedAt
   attendanceType        AttendanceType @relation(fields: [attendanceTypeId], references: [id])
@@ -157,6 +164,7 @@ model Attendance {
   @@index([memberId])
   @@index([attendanceTypeId])
   @@index([permissionId])
+  @@index([mode])
 }
 
 model PermissionType {
@@ -213,12 +221,15 @@ model EligibilityRule {
   name        String
   description String?
   isActive    Boolean               @default(true)
+  mode        appMode               @default(ABALAT)
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
   criteria    EligibilityCriteria[]
   events      Event[]
 
+  @@unique([name, mode])
   @@index([isActive])
+  @@index([mode])
 }
 
 model EligibilityCriteria {
@@ -228,9 +239,12 @@ model EligibilityCriteria {
   minAttendances    Int
   lookbackMonths    Int
   isTotalAttendance Boolean         @default(false)
+  mode              appMode         @default(ABALAT)
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
   eligibilityRule   EligibilityRule @relation(fields: [eligibilityRuleId], references: [id], onDelete: Cascade)
+
+  @@index([mode])
 }
 
 model Course {

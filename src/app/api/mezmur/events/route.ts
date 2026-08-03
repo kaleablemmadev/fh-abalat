@@ -22,7 +22,7 @@ export async function GET() {
   try {
     const events = await prisma.event.findMany({
       where: {
-        eventType: 'MEZMUR_EVENT',
+        mode: 'MEZMUR',
         OR: [
           { isRecurring: false },
           {
@@ -103,14 +103,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Get admin user
-    let adminUser = await prisma.user.findFirst({ where: { type: "ADMIN" } });
+    let adminUser = await prisma.user.findFirst({ where: { type: "ADMIN", mode: 'MEZMUR' } });
     if (!adminUser) {
-      adminUser = await prisma.user.findFirst({ where: { type: "SUPERADMIN" } });
+      adminUser = await prisma.user.findFirst({ where: { type: "SUPERADMIN", mode: 'MEZMUR' } });
     }
 
     if (!adminUser) {
       return NextResponse.json(
-        { error: "No admin user found to create event" },
+        { error: "No Mezmur admin user found to create event" },
         { status: 400 }
       );
     }
@@ -132,6 +132,7 @@ export async function POST(request: NextRequest) {
       eligibilityRuleId: body.eligibilityRuleId || null,
       targetMemberTypes: body.targetMemberTypes || [],
       eventType: 'MEZMUR_EVENT',
+      mode: 'MEZMUR',
       createdById: adminUser.id,
     };
 
@@ -174,7 +175,7 @@ export async function DELETE(request: NextRequest) {
       prisma.event.deleteMany({
         where: { 
           id: { in: body.ids },
-          eventType: 'MEZMUR_EVENT',
+          mode: 'MEZMUR',
         },
       }),
     ]);

@@ -1,4 +1,4 @@
-// src/app/api/eligibility-rules/route.ts
+// src/app/api/mezmur/eligibility-rules/route.ts
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const rules = await prisma.eligibilityRule.findMany({
       where: {
-        mode: 'ABALAT'
+        mode: 'MEZMUR'
       },
       include: {
         criteria: true,
@@ -17,7 +17,7 @@ export async function GET() {
     });
     return NextResponse.json(rules);
   } catch (error) {
-    console.error("GET /api/abalat/eligibility-rules error:", error);
+    console.error("GET /api/mezmur/eligibility-rules error:", error);
     return NextResponse.json(
       { error: "Failed to load eligibility rules" },
       { status: 500 }
@@ -50,14 +50,14 @@ export async function POST(request: NextRequest) {
       data: {
         name: name.trim(),
         description: description || null,
-        mode: 'ABALAT',
+        mode: 'MEZMUR',
         criteria: {
           create: criteria.map((c: any) => ({
-            eventType: c.eventType || 'chore',
+            eventType: c.eventType || 'mezmur',
             minAttendances: c.minAttendances || 0,
             lookbackMonths: c.lookbackMonths || 1,
             isTotalAttendance: c.isTotalAttendance || false,
-            mode: 'ABALAT',
+            mode: 'MEZMUR',
           })),
         },
       },
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result, { status: 201 });
   } catch (error) {
-    console.error("POST /api/abalat/eligibility-rules error:", error);
+    console.error("POST /api/mezmur/eligibility-rules error:", error);
     return NextResponse.json(
       { 
         error: "Failed to create eligibility rule", 

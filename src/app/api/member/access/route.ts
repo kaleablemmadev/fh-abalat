@@ -26,7 +26,8 @@ export async function POST(request: NextRequest) {
         fullName: member.fullName,
         type: member.type,
         memberType: member.memberType,
-        mode: 'MEMBER'
+        mode: 'MEMBER',
+        privateId: member.privateId
       }
     });
   } catch (error) {

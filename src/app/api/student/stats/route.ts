@@ -23,7 +23,8 @@ export async function GET(request: NextRequest) {
                   include: {
                     course: {
                       include: { instructor: true }
-                    }
+                    },
+                    instructor: true
                   }
                 }
               }

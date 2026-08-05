@@ -3,6 +3,7 @@ import prisma from "@/src/lib/prisma";
 import { notFound } from "next/navigation";
 import CourseAttendanceGrid from "./components/CourseAttendanceGrid";
 import { CourseAttendanceService } from "@/src/services/course-attendance.service";
+import { courseClassTypeDisplayNames } from "../../constants/courseEnum";
 
 async function getAdminId() {
   try {
@@ -42,7 +43,7 @@ export default async function CourseAttendancePage({ params }: { params: Promise
   const enrollments = await prisma.courseEnrollment.findMany({
     where: { 
       courseClassId: classId,
-      status: "ACTIVE",
+      status: { in: ["ACTIVE", "PENDING"] },
     },
     include: {
       student: true,
@@ -52,10 +53,15 @@ export default async function CourseAttendancePage({ params }: { params: Promise
 
   const students = enrollments.map((e) => e.student);
 
-  // Get attendance types
+  // Get attendance types (exclude "late" type)
   const attendanceTypes = await prisma.attendanceType.findMany({
     orderBy: { value: "desc" },
   });
+
+  // Filter out "late" attendance type
+  const filteredAttendanceTypes = attendanceTypes.filter(
+    (type) => !type.name.toLowerCase().includes('late')
+  );
 
   // Get events for this course class
   const events = await prisma.event.findMany({
@@ -80,13 +86,13 @@ export default async function CourseAttendancePage({ params }: { params: Promise
           className="text-xl font-bold tracking-tight"
           style={{ color: "hsl(var(--foreground))" }}
         >
-          Course Attendance
+          የኮርስ አቴንዳንስ
         </h1>
         <p
           className="text-sm mt-0.5"
           style={{ color: "hsl(var(--muted-foreground))" }}
         >
-          {courseClass.name} - {courseClass.year}
+          {courseClassTypeDisplayNames[courseClass.name] ?? courseClass.name} - {courseClass.year}
         </p>
       </div>
 
@@ -94,7 +100,7 @@ export default async function CourseAttendancePage({ params }: { params: Promise
         key={classId}
         classId={classId}
         students={students as any}
-        attendanceTypes={attendanceTypes}
+        attendanceTypes={filteredAttendanceTypes}
         events={events as any}
         initialAttendance={attendanceRecords}
       />

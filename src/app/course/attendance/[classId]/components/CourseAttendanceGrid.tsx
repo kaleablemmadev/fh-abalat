@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { Check, CheckCircle2, Loader2, X, Clock, Users, Save } from 'lucide-react';
+import { ethMonthNames } from '@/src/lib/ethiopiancal';
 
 interface Student {
   id: string;
@@ -121,8 +122,8 @@ export default function CourseAttendanceGrid({
   events,
   initialAttendance,
 }: CourseAttendanceGridProps) {
-  // State: Record<eventId, Record<studentId, attendanceTypeId>>
-  const [attendanceState, setAttendanceState] = useState<Record<string, Record<string, string>>>({});
+  // State: Record<eventId, Record<studentId, attendanceTypeId | undefined>>
+  const [attendanceState, setAttendanceState] = useState<Record<string, Record<string, string | undefined>>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -146,13 +147,29 @@ export default function CourseAttendanceGrid({
   }, [events, initialAttendance]);
 
   const handleAttendanceChange = (eventId: string, studentId: string, attendanceTypeId: string) => {
-    setAttendanceState((prev) => ({
-      ...prev,
-      [eventId]: {
-        ...prev[eventId],
-        [studentId]: attendanceTypeId,
-      },
-    }));
+    setAttendanceState((prev) => {
+      const currentAttendance = prev[eventId]?.[studentId];
+      
+      // If clicking the same attendance type that's already selected, deselect it
+      if (currentAttendance === attendanceTypeId) {
+        return {
+          ...prev,
+          [eventId]: {
+            ...prev[eventId],
+            [studentId]: undefined,
+          },
+        };
+      }
+      
+      // Otherwise, select the new attendance type
+      return {
+        ...prev,
+        [eventId]: {
+          ...prev[eventId],
+          [studentId]: attendanceTypeId,
+        },
+      };
+    });
   };
 
   const handleSave = async () => {
@@ -164,15 +181,16 @@ export default function CourseAttendanceGrid({
       const attendanceUpdates: Array<{
         eventId: string;
         memberId: string;
-        attendanceTypeId: string;
+        attendanceTypeId: string | null;
       }> = [];
 
       Object.entries(attendanceState).forEach(([eventId, studentRecords]) => {
         Object.entries(studentRecords).forEach(([studentId, attendanceTypeId]) => {
+          // Include all records - attendanceTypeId can be null for deletions
           attendanceUpdates.push({
             eventId,
             memberId: studentId,
-            attendanceTypeId,
+            attendanceTypeId: attendanceTypeId || null,
           });
         });
       });
@@ -184,7 +202,8 @@ export default function CourseAttendanceGrid({
       });
 
       if (!res.ok) {
-        throw new Error('Failed to save attendance');
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to save attendance');
       }
 
       setSaveStatus('success');
@@ -199,7 +218,8 @@ export default function CourseAttendanceGrid({
   };
 
   const formatEthiopianDate = (event: Event) => {
-    return `${event.ethiopianMonth} ${event.ethiopianDay}`;
+    const monthName = ethMonthNames[event.ethiopianMonth as keyof typeof ethMonthNames] || event.ethiopianMonth;
+    return `${monthName} ${event.ethiopianDay}`;
   };
 
   const hasChanges = () => {
@@ -214,7 +234,29 @@ export default function CourseAttendanceGrid({
       }
     });
 
-    return JSON.stringify(attendanceState) !== JSON.stringify(initialState);
+    // Deep comparison handling undefined values
+    for (const eventId in attendanceState) {
+      for (const studentId in attendanceState[eventId]) {
+        const currentValue = attendanceState[eventId][studentId];
+        const initialValue = initialState[eventId]?.[studentId];
+        
+        // If values differ (including undefined vs defined), there are changes
+        if (currentValue !== initialValue) {
+          return true;
+        }
+      }
+    }
+    
+    // Check if any initial attendance was removed
+    for (const eventId in initialState) {
+      for (const studentId in initialState[eventId]) {
+        if (!attendanceState[eventId]?.[studentId]) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   };
 
   if (events.length === 0) {
@@ -232,10 +274,10 @@ export default function CourseAttendanceGrid({
           style={{ color: 'hsl(var(--muted-foreground))' }}
         />
         <p className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>
-          No events scheduled for this class yet.
+          ለዚህ ክፍል ምንም የተያዘ አቴንዳንስ የለም
         </p>
         <p className="text-xs mt-1" style={{ color: 'hsl(var(--muted-foreground))' }}>
-          Generate course events to start taking attendance.
+          አቴንዳንስ ለመመዝገብ ክፍሎችን መሥርቱ
         </p>
       </div>
     );
@@ -267,7 +309,7 @@ export default function CourseAttendanceGrid({
                     minWidth: '150px',
                   }}
                 >
-                  Student
+                  ተማሪ
                 </th>
                 {events.map((event) => (
                   <th
@@ -303,7 +345,7 @@ export default function CourseAttendanceGrid({
                       minWidth: '150px',
                     }}
                   >
-                    {student.fullName || 'Unnamed student'}
+                    {student.fullName || 'ስም አልተመዘገበም'}
                   </td>
                   {events.map((event) => {
                     const currentAttendanceTypeId = attendanceState[event.id]?.[student.id];
@@ -367,21 +409,21 @@ export default function CourseAttendanceGrid({
       >
         <div className="flex items-center gap-2 text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
           <Users size={14} />
-          <span>{students.length} students</span>
+          <span>{students.length} ተማሪዎች</span>
           <span>•</span>
-          <span>{events.length} events</span>
+          <span>{events.length} አቴንዳንሶች</span>
         </div>
 
         <div className="flex items-center gap-2">
           {saveStatus === 'success' && (
             <div className="flex items-center gap-1 text-xs" style={{ color: 'hsl(160 65% 60%)' }}>
               <CheckCircle2 size={14} />
-              Saved
+              የተመዘገቡ
             </div>
           )}
           {saveStatus === 'error' && (
             <div className="flex items-center gap-1 text-xs" style={{ color: 'hsl(0 55% 60%)' }}>
-              Failed to save
+              መመዝገብ አልተሳካም
             </div>
           )}
           <button

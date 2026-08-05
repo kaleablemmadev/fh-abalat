@@ -27,44 +27,47 @@ model CourseRegistration {
 }
 
 model User {
-  id                    String               @id @default(cuid())
-  email                 String?              @unique
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
-  mustChangePassword    Boolean              @default(false)
-  address               String?
-  age                   Int?
-  christianName         String?
-  courseClassId         String?
-  departmentId          String?
-  ethiopianCreatedAt    String?
-  fullName              String?
-  gender                genderType           @default(MALE)
-  isActive              Boolean              @default(true)
-  memberType            memberType?          @default(REGULAR_MEMBER)
-  mode                  appMode?
-  privateId             String?              @unique
-  passwordHash          String?
-  phoneNumber           String?
-  registerDate          String?
-  type                  userType             @default(MEMBER)
-  reviewedRegistrations AdminRegistration[]  @relation("RegistrationReviewer")
-  markedAttendances     Attendance[]         @relation("MarkedByAdmin")
-  attendances           Attendance[]         @relation("MemberAttendances")
-  performedAuditLogs    AuditLog[]           @relation("AuditLogPerformer")
-  enrollments           CourseEnrollment[]
-  registrations         CourseRegistration[]
-  createdEvents         Event[]              @relation("EventCreatedBy")
-  marks                 Mark[]
-  mezmurEnrollments     MezmurEnrollment[]
-  uploadedMusicFiles    MusicFile[]          @relation("MusicUploadedBy")
-  targetNotifications   Notification[]       @relation("NotificationTarget")
-  permissions           Permission[]         @relation("MemberPermissions")
-  reviewedPermissions   Permission[]         @relation("ReviewedByAdmin")
-  playlists             Playlist[]
-  courseClass           CourseClass?         @relation(fields: [courseClassId], references: [id])
-  department            Department?          @relation(fields: [departmentId], references: [id])
+  id                          String                 @id @default(cuid())
+  email                       String?                @unique
+  createdAt                   DateTime               @default(now())
+  updatedAt                   DateTime               @updatedAt
+  mustChangePassword          Boolean                @default(false)
+  address                     String?
+  age                         Int?
+  christianName               String?
+  grandfatherName             String?
+  courseClassId               String?
+  departmentId                String?
+  ethiopianCreatedAt          String?
+  fullName                    String?
+  gender                      genderType             @default(MALE)
+  isActive                    Boolean                @default(true)
+  memberType                  memberType?            @default(REGULAR_MEMBER)
+  mode                        appMode?
+  privateId                   String?                @unique
+  passwordHash                String?
+  phoneNumber                 String?
+  registerDate                String?
+  type                        userType               @default(MEMBER)
+  reviewedRegistrations       AdminRegistration[]    @relation("RegistrationReviewer")
+  markedAttendances           Attendance[]           @relation("MarkedByAdmin")
+  attendances                 Attendance[]           @relation("MemberAttendances")
+  performedAuditLogs          AuditLog[]             @relation("AuditLogPerformer")
+  enrollments                 CourseEnrollment[]
+  registrations               CourseRegistration[]
+  createdEvents               Event[]                @relation("EventCreatedBy")
+  marks                       Mark[]
+  mezmurEnrollments           MezmurEnrollment[]
+  uploadedMusicFiles          MusicFile[]            @relation("MusicUploadedBy")
+  targetNotifications         Notification[]         @relation("NotificationTarget")
+  permissions                 Permission[]           @relation("MemberPermissions")
+  reviewedPermissions         Permission[]           @relation("ReviewedByAdmin")
+  playlists                   Playlist[]
+  markedInstructorAttendances InstructorAttendance[] @relation("InstructorAttendanceMarker")
+  courseClass                 CourseClass?           @relation(fields: [courseClassId], references: [id])
+  department                  Department?            @relation(fields: [departmentId], references: [id])
 
+  @@unique([fullName, grandfatherName])
   @@index([type])
   @@index([memberType])
   @@index([isActive])
@@ -93,30 +96,32 @@ model AcademicYear {
 }
 
 model Event {
-  id                String           @id @default(cuid())
-  title             String
-  description       String?
-  date              DateTime
-  location          String?
-  ethiopianYear     Int?
-  ethiopianMonth    Int?
-  ethiopianDay      Int?
-  eventType         eventType        @default(EVENT)
-  isRecurring       Boolean          @default(false)
-  recurringMonth    Int?
-  recurringDay      Int?
-  eligibilityRuleId String?
-  targetMemberTypes memberType[]
-  createdById       String
-  courseClassId     String?
-  isActive          Boolean          @default(true)
-  mode              appMode          @default(ABALAT)
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  attendances       Attendance[]
-  courseClass       CourseClass?     @relation(fields: [courseClassId], references: [id])
-  createdBy         User             @relation("EventCreatedBy", fields: [createdById], references: [id])
-  eligibilityRule   EligibilityRule? @relation(fields: [eligibilityRuleId], references: [id])
+  id                    String                 @id @default(cuid())
+  title                 String
+  description           String?
+  date                  DateTime
+  location              String?
+  ethiopianYear         Int?
+  ethiopianMonth        Int?
+  ethiopianDay          Int?
+  eventType             eventType              @default(EVENT)
+  isRecurring           Boolean                @default(false)
+  recurringMonth        Int?
+  recurringDay          Int?
+  eligibilityRuleId     String?
+  targetMemberTypes     memberType[]
+  createdById           String
+  courseClassId         String?
+  isActive              Boolean                @default(true)
+  mode                  appMode                @default(ABALAT)
+  isAcademicTimeline    Boolean                @default(false)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  attendances           Attendance[]
+  instructorAttendances InstructorAttendance[]
+  courseClass           CourseClass?           @relation(fields: [courseClassId], references: [id])
+  createdBy             User                   @relation("EventCreatedBy", fields: [createdById], references: [id])
+  eligibilityRule       EligibilityRule?       @relation(fields: [eligibilityRuleId], references: [id])
 
   @@index([date])
   @@index([ethiopianYear, ethiopianMonth])
@@ -128,14 +133,15 @@ model Event {
 }
 
 model AttendanceType {
-  id          String       @id @default(cuid())
-  name        String       @unique
-  value       Float
-  isDefault   Boolean      @default(false)
-  mode        appMode      @default(ABALAT)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  attendances Attendance[]
+  id                    String                 @id @default(cuid())
+  name                  String                 @unique
+  value                 Float
+  isDefault             Boolean                @default(false)
+  mode                  appMode                @default(ABALAT)
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  attendances           Attendance[]
+  instructorAttendances InstructorAttendance[]
 
   @@unique([name, mode])
   @@index([mode])
@@ -254,6 +260,7 @@ model Course {
   topics             String[]
   isGiven            Boolean                @default(true)
   credits            Int?
+  requiredHours      Int                    @default(0)
   instructorId       String
   courseClassId      String?
   departmentId       String
@@ -283,16 +290,18 @@ enum CourseOfferingSemester {
 }
 
 model Instructor {
-  id           String     @id @default(cuid())
-  fullName     String     @unique
-  email        String?    @unique
+  id           String                 @id @default(cuid())
+  fullName     String                 @unique
+  email        String?                @unique
   phoneNumber  String?
   departmentId String
-  isActive     Boolean    @default(true)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  isActive     Boolean                @default(true)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
   courses      Course[]
-  department   Department @relation(fields: [departmentId], references: [id])
+  courseYears  CourseYear[]
+  attendances  InstructorAttendance[]
+  department   Department             @relation(fields: [departmentId], references: [id])
 
   @@index([departmentId])
   @@index([isActive])
@@ -356,30 +365,35 @@ model CourseEnrollment {
 }
 
 model CourseYear {
-  id               String      @id @default(cuid())
-  courseId         String
-  courseClassId    String
-  year             String
-  semester         Semester    @default(FIRST)
-  isTwoSemesters   Boolean     @default(false)
-  startDate        DateTime
-  endDate          DateTime
-  attendanceWeight Float       @default(10)
-  midExamWeight    Float       @default(25)
-  assignmentWeight Float       @default(15)
-  finalExamWeight  Float       @default(50)
-  isActive         Boolean     @default(true)
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
-  courseClass      CourseClass @relation(fields: [courseClassId], references: [id])
-  course           Course      @relation(fields: [courseId], references: [id])
-  marks            Mark[]
+  id                String          @id @default(cuid())
+  courseId          String
+  courseClassId     String
+  year              String
+  semester          Semester        @default(FIRST)
+  isTwoSemesters    Boolean         @default(false)
+  startDate         DateTime
+  endDate           DateTime
+  attendanceWeight  Float           @default(10)
+  midExamWeight     Float           @default(25)
+  assignmentWeight  Float           @default(15)
+  finalExamWeight   Float           @default(50)
+  isActive          Boolean         @default(true)
+  isGradingComplete Boolean         @default(true)
+  instructorId      String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  courseClass       CourseClass     @relation(fields: [courseClassId], references: [id])
+  course            Course          @relation(fields: [courseId], references: [id])
+  instructor        Instructor?     @relation(fields: [instructorId], references: [id])
+  marks             Mark[]
+  courseFreeDays    CourseFreeDay[]
 
   @@unique([courseId, courseClassId, year])
   @@index([courseId])
   @@index([courseClassId])
   @@index([year])
   @@index([isActive])
+  @@index([instructorId])
 }
 
 model Mark {
@@ -547,6 +561,61 @@ model Notification {
   @@index([targetUserId])
   @@index([isRead])
   @@index([createdAt])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  type      String   @default("GENERAL") // GENERAL, SCHEDULE, URGENT
+  mode      appMode  @default(COURSE)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CourseFreeDay {
+  id                String     @id @default(cuid())
+  courseYearId      String
+  date              DateTime
+  reason            String
+  isAnnual          Boolean    @default(false)
+  ethiopianYear     Int?
+  ethiopianMonth    Int?
+  ethiopianDay      Int?
+  notificationsSent Boolean    @default(false)
+  notificationDate  DateTime?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  courseYear        CourseYear @relation(fields: [courseYearId], references: [id], onDelete: Cascade)
+
+  @@unique([courseYearId, date])
+  @@index([date])
+  @@index([courseYearId])
+  @@index([isAnnual])
+  @@index([notificationsSent])
+}
+
+model InstructorAttendance {
+  id               String         @id @default(cuid())
+  instructorId     String
+  eventId          String
+  attendanceTypeId String
+  markedById       String
+  note             String?
+  mode             appMode        @default(COURSE)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  attendanceType   AttendanceType @relation(fields: [attendanceTypeId], references: [id])
+  event            Event          @relation(fields: [eventId], references: [id])
+  markedBy         User           @relation("InstructorAttendanceMarker", fields: [markedById], references: [id])
+  instructor       Instructor     @relation(fields: [instructorId], references: [id])
+
+  @@unique([instructorId, eventId])
+  @@index([eventId])
+  @@index([instructorId])
+  @@index([attendanceTypeId])
+  @@index([mode])
 }
 
 enum CourseRegistrationType {

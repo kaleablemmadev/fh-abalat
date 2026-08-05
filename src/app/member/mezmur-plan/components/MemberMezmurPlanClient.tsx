@@ -214,7 +214,7 @@ export default function MemberMezmurPlanClient({ schedules, musicFiles, currentM
       
       // Title
       doc.setFontSize(18);
-      doc.text(`Monthly Mezmur Schedule - ${monthName} ${currentYear}`, 105, 20, { align: 'center' });
+      doc.text(`ወርኃዊ የአገልግሎት መዝሙራት - ${monthName} ${currentYear}`, 105, 20, { align: 'center' });
       
       let yPos = 40;
 
@@ -373,12 +373,12 @@ export default function MemberMezmurPlanClient({ schedules, musicFiles, currentM
           return (
             <div key={day} className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl p-5 shadow-sm">
               <div className="mb-4 pb-2 border-b border-[hsl(var(--border))]">
-                <h3 className="font-bold text-lg">Day {day}</h3>
+                <h3 className="font-bold text-lg">{ethMonthNames[currentMonth as keyof typeof ethMonthNames]} {day}</h3>
               </div>
 
               <div className="space-y-2">
                 {files.length === 0 ? (
-                  <p className="text-sm opacity-50 italic text-center py-4">No Mezmurs assigned</p>
+                  <p className="text-sm opacity-50 italic text-center py-4">ምንም መዝሙር አልተመዘገበም</p>
                 ) : (
                   files.map((file: any) => (
                     <div key={file.id} className="space-y-2">
@@ -450,7 +450,7 @@ export default function MemberMezmurPlanClient({ schedules, musicFiles, currentM
               <div>
                 <h3 className="font-bold text-lg">{viewingLyrics.title}</h3>
                 <p className="text-sm opacity-60">
-                  {viewingLyrics.language === "GEEZ" ? "ግዕዝ" : "Amharic"}
+                  {viewingLyrics.language === "GEEZ" ? "ግዕዝ" : "ዐማርኛ"}
                 </p>
               </div>
               <button

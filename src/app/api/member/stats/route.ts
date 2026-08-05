@@ -160,12 +160,84 @@ export async function GET(request: NextRequest) {
       take: 10,
     });
 
+    // NEW: Get active announcements for COURSE/MEMBER mode
+    const announcements = await prisma.announcement.findMany({
+      where: {
+        mode: { in: ['COURSE', 'MEMBER'] },
+        isActive: true
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 5
+    });
+
+    // NEW: Get academic timeline events
+    const timelineEvents = await prisma.event.findMany({
+      where: {
+        isAcademicTimeline: true,
+        isActive: true
+      },
+      orderBy: { date: 'asc' }
+    });
+
+    // NEW: Get student grades if they are a COURSE_STUDENT
+    const student = await prisma.user.findUnique({
+      where: { id: memberId },
+      include: {
+        marks: {
+          include: {
+            courseYear: {
+              include: { course: true }
+            }
+          },
+          orderBy: { updatedAt: 'desc' }
+        },
+        enrollments: {
+          where: { status: 'ACTIVE' },
+          include: {
+            courseClass: {
+              include: {
+                courseYears: {
+                  where: { isActive: true },
+                  include: { course: true }
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Process marks to include grading status and handle GPA correctly
+    const processedGrades = student?.marks.map(m => ({
+      ...m,
+      isGradingComplete: m.courseYear.isGradingComplete
+    })) || [];
+
+    // Extract handouts from active courses
+    const handouts = student?.enrollments.flatMap(en =>
+      en.courseClass?.courseYears.map(cy => ({
+        courseName: cy.course.name,
+        url: cy.course.studentHandoutUrl,
+        instructor: cy.course.instructorId
+      })).filter(h => h.url) || []
+    ) || [];
+
     return NextResponse.json({
       attendanceCount,
       recentAttendances,
       closestEvents,
       monthlyAttendanceSum,
-      notifications
+      notifications,
+      announcements,
+      timelineEvents,
+      grades: processedGrades,
+      handouts,
+      profile: {
+        address: student?.address,
+        age: student?.age,
+        phoneNumber: student?.phoneNumber,
+        gender: student?.gender
+      }
     });
   } catch (error) {
     console.error('Member stats error:', error);

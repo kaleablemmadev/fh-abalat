@@ -20,10 +20,10 @@ export default async function MemberMusicPage() {
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Music Library
+          የመዝሙር መዝገብ
         </h1>
         <p className="text-sm mt-0.5 opacity-50">
-          Browse Mezmur lyrics and titles for learning and practice
+          ለመዝሙር ጥናት የሚሆኑ መዝሙሮች
         </p>
       </div>
 

@@ -2,6 +2,7 @@
 import prisma from '@/src/lib/prisma';
 import Breadcrumb from '@/src/components/navigation/Breadcrumb';
 import { Bell, Clock } from 'lucide-react';
+import { formatEthiopianDate } from '@/src/lib/ethiopiancal';
 
 export default async function CourseNotificationsPage() {
   const notifications = await prisma.notification.findMany({
@@ -80,7 +81,7 @@ export default async function CourseNotificationsPage() {
                       <div className="flex items-center gap-4 text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
                         <div className="flex items-center gap-1">
                           <Clock size={12} />
-                          <span>{new Date(notification.createdAt).toLocaleString()}</span>
+                          <span>{formatEthiopianDate(new Date(notification.createdAt))}</span>
                         </div>
                         {notification.targetUser && (
                           <span>To: {notification.targetUser.fullName || notification.targetUser.email}</span>

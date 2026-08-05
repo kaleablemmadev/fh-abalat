@@ -17,6 +17,7 @@ const academicYearSchema = z.object({
   s2FinalExamDate: z.string().optional(),
   midExamMinAttendance: z.number().optional(),
   finalExamMinAttendance: z.number().optional(),
+  includedClasses: z.array(z.string()).optional(),
 });
 
 export async function GET() {
@@ -52,7 +53,8 @@ export async function POST(request: NextRequest) {
       year, startDate, endDate, isActive,
       s1Start, s1End, s2Start, s2End,
       s1MidExamDate, s1FinalExamDate, s2MidExamDate, s2FinalExamDate,
-      midExamMinAttendance, finalExamMinAttendance
+      midExamMinAttendance, finalExamMinAttendance,
+      includedClasses
     } = validation.data;
 
     // If setting to active, deactivate others
@@ -82,8 +84,9 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Automatically generate the 5 constant classes
-    const classTypes = ['KEDAMAY', 'KALEAY', 'SALSAY', 'RABEAY', 'KEREMT'] as const;
+    // Automatically generate the constant classes if included
+    const defaultClasses = ['KEDAMAY', 'KALEAY', 'SALSAY', 'RABEAY', 'KEREMT'];
+    const classTypes = (includedClasses || defaultClasses).filter(c => defaultClasses.includes(c));
 
     // Create classes AND CourseYear records for existing courses
     const courses = await prisma.course.findMany({
@@ -94,7 +97,7 @@ export async function POST(request: NextRequest) {
       classTypes.map(async (type) => {
         const courseClass = await prisma.courseClass.create({
           data: {
-            name: type,
+            name: type as any,
             year: academicYear.year,
             academicYearId: academicYear.id,
             isActive: true,
@@ -133,6 +136,7 @@ export async function POST(request: NextRequest) {
                     assignmentWeight: course.assignmentWeight,
                     finalExamWeight: course.finalExamWeight,
                     isActive: true,
+                    instructorId: course.instructorId, // Assign default instructor
                   }
                 });
               })
@@ -142,7 +146,12 @@ export async function POST(request: NextRequest) {
       })
     );
 
-    return NextResponse.json(academicYear, { status: 201 });
+    const completeYear = await prisma.academicYear.findUnique({
+      where: { id: academicYear.id },
+      include: { classes: true }
+    });
+
+    return NextResponse.json(completeYear, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

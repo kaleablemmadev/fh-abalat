@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import Breadcrumb from "@/src/components/navigation/Breadcrumb";
 import { BookOpen, User, Layers, Calendar, CheckSquare, GraduationCap, ArrowLeft, Clock, FileText, Download } from "lucide-react";
 import Link from "next/link";
+import { formatEthiopianDate } from "@/src/lib/ethiopiancal";
+
+import CourseOfferingActions from "../components/CourseOfferingActions";
 
 export default async function CourseDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -15,6 +18,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
       courseYears: {
         include: {
           courseClass: true,
+          instructor: true,
           _count: {
             select: { marks: true }
           }
@@ -54,6 +58,20 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
               <span className="font-medium">{course.department.name}</span>
             </div>
           </div>
+
+          <div className="rounded-2xl bg-[hsl(217_70%_32%)] p-6 text-white space-y-4 shadow-lg shadow-[hsl(217_70%_32%)/0.2]">
+            <h3 className="font-bold flex items-center gap-2">
+              <User size={18} />
+              Primary Instructor
+            </h3>
+            <div className="space-y-1">
+              <p className="text-lg font-bold">{course.instructor.fullName}</p>
+              <p className="text-xs text-blue-100 opacity-80">{course.instructor.email || "No email provided"}</p>
+            </div>
+            <p className="text-[10px] text-blue-200 opacity-60 leading-relaxed italic">
+                * This is the default instructor assigned when creating new academic years. You can swap instructors for specific years in the Year Management tool.
+            </p>
+          </div>
         </div>
 
         <Link
@@ -90,9 +108,9 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                   href={course.teacherHandoutUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-50 text-blue-600 text-xs font-bold hover:bg-blue-100 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-blue-500/10 text-blue-500 text-xs font-bold hover:bg-blue-500 hover:text-white transition-all border border-blue-500/20"
                 >
-                  <Download size={14} /> Download PDF
+                  <Download size={14} /> Download Teacher PDF
                 </a>
               ) : (
                 <p className="text-xs text-[hsl(var(--muted-foreground))] italic">No handout uploaded.</p>
@@ -109,9 +127,9 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                   href={course.studentHandoutUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 text-xs font-bold hover:bg-emerald-100 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-emerald-500/10 text-emerald-500 text-xs font-bold hover:bg-emerald-500 hover:text-white transition-all border border-emerald-500/20"
                 >
-                  <Download size={14} /> Download PDF
+                  <Download size={14} /> Download Student PDF
                 </a>
               ) : (
                 <p className="text-xs text-[hsl(var(--muted-foreground))] italic">No handout uploaded.</p>
@@ -138,55 +156,63 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
             </div>
           </div>
 
-          {/* Offerings History */}
+          {/* Offerings History with Link to Grading */}
           <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-[hsl(var(--border))] flex items-center justify-between bg-[hsl(var(--muted)/0.3)]">
               <h2 className="text-sm font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))] flex items-center gap-2">
                 <Calendar size={16} />
-                Course Offerings History
+                Course Performance Access
               </h2>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[hsl(var(--primary)/0.1)] text-[hsl(var(--primary))]">
-                {course.courseYears.length} Terms
-              </span>
             </div>
             <div className="divide-y divide-[hsl(var(--border))]">
-              {course.courseYears.length === 0 ? (
-                <div className="p-10 text-center text-sm text-[hsl(var(--muted-foreground))] italic">
-                  This course hasn't been assigned to any academic years yet.
-                </div>
-              ) : (
-                course.courseYears.map((cy) => (
-                  <div key={cy.id} className="p-5 flex items-center justify-between hover:bg-[hsl(var(--muted)/0.2)] transition-colors group">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-[hsl(var(--foreground))]">{cy.courseClass.name}</span>
-                        <span className="text-xs text-[hsl(var(--muted-foreground))]">— {cy.year} ({cy.semester})</span>
-                      </div>
-                      <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                        {new Date(cy.startDate).toLocaleDateString()} – {new Date(cy.endDate).toLocaleDateString()}
-                      </p>
+              {course.courseYears.map((cy) => (
+                <div key={cy.id} className="p-5 flex items-center justify-between hover:bg-[hsl(var(--muted)/0.2)] transition-colors group">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-[hsl(var(--foreground))]">{cy.courseClass.name}</span>
+                      <span className="text-xs text-[hsl(var(--muted-foreground))]">— {cy.year} ({cy.semester})</span>
                     </div>
-                    <div className="flex items-center gap-6">
-                      <div className="text-right">
-                        <p className="text-xs font-bold text-[hsl(var(--foreground))]">{cy._count.marks}</p>
-                        <p className="text-[10px] text-[hsl(var(--muted-foreground))] uppercase">Students</p>
-                      </div>
-                      <Link
-                        href={`/course/marks/${cy.id}`}
-                        className="p-2 rounded-lg bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary)/0.1)] transition-all"
-                      >
-                        <GraduationCap size={18} />
-                      </Link>
-                    </div>
+                    <p className="text-[10px] text-[hsl(var(--primary))] font-bold uppercase tracking-tight">
+                       Instructor: {cy.instructor?.fullName || "Default Instructor"}
+                    </p>
+                    <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                      Current student count: {cy._count.marks}
+                    </p>
                   </div>
-                ))
-              )}
+                  <Link
+                    href={`/course/marks/${cy.id}`}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-xs font-bold hover:bg-blue-500 transition-all shadow-md shadow-blue-900/20"
+                  >
+                    Open Bulk Grading <ArrowLeft size={14} className="rotate-180" />
+                  </Link>
+                </div>
+              ))}
             </div>
+          </div>
+
+          <div className="rounded-2xl bg-[hsl(217_70%_32%)] p-6 text-white space-y-4 shadow-lg shadow-[hsl(217_70%_32%)/0.2]">
+            <h3 className="font-bold flex items-center gap-2">
+              <User size={18} />
+              Primary Instructor
+            </h3>
+            <div className="space-y-1">
+              <p className="text-lg font-bold">{course.instructor.fullName}</p>
+              <p className="text-xs text-blue-100 opacity-80">{course.instructor.email || "No email provided"}</p>
+            </div>
+            <p className="text-[10px] text-blue-200 opacity-60 leading-relaxed italic">
+                * This is the default instructor assigned when creating new academic years. You can swap instructors for specific years in the Year Management tool.
+            </p>
           </div>
         </div>
 
-        {/* Sidebar Info */}
+        {/* Sidebar: Actions & Info */}
         <div className="space-y-6">
+          <CourseOfferingActions
+            courseId={course.id}
+            courseName={course.name}
+            courseYears={course.courseYears}
+          />
+
           <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 space-y-6 shadow-sm">
             <h3 className="text-sm font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))]">Quick Stats</h3>
             <div className="space-y-4">
@@ -195,11 +221,10 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                 <span className="text-sm font-bold">{course.credits || 0}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[hsl(var(--muted-foreground))]">Permanent Classes</span>
-                <div className="flex flex-wrap gap-1 justify-end max-w-[120px]">
-                  {course.classTypes.map((type: string) => (
-                    <span key={type} className="text-[10px] font-bold text-[hsl(var(--primary))] uppercase tracking-tighter bg-[hsl(var(--primary)/0.05)] px-1 rounded">{type}</span>
-                  ))}
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">Weights</span>
+                <div className="text-right">
+                  <p className="text-[10px] font-bold">Mid {course.midExamWeight}%</p>
+                  <p className="text-[10px] font-bold">Final {course.finalExamWeight}%</p>
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -208,25 +233,21 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                   {course.isGiven ? 'Active' : 'Inactive'}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-[hsl(var(--muted-foreground))]">Dept Code</span>
-                <span className="text-sm font-mono font-bold text-[hsl(var(--primary))]">{course.department.code || 'N/A'}</span>
-              </div>
             </div>
           </div>
 
           <div className="rounded-2xl bg-[hsl(217_70%_32%)] p-6 text-white space-y-4 shadow-lg shadow-[hsl(217_70%_32%)/0.2]">
             <h3 className="font-bold flex items-center gap-2">
               <User size={18} />
-              Instructor Details
+              Primary Instructor
             </h3>
             <div className="space-y-1">
               <p className="text-lg font-bold">{course.instructor.fullName}</p>
               <p className="text-xs text-blue-100 opacity-80">{course.instructor.email || "No email provided"}</p>
             </div>
-            <button className="w-full py-2 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold transition-all border border-white/10">
-              View Profile
-            </button>
+            <p className="text-[10px] text-blue-200 opacity-60 leading-relaxed italic">
+                * This is the default instructor assigned when creating new academic years. You can swap instructors for specific years in the Year Management tool.
+            </p>
           </div>
         </div>
       </div>

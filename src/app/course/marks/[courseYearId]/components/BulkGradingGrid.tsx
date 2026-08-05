@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { CheckCircle2, Loader2, Save, Users, Filter, Calculator } from "lucide-react";
+import { CheckCircle2, Loader2, Save, Users, Filter, Calculator, Trophy } from "lucide-react";
+import { calculateFinalMark, getLetterGrade, getPassStatus } from "@/src/lib/courseGrading";
 
 interface Student {
   id: string;
@@ -159,6 +160,32 @@ export default function BulkGradingGrid({
     });
   }, [studentsWithData, filter]);
 
+  // Calculate real-time rankings for this specific course
+  const rankedStudents = useMemo(() => {
+    const computed = filteredStudents.map(item => {
+      const state = marksState[item.student.id] || { midExamScore: "", assignmentScore: "", finalExamScore: "" };
+      const score = calculateFinalMark(
+        {
+          midExamScore: state.midExamScore ? parseFloat(state.midExamScore) : 0,
+          assignmentScore: state.assignmentScore ? parseFloat(state.assignmentScore) : 0,
+          finalExamScore: state.finalExamScore ? parseFloat(state.finalExamScore) : 0,
+        },
+        weights,
+        item.attendanceScore
+      );
+      return { ...item, realTimeScore: score };
+    });
+
+    // Sort by score descending
+    const sorted = [...computed].sort((a, b) => b.realTimeScore - a.realTimeScore);
+
+    // Assign ranks (handling ties if we want, but simple for now)
+    return computed.map(item => {
+      const rank = sorted.findIndex(s => s.student.id === item.student.id) + 1;
+      return { ...item, rank };
+    });
+  }, [filteredStudents, marksState, weights]);
+
   const totals = useMemo(() => ({
     total: studentsWithData.length,
     passed: studentsWithData.filter(({ mark }) => mark?.passStatus === "PASSED").length,
@@ -269,31 +296,31 @@ export default function BulkGradingGrid({
                   className="px-3 py-2 text-center font-semibold"
                   style={{ color: "hsl(var(--foreground))", minWidth: "60px" }}
                 >
-                  Att (100)
+                  Att ({weights.attendanceWeight})
                 </th>
                 <th
                   className="px-3 py-2 text-center font-semibold"
                   style={{ color: "hsl(var(--foreground))", minWidth: "80px" }}
                 >
-                  Mid Exam
+                  Mid ({weights.midExamWeight})
                 </th>
                 <th
                   className="px-3 py-2 text-center font-semibold"
                   style={{ color: "hsl(var(--foreground))", minWidth: "80px" }}
                 >
-                  Assignment
+                  Assign ({weights.assignmentWeight})
                 </th>
                 <th
                   className="px-3 py-2 text-center font-semibold"
                   style={{ color: "hsl(var(--foreground))", minWidth: "80px" }}
                 >
-                  Final Exam
+                  Final ({weights.finalExamWeight})
                 </th>
                 <th
                   className="px-3 py-2 text-center font-semibold"
                   style={{ color: "hsl(var(--foreground))", minWidth: "60px" }}
                 >
-                  Score
+                  Rank
                 </th>
                 <th
                   className="px-3 py-2 text-center font-semibold"
@@ -310,15 +337,18 @@ export default function BulkGradingGrid({
               </tr>
             </thead>
             <tbody>
-              {filteredStudents.map(({ student, mark, attendanceScore }) => {
-                const currentMarks = marksState[student.id] || {
+              {rankedStudents.map(({ student, mark, attendanceScore, rank, realTimeScore }) => {
+                const current = marksState[student.id] || {
                   midExamScore: "",
                   assignmentScore: "",
                   finalExamScore: "",
                 };
 
+                const grade = getLetterGrade(realTimeScore);
+                const status = getPassStatus(grade);
+
                 return (
-                  <tr key={student.id} style={{ borderBottom: "1px solid hsl(var(--border))" }}>
+                  <tr key={student.id} style={{ borderBottom: "1px solid hsl(var(--border))" }} className="group">
                     <td
                       className="sticky left-0 px-3 py-2 z-10"
                       style={{
@@ -344,11 +374,11 @@ export default function BulkGradingGrid({
                         }}
                         type="number"
                         min="0"
-                        max="100"
+                        max={weights.midExamWeight}
                         step="0.1"
-                        value={currentMarks.midExamScore}
+                        value={current.midExamScore}
                         onChange={(e) => handleScoreChange(student.id, "midExamScore", e.target.value)}
-                        placeholder="-"
+                        placeholder={`0-${weights.midExamWeight}`}
                       />
                     </td>
                     <td className="px-2 py-2 text-center">
@@ -361,11 +391,11 @@ export default function BulkGradingGrid({
                         }}
                         type="number"
                         min="0"
-                        max="100"
+                        max={weights.assignmentWeight}
                         step="0.1"
-                        value={currentMarks.assignmentScore}
+                        value={current.assignmentScore}
                         onChange={(e) => handleScoreChange(student.id, "assignmentScore", e.target.value)}
-                        placeholder="-"
+                        placeholder={`0-${weights.assignmentWeight}`}
                       />
                     </td>
                     <td className="px-2 py-2 text-center">
@@ -378,35 +408,41 @@ export default function BulkGradingGrid({
                         }}
                         type="number"
                         min="0"
-                        max="100"
+                        max={weights.finalExamWeight}
                         step="0.1"
-                        value={currentMarks.finalExamScore}
+                        value={current.finalExamScore}
                         onChange={(e) => handleScoreChange(student.id, "finalExamScore", e.target.value)}
-                        placeholder="-"
+                        placeholder={`0-${weights.finalExamWeight}`}
                       />
                     </td>
                     <td className="px-2 py-2 text-center" style={{ color: "hsl(var(--foreground))" }}>
-                      {mark?.computedScore !== null && mark?.computedScore !== undefined
-                        ? mark.computedScore.toFixed(1)
-                        : "-"}
-                    </td>
-                    <td className="px-2 py-2 text-center">
-                      <span className={`font-semibold ${getGradeColor(mark?.letterGrade || null)}`}>
-                        {mark?.letterGrade || "-"}
+                      <span className="font-bold text-blue-500">
+                        {realTimeScore.toFixed(1)}
                       </span>
                     </td>
                     <td className="px-2 py-2 text-center">
-                      {mark?.passStatus ? (
-                        <span
-                          className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${getPassStatusColor(
-                            mark.passStatus
-                          )}`}
-                        >
-                          {mark.passStatus}
-                        </span>
-                      ) : (
-                        <span style={{ color: "hsl(var(--muted-foreground))" }}>-</span>
-                      )}
+                      <div className={`w-7 h-7 mx-auto rounded-lg flex items-center justify-center font-bold text-[10px] ${
+                        rank === 1 ? 'bg-yellow-500/20 text-yellow-500' :
+                        rank === 2 ? 'bg-slate-300/20 text-slate-400' :
+                        rank === 3 ? 'bg-orange-500/20 text-orange-500' :
+                        'bg-zinc-800 text-zinc-500'
+                      }`}>
+                        {rank}
+                      </div>
+                    </td>
+                    <td className="px-2 py-2 text-center">
+                      <span className={`font-black ${getGradeColor(grade)}`}>
+                        {grade}
+                      </span>
+                    </td>
+                    <td className="px-2 py-2 text-center">
+                      <span
+                        className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${getPassStatusColor(
+                          status
+                        )}`}
+                      >
+                        {status}
+                      </span>
                     </td>
                   </tr>
                 );

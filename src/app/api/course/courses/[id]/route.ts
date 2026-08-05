@@ -8,6 +8,7 @@ const courseSchema = z.object({
   description: z.string().nullish(),
   topics: z.array(z.string()).nullish(),
   credits: z.number().int().nullish(),
+  requiredHours: z.number().int().min(0).optional(),
   instructorId: z.string().min(1).optional(),
   departmentId: z.string().min(1).optional(),
   isGiven: z.boolean().optional(),
@@ -79,7 +80,7 @@ export async function PUT(
     }
 
     const {
-      name, description, topics, credits, instructorId, departmentId, isGiven, classTypes,
+      name, description, topics, credits, requiredHours, instructorId, departmentId, isGiven, classTypes,
       semesterPreference, teacherHandoutUrl, studentHandoutUrl,
       attendanceWeight, midExamWeight, assignmentWeight, finalExamWeight
     } = validation.data;
@@ -131,6 +132,7 @@ export async function PUT(
     if (description !== undefined) updateData.description = description;
     if (topics !== undefined) updateData.topics = topics;
     if (credits !== undefined) updateData.credits = credits;
+    if (requiredHours !== undefined) updateData.requiredHours = requiredHours;
     if (instructorId !== undefined) updateData.instructorId = instructorId;
     if (departmentId !== undefined) updateData.departmentId = departmentId;
     if (isGiven !== undefined) updateData.isGiven = isGiven;

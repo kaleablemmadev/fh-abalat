@@ -6,24 +6,11 @@ import { Plus } from "lucide-react";
 export const dynamic = 'force-dynamic';
 
 export default async function CourseMembersPage() {
-  // Fetch students with their active enrollments
+  // Fetch students (simplified to avoid timeout)
   const students = await prisma.user.findMany({
     where: {
       type: "MEMBER",
       memberType: "COURSE_STUDENT",
-    },
-    include: {
-      enrollments: {
-        where: {
-          status: "ACTIVE",
-        },
-        include: {
-          courseClass: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
     },
     orderBy: {
       fullName: "asc",
@@ -59,17 +46,26 @@ export default async function CourseMembersPage() {
           </p>
         </div>
 
-        <Link
-          href="/course/members/new"
-          className="inline-flex items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 hover:bg-[hsl(217_70%_38%)]"
-          style={{
-            background: "hsl(217 70% 32%)",
-            color: "#fff",
-          }}
-        >
-          <Plus size={14} />
-          New Student
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href="/course/members/new"
+            className="inline-flex items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 hover:bg-[hsl(217_70%_38%)]"
+            style={{
+              background: "hsl(217 70% 32%)",
+              color: "#fff",
+            }}
+          >
+            <Plus size={14} />
+            New Student
+          </Link>
+          <Link
+            href="/course/members/bulk-new"
+            className="inline-flex items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 border border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]"
+          >
+            <Plus size={14} />
+            Bulk Add
+          </Link>
+        </div>
       </div>
 
       <MemberListClient

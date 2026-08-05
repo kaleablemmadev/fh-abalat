@@ -55,11 +55,13 @@ export function calculateCourseAttendanceScore(
  * Calculate final mark for a student
  * 
  * Given a Mark record + its CourseYear's weights + the computed attendance score,
- * return the weighted total out of 100.
+ * return the sum.
  * 
- * @param markScores - Raw scores (mid-exam, assignment, final-exam)
- * @param weights - CourseYear assessment weights
- * @param attendanceScore - Computed attendance score
+ * NOTE: Inputs are now assumed to be already weighted (e.g. midExamScore is 0-25).
+ *
+ * @param markScores - Raw scores (already weighted points)
+ * @param weights - CourseYear assessment weights (for reference/validation)
+ * @param attendanceScore - Computed attendance score (already weighted points)
  * @returns Weighted total score (0 to 100)
  */
 export function calculateFinalMark(
@@ -68,16 +70,10 @@ export function calculateFinalMark(
   attendanceScore: number
 ): number {
   const { midExamScore = 0, assignmentScore = 0, finalExamScore = 0 } = markScores;
-  const { attendanceWeight, midExamWeight, assignmentWeight, finalExamWeight } = weights;
 
-  // Calculate weighted components
-  const attendanceComponent = (attendanceScore / attendanceWeight) * attendanceWeight;
-  const midExamComponent = (midExamScore / 100) * midExamWeight;
-  const assignmentComponent = (assignmentScore / 100) * assignmentWeight;
-  const finalExamComponent = (finalExamScore / 100) * finalExamWeight;
-
-  // Sum all components
-  return attendanceComponent + midExamComponent + assignmentComponent + finalExamComponent;
+  // Since inputs are now entered directly as points (0-25 etc),
+  // we just sum them.
+  return attendanceScore + midExamScore + assignmentScore + finalExamScore;
 }
 
 /**

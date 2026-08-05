@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ListMusic, Music, ChevronDown, ChevronUp, Languages } from "lucide-react";
+import { ListMusic, Music, ChevronDown, ChevronUp, Languages, Play } from "lucide-react";
+import Link from "next/link";
 
 interface Category {
   id: string;
@@ -64,8 +65,20 @@ export default function MemberCategoryList({ categories }: MemberCategoryListPro
                   </p>
                 </div>
               </div>
-              <div className="shrink-0 ml-2">
-                {isExpanded ? <ChevronUp size={16} className="opacity-50" /> : <ChevronDown size={16} className="opacity-50" />}
+              <div className="flex items-center gap-2">
+                {fileCount > 0 && (
+                  <Link
+                    href={`/member/music/player?categoryId=${category.id}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="p-2 rounded-lg bg-[hsl(25 70% 45%)] text-white hover:bg-[hsl(25 70% 40%)] transition-colors shadow-sm"
+                    title="Play Category"
+                  >
+                    <Play size={14} fill="currentColor" />
+                  </Link>
+                )}
+                <div className="shrink-0 ml-2">
+                  {isExpanded ? <ChevronUp size={16} className="opacity-50" /> : <ChevronDown size={16} className="opacity-50" />}
+                </div>
               </div>
             </button>
 
@@ -86,7 +99,7 @@ export default function MemberCategoryList({ categories }: MemberCategoryListPro
                       <div className="flex items-center gap-1 shrink-0">
                         <Languages size={12} className="opacity-40" />
                         <span className="text-[10px] opacity-50">
-                          {file.language === "GEEZ" ? "ግዕዝ" : "Amh"}
+                          {file.language === "GEEZ" ? "ግዕዝ" : "ዐማርኛ"}
                         </span>
                       </div>
                     </div>
@@ -101,7 +114,7 @@ export default function MemberCategoryList({ categories }: MemberCategoryListPro
       {categories.length === 0 && (
         <div className="col-span-full text-center py-12">
           <ListMusic size={48} className="mx-auto opacity-20 mb-4" />
-          <p className="text-sm opacity-50">No categories found</p>
+          <p className="text-sm opacity-50">ምንም ምድቦች አልተገኙም</p>
         </div>
       )}
     </div>

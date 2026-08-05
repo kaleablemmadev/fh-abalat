@@ -3,6 +3,8 @@ import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { calculateFinalMark, getLetterGrade, getPassStatus } from "@/src/lib/courseGrading";
+import { CourseAttendanceService } from "@/src/services/course-attendance.service";
+import { isWithinAcademicYearTimeline } from "@/src/lib/utils";
 
 // Zod schema for bulk mark update
 const bulkMarkSchema = z.object({
@@ -10,9 +12,9 @@ const bulkMarkSchema = z.object({
   marks: z.array(
     z.object({
       studentId: z.string().min(1),
-      midExamScore: z.number().min(0).max(100).optional(),
-      assignmentScore: z.number().min(0).max(100).optional(),
-      finalExamScore: z.number().min(0).max(100).optional(),
+      midExamScore: z.number().min(0).optional(),
+      assignmentScore: z.number().min(0).optional(),
+      finalExamScore: z.number().min(0).optional(),
     })
   ),
 });
@@ -32,9 +34,16 @@ export async function POST(request: NextRequest) {
 
     const { courseYearId, marks: marksData } = validation.data;
 
-    // Verify course year exists
+    // Verify course year exists and check academic year timeline
     const courseYear = await prisma.courseYear.findUnique({
       where: { id: courseYearId },
+      include: {
+        courseClass: {
+          include: {
+            academicYear: true
+          }
+        }
+      }
     });
 
     if (!courseYear) {
@@ -44,11 +53,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if current date is within academic year timeline
+    if (courseYear.courseClass?.academicYear) {
+      const { startDate, endDate } = courseYear.courseClass.academicYear;
+      
+      if (!isWithinAcademicYearTimeline(new Date(startDate), new Date(endDate))) {
+        return NextResponse.json(
+          { error: "Cannot update marks outside the academic year timeline. Only registration and basic updates are allowed." },
+          { status: 400 }
+        );
+      }
+    }
+
     // Use transaction to upsert all marks
-    const result = await prisma.$transaction(
-      marksData.map((markData) => {
-        // Calculate computed score and letter grade
-        const attendanceScore = 0; // TODO: Calculate from attendance records
+    // Execute sequentially to avoid driver issues in transactions
+    const result = await prisma.$transaction(async (tx) => {
+      const savedMarks = [];
+
+      for (const markData of marksData) {
+        // Calculate attendance score from records
+        const attendanceScore = await CourseAttendanceService.calculateStudentAttendanceScore(
+          markData.studentId,
+          courseYear.courseClassId,
+          courseYear.attendanceWeight
+        );
+
         const computedScore = calculateFinalMark(
           {
             midExamScore: markData.midExamScore,
@@ -66,7 +95,7 @@ export async function POST(request: NextRequest) {
         const letterGrade = getLetterGrade(computedScore);
         const passStatus = getPassStatus(letterGrade);
 
-        return prisma.mark.upsert({
+        const upsertedMark = await tx.mark.upsert({
           where: {
             studentId_courseYearId: {
               studentId: markData.studentId,
@@ -92,8 +121,12 @@ export async function POST(request: NextRequest) {
             passStatus,
           },
         });
-      })
-    );
+        savedMarks.push(upsertedMark);
+      }
+      return savedMarks;
+    }, {
+      timeout: 30000
+    });
 
     return NextResponse.json({ success: true, count: result.length }, { status: 200 });
   } catch (error) {

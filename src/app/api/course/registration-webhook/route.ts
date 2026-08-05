@@ -2,8 +2,9 @@ import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { getEthiopianToday, formatEthiopianDate } from "@/src/lib/ethiopiancal";
+import { CourseEnrollmentService } from "@/src/services/course-enrollment.service";
 
-// Types from Prisma (defined in schema.prisma)
+// Schema matching firecourse's FormData shape
 // Note: Using string literals for enums to avoid import issues if client generation is slightly different
 // But since we ran prisma generate, we can try importing them.
 // If they fail, we'll fallback to literal strings.
@@ -154,13 +155,18 @@ export async function POST(request: NextRequest) {
           data: {
             studentId: user.id,
             courseClassId: courseClass.id,
-            status: 'ACTIVE',
+            status: 'PENDING',
             enrolledDate: formatEthiopianDate(ethToday, 'short'),
           },
         });
+
+        // Auto-enroll in all courses for this class
+        await CourseEnrollmentService.autoEnrollInCourses(user.id, courseClass.id, tx);
       }
 
       return { memberId: user.id, registrationId: registration.id };
+    }, {
+      timeout: 30000 // 30 seconds
     });
 
     return NextResponse.json({ success: true, ...result });

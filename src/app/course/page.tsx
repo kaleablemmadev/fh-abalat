@@ -1,17 +1,17 @@
 'use client';
 
-import { CheckSquare, GraduationCap, Shield, ArrowRight, BookOpen, Users, Layers } from 'lucide-react';
+import { CheckSquare, GraduationCap, Shield, ArrowRight, BookOpen, Users, Layers, RefreshCcw, Calendar } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function CourseHomePage() {
   const [stats, setStats] = useState([
-    { label: 'Active Students', value: '0', icon: Users, href: '/course/members' },
-    { label: 'Current Courses', value: '0', icon: BookOpen, href: '/course/courses' },
-    { label: 'Total Attendance', value: '0', icon: CheckSquare, href: '/course/attendance' },
-    { label: 'Active Enrollments', value: '0', icon: Shield, href: '/course/enrollments' },
-    { label: 'Academic Staff', value: '0', icon: Users, href: '/course/instructors' },
-    { label: 'Departments', value: '0', icon: Layers, href: '/course/departments' },
+    { label: 'ያሉ አባላት', value: '0', icon: Users, href: '/course/members' },
+    { label: 'የትምህርት ውጤቶች', value: 'Rankings', icon: GraduationCap, href: '/course/performance' },
+    { label: 'ማስታወቂያዎችና ዜናዎች', value: 'Broadcast', icon: Shield, href: '/course/announcements' },
+    { label: 'የዓመት ኮርሶች', value: '0', icon: BookOpen, href: '/course/courses' },
+    { label: 'አጠቃላይ አቴንዳንስ', value: '0', icon: CheckSquare, href: '/course/attendance' },
+    { label: 'እየተሰጡ ያሉ ትምህርቶች', value: '0', icon: Shield, href: '/course/enrollments' },
   ]);
 
   useEffect(() => {
@@ -21,12 +21,12 @@ export default function CourseHomePage() {
         if (res.ok) {
           const data = await res.json();
           setStats([
-            { label: 'Active Students', value: data.studentCount.toString(), icon: Users, href: '/course/members' },
-            { label: 'Current Courses', value: data.courseCount.toString(), icon: BookOpen, href: '/course/courses' },
-            { label: 'Total Attendance', value: data.attendanceCount.toString(), icon: CheckSquare, href: '/course/attendance' },
-            { label: 'Active Enrollments', value: data.enrollmentCount.toString(), icon: Shield, href: '/course/enrollments' },
-            { label: 'Academic Staff', value: data.instructorCount.toString(), icon: Users, href: '/course/instructors' },
-            { label: 'Departments', value: data.departmentCount.toString(), icon: Layers, href: '/course/departments' },
+            { label: 'ያሉ አባላት', value: data.studentCount.toString(), icon: Users, href: '/course/members' },
+            { label: 'የትምህርት ውጤቶች', value: 'Rankings', icon: GraduationCap, href: '/course/performance' },
+            { label: 'ማስታወቂያዎችና ዜናዎች', value: 'Broadcast', icon: Shield, href: '/course/announcements' },
+            { label: 'የዓመት ኮርሶች', value: data.courseCount.toString(), icon: BookOpen, href: '/course/courses' },
+            { label: 'አጠቃላይ አቴንዳንስ', value: data.attendanceCount.toString(), icon: CheckSquare, href: '/course/attendance' },
+            { label: 'እየተሰጡ ያሉ ትምህርቶች', value: data.enrollmentCount.toString(), icon: Shield, href: '/course/enrollments' },
           ]);
         }
       } catch (err) {
@@ -41,10 +41,10 @@ export default function CourseHomePage() {
     <div className="space-y-8 animate-fade-in pb-10">
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[hsl(var(--foreground))]">
-          Course Dashboard
+          የኮርስ ዋና ገጽ
         </h1>
         <p className="text-sm mt-1 text-[hsl(var(--muted-foreground))]">
-          Academic management portal for students, courses, and performance.
+          የኮርስ ክፍል ትምህርቶችና ተማሪዎች መከታተያ
         </p>
       </div>
 
@@ -71,7 +71,7 @@ export default function CourseHomePage() {
               </div>
             </div>
             <div className="flex items-center gap-1.5 mt-6 text-xs font-bold text-[hsl(217_70%_32%)] opacity-80 group-hover:opacity-100 transition-opacity">
-              View Details <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              ዝርዝር ተመልከት <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </div>
           </Link>
         ))}
@@ -89,21 +89,36 @@ export default function CourseHomePage() {
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold transition-all duration-150 bg-[hsl(217,70%,32%)] text-white hover:bg-[hsl(217,70%,36%)] active:scale-95 shadow-md shadow-[hsl(217,70%,32%)/0.2]"
           >
             <CheckSquare size={18} />
-            Take Attendance
+            አቴንዳንስ መዝግብ
           </Link>
           <Link
             href="/course/marks"
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold transition-all duration-150 bg-[hsl(217,70%,32%)] text-white hover:bg-[hsl(217,70%,36%)] active:scale-95 shadow-md shadow-[hsl(217,70%,32%)/0.2]"
           >
             <GraduationCap size={18} />
-            Enter Student Marks
+            የተማሪ ውጤት አስገባ
           </Link>
           <Link
-            href="/course/enrollments/new"
+            href="/course/transition"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold transition-all duration-150 bg-orange-600 text-white hover:bg-orange-500 active:scale-95 shadow-md shadow-orange-900/20"
+          >
+            <RefreshCcw size={18} />
+            የዓመት መጨረሻ መተላለፍ
+          </Link>
+          <Link
+            href="/course/settings/timeline"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold transition-all duration-150 bg-slate-700 text-white hover:bg-slate-600 active:scale-95 shadow-md shadow-slate-900/20"
+          >
+            <Calendar size={18} />
+            የትምህርት ጊዜ መርሐ ግብር
+          </Link>
+          <Link
+            href="/register"
+            target="_blank"
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg text-sm font-bold transition-all duration-150 bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent))] active:scale-95 border border-[hsl(var(--border))]"
           >
             <Users size={18} />
-            New Enrollment
+            የምዝገባ ድኅረ ገጽ
           </Link>
         </div>
       </div>

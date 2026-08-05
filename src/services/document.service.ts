@@ -23,7 +23,73 @@ interface MonthlyAttendanceOptions {
   attendanceType?: string;
 }
 
+interface CoursePerformanceOptions {
+  className: string;
+  year: string;
+  courses: { name: string }[];
+  students: {
+    fullName: string | null;
+    rank: number;
+    average: number;
+    total: number;
+    grades: number[];
+    status: string;
+  }[];
+}
+
 export class DocumentService {
+  static async generateCoursePerformancePDF(options: CoursePerformanceOptions): Promise<Buffer> {
+    const { className, year, courses, students } = options;
+    const { default: jsPDF } = await import('jspdf');
+    const { default: autoTable } = await import('jspdf-autotable');
+
+    return new Promise((resolve, reject) => {
+      try {
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        const fontPath = path.join(process.cwd(), 'public', 'fonts', 'NotoSansEthiopic-VariableFont_wdth,wght.ttf');
+        let fontLoaded = false;
+
+        if (fs.existsSync(fontPath)) {
+          const fontData = fs.readFileSync(fontPath);
+          doc.addFileToVFS('NotoSansEthiopic.ttf', fontData.toString('base64'));
+          doc.addFont('NotoSansEthiopic.ttf', 'NotoSansEthiopic', 'normal');
+          doc.setFont('NotoSansEthiopic');
+          fontLoaded = true;
+        }
+
+        doc.setFontSize(18);
+        doc.text(`የተማሪዎች ውጤት ማጠቃለያ - ${className} (${year})`, 15, 15);
+        doc.setFontSize(10);
+        doc.text(`ሪፖርቱ የወጣበት ቀን: ${new Date().toLocaleDateString()}`, 15, 22);
+
+        const head = [
+          ['ደረጃ', 'ተማሪ ስም', ...courses.map(c => c.name), 'አጠቃላይ', 'አማካይ', 'ሁኔታ']
+        ];
+
+        const body = students.map(s => [
+          s.rank,
+          s.fullName || 'አይታወቅም',
+          ...s.grades.map(g => g.toFixed(0)),
+          s.total.toFixed(0),
+          s.average.toFixed(1) + '%',
+          s.status === 'PASSED' ? 'ያለፈ' : 'ያላለፈ'
+        ]);
+
+        autoTable(doc, {
+          startY: 30,
+          head,
+          body,
+          styles: { font: fontLoaded ? 'NotoSansEthiopic' : 'helvetica', fontSize: 8 },
+          headStyles: { fillColor: [21, 101, 192], textColor: [255, 255, 255] },
+          theme: 'grid'
+        });
+
+        resolve(Buffer.from(doc.output('arraybuffer')));
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
   static async generateMonthlyAttendanceDOCX(options: MonthlyAttendanceOptions): Promise<Buffer> {
     const { months, data, attendanceType } = options;
 
@@ -32,6 +98,15 @@ export class DocumentService {
     const fontBuffer = fs.readFileSync(fontPath);
 
     const doc = new Document({
+      styles: {
+        default: {
+          document: {
+            run: {
+              font: "Noto Sans Ethiopic",
+            },
+          },
+        },
+      },
       sections: [{
         properties: {
           page: {
@@ -145,6 +220,15 @@ export class DocumentService {
     const column2 = eligibleMembers.slice(membersPerColumn);
 
     const doc = new Document({
+      styles: {
+        default: {
+          document: {
+            run: {
+              font: "Noto Sans Ethiopic",
+            },
+          },
+        },
+      },
       sections: [{
         properties: {
           page: {

@@ -1,6 +1,37 @@
-- [x] Update Mezmur Dashboard stats (`src/app/mezmur/page.tsx`)
-- [x] Update Mezmur Schedule query (`src/app/mezmur/schedule/page.tsx`)
-- [x] Update `MezmurEventList` component (`src/app/mezmur/schedule/components/MezmurEventList.tsx`)
-    - [x] Update `eventType` in `MezmurEvent` interface
-    - [x] Add `MEZMUR_EVENT` to `typeLabels` and `typeColors`
-    - [x] Update navigation link for actual events
+- [x] **Data Model & Utilities**
+    - [x] Update `schema.prisma` with `Announcement` and `isAcademicTimeline` in `Event`
+    - [x] Update `utils.ts` for `FHC-XXXX` ID generation
+    - [x] Update `schema.prisma` for per-year instructors (`CourseYear.instructorId`)
+- [ ] **Instructor Assignment Refinements**
+    - [ ] Update `Academic Year API` to initialize instructors
+    - [ ] Create `Faculty Management UI` for Academic Years
+    - [ ] Update display logic in dashboards/grading to show year-specific instructor
+- [ ] **Amharic Font Integration**
+    - [ ] Move fonts to `public/fonts/` for client access
+    - [ ] Update `Document Service` (Server PDF/DOCX font support)
+    - [ ] Update `Member Export API` (CSV UTF-8 BOM)
+    - [ ] Update `Registration Page` (Client PDF font support)
+- [x] **Registration & Enrollment**
+    - [x] Create `course-enrollment.service.ts` for auto-enrollment logic
+    - [x] Update `registration-webhook/route.ts` (PENDING status + auto-enroll)
+    - [x] Update `members/route.ts` (new ID format + auto-enroll)
+- [x] **Attendance & Status Refinement**
+    - [x] Update `attendance/[classId]/page.tsx` to show `PENDING` students
+    - [x] Update `attendance/bulk/route.ts` (activate only on "Attended")
+- [x] **Public Registration System**
+    - [x] Create Public Registration API `/api/public/register`
+    - [x] Create Public Registration Page `/register` (Basic PDF)
+    - [x] Add registration link to Landing Page `/`
+- [x] **Admin Features**
+    - [x] Create Performance API (`/api/course/performance`)
+    - [x] Create Performance Dashboard UI (`/course/performance`)
+    - [x] Create Announcements API and Admin UI
+    - [x] Create Transition/Promotion UI (`/course/transition`)
+- [x] **Member Features**
+    - [x] Create `Timeline` component
+    - [x] Update Member Dashboard with announcements and timeline
+    - [x] Create Member Grades page (`/member/grades`)
+- [ ] **Verification**
+    - [ ] Verify `PENDING` to `ACTIVE` transition logic
+    - [ ] Verify public registration and Amharic PDF generation
+    - [ ] Verify per-year instructor swapping

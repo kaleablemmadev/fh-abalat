@@ -11,6 +11,9 @@ const globalForPrisma = globalThis as unknown as {
 // Reuse or create the pool
 const pool = globalForPrisma.pool ?? new pg.Pool({
   connectionString: process.env.DATABASE_URL,
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
 });
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.pool = pool;
@@ -21,7 +24,7 @@ const adapter = new PrismaPg(pool);
 const prismaClient = new PrismaClient({ adapter });
 
 // If the cached client exists but is missing new models, we need to refresh it
-if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).academicYear) {
+if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).courseEnrollment) {
     globalForPrisma.prisma = undefined;
 }
 

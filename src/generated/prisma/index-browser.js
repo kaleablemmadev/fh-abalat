@@ -144,6 +144,7 @@ exports.Prisma.UserScalarFieldEnum = {
   address: 'address',
   age: 'age',
   christianName: 'christianName',
+  grandfatherName: 'grandfatherName',
   courseClassId: 'courseClassId',
   departmentId: 'departmentId',
   ethiopianCreatedAt: 'ethiopianCreatedAt',
@@ -198,6 +199,7 @@ exports.Prisma.EventScalarFieldEnum = {
   courseClassId: 'courseClassId',
   isActive: 'isActive',
   mode: 'mode',
+  isAcademicTimeline: 'isAcademicTimeline',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -288,6 +290,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   topics: 'topics',
   isGiven: 'isGiven',
   credits: 'credits',
+  requiredHours: 'requiredHours',
   instructorId: 'instructorId',
   courseClassId: 'courseClassId',
   departmentId: 'departmentId',
@@ -364,6 +367,8 @@ exports.Prisma.CourseYearScalarFieldEnum = {
   assignmentWeight: 'assignmentWeight',
   finalExamWeight: 'finalExamWeight',
   isActive: 'isActive',
+  isGradingComplete: 'isGradingComplete',
+  instructorId: 'instructorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -485,6 +490,44 @@ exports.Prisma.NotificationScalarFieldEnum = {
   targetUserId: 'targetUserId',
   auditLogId: 'auditLogId',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.AnnouncementScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  type: 'type',
+  mode: 'mode',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CourseFreeDayScalarFieldEnum = {
+  id: 'id',
+  courseYearId: 'courseYearId',
+  date: 'date',
+  reason: 'reason',
+  isAnnual: 'isAnnual',
+  ethiopianYear: 'ethiopianYear',
+  ethiopianMonth: 'ethiopianMonth',
+  ethiopianDay: 'ethiopianDay',
+  notificationsSent: 'notificationsSent',
+  notificationDate: 'notificationDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InstructorAttendanceScalarFieldEnum = {
+  id: 'id',
+  instructorId: 'instructorId',
+  eventId: 'eventId',
+  attendanceTypeId: 'attendanceTypeId',
+  markedById: 'markedById',
+  note: 'note',
+  mode: 'mode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -630,7 +673,10 @@ exports.Prisma.ModelName = {
   ModePassword: 'ModePassword',
   AdminRegistration: 'AdminRegistration',
   AuditLog: 'AuditLog',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  Announcement: 'Announcement',
+  CourseFreeDay: 'CourseFreeDay',
+  InstructorAttendance: 'InstructorAttendance'
 };
 
 /**

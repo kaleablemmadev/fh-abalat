@@ -7,11 +7,19 @@ export type enrollmentStatus = (typeof enrollmentStatusValues)[number];
 
 // Course class type display names
 export const courseClassTypeDisplayNames: Record<courseClassType, string> = {
-  KEDAMAY: 'Kedamay',
-  KALEAY: 'Kale\'ay',
-  SALSAY: 'Salsay',
-  RABEAY: 'Rabe\'ay',
-  KEREMT: 'Keremt',
+  KEDAMAY: 'ቀዳማይ',
+  KALEAY: 'ካልዓይ',
+  SALSAY: 'ሣልሳይ',
+  RABEAY: 'ራብዓይ',
+  KEREMT: 'ክረምት ቀዳማይ',
+};
+
+export const courseClassList: Record<string, string> = {
+  "KEDAMAY": 'ቀዳማይ',
+  "KALEAY": 'ካልዓይ',
+  "SALSAY": 'ሣልሳይ',
+  "RABEAY": 'ራብዓይ',
+  "KEREMT": 'ክረምት ቀዳማይ',
 };
 
 // Enrollment status display names

@@ -3,6 +3,7 @@ import prisma from '@/src/lib/prisma';
 import { getAuditLogs } from '@/src/services/audit.service';
 import Breadcrumb from '@/src/components/navigation/Breadcrumb';
 import { Clock, User, FileText } from 'lucide-react';
+import { formatEthiopianDate } from '@/src/lib/ethiopiancal';
 
 export default async function CourseAuditLogPage() {
   const auditLogs = await getAuditLogs('COURSE');
@@ -70,7 +71,7 @@ export default async function CourseAuditLogPage() {
                           {log.entityType}
                         </span>
                         <span className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] ml-auto">
-                          {new Date(log.createdAt).toLocaleString()}
+                          {formatEthiopianDate(new Date(log.createdAt))}
                         </span>
                       </div>
 

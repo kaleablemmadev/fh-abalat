@@ -7,44 +7,44 @@ import { Home, CheckSquare, GraduationCap, Shield, Users, BookOpen, Layers, Cale
 const courseNavItems: NavSection[] = [
   {
     items: [
-      { name: 'Dashboard', href: '/course', icon: Home },
+      { name: 'ዋና ገጽ', href: '/course', icon: Home },
     ]
   },
   {
-    label: 'Academic',
+    label: 'ትምህርትና ኮርስ',
     items: [
-      { name: 'Attendance', href: '/course/attendance', icon: CheckSquare },
-      { name: 'Marks', href: '/course/marks', icon: GraduationCap },
-      { name: 'Eligibility', href: '/course/eligibility/report', icon: Shield },
-      { name: 'Permissions', href: '/course/permissions', icon: Clock },
+      { name: 'አቴንዳንስ', href: '/course/attendance', icon: CheckSquare },
+      { name: 'ውጤቶች', href: '/course/marks', icon: GraduationCap },
+      { name: 'መፈተኛ መስፈርት', href: '/course/eligibility/report', icon: Shield },
+      { name: 'ፈቃዶች', href: '/course/permissions', icon: Clock },
     ]
   },
   {
-    label: 'Management',
+    label: 'ተማሪ ክትትል',
     items: [
-      { name: 'Students', href: '/course/members', icon: Users },
-      { name: 'Enrollments', href: '/course/enrollments', icon: ClipboardList },
-      { name: 'Courses', href: '/course/courses', icon: BookOpen },
+      { name: 'ተማሪዎች', href: '/course/members', icon: Users },
+      { name: 'ምዝገባዎች', href: '/course/enrollments', icon: ClipboardList },
+      { name: 'ኮርሶች', href: '/course/courses', icon: BookOpen },
     ]
   },
   {
-    label: 'Setup',
+    label: 'ዓመታዊ መርሐ ግብር',
     items: [
-      { name: 'Term Setup', href: '/course/academic-years', icon: CalendarDays },
+      { name: 'የኮርስ ዓመት', href: '/course/academic-years', icon: CalendarDays },
     ]
   },
   {
-    label: 'Infrastructure',
+    label: 'የክፍል መዋቅር',
     items: [
-      { name: 'Instructors', href: '/course/instructors', icon: Users },
-      { name: 'Departments', href: '/course/departments', icon: Layers },
+      { name: 'መምህራን', href: '/course/instructors', icon: Users },
+      { name: 'ክፍላተ ትምህርት', href: '/course/departments', icon: Layers },
     ]
   },
   {
-    label: 'Registration (External)',
+    label: 'ምዝገባ (External)',
     items: [
-      { name: 'Bega Form', href: 'https://firecourse.vercel.app/bega', icon: ExternalLink, external: true },
-      { name: 'Keremt Form', href: 'https://firecourse.vercel.app/keremt', icon: ExternalLink, external: true },
+      { name: 'የበጋ ኮርስ ምዝገባ', href: 'https://firecourse.vercel.app/bega', icon: ExternalLink, external: true },
+      { name: 'የክረምት ኮርስ ምዝገባ', href: 'https://firecourse.vercel.app/keremt', icon: ExternalLink, external: true },
     ]
   }
 ];

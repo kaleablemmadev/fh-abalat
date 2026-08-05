@@ -46,6 +46,11 @@ export default function StudentDashboard() {
   const currentClass = activeEnrollment?.courseClass;
   const currentCourses = activeEnrollment?.courseClass?.courseYears || [];
 
+  const completedMarks = data.marks.filter(m => m.courseYear.isGradingComplete);
+  const averageScore = completedMarks.length > 0
+    ? (completedMarks.reduce((sum, m) => sum + (m.computedScore || 0), 0) / completedMarks.length).toFixed(1)
+    : "--";
+
   return (
     <div className="space-y-8 pb-20">
       {/* Welcome & Class Header */}
@@ -90,10 +95,10 @@ export default function StudentDashboard() {
             <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500">
               <Award size={20} />
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">GPA / Grade</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--muted-foreground))]">Average Score</span>
           </div>
-          <p className="text-3xl font-bold">--</p>
-          <p className="text-xs text-[hsl(var(--muted-foreground))]">Cumulative performance</p>
+          <p className="text-3xl font-bold">{averageScore}%</p>
+          <p className="text-xs text-[hsl(var(--muted-foreground))]">Based on completed courses</p>
         </div>
       </div>
 
@@ -111,12 +116,17 @@ export default function StudentDashboard() {
               </div>
             ) : (
               currentCourses.map((cy: any) => (
-                <div key={cy.id} className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 hover:border-[hsl(var(--primary)/0.4)] transition-all flex items-center justify-between group">
+                <div key={cy.id} className={`rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 hover:border-[hsl(var(--primary)/0.4)] transition-all flex items-center justify-between group ${!cy.isGradingComplete ? 'opacity-80' : ''}`}>
                   <div className="space-y-1">
-                    <h3 className="font-bold text-[hsl(var(--foreground))]">{cy.course.name}</h3>
+                    <div className="flex items-center gap-2">
+                        <h3 className="font-bold text-[hsl(var(--foreground))]">{cy.course.name}</h3>
+                        {!cy.isGradingComplete && (
+                            <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">In Progress</span>
+                        )}
+                    </div>
                     <p className="text-xs text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
                       <Users size={12} />
-                      Instructor: {cy.course.instructor.fullName}
+                      Instructor: {cy.instructor?.fullName || cy.course.instructor.fullName}
                     </p>
                   </div>
                   <ChevronRight size={18} className="text-[hsl(var(--muted-foreground))] group-hover:translate-x-1 transition-transform" />

@@ -46,9 +46,9 @@ export default async function MemberMezmurPlanPage() {
   return (
     <div className="space-y-6 animate-fade-in pb-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Mezmur Monthly Plan</h1>
+        <h1 className="text-2xl font-bold tracking-tight">ወርኃዊ የአገልግሎት መዝሙራት</h1>
         <p className="text-sm opacity-70">
-          Mezmur assignments for {today.month} {today.year}
+          ለ{today.month} {today.year} የሚሆኑ የአገልግሎት መዝሙራት
         </p>
       </div>
 

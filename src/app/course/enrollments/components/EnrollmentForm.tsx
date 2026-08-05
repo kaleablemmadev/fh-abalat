@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Save, X } from "lucide-react";
 import { enrollmentStatusValues } from "../../constants/courseEnum";
+import EthiopianDatePicker from "@/src/components/EthiopianDatePicker";
+import { ethiopianDateWordsToISO, getEthiopianToday, ethiopianISOToGregorianDate, gregorianToEthiopianISO } from "@/src/lib/ethiopiancal";
 
 interface EnrollmentFormProps {
   initialData?: {
@@ -35,12 +37,19 @@ export default function EnrollmentForm({
   students 
 }: EnrollmentFormProps) {
   const router = useRouter();
+
+  const todayEthISO = ethiopianDateWordsToISO(getEthiopianToday());
+
   const [formData, setFormData] = useState({
     studentId: initialData?.studentId || "",
     courseClassId: initialData?.courseClassId || "",
     status: initialData?.status || "PENDING",
-    enrolledDate: initialData?.enrolledDate || new Date().toISOString().split('T')[0],
-    unenrollmentDate: initialData?.unenrollmentDate || "",
+    enrolledDate: initialData?.enrolledDate
+      ? gregorianToEthiopianISO(new Date(initialData.enrolledDate))
+      : todayEthISO,
+    unenrollmentDate: initialData?.unenrollmentDate
+      ? gregorianToEthiopianISO(new Date(initialData.unenrollmentDate))
+      : "",
     unenrollmentReason: initialData?.unenrollmentReason || "",
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +68,10 @@ export default function EnrollmentForm({
 
       const payload = {
         ...formData,
-        unenrollmentDate: formData.unenrollmentDate || null,
+        enrolledDate: ethiopianISOToGregorianDate(formData.enrolledDate).toISOString(),
+        unenrollmentDate: formData.unenrollmentDate
+          ? ethiopianISOToGregorianDate(formData.unenrollmentDate).toISOString()
+          : null,
         unenrollmentReason: formData.unenrollmentReason || null,
       };
 
@@ -187,49 +199,21 @@ export default function EnrollmentForm({
           </select>
         </div>
 
-        <div className="space-y-1.5">
-          <label
-            className="text-xs font-medium"
-            style={{ color: "hsl(var(--foreground))" }}
-          >
-            Enrolled Date *
-          </label>
-          <input
-            className="h-9 w-full rounded border px-3 text-xs transition-all duration-150"
-            style={{
-              background: "hsl(var(--background))",
-              border: "1px solid hsl(var(--border))",
-              color: "hsl(var(--foreground))",
-            }}
-            type="date"
-            value={formData.enrolledDate}
-            onChange={(e) => handleChange("enrolledDate", e.target.value)}
-            required
-          />
-        </div>
+        <EthiopianDatePicker
+          label="Enrolled Date"
+          value={formData.enrolledDate}
+          onChange={(val) => handleChange("enrolledDate", val)}
+          required
+        />
       </div>
 
       {(formData.status === "WITHDREW" || formData.status === "CANCELLED") && (
         <div className="space-y-3 p-3 rounded" style={{ background: "hsl(var(--muted))" }}>
-          <div className="space-y-1.5">
-            <label
-              className="text-xs font-medium"
-              style={{ color: "hsl(var(--foreground))" }}
-            >
-              Unenrollment Date
-            </label>
-            <input
-              className="h-9 w-full rounded border px-3 text-xs transition-all duration-150"
-              style={{
-                background: "hsl(var(--background))",
-                border: "1px solid hsl(var(--border))",
-                color: "hsl(var(--foreground))",
-              }}
-              type="date"
-              value={formData.unenrollmentDate}
-              onChange={(e) => handleChange("unenrollmentDate", e.target.value)}
-            />
-          </div>
+          <EthiopianDatePicker
+            label="Unenrollment Date"
+            value={formData.unenrollmentDate}
+            onChange={(val) => handleChange("unenrollmentDate", val)}
+          />
 
           <div className="space-y-1.5">
             <label

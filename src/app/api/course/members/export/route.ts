@@ -14,13 +14,14 @@ export async function GET() {
       orderBy: { fullName: "asc" },
     });
 
-    const headers = ["ID", "Full Name", "Code", "Gender", "Age", "Phone", "Address", "Current Class", "Year"];
+    const headers = ["ID", "Full Name", "Grandfather Name", "Code", "Gender", "Age", "Phone", "Address", "Current Class", "Year"];
 
     const rows = students.map(s => {
       const activeClass = s.enrollments[0]?.courseClass;
       return [
         s.id,
         `"${(s.fullName || "").replace(/"/g, '""')}"`,
+        `"${(s.grandfatherName || "").replace(/"/g, '""')}"`,
         s.privateId || "",
         s.gender,
         s.age || "",
@@ -32,10 +33,12 @@ export async function GET() {
     });
 
     const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+    // Prepend UTF-8 BOM for Excel Amharic support
+    const contentWithBom = "\uFEFF" + csvContent;
 
-    return new NextResponse(csvContent, {
+    return new NextResponse(contentWithBom, {
       headers: {
-        "Content-Type": "text/csv",
+        "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename=students-export-${Date.now()}.csv`,
       },
     });

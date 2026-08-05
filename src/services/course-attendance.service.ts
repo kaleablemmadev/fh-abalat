@@ -1,5 +1,6 @@
 import prisma from '@/src/lib/prisma';
 import { gregorianToEthiopianDate } from '@/src/lib/ethiopiancal';
+import { CourseFreeDayService } from './course-free-day.service';
 
 export class CourseAttendanceService {
   /**
@@ -13,6 +14,14 @@ export class CourseAttendanceService {
     if (!courseClass || !courseClass.startDate || !courseClass.endDate) {
       throw new Error('Class or term dates not found');
     }
+
+    // Get all course years for this class to check for course-free days
+    const courseYears = await prisma.courseYear.findMany({
+      where: { courseClassId: classId },
+      select: { id: true },
+    });
+
+    const courseYearIds = courseYears.map(cy => cy.id);
 
     const events = [];
     const current = new Date(courseClass.startDate);
@@ -28,49 +37,62 @@ export class CourseAttendanceService {
           shouldCreate = true;
         }
       } else {
-        // Regular classes: Sat-Sun (6, 0)
+        // Regular classes (KEDAMAY, KALEAY, SALSAY, RABEAY): Sat-Sun (6, 0)
         if (dayOfWeek === 6 || dayOfWeek === 0) {
           shouldCreate = true;
         }
       }
 
       if (shouldCreate) {
-        const ethDate = gregorianToEthiopianDate({
-          year: current.getFullYear(),
-          month: current.getMonth() + 1,
-          day: current.getDate(),
-        });
-
-        // Check if event already exists
+        // Check if this date is a course-free day for any of the course years
         const dayStart = new Date(current);
         dayStart.setHours(0, 0, 0, 0);
         const dayEnd = new Date(current);
         dayEnd.setHours(23, 59, 59, 999);
 
-        const existing = await prisma.event.findFirst({
+        const isFreeDay = await prisma.courseFreeDay.findFirst({
           where: {
-            courseClassId: classId,
+            courseYearId: { in: courseYearIds },
             date: {
               gte: dayStart,
-              lt: dayEnd,
+              lte: dayEnd,
             },
           },
         });
 
-        if (!existing) {
-          const event = await prisma.event.create({
-            data: {
-              title: `${courseClass.name} Session`,
-              date: new Date(current),
-              ethiopianYear: ethDate.year,
-              ethiopianMonth: ethDate.month,
-              ethiopianDay: ethDate.day,
-              eventType: 'EVENT',
-              createdById: adminId,
+        if (!isFreeDay) {
+          const ethDate = gregorianToEthiopianDate({
+            year: current.getFullYear(),
+            month: current.getMonth() + 1,
+            day: current.getDate(),
+          });
+
+          // Check if event already exists
+          const existing = await prisma.event.findFirst({
+            where: {
               courseClassId: classId,
+              date: {
+                gte: dayStart,
+                lt: dayEnd,
+              },
             },
           });
-          events.push(event);
+
+          if (!existing) {
+            const event = await prisma.event.create({
+              data: {
+                title: `${courseClass.name} Session`,
+                date: new Date(current),
+                ethiopianYear: ethDate.year,
+                ethiopianMonth: ethDate.month,
+                ethiopianDay: ethDate.day,
+                eventType: 'EVENT',
+                createdById: adminId,
+                courseClassId: classId,
+              },
+            });
+            events.push(event);
+          }
         }
       }
 
@@ -82,17 +104,51 @@ export class CourseAttendanceService {
 
   /**
    * Calculate student attendance score for a specific class
-   * Returns a value out of 100
+   * Returns a value out of the provided weight
+   * Excludes course-free days from the calculation
    */
-  static async calculateStudentAttendanceScore(studentId: string, classId: string) {
+  static async calculateStudentAttendanceScore(studentId: string, classId: string, weight: number = 10) {
     const events = await prisma.event.findMany({
       where: { courseClassId: classId, isActive: true },
+      select: { id: true, date: true },
+    });
+
+    if (events.length === 0) return weight; // Default to full score if no events
+
+    // Get all course years for this class
+    const courseYears = await prisma.courseYear.findMany({
+      where: { courseClassId: classId },
       select: { id: true },
     });
 
-    if (events.length === 0) return 100; // Default to full score if no events
+    const courseYearIds = courseYears.map(cy => cy.id);
 
-    const eventIds = events.map((e) => e.id);
+    // Filter out events that fall on course-free days
+    const validEvents = [];
+    for (const event of events) {
+      const dayStart = new Date(event.date);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(event.date);
+      dayEnd.setHours(23, 59, 59, 999);
+
+      const isFreeDay = await prisma.courseFreeDay.findFirst({
+        where: {
+          courseYearId: { in: courseYearIds },
+          date: {
+            gte: dayStart,
+            lte: dayEnd,
+          },
+        },
+      });
+
+      if (!isFreeDay) {
+        validEvents.push(event);
+      }
+    }
+
+    if (validEvents.length === 0) return weight; // Default to full score if no valid events
+
+    const eventIds = validEvents.map((e) => e.id);
 
     const attendances = await prisma.attendance.findMany({
       where: {
@@ -104,9 +160,66 @@ export class CourseAttendanceService {
       },
     });
 
-    const totalWeight = attendances.reduce((acc, curr) => acc + (curr.attendanceType?.value || 0), 0);
-    const score = (totalWeight / events.length) * 100;
+    const totalValue = attendances.reduce((acc, curr) => acc + (curr.attendanceType?.value || 0), 0);
+    const score = (totalValue / validEvents.length) * weight;
 
-    return Math.min(Math.max(score, 0), 100);
+    return Math.min(Math.max(score, 0), weight);
+  }
+
+  /**
+   * Check if attendance can be marked for a specific event
+   * Returns false if the event falls on a course-free day
+   */
+  static async canMarkAttendance(eventId: string): Promise<{ canMark: boolean; reason?: string }> {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      include: {
+        courseClass: true,
+      },
+    });
+
+    if (!event || !event.courseClassId) {
+      return { canMark: true }; // Allow for non-course events
+    }
+
+    // Get course years for this class
+    const courseYears = await prisma.courseYear.findMany({
+      where: { courseClassId: event.courseClassId },
+      select: { id: true },
+    });
+
+    const courseYearIds = courseYears.map(cy => cy.id);
+
+    // Check if this event date is a course-free day
+    const dayStart = new Date(event.date);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(event.date);
+    dayEnd.setHours(23, 59, 59, 999);
+
+    const freeDay = await prisma.courseFreeDay.findFirst({
+      where: {
+        courseYearId: { in: courseYearIds },
+        date: {
+          gte: dayStart,
+          lte: dayEnd,
+        },
+      },
+      include: {
+        courseYear: {
+          include: {
+            course: true,
+          },
+        },
+      },
+    });
+
+    if (freeDay) {
+      return {
+        canMark: false,
+        reason: `Cannot mark attendance: Course "${freeDay.courseYear.course.name}" is cancelled on this date. Reason: ${freeDay.reason}`,
+      };
+    }
+
+    return { canMark: true };
   }
 }

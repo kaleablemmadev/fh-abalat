@@ -2,6 +2,7 @@
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { isWithinAcademicYearTimeline } from "@/src/lib/utils";
 
 const enrollmentSchema = z.object({
   status: z.enum(["ACTIVE", "PENDING", "WITHDREW", "CANCELLED"]).optional(),
@@ -61,6 +62,36 @@ export async function PUT(
 
     const { status, enrolledDate, unenrollmentDate, unenrollmentReason, finalGrade } = validation.data;
 
+    // Get enrollment to check academic year timeline
+    const existingEnrollment = await prisma.courseEnrollment.findUnique({
+      where: { id },
+      include: {
+        courseClass: {
+          include: {
+            academicYear: true
+          }
+        }
+      }
+    });
+
+    if (!existingEnrollment) {
+      return NextResponse.json(
+        { error: "Enrollment not found" },
+        { status: 404 },
+      );
+    }
+
+    // Check if current date is within academic year timeline
+    // Registration updates are allowed outside timeline, but operations like attendance/marks are restricted
+    let timelineWarning = null;
+    if (existingEnrollment.courseClass?.academicYear) {
+      const { startDate, endDate } = existingEnrollment.courseClass.academicYear;
+      
+      if (!isWithinAcademicYearTimeline(new Date(startDate), new Date(endDate))) {
+        timelineWarning = "Enrollment updates are allowed outside the academic year timeline, but attendance and marks operations will be restricted until the academic year begins.";
+      }
+    }
+
     const enrollment = await prisma.courseEnrollment.update({
       where: { id },
       data: {
@@ -72,7 +103,12 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(enrollment);
+    const response: any = { enrollment };
+    if (timelineWarning) {
+      response.timelineWarning = timelineWarning;
+    }
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error(error);
     return NextResponse.json(

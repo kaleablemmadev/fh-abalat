@@ -8,7 +8,8 @@ import {
   Loader2,
   ChevronRight,
   ShieldCheck,
-  Settings
+  Settings,
+  UserPlus
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -47,14 +48,11 @@ export default function MemberAccessPage() {
         fullName: user.fullName,
         memberType: user.memberType,
         mode: 'MEMBER',
+        privateId: user.privateId, // Store privateId in session for profile info
         timestamp: Date.now(),
       })}; path=/; max-age=86400`; // 24 hours
 
-      if (user.memberType === 'COURSE_STUDENT') {
-        router.push('/student');
-      } else {
-        router.push('/member');
-      }
+      router.push('/member');
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid code. Please try again.');
@@ -121,6 +119,14 @@ export default function MemberAccessPage() {
                 </>
               )}
             </button>
+
+            <Link
+              href="/register"
+              className="w-full py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold transition-all flex items-center justify-center gap-2 border border-slate-700"
+            >
+              አዲስ ተማሪ? እዚህ ይመዝገቡ
+              <UserPlus size={18} />
+            </Link>
           </form>
 
           <div className="text-center pt-4 border-t border-slate-800">

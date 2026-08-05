@@ -13,6 +13,7 @@ import {
   BookOpen,
   ClipboardList
 } from "lucide-react";
+import { formatEthiopianDate } from "@/src/lib/ethiopiancal";
 
 const statusColors: Record<string, string> = {
   ACTIVE: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -23,8 +24,13 @@ const statusColors: Record<string, string> = {
 export default async function CourseStudentDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const student = await prisma.user.findUnique({
-    where: { id },
+  const student = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: id },
+        { privateId: id }
+      ]
+    },
     include: {
       enrollments: {
         include: {
@@ -68,6 +74,12 @@ export default async function CourseStudentDetailsPage({ params }: { params: Pro
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[hsl(var(--muted))] border border-[hsl(var(--border))] text-sm font-bold hover:bg-[hsl(var(--accent))] transition-all"
         >
           <Edit size={16} /> Edit Student
+        </Link>
+        <Link
+          href={`/course/members/${id}/grade`}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-bold hover:bg-blue-500 transition-all shadow-md shadow-blue-900/20"
+        >
+          <GraduationCap size={16} /> Grade All Courses
         </Link>
       </div>
 
@@ -124,7 +136,7 @@ export default async function CourseStudentDetailsPage({ params }: { params: Pro
                 <div key={en.id} className="p-4 flex items-center justify-between">
                   <div>
                     <p className="text-sm font-bold">{en.courseClass?.name || "Unknown Class"}</p>
-                    <p className="text-[10px] opacity-40 mt-0.5">Year: {en.courseClass?.year} · Enrolled on {en.enrolledDate}</p>
+                    <p className="text-[10px] opacity-40 mt-0.5">Year: {en.courseClass?.year} · Enrolled on {formatEthiopianDate(new Date(en.enrolledDate))}</p>
                   </div>
                   <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border uppercase ${statusColors[en.status] || ""}`}>
                     {en.status}
@@ -173,7 +185,7 @@ export default async function CourseStudentDetailsPage({ params }: { params: Pro
                 <div key={at.id} className="p-4 flex items-center justify-between">
                   <div>
                     <p className="text-sm font-bold">{at.event.title}</p>
-                    <p className="text-[10px] opacity-40 mt-0.5">{new Date(at.event.date).toLocaleDateString()}</p>
+                    <p className="text-[10px] opacity-40 mt-0.5">{formatEthiopianDate(new Date(at.event.date))}</p>
                   </div>
                   <span className="text-xs font-medium opacity-60">
                     {at.attendanceType.name}

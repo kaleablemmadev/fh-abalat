@@ -2,6 +2,7 @@
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { isWithinAcademicYearTimeline } from "@/src/lib/utils";
 
 // Zod schema for ClassEnrollment creation/update
 const enrollmentSchema = z.object({
@@ -68,9 +69,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify course class exists
+    // Verify course class exists and check academic year timeline
     const courseClass = await prisma.courseClass.findUnique({
       where: { id: courseClassId },
+      include: {
+        academicYear: true
+      }
     });
 
     if (!courseClass) {
@@ -78,6 +82,17 @@ export async function POST(request: NextRequest) {
         { error: "Course class not found" },
         { status: 404 },
       );
+    }
+
+    // Check if current date is within academic year timeline
+    // Registration is allowed outside timeline, but operations like attendance/marks are restricted
+    let timelineWarning = null;
+    if (courseClass.academicYear) {
+      const { startDate, endDate } = courseClass.academicYear;
+      
+      if (!isWithinAcademicYearTimeline(new Date(startDate), new Date(endDate))) {
+        timelineWarning = "Registration is allowed outside the academic year timeline, but attendance and marks operations will be restricted until the academic year begins.";
+      }
     }
 
     // Check if enrollment already exists
@@ -108,7 +123,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(enrollment, { status: 201 });
+    const response: any = { enrollment };
+    if (timelineWarning) {
+      response.warning = timelineWarning;
+    }
+
+    return NextResponse.json(response, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

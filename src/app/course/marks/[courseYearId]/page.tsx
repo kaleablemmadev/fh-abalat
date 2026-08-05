@@ -15,6 +15,7 @@ export default async function BulkGradingPage({ params }: { params: Promise<{ co
         },
       },
       courseClass: true,
+      instructor: true, // Specific instructor for this year
       marks: {
         include: {
           student: true,
@@ -43,7 +44,8 @@ export default async function BulkGradingPage({ params }: { params: Promise<{ co
   const studentsWithData = await Promise.all(enrollments.map(async (enrollment) => {
     const attendanceScore = await CourseAttendanceService.calculateStudentAttendanceScore(
       enrollment.studentId,
-      courseYear.courseClassId
+      courseYear.courseClassId,
+      courseYear.attendanceWeight
     );
 
     const mark = courseYear.marks.find(m => m.studentId === enrollment.studentId);
@@ -70,6 +72,9 @@ export default async function BulkGradingPage({ params }: { params: Promise<{ co
         >
           {courseYear.course.name} - {courseYear.courseClass.name} ({courseYear.year})
           <span className="ml-2 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-black uppercase">
+            Instructor: {courseYear.instructor?.fullName || courseYear.course.instructor.fullName}
+          </span>
+          <span className="ml-2 px-2 py-0.5 rounded-full bg-zinc-500/10 text-zinc-400 border border-zinc-500/20 text-[10px] font-black uppercase">
             {courseYear.isTwoSemesters ? "Full Year" : `${courseYear.semester} Semester`}
           </span>
         </p>

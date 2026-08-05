@@ -20,10 +20,10 @@ export default async function MemberMusicCategoriesPage() {
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: "hsl(var(--foreground))" }}>
-          Music Categories
+          የመዝሙር ምድቦች
         </h1>
         <p className="text-sm mt-0.5 opacity-50">
-          Browse Mezmur by category to find specific types of songs
+          መዝሙራትን በምድብ ተመልከት
         </p>
       </div>
 

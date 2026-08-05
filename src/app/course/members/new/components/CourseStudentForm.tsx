@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Loader2, UserPlus, ArrowLeft } from "lucide-react";
+import { courseClassTypeDisplayNames } from "../../../constants/courseEnum";
 
 const fieldBase = {
   className: "h-10 w-full rounded-lg border px-4 text-sm transition-all outline-none focus:border-blue-500",
@@ -22,6 +23,7 @@ export default function CourseStudentForm({ courseClasses }: StudentFormProps) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: "",
+    grandfatherName: "",
     phoneNumber: "",
     address: "",
     age: "",
@@ -93,7 +95,9 @@ export default function CourseStudentForm({ courseClasses }: StudentFormProps) {
           >
             <option value="">Select current class...</option>
             {courseClasses.map(cc => (
-                <option key={cc.id} value={cc.id}>{cc.name} ({cc.year})</option>
+                <option key={cc.id} value={cc.id}>
+                  {courseClassTypeDisplayNames[cc.name as keyof typeof courseClassTypeDisplayNames] || cc.name} ({cc.year})
+                </option>
             ))}
           </select>
         </div>
@@ -106,6 +110,16 @@ export default function CourseStudentForm({ courseClasses }: StudentFormProps) {
             onChange={e => handleChange("fullName", e.target.value)}
             placeholder="Student's full name"
             required
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold">Grandfather Name (to prevent duplicates)</label>
+          <input
+            {...fieldBase}
+            value={formData.grandfatherName}
+            onChange={e => handleChange("grandfatherName", e.target.value)}
+            placeholder="Father's father name (optional but recommended)"
           />
         </div>
 

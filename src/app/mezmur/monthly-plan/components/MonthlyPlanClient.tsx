@@ -24,6 +24,11 @@ interface MonthlyPlanClientProps {
 const DEFAULT_DAYS = [1, 12, 21, 23, 24];
 const PAGUME_DAYS = [1]; // Pagume only has 5-6 days, so only day 1 is valid
 
+// Get available days based on month (Pagume month 13 only has day 1)
+const getAvailableDays = (monthNum: number) => {
+  return monthNum === 13 ? PAGUME_DAYS : DEFAULT_DAYS;
+};
+
 export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: MonthlyPlanClientProps) {
   // Infer month number from month name
   let initialMonthNumber = 1;
@@ -36,12 +41,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
 
   const [year, setYear] = useState(currentEthiopianDate.year);
   const [month, setMonth] = useState(initialMonthNumber);
-  
-  // Get available days based on month (Pagume month 13 only has day 1)
-  const getAvailableDays = (monthNum: number) => {
-    return monthNum === 13 ? PAGUME_DAYS : DEFAULT_DAYS;
-  };
-  
+
   const availableDays = getAvailableDays(month);
   
   // State to hold selected music IDs for each day
@@ -106,25 +106,11 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
     } finally {
       setIsLoading(false);
     }
-  }, [year, month, getAvailableDays]);
+  }, [year, month]);
 
   useEffect(() => {
     fetchPlan();
   }, [fetchPlan]);
-
-  // Update available days when month changes
-  useEffect(() => {
-    const newDays = getAvailableDays(month);
-    setDayPlans(prev => {
-      const newPlans: Record<number, string[]> = {};
-      newDays.forEach(day => {
-        newPlans[day] = prev[day] || [];
-      });
-      return newPlans;
-    });
-    // Fetch plan after updating days
-    fetchPlan();
-  }, [month, fetchPlan]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -495,7 +481,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
               </div>
 
               <div className="space-y-2">
-                {dayPlans[day].length === 0 ? (
+                {!dayPlans[day] || dayPlans[day].length === 0 ? (
                   <p className="text-sm opacity-50 italic text-center py-4">ምንም መዝሙር አልተመዘገበም</p>
                 ) : (
                   dayPlans[day].map(musicId => {
@@ -552,7 +538,7 @@ export default function MonthlyPlanClient({ musicFiles, currentEthiopianDate }: 
               ) : (
                 <div className="space-y-1">
                   {filteredMusic.map(m => {
-                    const isAlreadyAdded = dayPlans[isSelectingForDay].includes(m.id);
+                    const isAlreadyAdded = dayPlans[isSelectingForDay]?.includes(m.id) || false;
                     return (
                       <button
                         key={m.id}

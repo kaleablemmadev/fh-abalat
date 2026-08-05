@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Save, X, Loader2, CheckCircle2, Calculator } from "lucide-react";
+import { calculateFinalMark, getLetterGrade, getPassStatus } from "@/src/lib/courseGrading";
 
 interface Mark {
   id: string;
@@ -50,33 +51,22 @@ export default function StudentMarkForm({
 
   // Recalculate score when form data changes
   useEffect(() => {
-    const midExam = formData.midExamScore ? parseFloat(formData.midExamScore) : 0;
-    const assignment = formData.assignmentScore ? parseFloat(formData.assignmentScore) : 0;
-    const finalExam = formData.finalExamScore ? parseFloat(formData.finalExamScore) : 0;
-
-    const score =
-      midExam * (weights.midExamWeight / 100) +
-      assignment * (weights.assignmentWeight / 100) +
-      finalExam * (weights.finalExamWeight / 100) +
-      attendanceScore * (weights.attendanceWeight / 100);
+    const score = calculateFinalMark(
+      {
+        midExamScore: formData.midExamScore ? parseFloat(formData.midExamScore) : 0,
+        assignmentScore: formData.assignmentScore ? parseFloat(formData.assignmentScore) : 0,
+        finalExamScore: formData.finalExamScore ? parseFloat(formData.finalExamScore) : 0,
+      },
+      weights,
+      attendanceScore
+    );
 
     setComputedScore(score);
 
-    // Determine letter grade (standard scale)
-    let grade = "F";
-    if (score >= 90) grade = "A+";
-    else if (score >= 85) grade = "A";
-    else if (score >= 80) grade = "A-";
-    else if (score >= 75) grade = "B+";
-    else if (score >= 70) grade = "B";
-    else if (score >= 65) grade = "B-";
-    else if (score >= 60) grade = "C+";
-    else if (score >= 50) grade = "C";
-    else if (score >= 45) grade = "C-";
-    else if (score >= 40) grade = "D";
-
+    // Determine letter grade using shared logic
+    const grade = getLetterGrade(score);
     setLetterGrade(grade);
-    setPassStatus(score >= 50 ? "PASSED" : "FAILED");
+    setPassStatus(getPassStatus(grade));
   }, [formData, weights, attendanceScore]);
 
   const handleScoreChange = (field: "midExamScore" | "assignmentScore" | "finalExamScore", value: string) => {
@@ -175,7 +165,7 @@ export default function StudentMarkForm({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-              Attendance (100)
+              Attendance ({weights.attendanceWeight})
             </label>
             <div
               className="h-9 w-full rounded border px-3 text-xs flex items-center bg-zinc-900/50"
@@ -191,7 +181,7 @@ export default function StudentMarkForm({
 
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-              Mid Exam Score
+              Mid Exam ({weights.midExamWeight})
             </label>
             <input
               className="h-9 w-full rounded border px-3 text-xs transition-all duration-150"
@@ -202,17 +192,17 @@ export default function StudentMarkForm({
               }}
               type="number"
               min="0"
-              max="100"
+              max={weights.midExamWeight}
               step="0.1"
               value={formData.midExamScore}
               onChange={(e) => handleScoreChange("midExamScore", e.target.value)}
-              placeholder="0-100"
+              placeholder={`0-${weights.midExamWeight}`}
             />
           </div>
 
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-              Assignment Score
+              Assignment ({weights.assignmentWeight})
             </label>
             <input
               className="h-9 w-full rounded border px-3 text-xs transition-all duration-150"
@@ -223,17 +213,17 @@ export default function StudentMarkForm({
               }}
               type="number"
               min="0"
-              max="100"
+              max={weights.assignmentWeight}
               step="0.1"
               value={formData.assignmentScore}
               onChange={(e) => handleScoreChange("assignmentScore", e.target.value)}
-              placeholder="0-100"
+              placeholder={`0-${weights.assignmentWeight}`}
             />
           </div>
 
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-              Final Exam Score
+              Final Exam ({weights.finalExamWeight})
             </label>
             <input
               className="h-9 w-full rounded border px-3 text-xs transition-all duration-150"
@@ -244,11 +234,11 @@ export default function StudentMarkForm({
               }}
               type="number"
               min="0"
-              max="100"
+              max={weights.finalExamWeight}
               step="0.1"
               value={formData.finalExamScore}
               onChange={(e) => handleScoreChange("finalExamScore", e.target.value)}
-              placeholder="0-100"
+              placeholder={`0-${weights.finalExamWeight}`}
             />
           </div>
         </div>

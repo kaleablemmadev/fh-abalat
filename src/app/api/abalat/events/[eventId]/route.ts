@@ -2,6 +2,7 @@
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { dateToEthiopian } from "@/src/lib/ethiopiancal";
+import { isWithinAcademicYearTimeline } from "@/src/lib/utils";
 
 type EventUpdatePayload = Partial<{
   title: string;
@@ -81,9 +82,30 @@ export async function PUT(
       );
     }
 
-    const event = await prisma.event.findUnique({ where: { id: eventId } });
+    const event = await prisma.event.findUnique({ 
+      where: { id: eventId },
+      include: {
+        courseClass: {
+          include: {
+            academicYear: true
+          }
+        }
+      }
+    });
     if (!event) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+
+    // Check if current date is within academic year timeline for course-related events
+    if (event.courseClass?.academicYear) {
+      const { startDate, endDate } = event.courseClass.academicYear;
+      
+      if (!isWithinAcademicYearTimeline(new Date(startDate), new Date(endDate))) {
+        return NextResponse.json(
+          { error: "Cannot update course events outside the academic year timeline. Only registration and basic updates are allowed." },
+          { status: 400 }
+        );
+      }
     }
 
     // Build update data

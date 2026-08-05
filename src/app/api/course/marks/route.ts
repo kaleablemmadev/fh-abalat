@@ -3,14 +3,15 @@ import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { calculateFinalMark, getLetterGrade, getPassStatus } from "@/src/lib/courseGrading";
+import { CourseAttendanceService } from "@/src/services/course-attendance.service";
 
 // Zod schema for Mark creation/update
 const markSchema = z.object({
   studentId: z.string().min(1),
   courseYearId: z.string().min(1),
-  midExamScore: z.number().min(0).max(100).optional(),
-  assignmentScore: z.number().min(0).max(100).optional(),
-  finalExamScore: z.number().min(0).max(100).optional(),
+  midExamScore: z.number().min(0).optional(),
+  assignmentScore: z.number().min(0).optional(),
+  finalExamScore: z.number().min(0).optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -102,8 +103,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Calculate computed score and letter grade
-    const attendanceScore = 0; // TODO: Calculate from attendance records
+    // Calculate computed score and letter grade from actual records
+    const attendanceScore = await CourseAttendanceService.calculateStudentAttendanceScore(
+      studentId,
+      courseYear.courseClassId,
+      courseYear.attendanceWeight
+    );
+
     const computedScore = calculateFinalMark(
       { midExamScore, assignmentScore, finalExamScore },
       {

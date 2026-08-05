@@ -13,6 +13,7 @@ interface CourseFormProps {
     description?: string;
     topics?: string[];
     credits?: number;
+    requiredHours?: number;
     instructorId?: string;
     departmentId?: string;
     isGiven?: boolean;
@@ -52,6 +53,7 @@ export default function CourseForm({ initialData, isEditMode = false, instructor
     description: initialData?.description || "",
     topics: initialData?.topics || [],
     credits: initialData?.credits || "",
+    requiredHours: initialData?.requiredHours || 0,
     instructorId: initialData?.instructorId || "",
     departmentId: initialData?.departmentId || "",
     isGiven: initialData?.isGiven ?? true,
@@ -119,6 +121,7 @@ export default function CourseForm({ initialData, isEditMode = false, instructor
           teacherHandoutUrl: teacherUrl,
           studentHandoutUrl: studentUrl,
           credits: formData.credits ? parseInt(formData.credits.toString()) : null,
+          requiredHours: formData.requiredHours ? parseInt(formData.requiredHours.toString()) : 0,
         }),
       });
 
@@ -284,6 +287,22 @@ export default function CourseForm({ initialData, isEditMode = false, instructor
             />
           </div>
 
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold" style={{ color: "hsl(var(--foreground))" }}>
+              Required Teaching Hours
+            </label>
+            <input
+              {...fieldBase}
+              type="number"
+              value={formData.requiredHours}
+              onChange={(e) => handleChange("requiredHours", e.target.value)}
+              placeholder="Total hours needed to complete this course"
+              min="0"
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold" style={{ color: "hsl(var(--foreground))" }}>
               Instructor *

@@ -12,10 +12,16 @@ import {
   ChevronRight,
   ArrowRight,
   Shield,
-  Music
+  Music,
+  GraduationCap,
+  Megaphone,
+  Clock,
+  BookOpen,
+  Download
 } from 'lucide-react';
 import Link from 'next/link';
 import { ethMonthNames, dateToEthiopian, formatEthiopianDate, getEthiopianToday, ethiopianDateToDate } from '@/src/lib/ethiopiancal';
+import { Timeline } from '@/src/components/Timeline';
 
 interface MemberStats {
   attendanceCount: number;
@@ -53,6 +59,11 @@ interface MemberStats {
   }[];
   monthlyAttendanceSum: number;
   notifications: any[];
+  announcements: any[];
+  timelineEvents: any[];
+  grades: any[];
+  handouts: { courseName: string; url: string }[];
+  profile: { address?: string; age?: number; phoneNumber?: string; gender?: string };
 }
 
 function getMonthNumber(monthName: string): number {
@@ -151,7 +162,14 @@ export default function MemberDashboard() {
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">{user?.fullName}</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-white">{user?.fullName}</h1>
+            {user?.privateId && (
+              <span className="px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[10px] font-mono text-blue-400">
+                ID: {user.privateId}
+              </span>
+            )}
+          </div>
           <p className="text-sm text-slate-400">በፍሬ ሃይማኖት ውስጥ የተሳትፎዎ ዝርዝር ገለፃ</p>
         </div>
         <div className="flex items-center gap-3">
@@ -222,6 +240,37 @@ export default function MemberDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Grades Preview */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+            <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <GraduationCap size={16} className="text-emerald-500" />
+                <h3 className="text-sm font-bold text-white">የቅርብ ጊዜ ውጤቶች</h3>
+              </div>
+              <Link href="/member/grades" className="text-xs text-blue-500 hover:underline flex items-center gap-1">
+                ዝርዝር ተመልከት <ArrowRight size={12} />
+              </Link>
+            </div>
+            <div className="divide-y divide-slate-800">
+              {stats.grades.length === 0 ? (
+                <div className="p-8 text-center text-slate-500 text-sm italic">ምንም የተመዘገበ ውጤት የለም</div>
+              ) : (
+                stats.grades.map((grade, idx) => (
+                  <div key={idx} className="px-5 py-3 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                    <div>
+                      <p className="text-sm font-medium text-slate-200">{grade.courseYear.course.name}</p>
+                      <p className="text-[10px] text-slate-500 mt-0.5">{grade.courseYear.year}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-blue-500">{grade.letterGrade || "-"}</p>
+                      <p className="text-[10px] text-slate-500">{grade.computedScore?.toFixed(1)}%</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
           {/* Upcoming Events with Eligibility */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
             <div className="px-5 py-4 border-b border-slate-800">
@@ -288,7 +337,7 @@ export default function MemberDashboard() {
                       {/* Fulfillment Details */}
                       <div className="grid grid-cols-2 gap-3 mb-3">
                         <div className="p-3 rounded-lg bg-slate-800/50">
-                          <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Required</p>
+                          <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">የሚያስፈልገው</p>
                           <p className="text-sm font-bold text-white">
                             {event.eligibilityCheck.scores.requiredTotal > 0 
                               ? event.eligibilityCheck.scores.requiredTotal 
@@ -296,7 +345,7 @@ export default function MemberDashboard() {
                           </p>
                         </div>
                         <div className="p-3 rounded-lg bg-slate-800/50">
-                          <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Current</p>
+                          <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">ያለዎት</p>
                           <p className="text-sm font-bold text-white">
                             {event.eligibilityCheck.scores.totalScore.toFixed(1)}
                           </p>
@@ -328,7 +377,7 @@ export default function MemberDashboard() {
                         <p className={`text-xs font-semibold ${
                           event.eligibilityCheck.eligible ? 'text-emerald-400' : 'text-red-400'
                         }`}>
-                          {event.eligibilityCheck.eligible ? '✓ Eligible' : '✗ Not Eligible'}
+                          {event.eligibilityCheck.eligible ? '✓ አሟልቷል' : '✗ አላሟላም'}
                         </p>
                         {!event.eligibilityCheck.eligible && event.eligibilityCheck.reasons.length > 0 && (
                           <div className="mt-2 space-y-1">
@@ -348,21 +397,21 @@ export default function MemberDashboard() {
           {/* Recent Attendance */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
             <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white">Recent Attendance</h3>
+              <h3 className="text-sm font-bold text-white">የቅርብ ጊዜ አቴንዳንሶች</h3>
               <Link href="/member/attendance" className="text-xs text-blue-500 hover:underline flex items-center gap-1">
-                View All <ArrowRight size={12} />
+                ሁሉንም ተመልከት <ArrowRight size={12} />
               </Link>
             </div>
             <div className="divide-y divide-slate-800">
               {stats.recentAttendances.length === 0 ? (
-                <div className="p-8 text-center text-slate-500 text-sm italic">No recent attendance records</div>
+                <div className="p-8 text-center text-slate-500 text-sm italic">ምንም የተመዘገበ አቴንዳንስ የለም</div>
               ) : (
                 stats.recentAttendances.map((att, idx) => {
                   const attEthDate = dateToEthiopian(new Date(att.event.date));
                   return (
                   <div key={idx} className="px-5 py-3 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
                     <div>
-                      <p className="text-sm font-medium text-slate-200">{att.event.title}</p>
+                      <p className="text-sm font-medium text-slate-200">{att.event.title === "Sunday Morning Attendance" ? "እሑድ ጉባዔ አቴንዳንስ" : att.event.title === "Chore Attendance" ? "የሠርክ አገልግሎት አቴንዳንስ" : "የመዝሙር ጥናት አቴንዳንስ"}</p>
                       <p className="text-[10px] text-slate-500 mt-0.5">
                         {formatEthiopianDate(attEthDate, 'short')}
                       </p>
@@ -371,8 +420,8 @@ export default function MemberDashboard() {
                       <span
                         className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"
                         style={{
-                          background: att.attendanceType.value >= 1 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                          color: att.attendanceType.value >= 1 ? '#10b981' : '#ef4444'
+                          background: att.attendanceType.value >= 1 ? 'rgba(16, 185, 129, 0.1)' : att.attendanceType.value === 0.5 ? 'rgba(245, 158, 11, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                          color: att.attendanceType.value >= 1 ? '#10b981' : att.attendanceType.value === 0.5 ? '#f59e0b' : '#ef4444'
                         }}
                       >
                         {att.attendanceType.name}
@@ -388,6 +437,39 @@ export default function MemberDashboard() {
 
         {/* Sidebar Area */}
         <div className="space-y-6">
+          {/* Announcements */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+            <div className="px-5 py-4 border-b border-slate-800 flex items-center gap-2">
+              <Megaphone size={16} className="text-orange-500" />
+              <h3 className="text-sm font-bold text-white">አጠቃላይ ማስታወቂያዎች</h3>
+            </div>
+            <div className="p-4 space-y-4">
+              {stats.announcements.length === 0 ? (
+                <div className="text-center text-slate-500 text-xs italic py-4">ምንም አዲስ ማስታወቂያ የለም</div>
+              ) : (
+                stats.announcements.map((a, idx) => (
+                  <div key={idx} className={`p-3 rounded-lg border ${
+                    a.type === 'URGENT' ? 'bg-red-500/5 border-red-500/20' :
+                    a.type === 'SCHEDULE' ? 'bg-blue-500/5 border-blue-500/20' :
+                    'bg-slate-800/50 border-slate-700/50'
+                  }`}>
+                    <h4 className={`text-xs font-bold mb-1 ${
+                      a.type === 'URGENT' ? 'text-red-400' :
+                      a.type === 'SCHEDULE' ? 'text-blue-400' :
+                      'text-slate-200'
+                    }`}>
+                      {a.title}
+                    </h4>
+                    <p className="text-[10px] text-slate-400 leading-relaxed">{a.message}</p>
+                    <p className="text-[9px] text-slate-500 mt-2 flex items-center gap-1">
+                      <Clock size={10} /> {formatEthiopianDate(dateToEthiopian(new Date(a.createdAt)), 'short')}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
           {/* Notifications */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
             <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
@@ -423,6 +505,63 @@ export default function MemberDashboard() {
             </div>
           </div>
 
+          {/* Handouts */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+            <div className="px-5 py-4 border-b border-slate-800 flex items-center gap-2">
+              <BookOpen size={16} className="text-purple-500" />
+              <h3 className="text-sm font-bold text-white">Handouts & Materials</h3>
+            </div>
+            <div className="p-4 space-y-2">
+              {stats.handouts.length === 0 ? (
+                <div className="text-center text-slate-500 text-[10px] italic py-2">No handouts available.</div>
+              ) : (
+                stats.handouts.map((h, idx) => (
+                  <a
+                    key={idx}
+                    href={h.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 transition-colors group"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold text-slate-200 truncate">{h.courseName}</p>
+                      <p className="text-[9px] text-slate-500">Course Material</p>
+                    </div>
+                    <Download size={14} className="text-slate-500 group-hover:text-blue-500 transition-colors" />
+                  </a>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Personal Information */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+            <div className="px-5 py-4 border-b border-slate-800 flex items-center gap-2">
+              <Users size={16} className="text-emerald-500" />
+              <h3 className="text-sm font-bold text-white">Profile Information</h3>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Gender</p>
+                  <p className="text-xs text-slate-200">{stats.profile.gender === 'MALE' ? 'ወንድ' : 'ሴት'}</p>
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Age</p>
+                  <p className="text-xs text-slate-200">{stats.profile.age} years</p>
+                </div>
+              </div>
+              <div>
+                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Phone Number</p>
+                <p className="text-xs text-slate-200">{stats.profile.phoneNumber || 'N/A'}</p>
+              </div>
+              <div>
+                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Address</p>
+                <p className="text-xs text-slate-200">{stats.profile.address || 'N/A'}</p>
+              </div>
+            </div>
+          </div>
+
           {/* Quick Actions */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
             <h3 className="text-sm font-bold text-white mb-4">Quick Actions</h3>
@@ -431,17 +570,26 @@ export default function MemberDashboard() {
                 href="/member/attendance"
                 className="block text-center w-full py-2 px-4 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white transition-colors"
               >
-                View Attendance History
+                የአቴንዳንስ ዝርዝር ተመልከት
               </Link>
               <Link
                 href="/member/permissions"
                 className="block text-center w-full py-2 px-4 rounded-lg text-sm font-medium bg-purple-600 hover:bg-purple-700 text-white transition-colors"
               >
-                My Permissions
+                ያሉኝ ፈቃዶች
               </Link>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Academic Timeline */}
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-sm">
+        <div className="text-center mb-12">
+          <h3 className="text-lg font-bold text-white mb-2">የአካዳሚክ ዓመቱ ኩነቶች (Academic Timeline)</h3>
+          <p className="text-xs text-slate-500">የዘንድሮው የትምህርት ዘመን ዋና ዋና ኩነቶች የጊዜ ሰሌዳ</p>
+        </div>
+        <Timeline events={stats.timelineEvents} />
       </div>
     </div>
   );

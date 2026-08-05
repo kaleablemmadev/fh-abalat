@@ -3,6 +3,7 @@ import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { calculateFinalMark, getLetterGrade, getPassStatus } from "@/src/lib/courseGrading";
+import { isWithinAcademicYearTimeline } from "@/src/lib/utils";
 
 const markSchema = z.object({
   midExamScore: z.number().min(0).max(100).optional(),
@@ -65,11 +66,19 @@ export async function PUT(
 
     const { midExamScore, assignmentScore, finalExamScore } = validation.data;
 
-    // Get existing mark to compute new score
+    // Get existing mark to compute new score and check academic year timeline
     const existingMark = await prisma.mark.findUnique({
       where: { id },
       include: {
-        courseYear: true,
+        courseYear: {
+          include: {
+            courseClass: {
+              include: {
+                academicYear: true
+              }
+            }
+          }
+        },
       },
     });
 
@@ -78,6 +87,18 @@ export async function PUT(
         { error: "Mark not found" },
         { status: 404 },
       );
+    }
+
+    // Check if current date is within academic year timeline
+    if (existingMark.courseYear?.courseClass?.academicYear) {
+      const { startDate, endDate } = existingMark.courseYear.courseClass.academicYear;
+      
+      if (!isWithinAcademicYearTimeline(new Date(startDate), new Date(endDate))) {
+        return NextResponse.json(
+          { error: "Cannot update marks outside the academic year timeline. Only registration and basic updates are allowed." },
+          { status: 400 }
+        );
+      }
     }
 
     // Calculate computed score and letter grade
@@ -127,11 +148,47 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const mark = await prisma.mark.delete({
+    
+    // Get mark to check academic year timeline
+    const mark = await prisma.mark.findUnique({
+      where: { id },
+      include: {
+        courseYear: {
+          include: {
+            courseClass: {
+              include: {
+                academicYear: true
+              }
+            }
+          }
+        },
+      },
+    });
+
+    if (!mark) {
+      return NextResponse.json(
+        { error: "Mark not found" },
+        { status: 404 },
+      );
+    }
+
+    // Check if current date is within academic year timeline
+    if (mark.courseYear?.courseClass?.academicYear) {
+      const { startDate, endDate } = mark.courseYear.courseClass.academicYear;
+      
+      if (!isWithinAcademicYearTimeline(new Date(startDate), new Date(endDate))) {
+        return NextResponse.json(
+          { error: "Cannot delete marks outside the academic year timeline. Only registration and basic updates are allowed." },
+          { status: 400 }
+        );
+      }
+    }
+
+    const deletedMark = await prisma.mark.delete({
       where: { id },
     });
 
-    return NextResponse.json(mark);
+    return NextResponse.json(deletedMark);
   } catch (error) {
     console.error(error);
     return NextResponse.json(

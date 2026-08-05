@@ -271,6 +271,53 @@ export function ethiopianDateToDate(ethDate: EthDateWords): Date {
   return new Date(gregDate.year, gregDate.month - 1, gregDate.day);
 }
 
+export function ethDateWordsToNumeric(ethDate: EthDateWords): EthDate {
+  let monthNumber = 1;
+  for (const [key, value] of Object.entries(ethMonthNames)) {
+    if (value === ethDate.month) {
+      monthNumber = parseInt(key);
+      break;
+    }
+  }
+  return { year: ethDate.year, month: monthNumber, day: ethDate.day };
+}
+
+export function ethDateNumericToWords(ethDate: EthDate): EthDateWords {
+  return {
+    year: ethDate.year,
+    month: ethMonthNames[ethDate.month] || ethMonthNames[1],
+    day: ethDate.day
+  };
+}
+
+/**
+ * Parses a string like "2017-01-01" as an Ethiopian date.
+ * Returns EthDateWords.
+ */
+export function parseEthiopianDateString(dateStr: string): EthDateWords {
+  if (!dateStr) return getEthiopianToday();
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return ethDateNumericToWords({ year: y || 2017, month: m || 1, day: d || 1 });
+}
+
+/**
+ * Converts EthDateWords to a string like "2017-01-01".
+ */
+export function ethiopianDateWordsToISO(ethDate: EthDateWords): string {
+  const numeric = ethDateWordsToNumeric(ethDate);
+  return `${numeric.year}-${numeric.month.toString().padStart(2, '0')}-${numeric.day.toString().padStart(2, '0')}`;
+}
+
+export function gregorianToEthiopianISO(date: Date): string {
+  const ethDate = dateToEthiopian(date);
+  return ethiopianDateWordsToISO(ethDate);
+}
+
+export function ethiopianISOToGregorianDate(ethISO: string): Date {
+  const words = parseEthiopianDateString(ethISO);
+  return ethiopianDateToDate(words);
+}
+
 export function formatEthiopianDate(date: Date | EthDateWords, format: 'short' | 'long' = 'long'): string {
   let ethDate: EthDateWords;
 

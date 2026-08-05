@@ -26,10 +26,11 @@ export async function GET() {
     ]);
 
     const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+    const contentWithBom = "\uFEFF" + csvContent;
 
-    return new NextResponse(csvContent, {
+    return new NextResponse(contentWithBom, {
       headers: {
-        "Content-Type": "text/csv",
+        "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": `attachment; filename=courses-export-${Date.now()}.csv`,
       },
     });

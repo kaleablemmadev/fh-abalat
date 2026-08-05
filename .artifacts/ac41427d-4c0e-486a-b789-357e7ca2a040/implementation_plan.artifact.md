@@ -1,30 +1,46 @@
-# Implementation Plan - Fix Mezmur Events Counting and Display
+# Course, Academic Year & Amharic Font Enhancements
 
-This plan addresses the requirement to distinguish between attendance sessions and actual events in Mezmur mode. Customly created events should be counted and displayed, while attendance sessions should be excluded from the "Events" sections.
+This plan addresses the requirement to assign instructors per academic year and ensures all downloaded files (CSV, PDF, DOCX) correctly display Amharic characters.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> I will be changing the filters for events in the Mezmur dashboard and schedule. This means "Regular", "Beginners", and "Continuous" study sessions will no longer appear in the "Events" count or list. They will only be accessible via the "Attendance" section.
+> - **Instructor Assignments**: Course instructors will now be assigned per Academic Year. This means the same course can have different teachers in different years.
+> - **Amharic Font Support**: All downloads will use "Noto Sans Ethiopic" to ensure Ge'ez characters are rendered correctly.
+> - **CSV Downloads**: CSV files will now include a UTF-8 BOM (Byte Order Mark) to ensure Excel opens them with correct Amharic character encoding.
 
 ## Proposed Changes
 
-### Mezmur Dashboard & Schedule
+### 1. Per-Year Instructor Assignments
 
-#### [MODIFY] [page.tsx](file:///C:/Dev/fh-abalat/src/app/mezmur/page.tsx)
-- Update `eventCount` query to filter by `eventType: "MEZMUR_EVENT"` instead of attendance session types.
-- Ensure only active events are counted.
+#### [MODIFY] [Academic Year API](file:///C:/Dev/fh-abalat/src/app/api/course/academic-years/route.ts)
+- Update `POST` handler to initialize `CourseYear` records with the course's default instructor.
 
-#### [MODIFY] [page.tsx](file:///C:/Dev/fh-abalat/src/app/mezmur/schedule/page.tsx)
-- Update `events` query to filter by `eventType: "MEZMUR_EVENT"`.
+#### [NEW] [Faculty Management UI](file:///C:/Dev/fh-abalat/src/app/course/academic-years/%5Bid%5D/faculty/page.tsx)
+- Create a dashboard for admins to swap instructors for specific courses within an academic year.
 
-#### [MODIFY] [MezmurEventList.tsx](file:///C:/Dev/fh-abalat/src/app/mezmur/schedule/components/MezmurEventList.tsx)
-- Add `MEZMUR_EVENT` to `typeLabels` and `typeColors`.
-- This ensures that actual events are displayed correctly with their proper labels.
+#### [MODIFY] [Display Logic]
+- Update Student Dashboard, Course Details, and Grading views to prioritize the instructor assigned to the specific academic year term.
+
+---
+
+### 2. Amharic Font Support for Downloads
+
+#### [MODIFY] [Document Service](file:///C:/Dev/fh-abalat/src/services/document.service.ts)
+- Update `generatePDF` to consistently apply the loaded Amharic font to all text blocks.
+- Update `generateDOCX` to specify the font family in `TextRun` and `Table` styles.
+
+#### [MODIFY] [Member Export API](file:///C:/Dev/fh-abalat/src/app/api/course/members/export/route.ts)
+- Prepend the UTF-8 BOM (`\uFEFF`) to the CSV output.
+
+#### [MODIFY] [Registration PDF (Client)](file:///C:/Dev/fh-abalat/src/app/register/page.tsx)
+- Move font files to `public/fonts/` to make them accessible to the client.
+- Update `downloadPDF` to fetch and embed the font before generating the document.
 
 ## Verification Plan
 
 ### Manual Verification
-- **Mezmur Dashboard**: Verify the "Events" count reflects only `MEZMUR_EVENT` records.
-- **Mezmur Schedule**: Verify that only actual events are listed, and attendance sessions (Regular, etc.) are excluded.
-- **Event Creation**: Create a new event and verify it appears in the schedule but not in the attendance sessions list.
+- **Faculty**: Change an instructor for a 2017 course and verify that the 2016 record for the same course remains unchanged.
+- **Font (CSV)**: Export members and open in Excel. Verify Amharic names are readable.
+- **Font (PDF)**: Download a registration slip. Verify Amharic text is rendered (not boxes).
+- **Font (DOCX)**: Download an attendance report. Verify Amharic text is rendered correctly in Word.

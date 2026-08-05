@@ -32,7 +32,7 @@ export default function EligibilityReportClient({
     const semStart = currentSemester === "FIRST" ? activeYear.s1Start : activeYear.s2Start;
     const semEnd = currentSemester === "FIRST" ? activeYear.s1End : activeYear.s2End;
 
-    return activeYear.classes.flatMap((cls: any) => {
+    return (activeYear.classes || []).flatMap((cls: any) => {
       if (classFilter !== "ALL" && cls.id !== classFilter) return [];
 
       return cls.courseEnrollments.map((enrollment: any) => {
@@ -116,7 +116,7 @@ export default function EligibilityReportClient({
             onChange={e => setClassFilter(e.target.value)}
           >
             <option value="ALL">All Classes</option>
-            {activeYear.classes.map((cls: any) => (
+            {(activeYear.classes || []).map((cls: any) => (
               <option key={cls.id} value={cls.id}>{cls.name}</option>
             ))}
           </select>

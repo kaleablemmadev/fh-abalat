@@ -4,6 +4,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Search, Plus, Edit, User, Calendar } from "lucide-react";
+import { formatEthiopianDate } from "@/src/lib/ethiopiancal";
 
 interface Enrollment {
   id: string;
@@ -309,7 +310,7 @@ export default function EnrollmentListClient({
                     <span>
                       Enrolled:{" "}
                       <span style={{ color: "hsl(var(--foreground))" }}>
-                        {enrollment.enrolledDate}
+                        {formatEthiopianDate(new Date(enrollment.enrolledDate))}
                       </span>
                     </span>
                   </div>
@@ -322,7 +323,7 @@ export default function EnrollmentListClient({
                       <span>
                         Unenrolled:{" "}
                         <span style={{ color: "hsl(var(--foreground))" }}>
-                          {new Date(enrollment.unenrollmentDate).toLocaleDateString()}
+                          {formatEthiopianDate(new Date(enrollment.unenrollmentDate))}
                         </span>
                       </span>
                     </div>

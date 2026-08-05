@@ -4,6 +4,20 @@
 import { useEffect, useState } from 'react';
 import { ClipboardList, Filter, Search, Calendar, ChevronRight } from 'lucide-react';
 import Breadcrumb from '@/src/components/navigation/Breadcrumb';
+import { gregorianToEthiopianDate, getEthiopianMonthName } from '@/src/lib/ethiopiancal';
+
+function formatEthDateEnglish(ethDate: { year: number; month: number; day: number }) {
+  const monthName = getEthiopianMonthName(ethDate.month, 'amharic');
+  return `${monthName} ${ethDate.day}፣ ${ethDate.year}`;
+}
+
+function toEthDate(date: Date) {
+  return gregorianToEthiopianDate({
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate(),
+  });
+}
 
 interface AttendanceRecord {
   id: string;
@@ -67,15 +81,15 @@ export default function MemberAttendancePage() {
     <div className="space-y-6 animate-fade-in">
       <Breadcrumb
         items={[
-          { label: 'Dashboard', href: '/member' },
-          { label: 'Attendance History' },
+          { label: 'ዋና ገጽ', href: '/member' },
+          { label: 'የአቴንዳንስ መዝገብ' },
         ]}
       />
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Attendance History</h1>
-          <p className="text-sm text-slate-400">View all your past participation records</p>
+          <h1 className="text-2xl font-bold text-white">የአቴንዳንስ መዝገብ</h1>
+          <p className="text-sm text-slate-400">ያለፉ የጉባዔ፣ የመዝሙር ጥናትና የሠርክ አገልግሎት አቴንዳንሶን ይመልከቱ</p>
         </div>
       </div>
 
@@ -86,7 +100,7 @@ export default function MemberAttendancePage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
             <input
               type="text"
-              placeholder="Search events..."
+              placeholder="አቴንዳንሶችን ፈልግ..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-white focus:ring-1 focus:ring-blue-500 outline-none"
@@ -103,11 +117,11 @@ export default function MemberAttendancePage() {
           <table className="w-full text-left text-sm">
             <thead className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-slate-800/40">
               <tr>
-                <th className="px-6 py-3">Event</th>
-                <th className="px-6 py-3">Date</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Value</th>
-                <th className="px-6 py-3 text-right">Action</th>
+                <th className="px-6 py-3">አቴንዳንስ</th>
+                <th className="px-6 py-3">ቀን</th>
+                <th className="px-6 py-3">ሁኔታ</th>
+                <th className="px-6 py-3">ውጤት</th>
+                <th className="px-6 py-3 text-right">ተግባር</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800 text-slate-300">
@@ -120,20 +134,20 @@ export default function MemberAttendancePage() {
               ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-slate-500 italic">
-                    No records found
+                    ምንም የተመዘገበ አቴንዳንስ አልተገኘም
                   </td>
                 </tr>
               ) : (
                 filtered.map((att) => (
                   <tr key={att.id} className="hover:bg-slate-800/30 transition-colors group">
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-white">{att.event.title}</div>
+                      <div className="font-semibold text-white">{att.event.title === "Sunday Morning Attendance" ? "እሑድ ጉባዔ አቴንዳንስ" : att.event.title === "Chore Attendance" ? "የሠርክ አገልግሎት አቴንዳንስ" : "የመዝሙር ጥናት አቴንዳንስ"}</div>
                       {att.note && <div className="text-[10px] text-slate-500 mt-0.5">{att.note}</div>}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <Calendar size={12} className="text-slate-500" />
-                        {new Date(att.event.date).toLocaleDateString()}
+                        {formatEthDateEnglish(toEthDate(new Date(att.event.date)))}
                       </div>
                     </td>
                     <td className="px-6 py-4">

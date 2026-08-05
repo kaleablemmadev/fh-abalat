@@ -4,6 +4,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { genderType } from "@/src/generated/prisma";
 import { generateCourseStudentCode } from "@/src/lib/utils";
 import { getEthiopianToday } from "@/src/lib/ethiopiancal";
+import { CourseEnrollmentService } from "@/src/services/course-enrollment.service";
 
 export async function GET() {
     try {
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
 
         const studentSchema = z.object({
             fullName: z.string().min(2),
+            grandfatherName: z.string().optional(),
             gender: z.nativeEnum(genderType),
             age: z.number().min(5),
             phoneNumber: z.string().optional(),
@@ -41,7 +43,7 @@ export async function POST(req: NextRequest) {
         const ethToday = getEthiopianToday();
 
         // Generate a unique privateId with the new FHC format
-        let privateId = generateCourseStudentCode(ethToday.year);
+        let privateId = generateCourseStudentCode();
         let isUnique = false;
         let attempts = 0;
         while (!isUnique && attempts < 10) {
@@ -51,34 +53,42 @@ export async function POST(req: NextRequest) {
             if (!existing) {
                 isUnique = true;
             } else {
-                privateId = generateCourseStudentCode(ethToday.year);
+                privateId = generateCourseStudentCode();
                 attempts++;
             }
         }
 
-        const courseMember = await prisma.user.create({
-            data: {
-                fullName: validatedData.fullName,
-                gender: validatedData.gender,
-                age: validatedData.age,
-                phoneNumber: validatedData.phoneNumber,
-                address: validatedData.address,
-                memberType: "COURSE_STUDENT",
-                type: "MEMBER",
-                privateId,
-                enrollments: {
-                    create: {
-                        courseClassId: validatedData.courseClassId,
-                        enrolledDate: new Date().toLocaleDateString(),
-                        status: "ACTIVE"
+        const courseMember = await prisma.$transaction(async (tx) => {
+            const user = await tx.user.create({
+                data: {
+                    fullName: validatedData.fullName,
+                    grandfatherName: validatedData.grandfatherName,
+                    gender: validatedData.gender,
+                    age: validatedData.age,
+                    phoneNumber: validatedData.phoneNumber,
+                    address: validatedData.address,
+                    memberType: "COURSE_STUDENT",
+                    type: "MEMBER",
+                    privateId,
+                    enrollments: {
+                        create: {
+                            courseClassId: validatedData.courseClassId,
+                            enrolledDate: new Date().toLocaleDateString(),
+                            status: "PENDING" // Requirement: students are pending until first attendance
+                        }
+                    }
+                },
+                include: {
+                    enrollments: {
+                        include: { courseClass: true }
                     }
                 }
-            },
-            include: {
-                enrollments: {
-                    include: { courseClass: true }
-                }
-            }
+            });
+
+            await CourseEnrollmentService.autoEnrollInCourses(user.id, validatedData.courseClassId, tx);
+            return user;
+        }, {
+            timeout: 30000 // 30 seconds
         });
 
         return NextResponse.json(courseMember);

@@ -1,9 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, Music, X as CloseIcon, Languages, Play, Pause } from "lucide-react";
-import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
+import { Search, Music, X as CloseIcon, Languages, Play, Pause, Library } from "lucide-react";
+import Link from "next/link";
 
 // --- Zemach helpers ---
 interface Zemach { text: string; }
@@ -39,8 +38,6 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
   const [searchText, setSearchText] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
   const [viewingLyrics, setViewingLyrics] = useState<MusicFile | null>(null);
-  const [playingFile, setPlayingFile] = useState<MusicFile | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const filteredFiles = useMemo(() => {
     const normalizedSearch = searchText.trim().toLowerCase();
@@ -65,52 +62,37 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
     );
   };
 
-  const handlePlay = (file: MusicFile) => {
-    if (playingFile?.id === file.id) {
-      setIsPlaying(!isPlaying);
-    } else {
-      setPlayingFile(file);
-      setIsPlaying(true);
-    }
-  };
-
   return (
-    <>
-      <style jsx global>{`
-        .rhap_container {
-          background: hsl(var(--card)) !important;
-          border-radius: 8px;
-        }
-        .rhap_main {
-          background: hsl(var(--background)) !important;
-        }
-        .rhap_progress-bar {
-          background: hsl(var(--muted)) !important;
-        }
-        .rhap_progress-filled {
-          background: hsl(25 70% 45%) !important;
-        }
-        .rhap_progress-indicator {
-          background: hsl(25 70% 45%) !important;
-        }
-        .rhap_controls button {
-          color: hsl(var(--foreground)) !important;
-        }
-        .rhap_time {
-          color: hsl(var(--muted-foreground)) !important;
-        }
-      `}</style>
-      <div className="space-y-6">
+    <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 opacity-30" size={16} />
           <input
             className="w-full h-10 rounded-lg border pl-10 pr-4 text-sm transition-all"
             style={{ background: "hsl(var(--card))", borderColor: "hsl(var(--border))" }}
-            placeholder="Search by title or singer..."
+            placeholder="በመዝሙር ወይም ወረብ ርእስ ፈልግ..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
+        </div>
+
+        <div className="flex gap-2">
+          <Link
+            href="/member/music/player?playAll=true"
+            className="flex items-center gap-2 px-4 h-10 rounded-lg bg-[hsl(25_70%_45%)] hover:bg-[hsl(25_70%_40%)] text-white text-sm font-bold transition-all shadow-sm active:scale-95"
+          >
+            <Library size={16} />
+            Play All
+          </Link>
+          {categoryFilter.length > 0 && (
+            <Link
+              href={`/member/music/player?categoryIds=${categoryFilter.join(',')}`}
+              className="flex items-center gap-2 px-4 h-10 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold transition-all shadow-sm animate-slide-in active:scale-95"
+            >
+              <Play size={16} fill="currentColor" />
+              Play Selection
+            </Link>
+          )}
         </div>
       </div>
 
@@ -144,7 +126,7 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
                 </h3>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-xs opacity-60">
-                    {file.uploadedBy.fullName || "Unknown"}
+                    {file.uploadedBy.fullName || "አልተመዘገበም"}
                   </span>
                   {file.interpretation && (
                     <span className="text-xs opacity-40">• {file.interpretation}</span>
@@ -154,7 +136,7 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
               <div className="flex items-center gap-1 shrink-0 ml-2">
                 <Languages size={14} className="opacity-50" />
                 <span className="text-xs opacity-60">
-                  {file.language === "GEEZ" ? "ግዕዝ" : "Amharic"}
+                  {file.language === "GEEZ" ? "ግዕዝ" : "ዐማርኛ"}
                 </span>
               </div>
             </div>
@@ -176,17 +158,13 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
 
             <div className="space-y-2">
               {file.fileUrl && (
-                <button
-                  onClick={() => handlePlay(file)}
+                <Link
+                  href={`/member/music/player?categoryId=${file.categories[0]?.id || ''}`}
                   className="w-full flex items-center justify-center gap-2 p-2 rounded-lg bg-[hsl(25_70%_45%)] hover:bg-[hsl(25_70%_40%)] text-white transition-colors text-sm font-medium"
                 >
-                  {playingFile?.id === file.id && isPlaying ? (
-                    <Pause size={14} />
-                  ) : (
-                    <Play size={14} />
-                  )}
-                  {playingFile?.id === file.id && isPlaying ? 'Pause' : 'Play'}
-                </button>
+                  <Play size={14} />
+                  Play Now
+                </Link>
               )}
               
               <button
@@ -195,24 +173,9 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 <Music size={14} />
-                View Lyrics
+                የመዝሙር ቃላት
               </button>
             </div>
-
-            {playingFile?.id === file.id && (
-              <div className="mt-3">
-                <AudioPlayer
-                  src={file.fileUrl || ''}
-                  autoPlay={isPlaying}
-                  onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
-                  onEnded={() => setIsPlaying(false)}
-                  style={{ width: '100%' }}
-                  showJumpControls={false}
-                  showSkipControls={false}
-                />
-              </div>
-            )}
           </div>
         ))}
       </div>
@@ -220,7 +183,7 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
       {filteredFiles.length === 0 && (
         <div className="text-center py-12">
           <Music size={48} className="mx-auto opacity-20 mb-4" />
-          <p className="text-sm opacity-50">No music files found</p>
+          <p className="text-sm opacity-50">ምንም መዝሙራት አልተገኙም</p>
         </div>
       )}
 
@@ -231,7 +194,7 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
               <div>
                 <h3 className="font-bold text-lg">{viewingLyrics.title}</h3>
                 <p className="text-sm opacity-60">
-                  {viewingLyrics.language === "GEEZ" ? "ግዕዝ" : "Amharic"}
+                  {viewingLyrics.language === "GEEZ" ? "ግዕዝ" : "ዐማርኛ"}
                   {viewingLyrics.interpretation && ` • ${viewingLyrics.interpretation}`}
                 </p>
               </div>
@@ -256,7 +219,6 @@ export default function MemberMusicLibraryClient({ initialFiles, categories }: M
           </div>
         </div>
       )}
-      </div>
-    </>
+    </div>
   );
 }

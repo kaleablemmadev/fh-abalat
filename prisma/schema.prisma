@@ -42,9 +42,10 @@ model User {
   fullName              String?
   gender                genderType           @default(MALE)
   isActive              Boolean              @default(true)
-  memberType            memberType?          @default(REGULAR_MEMBER)
+  roles                 memberType[]
   mode                  appMode?
   privateId             String?              @unique
+  coursePrivateId       String?              @unique
   passwordHash          String?
   phoneNumber           String?
   registerDate          String?
@@ -65,14 +66,36 @@ model User {
   playlists             Playlist[]
   markedInstructorAttendances InstructorAttendance[] @relation("InstructorAttendanceMarker")
   followUps             StudentFollowUp[]
+  recommendations       MembershipRecommendation[] @relation("StudentToRecommendation")
+  madeRecommendations    MembershipRecommendation[] @relation("AdminToRecommendation")
   courseClass           CourseClass?              @relation(fields: [courseClassId], references: [id])
   department            Department?               @relation(fields: [departmentId], references: [id])
 
   @@index([type])
-  @@index([memberType])
   @@index([isActive])
   @@index([departmentId])
   @@unique([fullName, grandfatherName])
+}
+
+model MembershipRecommendation {
+  id              String           @id @default(cuid())
+  studentId       String
+  recommendedById String
+  status          RecommendationStatus @default(PENDING)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  student         User             @relation("StudentToRecommendation", fields: [studentId], references: [id])
+  recommendedBy   User             @relation("AdminToRecommendation", fields: [recommendedById], references: [id])
+
+  @@index([studentId])
+  @@index([status])
+}
+
+enum RecommendationStatus {
+  PENDING
+  REGISTERED
+  REJECTED
 }
 
 model AcademicYear {

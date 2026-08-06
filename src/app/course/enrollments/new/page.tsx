@@ -11,7 +11,7 @@ export default async function NewEnrollmentPage() {
   const students = await prisma.user.findMany({
     where: { 
       type: "MEMBER",
-      memberType: "COURSE_STUDENT",
+      memberTypes: { has: "COURSE_STUDENT" },
       isActive: true 
     },
     orderBy: { fullName: "asc" },

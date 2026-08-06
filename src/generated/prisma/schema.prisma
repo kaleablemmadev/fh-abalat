@@ -27,11 +27,11 @@ model CourseRegistration {
 }
 
 model User {
-  id                          String                 @id @default(cuid())
-  email                       String?                @unique
-  createdAt                   DateTime               @default(now())
-  updatedAt                   DateTime               @updatedAt
-  mustChangePassword          Boolean                @default(false)
+  id                          String                     @id @default(cuid())
+  email                       String?                    @unique
+  createdAt                   DateTime                   @default(now())
+  updatedAt                   DateTime                   @updatedAt
+  mustChangePassword          Boolean                    @default(false)
   address                     String?
   age                         Int?
   christianName               String?
@@ -40,39 +40,62 @@ model User {
   departmentId                String?
   ethiopianCreatedAt          String?
   fullName                    String?
-  gender                      genderType             @default(MALE)
-  isActive                    Boolean                @default(true)
-  memberType                  memberType?            @default(REGULAR_MEMBER)
+  gender                      genderType                 @default(MALE)
+  isActive                    Boolean                    @default(true)
+  roles                       memberType[]
   mode                        appMode?
-  privateId                   String?                @unique
+  privateId                   String?                    @unique
+  coursePrivateId             String?                    @unique
   passwordHash                String?
   phoneNumber                 String?
   registerDate                String?
-  type                        userType               @default(MEMBER)
-  reviewedRegistrations       AdminRegistration[]    @relation("RegistrationReviewer")
-  markedAttendances           Attendance[]           @relation("MarkedByAdmin")
-  attendances                 Attendance[]           @relation("MemberAttendances")
-  performedAuditLogs          AuditLog[]             @relation("AuditLogPerformer")
+  type                        userType                   @default(MEMBER)
+  reviewedRegistrations       AdminRegistration[]        @relation("RegistrationReviewer")
+  markedAttendances           Attendance[]               @relation("MarkedByAdmin")
+  attendances                 Attendance[]               @relation("MemberAttendances")
+  performedAuditLogs          AuditLog[]                 @relation("AuditLogPerformer")
   enrollments                 CourseEnrollment[]
   registrations               CourseRegistration[]
-  createdEvents               Event[]                @relation("EventCreatedBy")
+  createdEvents               Event[]                    @relation("EventCreatedBy")
   marks                       Mark[]
   mezmurEnrollments           MezmurEnrollment[]
-  uploadedMusicFiles          MusicFile[]            @relation("MusicUploadedBy")
-  targetNotifications         Notification[]         @relation("NotificationTarget")
-  permissions                 Permission[]           @relation("MemberPermissions")
-  reviewedPermissions         Permission[]           @relation("ReviewedByAdmin")
+  uploadedMusicFiles          MusicFile[]                @relation("MusicUploadedBy")
+  targetNotifications         Notification[]             @relation("NotificationTarget")
+  permissions                 Permission[]               @relation("MemberPermissions")
+  reviewedPermissions         Permission[]               @relation("ReviewedByAdmin")
   playlists                   Playlist[]
-  markedInstructorAttendances InstructorAttendance[] @relation("InstructorAttendanceMarker")
+  markedInstructorAttendances InstructorAttendance[]     @relation("InstructorAttendanceMarker")
   followUps                   StudentFollowUp[]
-  courseClass                 CourseClass?           @relation(fields: [courseClassId], references: [id])
-  department                  Department?            @relation(fields: [departmentId], references: [id])
+  recommendations             MembershipRecommendation[] @relation("StudentToRecommendation")
+  madeRecommendations         MembershipRecommendation[] @relation("AdminToRecommendation")
+  courseClass                 CourseClass?               @relation(fields: [courseClassId], references: [id])
+  department                  Department?                @relation(fields: [departmentId], references: [id])
 
   @@unique([fullName, grandfatherName])
   @@index([type])
-  @@index([memberType])
   @@index([isActive])
   @@index([departmentId])
+}
+
+model MembershipRecommendation {
+  id              String               @id @default(cuid())
+  studentId       String
+  recommendedById String
+  status          RecommendationStatus @default(PENDING)
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  student       User @relation("StudentToRecommendation", fields: [studentId], references: [id])
+  recommendedBy User @relation("AdminToRecommendation", fields: [recommendedById], references: [id])
+
+  @@index([studentId])
+  @@index([status])
+}
+
+enum RecommendationStatus {
+  PENDING
+  REGISTERED
+  REJECTED
 }
 
 model AcademicYear {

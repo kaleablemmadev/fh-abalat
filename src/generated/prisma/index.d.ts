@@ -24,6 +24,11 @@ export type CourseRegistration = $Result.DefaultSelection<Prisma.$CourseRegistra
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model MembershipRecommendation
+ * 
+ */
+export type MembershipRecommendation = $Result.DefaultSelection<Prisma.$MembershipRecommendationPayload>
+/**
  * Model AcademicYear
  * 
  */
@@ -168,7 +173,16 @@ export type StudentFollowUp = $Result.DefaultSelection<Prisma.$StudentFollowUpPa
  * Enums
  */
 export namespace $Enums {
-  export const CourseOfferingSemester: {
+  export const RecommendationStatus: {
+  PENDING: 'PENDING',
+  REGISTERED: 'REGISTERED',
+  REJECTED: 'REJECTED'
+};
+
+export type RecommendationStatus = (typeof RecommendationStatus)[keyof typeof RecommendationStatus]
+
+
+export const CourseOfferingSemester: {
   FIRST: 'FIRST',
   SECOND: 'SECOND',
   BOTH: 'BOTH'
@@ -332,6 +346,10 @@ export const auditAction: {
 export type auditAction = (typeof auditAction)[keyof typeof auditAction]
 
 }
+
+export type RecommendationStatus = $Enums.RecommendationStatus
+
+export const RecommendationStatus: typeof $Enums.RecommendationStatus
 
 export type CourseOfferingSemester = $Enums.CourseOfferingSemester
 
@@ -545,6 +563,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.membershipRecommendation`: Exposes CRUD operations for the **MembershipRecommendation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MembershipRecommendations
+    * const membershipRecommendations = await prisma.membershipRecommendation.findMany()
+    * ```
+    */
+  get membershipRecommendation(): Prisma.MembershipRecommendationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.academicYear`: Exposes CRUD operations for the **AcademicYear** model.
@@ -1274,6 +1302,7 @@ export namespace Prisma {
   export const ModelName: {
     CourseRegistration: 'CourseRegistration',
     User: 'User',
+    MembershipRecommendation: 'MembershipRecommendation',
     AcademicYear: 'AcademicYear',
     Event: 'Event',
     AttendanceType: 'AttendanceType',
@@ -1317,7 +1346,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "courseRegistration" | "user" | "academicYear" | "event" | "attendanceType" | "attendance" | "permissionType" | "permission" | "eligibilityRule" | "eligibilityCriteria" | "course" | "instructor" | "department" | "courseClass" | "courseEnrollment" | "courseYear" | "mark" | "mezmurEnrollment" | "musicCategory" | "musicFile" | "playlist" | "monthlyMezmurSchedule" | "modePassword" | "adminRegistration" | "auditLog" | "notification" | "announcement" | "courseFreeDay" | "instructorAttendance" | "studentFollowUp"
+      modelProps: "courseRegistration" | "user" | "membershipRecommendation" | "academicYear" | "event" | "attendanceType" | "attendance" | "permissionType" | "permission" | "eligibilityRule" | "eligibilityCriteria" | "course" | "instructor" | "department" | "courseClass" | "courseEnrollment" | "courseYear" | "mark" | "mezmurEnrollment" | "musicCategory" | "musicFile" | "playlist" | "monthlyMezmurSchedule" | "modePassword" | "adminRegistration" | "auditLog" | "notification" | "announcement" | "courseFreeDay" | "instructorAttendance" | "studentFollowUp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1466,6 +1495,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      MembershipRecommendation: {
+        payload: Prisma.$MembershipRecommendationPayload<ExtArgs>
+        fields: Prisma.MembershipRecommendationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MembershipRecommendationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MembershipRecommendationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>
+          }
+          findFirst: {
+            args: Prisma.MembershipRecommendationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MembershipRecommendationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>
+          }
+          findMany: {
+            args: Prisma.MembershipRecommendationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>[]
+          }
+          create: {
+            args: Prisma.MembershipRecommendationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>
+          }
+          createMany: {
+            args: Prisma.MembershipRecommendationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MembershipRecommendationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>[]
+          }
+          delete: {
+            args: Prisma.MembershipRecommendationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>
+          }
+          update: {
+            args: Prisma.MembershipRecommendationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>
+          }
+          deleteMany: {
+            args: Prisma.MembershipRecommendationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MembershipRecommendationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MembershipRecommendationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>[]
+          }
+          upsert: {
+            args: Prisma.MembershipRecommendationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipRecommendationPayload>
+          }
+          aggregate: {
+            args: Prisma.MembershipRecommendationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMembershipRecommendation>
+          }
+          groupBy: {
+            args: Prisma.MembershipRecommendationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MembershipRecommendationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MembershipRecommendationCountArgs<ExtArgs>
+            result: $Utils.Optional<MembershipRecommendationCountAggregateOutputType> | number
           }
         }
       }
@@ -3666,6 +3769,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     courseRegistration?: CourseRegistrationOmit
     user?: UserOmit
+    membershipRecommendation?: MembershipRecommendationOmit
     academicYear?: AcademicYearOmit
     event?: EventOmit
     attendanceType?: AttendanceTypeOmit
@@ -3790,6 +3894,8 @@ export namespace Prisma {
     playlists: number
     markedInstructorAttendances: number
     followUps: number
+    recommendations: number
+    madeRecommendations: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3809,6 +3915,8 @@ export namespace Prisma {
     playlists?: boolean | UserCountOutputTypeCountPlaylistsArgs
     markedInstructorAttendances?: boolean | UserCountOutputTypeCountMarkedInstructorAttendancesArgs
     followUps?: boolean | UserCountOutputTypeCountFollowUpsArgs
+    recommendations?: boolean | UserCountOutputTypeCountRecommendationsArgs
+    madeRecommendations?: boolean | UserCountOutputTypeCountMadeRecommendationsArgs
   }
 
   // Custom InputTypes
@@ -3932,6 +4040,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountFollowUpsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StudentFollowUpWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountRecommendationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MembershipRecommendationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMadeRecommendationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MembershipRecommendationWhereInput
   }
 
 
@@ -5785,9 +5907,9 @@ export namespace Prisma {
     fullName: string | null
     gender: $Enums.genderType | null
     isActive: boolean | null
-    memberType: $Enums.memberType | null
     mode: $Enums.appMode | null
     privateId: string | null
+    coursePrivateId: string | null
     passwordHash: string | null
     phoneNumber: string | null
     registerDate: string | null
@@ -5810,9 +5932,9 @@ export namespace Prisma {
     fullName: string | null
     gender: $Enums.genderType | null
     isActive: boolean | null
-    memberType: $Enums.memberType | null
     mode: $Enums.appMode | null
     privateId: string | null
+    coursePrivateId: string | null
     passwordHash: string | null
     phoneNumber: string | null
     registerDate: string | null
@@ -5835,9 +5957,10 @@ export namespace Prisma {
     fullName: number
     gender: number
     isActive: number
-    memberType: number
+    roles: number
     mode: number
     privateId: number
+    coursePrivateId: number
     passwordHash: number
     phoneNumber: number
     registerDate: number
@@ -5870,9 +5993,9 @@ export namespace Prisma {
     fullName?: true
     gender?: true
     isActive?: true
-    memberType?: true
     mode?: true
     privateId?: true
+    coursePrivateId?: true
     passwordHash?: true
     phoneNumber?: true
     registerDate?: true
@@ -5895,9 +6018,9 @@ export namespace Prisma {
     fullName?: true
     gender?: true
     isActive?: true
-    memberType?: true
     mode?: true
     privateId?: true
+    coursePrivateId?: true
     passwordHash?: true
     phoneNumber?: true
     registerDate?: true
@@ -5920,9 +6043,10 @@ export namespace Prisma {
     fullName?: true
     gender?: true
     isActive?: true
-    memberType?: true
+    roles?: true
     mode?: true
     privateId?: true
+    coursePrivateId?: true
     passwordHash?: true
     phoneNumber?: true
     registerDate?: true
@@ -6032,9 +6156,10 @@ export namespace Prisma {
     fullName: string | null
     gender: $Enums.genderType
     isActive: boolean
-    memberType: $Enums.memberType | null
+    roles: $Enums.memberType[]
     mode: $Enums.appMode | null
     privateId: string | null
+    coursePrivateId: string | null
     passwordHash: string | null
     phoneNumber: string | null
     registerDate: string | null
@@ -6076,9 +6201,10 @@ export namespace Prisma {
     fullName?: boolean
     gender?: boolean
     isActive?: boolean
-    memberType?: boolean
+    roles?: boolean
     mode?: boolean
     privateId?: boolean
+    coursePrivateId?: boolean
     passwordHash?: boolean
     phoneNumber?: boolean
     registerDate?: boolean
@@ -6099,6 +6225,8 @@ export namespace Prisma {
     playlists?: boolean | User$playlistsArgs<ExtArgs>
     markedInstructorAttendances?: boolean | User$markedInstructorAttendancesArgs<ExtArgs>
     followUps?: boolean | User$followUpsArgs<ExtArgs>
+    recommendations?: boolean | User$recommendationsArgs<ExtArgs>
+    madeRecommendations?: boolean | User$madeRecommendationsArgs<ExtArgs>
     courseClass?: boolean | User$courseClassArgs<ExtArgs>
     department?: boolean | User$departmentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -6120,9 +6248,10 @@ export namespace Prisma {
     fullName?: boolean
     gender?: boolean
     isActive?: boolean
-    memberType?: boolean
+    roles?: boolean
     mode?: boolean
     privateId?: boolean
+    coursePrivateId?: boolean
     passwordHash?: boolean
     phoneNumber?: boolean
     registerDate?: boolean
@@ -6147,9 +6276,10 @@ export namespace Prisma {
     fullName?: boolean
     gender?: boolean
     isActive?: boolean
-    memberType?: boolean
+    roles?: boolean
     mode?: boolean
     privateId?: boolean
+    coursePrivateId?: boolean
     passwordHash?: boolean
     phoneNumber?: boolean
     registerDate?: boolean
@@ -6174,16 +6304,17 @@ export namespace Prisma {
     fullName?: boolean
     gender?: boolean
     isActive?: boolean
-    memberType?: boolean
+    roles?: boolean
     mode?: boolean
     privateId?: boolean
+    coursePrivateId?: boolean
     passwordHash?: boolean
     phoneNumber?: boolean
     registerDate?: boolean
     type?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "createdAt" | "updatedAt" | "mustChangePassword" | "address" | "age" | "christianName" | "grandfatherName" | "courseClassId" | "departmentId" | "ethiopianCreatedAt" | "fullName" | "gender" | "isActive" | "memberType" | "mode" | "privateId" | "passwordHash" | "phoneNumber" | "registerDate" | "type", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "createdAt" | "updatedAt" | "mustChangePassword" | "address" | "age" | "christianName" | "grandfatherName" | "courseClassId" | "departmentId" | "ethiopianCreatedAt" | "fullName" | "gender" | "isActive" | "roles" | "mode" | "privateId" | "coursePrivateId" | "passwordHash" | "phoneNumber" | "registerDate" | "type", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     reviewedRegistrations?: boolean | User$reviewedRegistrationsArgs<ExtArgs>
     markedAttendances?: boolean | User$markedAttendancesArgs<ExtArgs>
@@ -6201,6 +6332,8 @@ export namespace Prisma {
     playlists?: boolean | User$playlistsArgs<ExtArgs>
     markedInstructorAttendances?: boolean | User$markedInstructorAttendancesArgs<ExtArgs>
     followUps?: boolean | User$followUpsArgs<ExtArgs>
+    recommendations?: boolean | User$recommendationsArgs<ExtArgs>
+    madeRecommendations?: boolean | User$madeRecommendationsArgs<ExtArgs>
     courseClass?: boolean | User$courseClassArgs<ExtArgs>
     department?: boolean | User$departmentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -6233,6 +6366,8 @@ export namespace Prisma {
       playlists: Prisma.$PlaylistPayload<ExtArgs>[]
       markedInstructorAttendances: Prisma.$InstructorAttendancePayload<ExtArgs>[]
       followUps: Prisma.$StudentFollowUpPayload<ExtArgs>[]
+      recommendations: Prisma.$MembershipRecommendationPayload<ExtArgs>[]
+      madeRecommendations: Prisma.$MembershipRecommendationPayload<ExtArgs>[]
       courseClass: Prisma.$CourseClassPayload<ExtArgs> | null
       department: Prisma.$DepartmentPayload<ExtArgs> | null
     }
@@ -6252,9 +6387,10 @@ export namespace Prisma {
       fullName: string | null
       gender: $Enums.genderType
       isActive: boolean
-      memberType: $Enums.memberType | null
+      roles: $Enums.memberType[]
       mode: $Enums.appMode | null
       privateId: string | null
+      coursePrivateId: string | null
       passwordHash: string | null
       phoneNumber: string | null
       registerDate: string | null
@@ -6669,6 +6805,8 @@ export namespace Prisma {
     playlists<T extends User$playlistsArgs<ExtArgs> = {}>(args?: Subset<T, User$playlistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     markedInstructorAttendances<T extends User$markedInstructorAttendancesArgs<ExtArgs> = {}>(args?: Subset<T, User$markedInstructorAttendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorAttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     followUps<T extends User$followUpsArgs<ExtArgs> = {}>(args?: Subset<T, User$followUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recommendations<T extends User$recommendationsArgs<ExtArgs> = {}>(args?: Subset<T, User$recommendationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    madeRecommendations<T extends User$madeRecommendationsArgs<ExtArgs> = {}>(args?: Subset<T, User$madeRecommendationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     courseClass<T extends User$courseClassArgs<ExtArgs> = {}>(args?: Subset<T, User$courseClassArgs<ExtArgs>>): Prisma__CourseClassClient<$Result.GetResult<Prisma.$CourseClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     department<T extends User$departmentArgs<ExtArgs> = {}>(args?: Subset<T, User$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -6715,9 +6853,10 @@ export namespace Prisma {
     readonly fullName: FieldRef<"User", 'String'>
     readonly gender: FieldRef<"User", 'genderType'>
     readonly isActive: FieldRef<"User", 'Boolean'>
-    readonly memberType: FieldRef<"User", 'memberType'>
+    readonly roles: FieldRef<"User", 'memberType[]'>
     readonly mode: FieldRef<"User", 'appMode'>
     readonly privateId: FieldRef<"User", 'String'>
+    readonly coursePrivateId: FieldRef<"User", 'String'>
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly phoneNumber: FieldRef<"User", 'String'>
     readonly registerDate: FieldRef<"User", 'String'>
@@ -7507,6 +7646,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.recommendations
+   */
+  export type User$recommendationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    where?: MembershipRecommendationWhereInput
+    orderBy?: MembershipRecommendationOrderByWithRelationInput | MembershipRecommendationOrderByWithRelationInput[]
+    cursor?: MembershipRecommendationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MembershipRecommendationScalarFieldEnum | MembershipRecommendationScalarFieldEnum[]
+  }
+
+  /**
+   * User.madeRecommendations
+   */
+  export type User$madeRecommendationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    where?: MembershipRecommendationWhereInput
+    orderBy?: MembershipRecommendationOrderByWithRelationInput | MembershipRecommendationOrderByWithRelationInput[]
+    cursor?: MembershipRecommendationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MembershipRecommendationScalarFieldEnum | MembershipRecommendationScalarFieldEnum[]
+  }
+
+  /**
    * User.courseClass
    */
   export type User$courseClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7560,6 +7747,1090 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MembershipRecommendation
+   */
+
+  export type AggregateMembershipRecommendation = {
+    _count: MembershipRecommendationCountAggregateOutputType | null
+    _min: MembershipRecommendationMinAggregateOutputType | null
+    _max: MembershipRecommendationMaxAggregateOutputType | null
+  }
+
+  export type MembershipRecommendationMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    recommendedById: string | null
+    status: $Enums.RecommendationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MembershipRecommendationMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    recommendedById: string | null
+    status: $Enums.RecommendationStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MembershipRecommendationCountAggregateOutputType = {
+    id: number
+    studentId: number
+    recommendedById: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MembershipRecommendationMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    recommendedById?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MembershipRecommendationMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    recommendedById?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MembershipRecommendationCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    recommendedById?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MembershipRecommendationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MembershipRecommendation to aggregate.
+     */
+    where?: MembershipRecommendationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipRecommendations to fetch.
+     */
+    orderBy?: MembershipRecommendationOrderByWithRelationInput | MembershipRecommendationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MembershipRecommendationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipRecommendations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipRecommendations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MembershipRecommendations
+    **/
+    _count?: true | MembershipRecommendationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MembershipRecommendationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MembershipRecommendationMaxAggregateInputType
+  }
+
+  export type GetMembershipRecommendationAggregateType<T extends MembershipRecommendationAggregateArgs> = {
+        [P in keyof T & keyof AggregateMembershipRecommendation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMembershipRecommendation[P]>
+      : GetScalarType<T[P], AggregateMembershipRecommendation[P]>
+  }
+
+
+
+
+  export type MembershipRecommendationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MembershipRecommendationWhereInput
+    orderBy?: MembershipRecommendationOrderByWithAggregationInput | MembershipRecommendationOrderByWithAggregationInput[]
+    by: MembershipRecommendationScalarFieldEnum[] | MembershipRecommendationScalarFieldEnum
+    having?: MembershipRecommendationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MembershipRecommendationCountAggregateInputType | true
+    _min?: MembershipRecommendationMinAggregateInputType
+    _max?: MembershipRecommendationMaxAggregateInputType
+  }
+
+  export type MembershipRecommendationGroupByOutputType = {
+    id: string
+    studentId: string
+    recommendedById: string
+    status: $Enums.RecommendationStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: MembershipRecommendationCountAggregateOutputType | null
+    _min: MembershipRecommendationMinAggregateOutputType | null
+    _max: MembershipRecommendationMaxAggregateOutputType | null
+  }
+
+  type GetMembershipRecommendationGroupByPayload<T extends MembershipRecommendationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MembershipRecommendationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MembershipRecommendationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MembershipRecommendationGroupByOutputType[P]>
+            : GetScalarType<T[P], MembershipRecommendationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MembershipRecommendationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    recommendedById?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    recommendedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["membershipRecommendation"]>
+
+  export type MembershipRecommendationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    recommendedById?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    recommendedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["membershipRecommendation"]>
+
+  export type MembershipRecommendationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    recommendedById?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    recommendedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["membershipRecommendation"]>
+
+  export type MembershipRecommendationSelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    recommendedById?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MembershipRecommendationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "recommendedById" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["membershipRecommendation"]>
+  export type MembershipRecommendationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    recommendedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MembershipRecommendationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    recommendedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MembershipRecommendationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    recommendedBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MembershipRecommendationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MembershipRecommendation"
+    objects: {
+      student: Prisma.$UserPayload<ExtArgs>
+      recommendedBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      recommendedById: string
+      status: $Enums.RecommendationStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["membershipRecommendation"]>
+    composites: {}
+  }
+
+  type MembershipRecommendationGetPayload<S extends boolean | null | undefined | MembershipRecommendationDefaultArgs> = $Result.GetResult<Prisma.$MembershipRecommendationPayload, S>
+
+  type MembershipRecommendationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MembershipRecommendationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MembershipRecommendationCountAggregateInputType | true
+    }
+
+  export interface MembershipRecommendationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MembershipRecommendation'], meta: { name: 'MembershipRecommendation' } }
+    /**
+     * Find zero or one MembershipRecommendation that matches the filter.
+     * @param {MembershipRecommendationFindUniqueArgs} args - Arguments to find a MembershipRecommendation
+     * @example
+     * // Get one MembershipRecommendation
+     * const membershipRecommendation = await prisma.membershipRecommendation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MembershipRecommendationFindUniqueArgs>(args: SelectSubset<T, MembershipRecommendationFindUniqueArgs<ExtArgs>>): Prisma__MembershipRecommendationClient<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MembershipRecommendation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MembershipRecommendationFindUniqueOrThrowArgs} args - Arguments to find a MembershipRecommendation
+     * @example
+     * // Get one MembershipRecommendation
+     * const membershipRecommendation = await prisma.membershipRecommendation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MembershipRecommendationFindUniqueOrThrowArgs>(args: SelectSubset<T, MembershipRecommendationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MembershipRecommendationClient<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MembershipRecommendation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipRecommendationFindFirstArgs} args - Arguments to find a MembershipRecommendation
+     * @example
+     * // Get one MembershipRecommendation
+     * const membershipRecommendation = await prisma.membershipRecommendation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MembershipRecommendationFindFirstArgs>(args?: SelectSubset<T, MembershipRecommendationFindFirstArgs<ExtArgs>>): Prisma__MembershipRecommendationClient<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MembershipRecommendation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipRecommendationFindFirstOrThrowArgs} args - Arguments to find a MembershipRecommendation
+     * @example
+     * // Get one MembershipRecommendation
+     * const membershipRecommendation = await prisma.membershipRecommendation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MembershipRecommendationFindFirstOrThrowArgs>(args?: SelectSubset<T, MembershipRecommendationFindFirstOrThrowArgs<ExtArgs>>): Prisma__MembershipRecommendationClient<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MembershipRecommendations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipRecommendationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MembershipRecommendations
+     * const membershipRecommendations = await prisma.membershipRecommendation.findMany()
+     * 
+     * // Get first 10 MembershipRecommendations
+     * const membershipRecommendations = await prisma.membershipRecommendation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const membershipRecommendationWithIdOnly = await prisma.membershipRecommendation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MembershipRecommendationFindManyArgs>(args?: SelectSubset<T, MembershipRecommendationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MembershipRecommendation.
+     * @param {MembershipRecommendationCreateArgs} args - Arguments to create a MembershipRecommendation.
+     * @example
+     * // Create one MembershipRecommendation
+     * const MembershipRecommendation = await prisma.membershipRecommendation.create({
+     *   data: {
+     *     // ... data to create a MembershipRecommendation
+     *   }
+     * })
+     * 
+     */
+    create<T extends MembershipRecommendationCreateArgs>(args: SelectSubset<T, MembershipRecommendationCreateArgs<ExtArgs>>): Prisma__MembershipRecommendationClient<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MembershipRecommendations.
+     * @param {MembershipRecommendationCreateManyArgs} args - Arguments to create many MembershipRecommendations.
+     * @example
+     * // Create many MembershipRecommendations
+     * const membershipRecommendation = await prisma.membershipRecommendation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MembershipRecommendationCreateManyArgs>(args?: SelectSubset<T, MembershipRecommendationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MembershipRecommendations and returns the data saved in the database.
+     * @param {MembershipRecommendationCreateManyAndReturnArgs} args - Arguments to create many MembershipRecommendations.
+     * @example
+     * // Create many MembershipRecommendations
+     * const membershipRecommendation = await prisma.membershipRecommendation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MembershipRecommendations and only return the `id`
+     * const membershipRecommendationWithIdOnly = await prisma.membershipRecommendation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MembershipRecommendationCreateManyAndReturnArgs>(args?: SelectSubset<T, MembershipRecommendationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MembershipRecommendation.
+     * @param {MembershipRecommendationDeleteArgs} args - Arguments to delete one MembershipRecommendation.
+     * @example
+     * // Delete one MembershipRecommendation
+     * const MembershipRecommendation = await prisma.membershipRecommendation.delete({
+     *   where: {
+     *     // ... filter to delete one MembershipRecommendation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MembershipRecommendationDeleteArgs>(args: SelectSubset<T, MembershipRecommendationDeleteArgs<ExtArgs>>): Prisma__MembershipRecommendationClient<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MembershipRecommendation.
+     * @param {MembershipRecommendationUpdateArgs} args - Arguments to update one MembershipRecommendation.
+     * @example
+     * // Update one MembershipRecommendation
+     * const membershipRecommendation = await prisma.membershipRecommendation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MembershipRecommendationUpdateArgs>(args: SelectSubset<T, MembershipRecommendationUpdateArgs<ExtArgs>>): Prisma__MembershipRecommendationClient<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MembershipRecommendations.
+     * @param {MembershipRecommendationDeleteManyArgs} args - Arguments to filter MembershipRecommendations to delete.
+     * @example
+     * // Delete a few MembershipRecommendations
+     * const { count } = await prisma.membershipRecommendation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MembershipRecommendationDeleteManyArgs>(args?: SelectSubset<T, MembershipRecommendationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MembershipRecommendations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipRecommendationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MembershipRecommendations
+     * const membershipRecommendation = await prisma.membershipRecommendation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MembershipRecommendationUpdateManyArgs>(args: SelectSubset<T, MembershipRecommendationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MembershipRecommendations and returns the data updated in the database.
+     * @param {MembershipRecommendationUpdateManyAndReturnArgs} args - Arguments to update many MembershipRecommendations.
+     * @example
+     * // Update many MembershipRecommendations
+     * const membershipRecommendation = await prisma.membershipRecommendation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MembershipRecommendations and only return the `id`
+     * const membershipRecommendationWithIdOnly = await prisma.membershipRecommendation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MembershipRecommendationUpdateManyAndReturnArgs>(args: SelectSubset<T, MembershipRecommendationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MembershipRecommendation.
+     * @param {MembershipRecommendationUpsertArgs} args - Arguments to update or create a MembershipRecommendation.
+     * @example
+     * // Update or create a MembershipRecommendation
+     * const membershipRecommendation = await prisma.membershipRecommendation.upsert({
+     *   create: {
+     *     // ... data to create a MembershipRecommendation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MembershipRecommendation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MembershipRecommendationUpsertArgs>(args: SelectSubset<T, MembershipRecommendationUpsertArgs<ExtArgs>>): Prisma__MembershipRecommendationClient<$Result.GetResult<Prisma.$MembershipRecommendationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MembershipRecommendations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipRecommendationCountArgs} args - Arguments to filter MembershipRecommendations to count.
+     * @example
+     * // Count the number of MembershipRecommendations
+     * const count = await prisma.membershipRecommendation.count({
+     *   where: {
+     *     // ... the filter for the MembershipRecommendations we want to count
+     *   }
+     * })
+    **/
+    count<T extends MembershipRecommendationCountArgs>(
+      args?: Subset<T, MembershipRecommendationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MembershipRecommendationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MembershipRecommendation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipRecommendationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MembershipRecommendationAggregateArgs>(args: Subset<T, MembershipRecommendationAggregateArgs>): Prisma.PrismaPromise<GetMembershipRecommendationAggregateType<T>>
+
+    /**
+     * Group by MembershipRecommendation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipRecommendationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MembershipRecommendationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MembershipRecommendationGroupByArgs['orderBy'] }
+        : { orderBy?: MembershipRecommendationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MembershipRecommendationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMembershipRecommendationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MembershipRecommendation model
+   */
+  readonly fields: MembershipRecommendationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MembershipRecommendation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MembershipRecommendationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    recommendedBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MembershipRecommendation model
+   */
+  interface MembershipRecommendationFieldRefs {
+    readonly id: FieldRef<"MembershipRecommendation", 'String'>
+    readonly studentId: FieldRef<"MembershipRecommendation", 'String'>
+    readonly recommendedById: FieldRef<"MembershipRecommendation", 'String'>
+    readonly status: FieldRef<"MembershipRecommendation", 'RecommendationStatus'>
+    readonly createdAt: FieldRef<"MembershipRecommendation", 'DateTime'>
+    readonly updatedAt: FieldRef<"MembershipRecommendation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MembershipRecommendation findUnique
+   */
+  export type MembershipRecommendationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipRecommendation to fetch.
+     */
+    where: MembershipRecommendationWhereUniqueInput
+  }
+
+  /**
+   * MembershipRecommendation findUniqueOrThrow
+   */
+  export type MembershipRecommendationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipRecommendation to fetch.
+     */
+    where: MembershipRecommendationWhereUniqueInput
+  }
+
+  /**
+   * MembershipRecommendation findFirst
+   */
+  export type MembershipRecommendationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipRecommendation to fetch.
+     */
+    where?: MembershipRecommendationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipRecommendations to fetch.
+     */
+    orderBy?: MembershipRecommendationOrderByWithRelationInput | MembershipRecommendationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MembershipRecommendations.
+     */
+    cursor?: MembershipRecommendationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipRecommendations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipRecommendations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MembershipRecommendations.
+     */
+    distinct?: MembershipRecommendationScalarFieldEnum | MembershipRecommendationScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipRecommendation findFirstOrThrow
+   */
+  export type MembershipRecommendationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipRecommendation to fetch.
+     */
+    where?: MembershipRecommendationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipRecommendations to fetch.
+     */
+    orderBy?: MembershipRecommendationOrderByWithRelationInput | MembershipRecommendationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MembershipRecommendations.
+     */
+    cursor?: MembershipRecommendationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipRecommendations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipRecommendations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MembershipRecommendations.
+     */
+    distinct?: MembershipRecommendationScalarFieldEnum | MembershipRecommendationScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipRecommendation findMany
+   */
+  export type MembershipRecommendationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * Filter, which MembershipRecommendations to fetch.
+     */
+    where?: MembershipRecommendationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipRecommendations to fetch.
+     */
+    orderBy?: MembershipRecommendationOrderByWithRelationInput | MembershipRecommendationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MembershipRecommendations.
+     */
+    cursor?: MembershipRecommendationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipRecommendations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipRecommendations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MembershipRecommendations.
+     */
+    distinct?: MembershipRecommendationScalarFieldEnum | MembershipRecommendationScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipRecommendation create
+   */
+  export type MembershipRecommendationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MembershipRecommendation.
+     */
+    data: XOR<MembershipRecommendationCreateInput, MembershipRecommendationUncheckedCreateInput>
+  }
+
+  /**
+   * MembershipRecommendation createMany
+   */
+  export type MembershipRecommendationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MembershipRecommendations.
+     */
+    data: MembershipRecommendationCreateManyInput | MembershipRecommendationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MembershipRecommendation createManyAndReturn
+   */
+  export type MembershipRecommendationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * The data used to create many MembershipRecommendations.
+     */
+    data: MembershipRecommendationCreateManyInput | MembershipRecommendationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MembershipRecommendation update
+   */
+  export type MembershipRecommendationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MembershipRecommendation.
+     */
+    data: XOR<MembershipRecommendationUpdateInput, MembershipRecommendationUncheckedUpdateInput>
+    /**
+     * Choose, which MembershipRecommendation to update.
+     */
+    where: MembershipRecommendationWhereUniqueInput
+  }
+
+  /**
+   * MembershipRecommendation updateMany
+   */
+  export type MembershipRecommendationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MembershipRecommendations.
+     */
+    data: XOR<MembershipRecommendationUpdateManyMutationInput, MembershipRecommendationUncheckedUpdateManyInput>
+    /**
+     * Filter which MembershipRecommendations to update
+     */
+    where?: MembershipRecommendationWhereInput
+    /**
+     * Limit how many MembershipRecommendations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MembershipRecommendation updateManyAndReturn
+   */
+  export type MembershipRecommendationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * The data used to update MembershipRecommendations.
+     */
+    data: XOR<MembershipRecommendationUpdateManyMutationInput, MembershipRecommendationUncheckedUpdateManyInput>
+    /**
+     * Filter which MembershipRecommendations to update
+     */
+    where?: MembershipRecommendationWhereInput
+    /**
+     * Limit how many MembershipRecommendations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MembershipRecommendation upsert
+   */
+  export type MembershipRecommendationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MembershipRecommendation to update in case it exists.
+     */
+    where: MembershipRecommendationWhereUniqueInput
+    /**
+     * In case the MembershipRecommendation found by the `where` argument doesn't exist, create a new MembershipRecommendation with this data.
+     */
+    create: XOR<MembershipRecommendationCreateInput, MembershipRecommendationUncheckedCreateInput>
+    /**
+     * In case the MembershipRecommendation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MembershipRecommendationUpdateInput, MembershipRecommendationUncheckedUpdateInput>
+  }
+
+  /**
+   * MembershipRecommendation delete
+   */
+  export type MembershipRecommendationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
+    /**
+     * Filter which MembershipRecommendation to delete.
+     */
+    where: MembershipRecommendationWhereUniqueInput
+  }
+
+  /**
+   * MembershipRecommendation deleteMany
+   */
+  export type MembershipRecommendationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MembershipRecommendations to delete
+     */
+    where?: MembershipRecommendationWhereInput
+    /**
+     * Limit how many MembershipRecommendations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MembershipRecommendation without action
+   */
+  export type MembershipRecommendationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipRecommendation
+     */
+    select?: MembershipRecommendationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipRecommendation
+     */
+    omit?: MembershipRecommendationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MembershipRecommendationInclude<ExtArgs> | null
   }
 
 
@@ -41023,9 +42294,10 @@ export namespace Prisma {
     fullName: 'fullName',
     gender: 'gender',
     isActive: 'isActive',
-    memberType: 'memberType',
+    roles: 'roles',
     mode: 'mode',
     privateId: 'privateId',
+    coursePrivateId: 'coursePrivateId',
     passwordHash: 'passwordHash',
     phoneNumber: 'phoneNumber',
     registerDate: 'registerDate',
@@ -41033,6 +42305,18 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const MembershipRecommendationScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    recommendedById: 'recommendedById',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MembershipRecommendationScalarFieldEnum = (typeof MembershipRecommendationScalarFieldEnum)[keyof typeof MembershipRecommendationScalarFieldEnum]
 
 
   export const AcademicYearScalarFieldEnum: {
@@ -41613,16 +42897,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'memberType'
+   * Reference to a field of type 'memberType[]'
    */
-  export type EnummemberTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'memberType'>
+  export type ListEnummemberTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'memberType[]'>
     
 
 
   /**
-   * Reference to a field of type 'memberType[]'
+   * Reference to a field of type 'memberType'
    */
-  export type ListEnummemberTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'memberType[]'>
+  export type EnummemberTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'memberType'>
     
 
 
@@ -41651,6 +42935,20 @@ export namespace Prisma {
    * Reference to a field of type 'userType[]'
    */
   export type ListEnumuserTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'userType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RecommendationStatus'
+   */
+  export type EnumRecommendationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecommendationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'RecommendationStatus[]'
+   */
+  export type ListEnumRecommendationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecommendationStatus[]'>
     
 
 
@@ -41964,9 +43262,10 @@ export namespace Prisma {
     fullName?: StringNullableFilter<"User"> | string | null
     gender?: EnumgenderTypeFilter<"User"> | $Enums.genderType
     isActive?: BoolFilter<"User"> | boolean
-    memberType?: EnummemberTypeNullableFilter<"User"> | $Enums.memberType | null
+    roles?: EnummemberTypeNullableListFilter<"User">
     mode?: EnumappModeNullableFilter<"User"> | $Enums.appMode | null
     privateId?: StringNullableFilter<"User"> | string | null
+    coursePrivateId?: StringNullableFilter<"User"> | string | null
     passwordHash?: StringNullableFilter<"User"> | string | null
     phoneNumber?: StringNullableFilter<"User"> | string | null
     registerDate?: StringNullableFilter<"User"> | string | null
@@ -41987,6 +43286,8 @@ export namespace Prisma {
     playlists?: PlaylistListRelationFilter
     markedInstructorAttendances?: InstructorAttendanceListRelationFilter
     followUps?: StudentFollowUpListRelationFilter
+    recommendations?: MembershipRecommendationListRelationFilter
+    madeRecommendations?: MembershipRecommendationListRelationFilter
     courseClass?: XOR<CourseClassNullableScalarRelationFilter, CourseClassWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
   }
@@ -42007,9 +43308,10 @@ export namespace Prisma {
     fullName?: SortOrderInput | SortOrder
     gender?: SortOrder
     isActive?: SortOrder
-    memberType?: SortOrderInput | SortOrder
+    roles?: SortOrder
     mode?: SortOrderInput | SortOrder
     privateId?: SortOrderInput | SortOrder
+    coursePrivateId?: SortOrderInput | SortOrder
     passwordHash?: SortOrderInput | SortOrder
     phoneNumber?: SortOrderInput | SortOrder
     registerDate?: SortOrderInput | SortOrder
@@ -42030,6 +43332,8 @@ export namespace Prisma {
     playlists?: PlaylistOrderByRelationAggregateInput
     markedInstructorAttendances?: InstructorAttendanceOrderByRelationAggregateInput
     followUps?: StudentFollowUpOrderByRelationAggregateInput
+    recommendations?: MembershipRecommendationOrderByRelationAggregateInput
+    madeRecommendations?: MembershipRecommendationOrderByRelationAggregateInput
     courseClass?: CourseClassOrderByWithRelationInput
     department?: DepartmentOrderByWithRelationInput
   }
@@ -42038,6 +43342,7 @@ export namespace Prisma {
     id?: string
     email?: string
     privateId?: string
+    coursePrivateId?: string
     fullName_grandfatherName?: UserFullNameGrandfatherNameCompoundUniqueInput
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
@@ -42055,7 +43360,7 @@ export namespace Prisma {
     fullName?: StringNullableFilter<"User"> | string | null
     gender?: EnumgenderTypeFilter<"User"> | $Enums.genderType
     isActive?: BoolFilter<"User"> | boolean
-    memberType?: EnummemberTypeNullableFilter<"User"> | $Enums.memberType | null
+    roles?: EnummemberTypeNullableListFilter<"User">
     mode?: EnumappModeNullableFilter<"User"> | $Enums.appMode | null
     passwordHash?: StringNullableFilter<"User"> | string | null
     phoneNumber?: StringNullableFilter<"User"> | string | null
@@ -42077,9 +43382,11 @@ export namespace Prisma {
     playlists?: PlaylistListRelationFilter
     markedInstructorAttendances?: InstructorAttendanceListRelationFilter
     followUps?: StudentFollowUpListRelationFilter
+    recommendations?: MembershipRecommendationListRelationFilter
+    madeRecommendations?: MembershipRecommendationListRelationFilter
     courseClass?: XOR<CourseClassNullableScalarRelationFilter, CourseClassWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
-  }, "id" | "email" | "privateId" | "fullName_grandfatherName">
+  }, "id" | "email" | "privateId" | "coursePrivateId" | "fullName_grandfatherName">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -42097,9 +43404,10 @@ export namespace Prisma {
     fullName?: SortOrderInput | SortOrder
     gender?: SortOrder
     isActive?: SortOrder
-    memberType?: SortOrderInput | SortOrder
+    roles?: SortOrder
     mode?: SortOrderInput | SortOrder
     privateId?: SortOrderInput | SortOrder
+    coursePrivateId?: SortOrderInput | SortOrder
     passwordHash?: SortOrderInput | SortOrder
     phoneNumber?: SortOrderInput | SortOrder
     registerDate?: SortOrderInput | SortOrder
@@ -42130,13 +43438,77 @@ export namespace Prisma {
     fullName?: StringNullableWithAggregatesFilter<"User"> | string | null
     gender?: EnumgenderTypeWithAggregatesFilter<"User"> | $Enums.genderType
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
-    memberType?: EnummemberTypeNullableWithAggregatesFilter<"User"> | $Enums.memberType | null
+    roles?: EnummemberTypeNullableListFilter<"User">
     mode?: EnumappModeNullableWithAggregatesFilter<"User"> | $Enums.appMode | null
     privateId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    coursePrivateId?: StringNullableWithAggregatesFilter<"User"> | string | null
     passwordHash?: StringNullableWithAggregatesFilter<"User"> | string | null
     phoneNumber?: StringNullableWithAggregatesFilter<"User"> | string | null
     registerDate?: StringNullableWithAggregatesFilter<"User"> | string | null
     type?: EnumuserTypeWithAggregatesFilter<"User"> | $Enums.userType
+  }
+
+  export type MembershipRecommendationWhereInput = {
+    AND?: MembershipRecommendationWhereInput | MembershipRecommendationWhereInput[]
+    OR?: MembershipRecommendationWhereInput[]
+    NOT?: MembershipRecommendationWhereInput | MembershipRecommendationWhereInput[]
+    id?: StringFilter<"MembershipRecommendation"> | string
+    studentId?: StringFilter<"MembershipRecommendation"> | string
+    recommendedById?: StringFilter<"MembershipRecommendation"> | string
+    status?: EnumRecommendationStatusFilter<"MembershipRecommendation"> | $Enums.RecommendationStatus
+    createdAt?: DateTimeFilter<"MembershipRecommendation"> | Date | string
+    updatedAt?: DateTimeFilter<"MembershipRecommendation"> | Date | string
+    student?: XOR<UserScalarRelationFilter, UserWhereInput>
+    recommendedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type MembershipRecommendationOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    recommendedById?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    student?: UserOrderByWithRelationInput
+    recommendedBy?: UserOrderByWithRelationInput
+  }
+
+  export type MembershipRecommendationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MembershipRecommendationWhereInput | MembershipRecommendationWhereInput[]
+    OR?: MembershipRecommendationWhereInput[]
+    NOT?: MembershipRecommendationWhereInput | MembershipRecommendationWhereInput[]
+    studentId?: StringFilter<"MembershipRecommendation"> | string
+    recommendedById?: StringFilter<"MembershipRecommendation"> | string
+    status?: EnumRecommendationStatusFilter<"MembershipRecommendation"> | $Enums.RecommendationStatus
+    createdAt?: DateTimeFilter<"MembershipRecommendation"> | Date | string
+    updatedAt?: DateTimeFilter<"MembershipRecommendation"> | Date | string
+    student?: XOR<UserScalarRelationFilter, UserWhereInput>
+    recommendedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type MembershipRecommendationOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    recommendedById?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MembershipRecommendationCountOrderByAggregateInput
+    _max?: MembershipRecommendationMaxOrderByAggregateInput
+    _min?: MembershipRecommendationMinOrderByAggregateInput
+  }
+
+  export type MembershipRecommendationScalarWhereWithAggregatesInput = {
+    AND?: MembershipRecommendationScalarWhereWithAggregatesInput | MembershipRecommendationScalarWhereWithAggregatesInput[]
+    OR?: MembershipRecommendationScalarWhereWithAggregatesInput[]
+    NOT?: MembershipRecommendationScalarWhereWithAggregatesInput | MembershipRecommendationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MembershipRecommendation"> | string
+    studentId?: StringWithAggregatesFilter<"MembershipRecommendation"> | string
+    recommendedById?: StringWithAggregatesFilter<"MembershipRecommendation"> | string
+    status?: EnumRecommendationStatusWithAggregatesFilter<"MembershipRecommendation"> | $Enums.RecommendationStatus
+    createdAt?: DateTimeWithAggregatesFilter<"MembershipRecommendation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MembershipRecommendation"> | Date | string
   }
 
   export type AcademicYearWhereInput = {
@@ -44768,9 +46140,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -44791,6 +46164,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -44811,9 +46186,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -44834,6 +46210,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserUpdateInput = {
@@ -44850,9 +46228,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44873,6 +46252,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -44893,9 +46274,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44916,6 +46298,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -44934,9 +46318,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -44957,9 +46342,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -44982,13 +46368,75 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
     type?: EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
+  }
+
+  export type MembershipRecommendationCreateInput = {
+    id?: string
+    status?: $Enums.RecommendationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: UserCreateNestedOneWithoutRecommendationsInput
+    recommendedBy: UserCreateNestedOneWithoutMadeRecommendationsInput
+  }
+
+  export type MembershipRecommendationUncheckedCreateInput = {
+    id?: string
+    studentId: string
+    recommendedById: string
+    status?: $Enums.RecommendationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipRecommendationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: UserUpdateOneRequiredWithoutRecommendationsNestedInput
+    recommendedBy?: UserUpdateOneRequiredWithoutMadeRecommendationsNestedInput
+  }
+
+  export type MembershipRecommendationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    recommendedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipRecommendationCreateManyInput = {
+    id?: string
+    studentId: string
+    recommendedById: string
+    status?: $Enums.RecommendationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipRecommendationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipRecommendationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    recommendedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AcademicYearCreateInput = {
@@ -48004,11 +49452,12 @@ export namespace Prisma {
     not?: NestedEnumgenderTypeFilter<$PrismaModel> | $Enums.genderType
   }
 
-  export type EnummemberTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.memberType | EnummemberTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnummemberTypeNullableFilter<$PrismaModel> | $Enums.memberType | null
+  export type EnummemberTypeNullableListFilter<$PrismaModel = never> = {
+    equals?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
+    has?: $Enums.memberType | EnummemberTypeFieldRefInput<$PrismaModel> | null
+    hasEvery?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel>
+    hasSome?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
   }
 
   export type EnumappModeNullableFilter<$PrismaModel = never> = {
@@ -48109,6 +49558,12 @@ export namespace Prisma {
     none?: StudentFollowUpWhereInput
   }
 
+  export type MembershipRecommendationListRelationFilter = {
+    every?: MembershipRecommendationWhereInput
+    some?: MembershipRecommendationWhereInput
+    none?: MembershipRecommendationWhereInput
+  }
+
   export type CourseClassNullableScalarRelationFilter = {
     is?: CourseClassWhereInput | null
     isNot?: CourseClassWhereInput | null
@@ -48175,6 +49630,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type MembershipRecommendationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserFullNameGrandfatherNameCompoundUniqueInput = {
     fullName: string
     grandfatherName: string
@@ -48196,9 +49655,10 @@ export namespace Prisma {
     fullName?: SortOrder
     gender?: SortOrder
     isActive?: SortOrder
-    memberType?: SortOrder
+    roles?: SortOrder
     mode?: SortOrder
     privateId?: SortOrder
+    coursePrivateId?: SortOrder
     passwordHash?: SortOrder
     phoneNumber?: SortOrder
     registerDate?: SortOrder
@@ -48225,9 +49685,9 @@ export namespace Prisma {
     fullName?: SortOrder
     gender?: SortOrder
     isActive?: SortOrder
-    memberType?: SortOrder
     mode?: SortOrder
     privateId?: SortOrder
+    coursePrivateId?: SortOrder
     passwordHash?: SortOrder
     phoneNumber?: SortOrder
     registerDate?: SortOrder
@@ -48250,9 +49710,9 @@ export namespace Prisma {
     fullName?: SortOrder
     gender?: SortOrder
     isActive?: SortOrder
-    memberType?: SortOrder
     mode?: SortOrder
     privateId?: SortOrder
+    coursePrivateId?: SortOrder
     passwordHash?: SortOrder
     phoneNumber?: SortOrder
     registerDate?: SortOrder
@@ -48297,16 +49757,6 @@ export namespace Prisma {
     _max?: NestedEnumgenderTypeFilter<$PrismaModel>
   }
 
-  export type EnummemberTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.memberType | EnummemberTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnummemberTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.memberType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnummemberTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnummemberTypeNullableFilter<$PrismaModel>
-  }
-
   export type EnumappModeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel> | null
     in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel> | null
@@ -48325,6 +49775,50 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumuserTypeFilter<$PrismaModel>
     _max?: NestedEnumuserTypeFilter<$PrismaModel>
+  }
+
+  export type EnumRecommendationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecommendationStatus | EnumRecommendationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RecommendationStatus[] | ListEnumRecommendationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RecommendationStatus[] | ListEnumRecommendationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecommendationStatusFilter<$PrismaModel> | $Enums.RecommendationStatus
+  }
+
+  export type MembershipRecommendationCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    recommendedById?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MembershipRecommendationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    recommendedById?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MembershipRecommendationMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    recommendedById?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumRecommendationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecommendationStatus | EnumRecommendationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RecommendationStatus[] | ListEnumRecommendationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RecommendationStatus[] | ListEnumRecommendationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecommendationStatusWithAggregatesFilter<$PrismaModel> | $Enums.RecommendationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecommendationStatusFilter<$PrismaModel>
+    _max?: NestedEnumRecommendationStatusFilter<$PrismaModel>
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -48437,14 +49931,6 @@ export namespace Prisma {
     in?: $Enums.eventType[] | ListEnumeventTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.eventType[] | ListEnumeventTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumeventTypeFilter<$PrismaModel> | $Enums.eventType
-  }
-
-  export type EnummemberTypeNullableListFilter<$PrismaModel = never> = {
-    equals?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    has?: $Enums.memberType | EnummemberTypeFieldRefInput<$PrismaModel> | null
-    hasEvery?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel>
-    hasSome?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
   }
 
   export type EnumappModeFilter<$PrismaModel = never> = {
@@ -50262,6 +51748,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRegistrationsInput, UserUpdateWithoutRegistrationsInput>, UserUncheckedUpdateWithoutRegistrationsInput>
   }
 
+  export type UserCreaterolesInput = {
+    set: $Enums.memberType[]
+  }
+
   export type AdminRegistrationCreateNestedManyWithoutReviewedByInput = {
     create?: XOR<AdminRegistrationCreateWithoutReviewedByInput, AdminRegistrationUncheckedCreateWithoutReviewedByInput> | AdminRegistrationCreateWithoutReviewedByInput[] | AdminRegistrationUncheckedCreateWithoutReviewedByInput[]
     connectOrCreate?: AdminRegistrationCreateOrConnectWithoutReviewedByInput | AdminRegistrationCreateOrConnectWithoutReviewedByInput[]
@@ -50372,6 +51862,20 @@ export namespace Prisma {
     connectOrCreate?: StudentFollowUpCreateOrConnectWithoutStudentInput | StudentFollowUpCreateOrConnectWithoutStudentInput[]
     createMany?: StudentFollowUpCreateManyStudentInputEnvelope
     connect?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+  }
+
+  export type MembershipRecommendationCreateNestedManyWithoutStudentInput = {
+    create?: XOR<MembershipRecommendationCreateWithoutStudentInput, MembershipRecommendationUncheckedCreateWithoutStudentInput> | MembershipRecommendationCreateWithoutStudentInput[] | MembershipRecommendationUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: MembershipRecommendationCreateOrConnectWithoutStudentInput | MembershipRecommendationCreateOrConnectWithoutStudentInput[]
+    createMany?: MembershipRecommendationCreateManyStudentInputEnvelope
+    connect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+  }
+
+  export type MembershipRecommendationCreateNestedManyWithoutRecommendedByInput = {
+    create?: XOR<MembershipRecommendationCreateWithoutRecommendedByInput, MembershipRecommendationUncheckedCreateWithoutRecommendedByInput> | MembershipRecommendationCreateWithoutRecommendedByInput[] | MembershipRecommendationUncheckedCreateWithoutRecommendedByInput[]
+    connectOrCreate?: MembershipRecommendationCreateOrConnectWithoutRecommendedByInput | MembershipRecommendationCreateOrConnectWithoutRecommendedByInput[]
+    createMany?: MembershipRecommendationCreateManyRecommendedByInputEnvelope
+    connect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
   }
 
   export type CourseClassCreateNestedOneWithoutUsersInput = {
@@ -50498,6 +52002,20 @@ export namespace Prisma {
     connect?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
   }
 
+  export type MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<MembershipRecommendationCreateWithoutStudentInput, MembershipRecommendationUncheckedCreateWithoutStudentInput> | MembershipRecommendationCreateWithoutStudentInput[] | MembershipRecommendationUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: MembershipRecommendationCreateOrConnectWithoutStudentInput | MembershipRecommendationCreateOrConnectWithoutStudentInput[]
+    createMany?: MembershipRecommendationCreateManyStudentInputEnvelope
+    connect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+  }
+
+  export type MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput = {
+    create?: XOR<MembershipRecommendationCreateWithoutRecommendedByInput, MembershipRecommendationUncheckedCreateWithoutRecommendedByInput> | MembershipRecommendationCreateWithoutRecommendedByInput[] | MembershipRecommendationUncheckedCreateWithoutRecommendedByInput[]
+    connectOrCreate?: MembershipRecommendationCreateOrConnectWithoutRecommendedByInput | MembershipRecommendationCreateOrConnectWithoutRecommendedByInput[]
+    createMany?: MembershipRecommendationCreateManyRecommendedByInputEnvelope
+    connect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -50514,8 +52032,9 @@ export namespace Prisma {
     set?: $Enums.genderType
   }
 
-  export type NullableEnummemberTypeFieldUpdateOperationsInput = {
-    set?: $Enums.memberType | null
+  export type UserUpdaterolesInput = {
+    set?: $Enums.memberType[]
+    push?: $Enums.memberType | $Enums.memberType[]
   }
 
   export type NullableEnumappModeFieldUpdateOperationsInput = {
@@ -50748,6 +52267,34 @@ export namespace Prisma {
     update?: StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput | StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: StudentFollowUpUpdateManyWithWhereWithoutStudentInput | StudentFollowUpUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: StudentFollowUpScalarWhereInput | StudentFollowUpScalarWhereInput[]
+  }
+
+  export type MembershipRecommendationUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<MembershipRecommendationCreateWithoutStudentInput, MembershipRecommendationUncheckedCreateWithoutStudentInput> | MembershipRecommendationCreateWithoutStudentInput[] | MembershipRecommendationUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: MembershipRecommendationCreateOrConnectWithoutStudentInput | MembershipRecommendationCreateOrConnectWithoutStudentInput[]
+    upsert?: MembershipRecommendationUpsertWithWhereUniqueWithoutStudentInput | MembershipRecommendationUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: MembershipRecommendationCreateManyStudentInputEnvelope
+    set?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    disconnect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    delete?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    connect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    update?: MembershipRecommendationUpdateWithWhereUniqueWithoutStudentInput | MembershipRecommendationUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: MembershipRecommendationUpdateManyWithWhereWithoutStudentInput | MembershipRecommendationUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: MembershipRecommendationScalarWhereInput | MembershipRecommendationScalarWhereInput[]
+  }
+
+  export type MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput = {
+    create?: XOR<MembershipRecommendationCreateWithoutRecommendedByInput, MembershipRecommendationUncheckedCreateWithoutRecommendedByInput> | MembershipRecommendationCreateWithoutRecommendedByInput[] | MembershipRecommendationUncheckedCreateWithoutRecommendedByInput[]
+    connectOrCreate?: MembershipRecommendationCreateOrConnectWithoutRecommendedByInput | MembershipRecommendationCreateOrConnectWithoutRecommendedByInput[]
+    upsert?: MembershipRecommendationUpsertWithWhereUniqueWithoutRecommendedByInput | MembershipRecommendationUpsertWithWhereUniqueWithoutRecommendedByInput[]
+    createMany?: MembershipRecommendationCreateManyRecommendedByInputEnvelope
+    set?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    disconnect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    delete?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    connect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    update?: MembershipRecommendationUpdateWithWhereUniqueWithoutRecommendedByInput | MembershipRecommendationUpdateWithWhereUniqueWithoutRecommendedByInput[]
+    updateMany?: MembershipRecommendationUpdateManyWithWhereWithoutRecommendedByInput | MembershipRecommendationUpdateManyWithWhereWithoutRecommendedByInput[]
+    deleteMany?: MembershipRecommendationScalarWhereInput | MembershipRecommendationScalarWhereInput[]
   }
 
   export type CourseClassUpdateOneWithoutUsersNestedInput = {
@@ -50992,6 +52539,66 @@ export namespace Prisma {
     update?: StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput | StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: StudentFollowUpUpdateManyWithWhereWithoutStudentInput | StudentFollowUpUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: StudentFollowUpScalarWhereInput | StudentFollowUpScalarWhereInput[]
+  }
+
+  export type MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<MembershipRecommendationCreateWithoutStudentInput, MembershipRecommendationUncheckedCreateWithoutStudentInput> | MembershipRecommendationCreateWithoutStudentInput[] | MembershipRecommendationUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: MembershipRecommendationCreateOrConnectWithoutStudentInput | MembershipRecommendationCreateOrConnectWithoutStudentInput[]
+    upsert?: MembershipRecommendationUpsertWithWhereUniqueWithoutStudentInput | MembershipRecommendationUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: MembershipRecommendationCreateManyStudentInputEnvelope
+    set?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    disconnect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    delete?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    connect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    update?: MembershipRecommendationUpdateWithWhereUniqueWithoutStudentInput | MembershipRecommendationUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: MembershipRecommendationUpdateManyWithWhereWithoutStudentInput | MembershipRecommendationUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: MembershipRecommendationScalarWhereInput | MembershipRecommendationScalarWhereInput[]
+  }
+
+  export type MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput = {
+    create?: XOR<MembershipRecommendationCreateWithoutRecommendedByInput, MembershipRecommendationUncheckedCreateWithoutRecommendedByInput> | MembershipRecommendationCreateWithoutRecommendedByInput[] | MembershipRecommendationUncheckedCreateWithoutRecommendedByInput[]
+    connectOrCreate?: MembershipRecommendationCreateOrConnectWithoutRecommendedByInput | MembershipRecommendationCreateOrConnectWithoutRecommendedByInput[]
+    upsert?: MembershipRecommendationUpsertWithWhereUniqueWithoutRecommendedByInput | MembershipRecommendationUpsertWithWhereUniqueWithoutRecommendedByInput[]
+    createMany?: MembershipRecommendationCreateManyRecommendedByInputEnvelope
+    set?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    disconnect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    delete?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    connect?: MembershipRecommendationWhereUniqueInput | MembershipRecommendationWhereUniqueInput[]
+    update?: MembershipRecommendationUpdateWithWhereUniqueWithoutRecommendedByInput | MembershipRecommendationUpdateWithWhereUniqueWithoutRecommendedByInput[]
+    updateMany?: MembershipRecommendationUpdateManyWithWhereWithoutRecommendedByInput | MembershipRecommendationUpdateManyWithWhereWithoutRecommendedByInput[]
+    deleteMany?: MembershipRecommendationScalarWhereInput | MembershipRecommendationScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutRecommendationsInput = {
+    create?: XOR<UserCreateWithoutRecommendationsInput, UserUncheckedCreateWithoutRecommendationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRecommendationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutMadeRecommendationsInput = {
+    create?: XOR<UserCreateWithoutMadeRecommendationsInput, UserUncheckedCreateWithoutMadeRecommendationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMadeRecommendationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumRecommendationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RecommendationStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutRecommendationsNestedInput = {
+    create?: XOR<UserCreateWithoutRecommendationsInput, UserUncheckedCreateWithoutRecommendationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRecommendationsInput
+    upsert?: UserUpsertWithoutRecommendationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRecommendationsInput, UserUpdateWithoutRecommendationsInput>, UserUncheckedUpdateWithoutRecommendationsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutMadeRecommendationsNestedInput = {
+    create?: XOR<UserCreateWithoutMadeRecommendationsInput, UserUncheckedCreateWithoutMadeRecommendationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMadeRecommendationsInput
+    upsert?: UserUpsertWithoutMadeRecommendationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMadeRecommendationsInput, UserUpdateWithoutMadeRecommendationsInput>, UserUncheckedUpdateWithoutMadeRecommendationsInput>
   }
 
   export type CourseClassCreateNestedManyWithoutAcademicYearInput = {
@@ -53051,13 +54658,6 @@ export namespace Prisma {
     not?: NestedEnumgenderTypeFilter<$PrismaModel> | $Enums.genderType
   }
 
-  export type NestedEnummemberTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.memberType | EnummemberTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnummemberTypeNullableFilter<$PrismaModel> | $Enums.memberType | null
-  }
-
   export type NestedEnumappModeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel> | null
     in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel> | null
@@ -53117,16 +54717,6 @@ export namespace Prisma {
     _max?: NestedEnumgenderTypeFilter<$PrismaModel>
   }
 
-  export type NestedEnummemberTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.memberType | EnummemberTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.memberType[] | ListEnummemberTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnummemberTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.memberType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnummemberTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnummemberTypeNullableFilter<$PrismaModel>
-  }
-
   export type NestedEnumappModeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.appMode | EnumappModeFieldRefInput<$PrismaModel> | null
     in?: $Enums.appMode[] | ListEnumappModeFieldRefInput<$PrismaModel> | null
@@ -53145,6 +54735,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumuserTypeFilter<$PrismaModel>
     _max?: NestedEnumuserTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRecommendationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecommendationStatus | EnumRecommendationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RecommendationStatus[] | ListEnumRecommendationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RecommendationStatus[] | ListEnumRecommendationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecommendationStatusFilter<$PrismaModel> | $Enums.RecommendationStatus
+  }
+
+  export type NestedEnumRecommendationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RecommendationStatus | EnumRecommendationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RecommendationStatus[] | ListEnumRecommendationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RecommendationStatus[] | ListEnumRecommendationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRecommendationStatusWithAggregatesFilter<$PrismaModel> | $Enums.RecommendationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRecommendationStatusFilter<$PrismaModel>
+    _max?: NestedEnumRecommendationStatusFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -53469,9 +55076,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -53491,6 +55099,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -53511,9 +55121,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -53533,6 +55144,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -53565,9 +55178,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53587,6 +55201,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -53607,9 +55223,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53629,6 +55246,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type AdminRegistrationCreateWithoutReviewedByInput = {
@@ -54243,6 +55862,58 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MembershipRecommendationCreateWithoutStudentInput = {
+    id?: string
+    status?: $Enums.RecommendationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recommendedBy: UserCreateNestedOneWithoutMadeRecommendationsInput
+  }
+
+  export type MembershipRecommendationUncheckedCreateWithoutStudentInput = {
+    id?: string
+    recommendedById: string
+    status?: $Enums.RecommendationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipRecommendationCreateOrConnectWithoutStudentInput = {
+    where: MembershipRecommendationWhereUniqueInput
+    create: XOR<MembershipRecommendationCreateWithoutStudentInput, MembershipRecommendationUncheckedCreateWithoutStudentInput>
+  }
+
+  export type MembershipRecommendationCreateManyStudentInputEnvelope = {
+    data: MembershipRecommendationCreateManyStudentInput | MembershipRecommendationCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MembershipRecommendationCreateWithoutRecommendedByInput = {
+    id?: string
+    status?: $Enums.RecommendationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: UserCreateNestedOneWithoutRecommendationsInput
+  }
+
+  export type MembershipRecommendationUncheckedCreateWithoutRecommendedByInput = {
+    id?: string
+    studentId: string
+    status?: $Enums.RecommendationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipRecommendationCreateOrConnectWithoutRecommendedByInput = {
+    where: MembershipRecommendationWhereUniqueInput
+    create: XOR<MembershipRecommendationCreateWithoutRecommendedByInput, MembershipRecommendationUncheckedCreateWithoutRecommendedByInput>
+  }
+
+  export type MembershipRecommendationCreateManyRecommendedByInputEnvelope = {
+    data: MembershipRecommendationCreateManyRecommendedByInput | MembershipRecommendationCreateManyRecommendedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CourseClassCreateWithoutUsersInput = {
     id?: string
     name?: $Enums.CourseClassType
@@ -54812,6 +56483,50 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StudentFollowUp"> | Date | string
   }
 
+  export type MembershipRecommendationUpsertWithWhereUniqueWithoutStudentInput = {
+    where: MembershipRecommendationWhereUniqueInput
+    update: XOR<MembershipRecommendationUpdateWithoutStudentInput, MembershipRecommendationUncheckedUpdateWithoutStudentInput>
+    create: XOR<MembershipRecommendationCreateWithoutStudentInput, MembershipRecommendationUncheckedCreateWithoutStudentInput>
+  }
+
+  export type MembershipRecommendationUpdateWithWhereUniqueWithoutStudentInput = {
+    where: MembershipRecommendationWhereUniqueInput
+    data: XOR<MembershipRecommendationUpdateWithoutStudentInput, MembershipRecommendationUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type MembershipRecommendationUpdateManyWithWhereWithoutStudentInput = {
+    where: MembershipRecommendationScalarWhereInput
+    data: XOR<MembershipRecommendationUpdateManyMutationInput, MembershipRecommendationUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type MembershipRecommendationScalarWhereInput = {
+    AND?: MembershipRecommendationScalarWhereInput | MembershipRecommendationScalarWhereInput[]
+    OR?: MembershipRecommendationScalarWhereInput[]
+    NOT?: MembershipRecommendationScalarWhereInput | MembershipRecommendationScalarWhereInput[]
+    id?: StringFilter<"MembershipRecommendation"> | string
+    studentId?: StringFilter<"MembershipRecommendation"> | string
+    recommendedById?: StringFilter<"MembershipRecommendation"> | string
+    status?: EnumRecommendationStatusFilter<"MembershipRecommendation"> | $Enums.RecommendationStatus
+    createdAt?: DateTimeFilter<"MembershipRecommendation"> | Date | string
+    updatedAt?: DateTimeFilter<"MembershipRecommendation"> | Date | string
+  }
+
+  export type MembershipRecommendationUpsertWithWhereUniqueWithoutRecommendedByInput = {
+    where: MembershipRecommendationWhereUniqueInput
+    update: XOR<MembershipRecommendationUpdateWithoutRecommendedByInput, MembershipRecommendationUncheckedUpdateWithoutRecommendedByInput>
+    create: XOR<MembershipRecommendationCreateWithoutRecommendedByInput, MembershipRecommendationUncheckedCreateWithoutRecommendedByInput>
+  }
+
+  export type MembershipRecommendationUpdateWithWhereUniqueWithoutRecommendedByInput = {
+    where: MembershipRecommendationWhereUniqueInput
+    data: XOR<MembershipRecommendationUpdateWithoutRecommendedByInput, MembershipRecommendationUncheckedUpdateWithoutRecommendedByInput>
+  }
+
+  export type MembershipRecommendationUpdateManyWithWhereWithoutRecommendedByInput = {
+    where: MembershipRecommendationScalarWhereInput
+    data: XOR<MembershipRecommendationUpdateManyMutationInput, MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByInput>
+  }
+
   export type CourseClassUpsertWithoutUsersInput = {
     update: XOR<CourseClassUpdateWithoutUsersInput, CourseClassUncheckedUpdateWithoutUsersInput>
     create: XOR<CourseClassCreateWithoutUsersInput, CourseClassUncheckedCreateWithoutUsersInput>
@@ -54890,6 +56605,382 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courses?: CourseUncheckedUpdateManyWithoutDepartmentNestedInput
     instructors?: InstructorUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type UserCreateWithoutRecommendationsInput = {
+    id?: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mustChangePassword?: boolean
+    address?: string | null
+    age?: number | null
+    christianName?: string | null
+    grandfatherName?: string | null
+    ethiopianCreatedAt?: string | null
+    fullName?: string | null
+    gender?: $Enums.genderType
+    isActive?: boolean
+    roles?: UserCreaterolesInput | $Enums.memberType[]
+    mode?: $Enums.appMode | null
+    privateId?: string | null
+    coursePrivateId?: string | null
+    passwordHash?: string | null
+    phoneNumber?: string | null
+    registerDate?: string | null
+    type?: $Enums.userType
+    reviewedRegistrations?: AdminRegistrationCreateNestedManyWithoutReviewedByInput
+    markedAttendances?: AttendanceCreateNestedManyWithoutMarkedByInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    performedAuditLogs?: AuditLogCreateNestedManyWithoutPerformedByInput
+    enrollments?: CourseEnrollmentCreateNestedManyWithoutStudentInput
+    registrations?: CourseRegistrationCreateNestedManyWithoutMemberInput
+    createdEvents?: EventCreateNestedManyWithoutCreatedByInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
+    mezmurEnrollments?: MezmurEnrollmentCreateNestedManyWithoutStudentInput
+    uploadedMusicFiles?: MusicFileCreateNestedManyWithoutUploadedByInput
+    targetNotifications?: NotificationCreateNestedManyWithoutTargetUserInput
+    permissions?: PermissionCreateNestedManyWithoutMemberInput
+    reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
+    playlists?: PlaylistCreateNestedManyWithoutUserInput
+    markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
+    courseClass?: CourseClassCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutMembersInput
+  }
+
+  export type UserUncheckedCreateWithoutRecommendationsInput = {
+    id?: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mustChangePassword?: boolean
+    address?: string | null
+    age?: number | null
+    christianName?: string | null
+    grandfatherName?: string | null
+    courseClassId?: string | null
+    departmentId?: string | null
+    ethiopianCreatedAt?: string | null
+    fullName?: string | null
+    gender?: $Enums.genderType
+    isActive?: boolean
+    roles?: UserCreaterolesInput | $Enums.memberType[]
+    mode?: $Enums.appMode | null
+    privateId?: string | null
+    coursePrivateId?: string | null
+    passwordHash?: string | null
+    phoneNumber?: string | null
+    registerDate?: string | null
+    type?: $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    markedAttendances?: AttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    performedAuditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByInput
+    enrollments?: CourseEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    registrations?: CourseRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
+    mezmurEnrollments?: MezmurEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    uploadedMusicFiles?: MusicFileUncheckedCreateNestedManyWithoutUploadedByInput
+    targetNotifications?: NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+    permissions?: PermissionUncheckedCreateNestedManyWithoutMemberInput
+    reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
+    playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
+    markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
+  }
+
+  export type UserCreateOrConnectWithoutRecommendationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRecommendationsInput, UserUncheckedCreateWithoutRecommendationsInput>
+  }
+
+  export type UserCreateWithoutMadeRecommendationsInput = {
+    id?: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mustChangePassword?: boolean
+    address?: string | null
+    age?: number | null
+    christianName?: string | null
+    grandfatherName?: string | null
+    ethiopianCreatedAt?: string | null
+    fullName?: string | null
+    gender?: $Enums.genderType
+    isActive?: boolean
+    roles?: UserCreaterolesInput | $Enums.memberType[]
+    mode?: $Enums.appMode | null
+    privateId?: string | null
+    coursePrivateId?: string | null
+    passwordHash?: string | null
+    phoneNumber?: string | null
+    registerDate?: string | null
+    type?: $Enums.userType
+    reviewedRegistrations?: AdminRegistrationCreateNestedManyWithoutReviewedByInput
+    markedAttendances?: AttendanceCreateNestedManyWithoutMarkedByInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    performedAuditLogs?: AuditLogCreateNestedManyWithoutPerformedByInput
+    enrollments?: CourseEnrollmentCreateNestedManyWithoutStudentInput
+    registrations?: CourseRegistrationCreateNestedManyWithoutMemberInput
+    createdEvents?: EventCreateNestedManyWithoutCreatedByInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
+    mezmurEnrollments?: MezmurEnrollmentCreateNestedManyWithoutStudentInput
+    uploadedMusicFiles?: MusicFileCreateNestedManyWithoutUploadedByInput
+    targetNotifications?: NotificationCreateNestedManyWithoutTargetUserInput
+    permissions?: PermissionCreateNestedManyWithoutMemberInput
+    reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
+    playlists?: PlaylistCreateNestedManyWithoutUserInput
+    markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    courseClass?: CourseClassCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutMembersInput
+  }
+
+  export type UserUncheckedCreateWithoutMadeRecommendationsInput = {
+    id?: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mustChangePassword?: boolean
+    address?: string | null
+    age?: number | null
+    christianName?: string | null
+    grandfatherName?: string | null
+    courseClassId?: string | null
+    departmentId?: string | null
+    ethiopianCreatedAt?: string | null
+    fullName?: string | null
+    gender?: $Enums.genderType
+    isActive?: boolean
+    roles?: UserCreaterolesInput | $Enums.memberType[]
+    mode?: $Enums.appMode | null
+    privateId?: string | null
+    coursePrivateId?: string | null
+    passwordHash?: string | null
+    phoneNumber?: string | null
+    registerDate?: string | null
+    type?: $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    markedAttendances?: AttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    performedAuditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByInput
+    enrollments?: CourseEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    registrations?: CourseRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
+    mezmurEnrollments?: MezmurEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    uploadedMusicFiles?: MusicFileUncheckedCreateNestedManyWithoutUploadedByInput
+    targetNotifications?: NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+    permissions?: PermissionUncheckedCreateNestedManyWithoutMemberInput
+    reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
+    playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
+    markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type UserCreateOrConnectWithoutMadeRecommendationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMadeRecommendationsInput, UserUncheckedCreateWithoutMadeRecommendationsInput>
+  }
+
+  export type UserUpsertWithoutRecommendationsInput = {
+    update: XOR<UserUpdateWithoutRecommendationsInput, UserUncheckedUpdateWithoutRecommendationsInput>
+    create: XOR<UserCreateWithoutRecommendationsInput, UserUncheckedCreateWithoutRecommendationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRecommendationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRecommendationsInput, UserUncheckedUpdateWithoutRecommendationsInput>
+  }
+
+  export type UserUpdateWithoutRecommendationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    christianName?: NullableStringFieldUpdateOperationsInput | string | null
+    grandfatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    ethiopianCreatedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
+    mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
+    privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registerDate?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUpdateManyWithoutReviewedByNestedInput
+    markedAttendances?: AttendanceUpdateManyWithoutMarkedByNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    performedAuditLogs?: AuditLogUpdateManyWithoutPerformedByNestedInput
+    enrollments?: CourseEnrollmentUpdateManyWithoutStudentNestedInput
+    registrations?: CourseRegistrationUpdateManyWithoutMemberNestedInput
+    createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
+    mezmurEnrollments?: MezmurEnrollmentUpdateManyWithoutStudentNestedInput
+    uploadedMusicFiles?: MusicFileUpdateManyWithoutUploadedByNestedInput
+    targetNotifications?: NotificationUpdateManyWithoutTargetUserNestedInput
+    permissions?: PermissionUpdateManyWithoutMemberNestedInput
+    reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
+    playlists?: PlaylistUpdateManyWithoutUserNestedInput
+    markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
+    courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutMembersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRecommendationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    christianName?: NullableStringFieldUpdateOperationsInput | string | null
+    grandfatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethiopianCreatedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
+    mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
+    privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registerDate?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    markedAttendances?: AttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    performedAuditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByNestedInput
+    enrollments?: CourseEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    registrations?: CourseRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
+    mezmurEnrollments?: MezmurEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    uploadedMusicFiles?: MusicFileUncheckedUpdateManyWithoutUploadedByNestedInput
+    targetNotifications?: NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+    permissions?: PermissionUncheckedUpdateManyWithoutMemberNestedInput
+    reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
+    playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
+    markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
+  }
+
+  export type UserUpsertWithoutMadeRecommendationsInput = {
+    update: XOR<UserUpdateWithoutMadeRecommendationsInput, UserUncheckedUpdateWithoutMadeRecommendationsInput>
+    create: XOR<UserCreateWithoutMadeRecommendationsInput, UserUncheckedCreateWithoutMadeRecommendationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMadeRecommendationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMadeRecommendationsInput, UserUncheckedUpdateWithoutMadeRecommendationsInput>
+  }
+
+  export type UserUpdateWithoutMadeRecommendationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    christianName?: NullableStringFieldUpdateOperationsInput | string | null
+    grandfatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    ethiopianCreatedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
+    mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
+    privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registerDate?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUpdateManyWithoutReviewedByNestedInput
+    markedAttendances?: AttendanceUpdateManyWithoutMarkedByNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    performedAuditLogs?: AuditLogUpdateManyWithoutPerformedByNestedInput
+    enrollments?: CourseEnrollmentUpdateManyWithoutStudentNestedInput
+    registrations?: CourseRegistrationUpdateManyWithoutMemberNestedInput
+    createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
+    mezmurEnrollments?: MezmurEnrollmentUpdateManyWithoutStudentNestedInput
+    uploadedMusicFiles?: MusicFileUpdateManyWithoutUploadedByNestedInput
+    targetNotifications?: NotificationUpdateManyWithoutTargetUserNestedInput
+    permissions?: PermissionUpdateManyWithoutMemberNestedInput
+    reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
+    playlists?: PlaylistUpdateManyWithoutUserNestedInput
+    markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutMembersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMadeRecommendationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    christianName?: NullableStringFieldUpdateOperationsInput | string | null
+    grandfatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethiopianCreatedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
+    mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
+    privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registerDate?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    markedAttendances?: AttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    performedAuditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByNestedInput
+    enrollments?: CourseEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    registrations?: CourseRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
+    mezmurEnrollments?: MezmurEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    uploadedMusicFiles?: MusicFileUncheckedUpdateManyWithoutUploadedByNestedInput
+    targetNotifications?: NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+    permissions?: PermissionUncheckedUpdateManyWithoutMemberNestedInput
+    reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
+    playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
+    markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseClassCreateWithoutAcademicYearInput = {
@@ -55099,9 +57190,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -55121,6 +57213,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -55141,9 +57235,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -55163,6 +57258,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutCreatedEventsInput = {
@@ -55299,9 +57396,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55321,6 +57419,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -55341,9 +57441,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55363,6 +57464,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type EligibilityRuleUpsertWithoutEventsInput = {
@@ -55604,9 +57707,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -55626,6 +57730,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -55646,9 +57752,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -55668,6 +57775,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutMarkedAttendancesInput = {
@@ -55689,9 +57798,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -55711,6 +57821,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -55731,9 +57843,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -55753,6 +57866,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -55916,9 +58031,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55938,6 +58054,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -55958,9 +58076,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55980,6 +58099,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type UserUpsertWithoutAttendancesInput = {
@@ -56007,9 +58128,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56029,6 +58151,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -56049,9 +58173,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56071,6 +58196,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type PermissionUpsertWithoutAttendancesInput = {
@@ -56224,9 +58351,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -56246,6 +58374,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -56266,9 +58396,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -56288,6 +58419,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -56348,9 +58481,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -56370,6 +58504,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -56390,9 +58526,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -56412,6 +58549,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutReviewedPermissionsInput = {
@@ -56460,9 +58599,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56482,6 +58622,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -56502,9 +58644,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56524,6 +58667,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type PermissionTypeUpsertWithoutPermissionsInput = {
@@ -56596,9 +58741,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56618,6 +58764,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -56638,9 +58786,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -56660,6 +58809,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type EligibilityCriteriaCreateWithoutEligibilityRuleInput = {
@@ -57562,9 +59713,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -57585,6 +59737,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
   }
 
@@ -57603,9 +59757,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -57626,6 +59781,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -57719,9 +59876,10 @@ export namespace Prisma {
     fullName?: StringNullableFilter<"User"> | string | null
     gender?: EnumgenderTypeFilter<"User"> | $Enums.genderType
     isActive?: BoolFilter<"User"> | boolean
-    memberType?: EnummemberTypeNullableFilter<"User"> | $Enums.memberType | null
+    roles?: EnummemberTypeNullableListFilter<"User">
     mode?: EnumappModeNullableFilter<"User"> | $Enums.appMode | null
     privateId?: StringNullableFilter<"User"> | string | null
+    coursePrivateId?: StringNullableFilter<"User"> | string | null
     passwordHash?: StringNullableFilter<"User"> | string | null
     phoneNumber?: StringNullableFilter<"User"> | string | null
     registerDate?: StringNullableFilter<"User"> | string | null
@@ -57991,9 +60149,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -58014,6 +60173,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
 
@@ -58032,9 +60193,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -58055,6 +60217,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutCourseClassInput = {
@@ -58251,9 +60415,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -58273,6 +60438,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -58293,9 +60460,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -58315,6 +60483,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -58392,9 +60562,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58414,6 +60585,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -58434,9 +60607,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -58456,6 +60630,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type CourseClassCreateWithoutCourseYearsInput = {
@@ -58903,9 +61079,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -58925,6 +61102,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -58945,9 +61124,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -58967,6 +61147,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutMarksInput = {
@@ -59052,9 +61234,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59074,6 +61257,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -59094,9 +61279,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59116,6 +61302,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type UserCreateWithoutMezmurEnrollmentsInput = {
@@ -59132,9 +61320,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -59154,6 +61343,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -59174,9 +61365,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -59196,6 +61388,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutMezmurEnrollmentsInput = {
@@ -59228,9 +61422,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59250,6 +61445,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -59270,9 +61467,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59292,6 +61490,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type MusicFileCreateWithoutCategoriesInput = {
@@ -59365,9 +61565,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -59387,6 +61588,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -59407,9 +61610,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -59429,6 +61633,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMusicFilesInput = {
@@ -59528,9 +61734,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59550,6 +61757,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -59570,9 +61779,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59592,6 +61802,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type MusicCategoryUpsertWithWhereUniqueWithoutMusicFilesInput = {
@@ -59679,9 +61891,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -59701,6 +61914,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -59721,9 +61936,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -59743,6 +61959,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutPlaylistsInput = {
@@ -59816,9 +62034,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59838,6 +62057,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -59858,9 +62079,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59880,6 +62102,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type MusicFileUpsertWithWhereUniqueWithoutPlaylistsInput = {
@@ -59969,9 +62193,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -59991,6 +62216,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -60011,9 +62238,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -60033,6 +62261,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -60065,9 +62295,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60087,6 +62318,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -60107,9 +62340,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60129,6 +62363,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type UserCreateWithoutPerformedAuditLogsInput = {
@@ -60145,9 +62381,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -60167,6 +62404,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -60187,9 +62426,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -60209,6 +62449,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutPerformedAuditLogsInput = {
@@ -60275,9 +62517,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60297,6 +62540,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -60317,9 +62562,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60339,6 +62585,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutAuditLogInput = {
@@ -60404,9 +62652,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -60426,6 +62675,8 @@ export namespace Prisma {
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -60446,9 +62697,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -60468,6 +62720,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutTargetNotificationsInput = {
@@ -60539,9 +62793,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60561,6 +62816,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -60581,9 +62838,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60603,6 +62861,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type CourseYearCreateWithoutCourseFreeDaysInput = {
@@ -60801,9 +63061,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -60823,6 +63084,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -60843,9 +63106,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -60865,6 +63129,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutMarkedInstructorAttendancesInput = {
@@ -61022,9 +63288,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61044,6 +63311,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -61064,9 +63333,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61086,6 +63356,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type InstructorUpsertWithoutAttendancesInput = {
@@ -61139,9 +63411,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -61161,6 +63434,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    recommendations?: MembershipRecommendationCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationCreateNestedManyWithoutRecommendedByInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -61181,9 +63456,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -61203,6 +63479,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    recommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutStudentInput
+    madeRecommendations?: MembershipRecommendationUncheckedCreateNestedManyWithoutRecommendedByInput
   }
 
   export type UserCreateOrConnectWithoutFollowUpsInput = {
@@ -61235,9 +63513,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61257,6 +63536,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -61277,9 +63558,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61299,6 +63581,8 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type AdminRegistrationCreateManyReviewedByInput = {
@@ -61514,6 +63798,22 @@ export namespace Prisma {
     status?: $Enums.FollowUpStatus
     notes?: string | null
     resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipRecommendationCreateManyStudentInput = {
+    id?: string
+    recommendedById: string
+    status?: $Enums.RecommendationStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipRecommendationCreateManyRecommendedByInput = {
+    id?: string
+    studentId: string
+    status?: $Enums.RecommendationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -62183,6 +64483,54 @@ export namespace Prisma {
     status?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipRecommendationUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recommendedBy?: UserUpdateOneRequiredWithoutMadeRecommendationsNestedInput
+  }
+
+  export type MembershipRecommendationUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recommendedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipRecommendationUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    recommendedById?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipRecommendationUpdateWithoutRecommendedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: UserUpdateOneRequiredWithoutRecommendationsNestedInput
+  }
+
+  export type MembershipRecommendationUncheckedUpdateWithoutRecommendedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    status?: EnumRecommendationStatusFieldUpdateOperationsInput | $Enums.RecommendationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -63092,9 +65440,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -63219,9 +65568,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63242,6 +65592,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
   }
 
@@ -63260,9 +65612,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63283,6 +65636,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -63300,9 +65655,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63401,9 +65757,10 @@ export namespace Prisma {
     fullName?: string | null
     gender?: $Enums.genderType
     isActive?: boolean
-    memberType?: $Enums.memberType | null
+    roles?: UserCreaterolesInput | $Enums.memberType[]
     mode?: $Enums.appMode | null
     privateId?: string | null
+    coursePrivateId?: string | null
     passwordHash?: string | null
     phoneNumber?: string | null
     registerDate?: string | null
@@ -63665,9 +66022,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63688,6 +66046,8 @@ export namespace Prisma {
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUpdateManyWithoutRecommendedByNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
 
@@ -63706,9 +66066,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null
@@ -63729,6 +66090,8 @@ export namespace Prisma {
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
     followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
+    recommendations?: MembershipRecommendationUncheckedUpdateManyWithoutStudentNestedInput
+    madeRecommendations?: MembershipRecommendationUncheckedUpdateManyWithoutRecommendedByNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCourseClassInput = {
@@ -63746,9 +66109,10 @@ export namespace Prisma {
     fullName?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    roles?: UserUpdaterolesInput | $Enums.memberType[]
     mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
     privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    coursePrivateId?: NullableStringFieldUpdateOperationsInput | string | null
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
     registerDate?: NullableStringFieldUpdateOperationsInput | string | null

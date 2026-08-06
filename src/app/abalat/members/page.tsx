@@ -12,7 +12,7 @@ interface Member {
   age: number;
   christianName: string | null;
   registerDate: string | null;
-  memberType: "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT" | null;
+  memberTypes: ("COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT")[];
   privateId: string | null;
 }
 
@@ -74,7 +74,7 @@ export default function MembersPage() {
       const normalizedFields = [
         member.fullName ?? "",
         member.gender ?? "",
-        member.memberType ?? "",
+        member.memberTypes.join(" ") ?? "",
         member.christianName ?? "",
         member.registerDate ?? "",
       ]
@@ -86,7 +86,7 @@ export default function MembersPage() {
         : true;
 
       const matchesType = memberTypeFilter
-        ? member.memberType === memberTypeFilter
+        ? member.memberTypes.includes(memberTypeFilter as any)
         : true;
 
       return matchesSearch && matchesType;
@@ -96,9 +96,9 @@ export default function MembersPage() {
   const totals = useMemo(
     () => ({
       total: filteredMembers.length,
-      regular: filteredMembers.filter((m) => m.memberType === "REGULAR_MEMBER").length,
-      course: filteredMembers.filter((m) => m.memberType === "COURSE_STUDENT").length,
-      youth: filteredMembers.filter((m) => m.memberType === "YOUTH_STUDENT").length,
+      regular: filteredMembers.filter((m) => m.memberTypes.includes("REGULAR_MEMBER")).length,
+      course: filteredMembers.filter((m) => m.memberTypes.includes("COURSE_STUDENT")).length,
+      youth: filteredMembers.filter((m) => m.memberTypes.includes("YOUTH_STUDENT")).length,
     }),
     [filteredMembers]
   );
@@ -301,11 +301,6 @@ export default function MembersPage() {
           ) : (
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {filteredMembers.map((member) => {
-                const colorClass =
-                  member.memberType && memberTypeColors[member.memberType]
-                    ? memberTypeColors[member.memberType]
-                    : "bg-zinc-500/10 text-zinc-400 border-zinc-500/20";
-
                 return (
                   <li
                     key={member.id}
@@ -381,15 +376,23 @@ export default function MembersPage() {
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between pt-1">
-                        <span
-                          className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${colorClass}`}
-                        >
-                          {member.memberType
-                            ? memberTypeLabels[member.memberType] ?? member.memberType
-                            : "No type"}
-                        </span>
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        {member.memberTypes.map(type => (
+                          <span
+                            key={type}
+                            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${memberTypeColors[type] || "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"}`}
+                          >
+                            {memberTypeLabels[type] ?? type}
+                          </span>
+                        ))}
+                        {member.memberTypes.length === 0 && (
+                           <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold bg-zinc-500/10 text-zinc-400 border-zinc-500/20">
+                             No type
+                           </span>
+                        )}
+                      </div>
 
+                      <div className="flex justify-end pt-2">
                         <Link
                           href={`/abalat/members/${member.id}`}
                           className="text-[11px] font-medium transition-colors duration-150 hover:text-[hsl(160_60%_55%)]"

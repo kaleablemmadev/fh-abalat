@@ -1,6 +1,6 @@
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { ethMonthNames } from "@/src/lib/ethiopiancal";
+import { ethMonthNames, getEthiopianToday } from "@/src/lib/ethiopiancal";
 import { generateAccessCode } from "@/src/lib/utils";
 
 type MemberPayload = {
@@ -18,7 +18,10 @@ type MemberPayload = {
 export async function GET() {
   try {
     const members = await prisma.user.findMany({
-      where: { type: "MEMBER" },
+      where: {
+        type: "MEMBER",
+        memberTypes: { has: "REGULAR_MEMBER" }
+      },
       orderBy: { fullName: "asc" },
     });
     return NextResponse.json(members);
@@ -55,8 +58,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Generate a unique privateId
-    let privateId = generateAccessCode();
+    // Generate a unique privateId with new FH-XXXX-YY format
+    const ethToday = getEthiopianToday();
+    const yearDigits = ethToday.year.toString().slice(-2);
+
+    let privateId = generateAccessCode(yearDigits);
     let isUnique = false;
     let attempts = 0;
     while (!isUnique && attempts < 10) {
@@ -66,7 +72,7 @@ export async function POST(request: NextRequest) {
       if (!existing) {
         isUnique = true;
       } else {
-        privateId = generateAccessCode();
+        privateId = generateAccessCode(yearDigits);
         attempts++;
       }
     }
@@ -78,7 +84,7 @@ export async function POST(request: NextRequest) {
         age: body.age,
         christianName: body.christianName,
         registerDate: registerDate,
-        memberType: body.memberType ?? "REGULAR_MEMBER",
+        memberTypes: { set: ["REGULAR_MEMBER"] },
         type: "MEMBER",
         privateId,
         ...(body.courseClassId && {

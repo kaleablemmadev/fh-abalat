@@ -6,16 +6,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function generateAccessCode(): string {
+export function generateAccessCode(yearDigits: string): string {
   const number = Math.floor(Math.random() * 10000); // 0 to 9999
   const padded = number.toString().padStart(4, '0');
-  return `FH-${padded}`;
+  return `FH-${padded}-${yearDigits}`;
 }
 
-export function generateCourseStudentCode(): string {
+export function generateCourseStudentCode(yearDigits: string): string {
   const number = Math.floor(Math.random() * 10000); // 0 to 9999
   const padded = number.toString().padStart(4, '0');
-  return `FHC-${padded}`;
+  return `FHC-${padded}-${yearDigits}`;
 }
 
 /**

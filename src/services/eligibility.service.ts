@@ -275,9 +275,9 @@ export class EligibilityService {
       where: {
         type: 'MEMBER',
         ...(event.targetMemberTypes.length > 0 ? {
-          memberType: { in: event.targetMemberTypes },
+          memberTypes: { hasSome: event.targetMemberTypes },
         } : {
-          memberType: 'REGULAR_MEMBER',
+          memberTypes: { has: 'REGULAR_MEMBER' },
         }),
       },
       select: { id: true, fullName: true }
@@ -371,9 +371,9 @@ export class EligibilityService {
       where: {
         type: 'MEMBER',
         ...(event.targetMemberTypes.length > 0 ? {
-          memberType: { in: event.targetMemberTypes },
+          memberTypes: { hasSome: event.targetMemberTypes },
         } : {
-          memberType: 'REGULAR_MEMBER',
+          memberTypes: { has: 'REGULAR_MEMBER' },
         }),
       },
       select: { id: true, fullName: true }
@@ -487,7 +487,7 @@ export class EligibilityService {
     const events = await prisma.event.findMany({
       where: {
         OR: [
-          { targetMemberTypes: { has: member.memberType as any } },
+          { targetMemberTypes: { hasSome: member.memberTypes } },
           { courseClassId: member.courseClassId || undefined }
         ],
         isActive: true,

@@ -15,6 +15,7 @@ const abalatNavItems: NavSection[] = [
     items: [
       { name: 'አባላት', href: '/abalat/members', icon: Users },
       { name: 'በዓላት', href: '/abalat/events', icon: Calendar },
+      { name: 'የተማሪዎች ጥቆማ', href: '/abalat/recommendations', icon: Shield },
     ]
   },
   {

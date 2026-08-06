@@ -52,7 +52,8 @@ export class ReportService {
             courseClass: { academicYearId },
             status: 'ACTIVE'
           }
-        }
+        },
+        memberTypes: { has: "COURSE_STUDENT" }
       },
       include: {
         enrollments: {

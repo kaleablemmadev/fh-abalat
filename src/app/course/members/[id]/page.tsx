@@ -11,9 +11,12 @@ import {
   ArrowLeft,
   CheckCircle2,
   BookOpen,
-  ClipboardList
+  ClipboardList,
+  Bell
 } from "lucide-react";
 import { formatEthiopianDate } from "@/src/lib/ethiopiancal";
+import RecommendButton from "../components/RecommendButton";
+import { cookies } from "next/headers";
 
 const statusColors: Record<string, string> = {
   ACTIVE: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -23,6 +26,15 @@ const statusColors: Record<string, string> = {
 
 export default async function CourseStudentDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('mode_session')?.value;
+  let adminId = "";
+  if (sessionCookie) {
+     try {
+       const session = JSON.parse(decodeURIComponent(sessionCookie));
+       adminId = session.userId;
+     } catch (e) {}
+  }
 
   const student = await prisma.user.findFirst({
     where: {
@@ -63,8 +75,41 @@ export default async function CourseStudentDetailsPage({ params }: { params: Pro
 
   if (!student) notFound();
 
+  const isEligibleForAbalat = student.memberTypes.includes("COURSE_STUDENT" as any) &&
+                             !student.memberTypes.includes("REGULAR_MEMBER" as any) &&
+                             student.enrollments.some(e => ["SALSAY", "RABEAY"].includes(e.courseClass?.name as any));
+
   return (
     <div className="max-w-5xl mx-auto space-y-8 animate-fade-in py-6">
+      {isEligibleForAbalat && (
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex items-center justify-between gap-4 animate-slide-in">
+          <div className="flex items-center gap-3">
+             <div className="p-2 bg-amber-500/20 rounded-lg text-amber-600">
+                <Bell size={20} />
+             </div>
+             <div>
+                <p className="text-sm font-bold">Promotion Eligible</p>
+                <p className="text-xs opacity-60">This student is in Salsay level and can be recommended for Regular Membership.</p>
+             </div>
+          </div>
+          <RecommendButton studentId={student.id} adminId={adminId} />
+        </div>
+      )}
+
+      <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-2xl p-6 shadow-sm">
+        <div className="flex flex-wrap gap-6 items-center">
+          <div className="space-y-1">
+            <p className="text-[10px] font-black uppercase opacity-40">Abalat ID</p>
+            <p className="font-mono font-bold text-lg">{student.privateId || "None"}</p>
+          </div>
+          <div className="h-10 w-px bg-[hsl(var(--border))] hidden sm:block"></div>
+          <div className="space-y-1">
+            <p className="text-[10px] font-black uppercase opacity-40">Course ID</p>
+            <p className="font-mono font-bold text-lg text-blue-500">{student.coursePrivateId || "None"}</p>
+          </div>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between">
         <Link href="/course/members" className="flex items-center gap-2 text-sm opacity-60 hover:opacity-100 transition-opacity">
           <ArrowLeft size={16} /> Back to Students

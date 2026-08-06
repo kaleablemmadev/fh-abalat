@@ -1,38 +1,39 @@
-# Walkthrough - Configurable Class Duration for Keremt
+# Walkthrough - Membership Transition & Dual Role ID System
 
-I have implemented the ability for administrators to configure the daily teaching duration for the **KEREMT** class per academic year. This ensures that required teaching hours and performance reports are accurate based on varying schedules.
+I have implemented the dual-identity system and membership transition workflow, allowing students to seamlessly progress from Course Students to Regular Members with distinct identifiers for each role.
 
-## Key Changes
+## Key Deliverables
 
-### 1. Database Schema Evolution
-Updated the `CourseClass` model in [schema.prisma](file:///C:/Dev/fh-abalat/prisma/schema.prisma) to include a `dailyDurationHours` field.
-- **Default**: `2.0` hours.
-- **Applied**: Pushed the schema changes to the live database using Prisma.
+### 1. New Two-Part ID System
+Updated all identification codes to the new **4+2 strict format**:
+- **Abalat**: `FH-XXXX-YY` (e.g., `FH-0123-18`)
+- **Course**: `FHC-XXXX-YY` (e.g., `FHC-5678-18`)
+- The `YY` represents the **Ethiopian year of registration**, automatically derived from the student's creation date.
 
-### 2. Intelligent Teaching Hour Calculations
-Refactored the [TeachingHoursService](file:///C:/Dev/fh-abalat/src/services/teaching-hours.service.ts) to use the dynamic duration from the database.
-- **Calculation**: For Keremt, it now calculates `dailyDurationHours * 6 days`.
-- **Consistency**: All reports (Instructor Teaching Record, Dashboard) now reflect these custom durations automatically.
+### 2. Redesigned Member Login
+The login page at `/` has been completely overhauled:
+- **Two-Part Input**: Separate boxes for the 4-digit code and 2-digit year.
+- **Auto-Jump**: The cursor automatically jumps to the year box once 4 digits are typed.
+- **Role Selection**: After entering the code, members can explicitly choose to log in as an **Abalat Member** or a **Course Student**, ensuring they see the correct dashboard.
 
-### 3. Academic Year Management UI
-Updated the [AcademicYearList](file:///C:/Dev/fh-abalat/src/app/course/academic-years/components/AcademicYearList.tsx) component to allow session duration selection.
-- **Selection Dropdown**: When the **Keremt** class is included in a year, a new dropdown appears.
-- **Strict Options**: Administrators can select between:
-    - `2.0 Hours (Standard)`
-    - `2.5 Hours (1h 15m/course)`
-    - `3.0 Hours (1h 30m/course)`
-- **Visual Display**: The selected duration is now displayed next to the "Keremt" label in the academic year list for quick reference.
+### 3. Salsay Transition Workflow
+Implemented an automated recommendation pipeline:
+- **Eligibility Check**: Students in `SALSAY` or `RABEAY` classes who aren't yet Regular Members are automatically flagged.
+- **Recommendation List**: Course admins can "Send Info to Abalat" with one click.
+- **Abalat Registration**: Abalat admins have a dedicated **"Recommended Students"** dashboard to officially register these students into the regular membership database, assigning them their new `FH-` code while keeping their `FHC-` history intact.
 
-### 4. API Enhancements
-Updated both **POST** and **PUT** routes for academic years:
-- **POST**: Correctly assigns the selected duration when initializing new classes.
-- **PUT**: Allows updating the duration for an existing Keremt class within an academic year.
+### 4. Technical Foundations
+- **Prisma Evolution**: Migrated the `memberType` field to a `memberTypes` array to support users holding multiple roles.
+- **Data Migration**: Successfully converted all existing users to the new ID format and role structure using a custom migration script.
+- **Strict Isolation**: Updated all modules (Abalat, Mezmur, Course) to filter members accurately based on their active roles.
 
 ## How to use
-1. Go to the **Academic Years** page.
-2. When creating a **New Year** or **Editing** an existing one, look for the "Level 1" group.
-3. If "Keremt" is checked, use the **Keremt Session Duration** dropdown to set the hours.
-4. Click **Save**—all calculations for that year will update immediately.
+1. **Members**: Go to the login page, type your 4-digit code and 2-digit year, then select your role.
+2. **Course Admins**: On a student's profile (Salsay level), look for the "Promotion Eligible" banner to send their file to Abalat.
+3. **Abalat Admins**: Visit **"የተማሪዎች ጥቆማ"** (Recommendations) in the sidebar to register students sent from the Course module.
+
+> [!IMPORTANT]
+> All existing member IDs have been updated. Users must now use the `FH-XXXX-YY` format to log in.
 
 > [!TIP]
-> Changing the Keremt duration will immediately update the "Required Hours" in the **Instructor Teaching Reports**, helping you see if teachers are ahead or behind schedule based on the new timing.
+> Students who pass `KEREMT` level are now automatically progressed to `KALEAY` for the following year.

@@ -9,7 +9,7 @@ import { CourseEnrollmentService } from "@/src/services/course-enrollment.servic
 export async function GET() {
     try {
         const courseMember = await prisma.user.findMany({
-            where: { memberType: "COURSE_STUDENT" },
+            where: { memberTypes: { has: "COURSE_STUDENT" } },
             include: {
                 enrollments: {
                     where: { status: "ACTIVE" },
@@ -41,19 +41,20 @@ export async function POST(req: NextRequest) {
         
         const validatedData = studentSchema.parse(body);
         const ethToday = getEthiopianToday();
+        const yearDigits = ethToday.year.toString().slice(-2);
 
-        // Generate a unique privateId with the new FHC format
-        let privateId = generateCourseStudentCode();
+        // Generate a unique coursePrivateId with new FHC-XXXX-YY format
+        let coursePrivateId = generateCourseStudentCode(yearDigits);
         let isUnique = false;
         let attempts = 0;
         while (!isUnique && attempts < 10) {
             const existing = await prisma.user.findUnique({
-                where: { privateId },
+                where: { coursePrivateId },
             });
             if (!existing) {
                 isUnique = true;
             } else {
-                privateId = generateCourseStudentCode();
+                coursePrivateId = generateCourseStudentCode(yearDigits);
                 attempts++;
             }
         }
@@ -67,9 +68,9 @@ export async function POST(req: NextRequest) {
                     age: validatedData.age,
                     phoneNumber: validatedData.phoneNumber,
                     address: validatedData.address,
-                    memberType: "COURSE_STUDENT",
+                    memberTypes: { set: ["COURSE_STUDENT"] },
                     type: "MEMBER",
-                    privateId,
+                    coursePrivateId,
                     enrollments: {
                         create: {
                             courseClassId: validatedData.courseClassId,

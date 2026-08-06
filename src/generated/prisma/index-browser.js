@@ -151,13 +151,23 @@ exports.Prisma.UserScalarFieldEnum = {
   fullName: 'fullName',
   gender: 'gender',
   isActive: 'isActive',
-  memberType: 'memberType',
+  roles: 'roles',
   mode: 'mode',
   privateId: 'privateId',
+  coursePrivateId: 'coursePrivateId',
   passwordHash: 'passwordHash',
   phoneNumber: 'phoneNumber',
   registerDate: 'registerDate',
   type: 'type'
+};
+
+exports.Prisma.MembershipRecommendationScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  recommendedById: 'recommendedById',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AcademicYearScalarFieldEnum = {
@@ -571,12 +581,6 @@ exports.genderType = exports.$Enums.genderType = {
   FEMALE: 'FEMALE'
 };
 
-exports.memberType = exports.$Enums.memberType = {
-  COURSE_STUDENT: 'COURSE_STUDENT',
-  REGULAR_MEMBER: 'REGULAR_MEMBER',
-  YOUTH_STUDENT: 'YOUTH_STUDENT'
-};
-
 exports.appMode = exports.$Enums.appMode = {
   ABALAT: 'ABALAT',
   COURSE: 'COURSE',
@@ -588,6 +592,18 @@ exports.userType = exports.$Enums.userType = {
   ADMIN: 'ADMIN',
   MEMBER: 'MEMBER',
   SUPERADMIN: 'SUPERADMIN'
+};
+
+exports.memberType = exports.$Enums.memberType = {
+  COURSE_STUDENT: 'COURSE_STUDENT',
+  REGULAR_MEMBER: 'REGULAR_MEMBER',
+  YOUTH_STUDENT: 'YOUTH_STUDENT'
+};
+
+exports.RecommendationStatus = exports.$Enums.RecommendationStatus = {
+  PENDING: 'PENDING',
+  REGISTERED: 'REGISTERED',
+  REJECTED: 'REJECTED'
 };
 
 exports.eventType = exports.$Enums.eventType = {
@@ -674,6 +690,7 @@ exports.FollowUpStatus = exports.$Enums.FollowUpStatus = {
 exports.Prisma.ModelName = {
   CourseRegistration: 'CourseRegistration',
   User: 'User',
+  MembershipRecommendation: 'MembershipRecommendation',
   AcademicYear: 'AcademicYear',
   Event: 'Event',
   AttendanceType: 'AttendanceType',

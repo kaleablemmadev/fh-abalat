@@ -61,7 +61,7 @@ export async function PUT(
     if (body.gender !== undefined) updateData.gender = body.gender;
     if (body.age !== undefined) updateData.age = Number(body.age);
     if (body.christianName !== undefined) updateData.christianName = body.christianName || null;
-    if (body.memberType !== undefined) updateData.memberType = body.memberType;
+    if (body.memberTypes !== undefined) updateData.memberTypes = { set: body.memberTypes };
 
     // Handle Ethiopian date fields from form → registerDate string
     if (body.registerDateDay && body.registerDateMonth && body.registerDateYear) {

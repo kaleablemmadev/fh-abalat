@@ -23,8 +23,8 @@ const adapter = new PrismaPg(pool);
 // Create client
 const prismaClient = new PrismaClient({ adapter });
 
-// If the cached client exists but is missing new models, we need to refresh it
-if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).courseEnrollment) {
+// If the cached client exists but is missing new models or schema changes, we need to refresh it
+if (globalForPrisma.prisma && (!(globalForPrisma.prisma as any).courseEnrollment || !(globalForPrisma.prisma as any).membershipRecommendation)) {
     globalForPrisma.prisma = undefined;
 }
 

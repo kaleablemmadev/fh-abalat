@@ -19,18 +19,22 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const validatedData = registerSchema.parse(body);
 
-    // Generate a unique privateId FHC-XXXX
-    let privateId = generateCourseStudentCode();
+    // Get current Ethiopian year for ID
+    const { getEthiopianToday } = await import("@/src/lib/ethiopiancal");
+    const ethYear = getEthiopianToday().year.toString().slice(-2);
+
+    // Generate a unique coursePrivateId FHC-XXXX-YY
+    let coursePrivateId = generateCourseStudentCode(ethYear);
     let isUnique = false;
     let attempts = 0;
     while (!isUnique && attempts < 10) {
       const existing = await prisma.user.findUnique({
-        where: { privateId },
+        where: { coursePrivateId },
       });
       if (!existing) {
         isUnique = true;
       } else {
-        privateId = generateCourseStudentCode();
+        coursePrivateId = generateCourseStudentCode(ethYear);
         attempts++;
       }
     }
@@ -43,9 +47,9 @@ export async function POST(req: NextRequest) {
           age: validatedData.age,
           phoneNumber: validatedData.phoneNumber,
           address: validatedData.address,
-          memberType: "COURSE_STUDENT",
+          memberTypes: { set: ["COURSE_STUDENT"] },
           type: "MEMBER",
-          privateId,
+          coursePrivateId,
           enrollments: {
             create: {
               courseClassId: validatedData.courseClassId,
@@ -72,7 +76,7 @@ export async function POST(req: NextRequest) {
       student: {
         id: student.id,
         fullName: student.fullName,
-        privateId: student.privateId,
+        privateId: student.coursePrivateId,
         className: student.enrollments[0]?.courseClass?.name,
         classYear: student.enrollments[0]?.courseClass?.year
       }

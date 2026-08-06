@@ -1,19 +1,12 @@
-# Task: PDF Reporting System Implementation
+# Task: Multi-Role Membership & Dual ID System
 
-- [x] Implement `ReportService` for PDF generation (`src/services/report.service.ts`)
-    - [x] Add Global Ranking logic
-    - [x] Implement `generateMarksByCoursePDF`
-    - [x] Implement `generateMarksByStudentPDF`
-    - [x] Implement `generateAttendanceReportPDF`
-    - [x] Implement `generateInstructorReportPDF`
-- [x] Create API Endpoints (`src/app/api/course/reports/route.ts`)
-    - [x] Handle all report types via query parameters
-- [x] Implement UI for Reports Center (`src/app/course/reports/page.tsx`)
-    - [x] Add categorization cards
-    - [x] Implement multi-select for students
-    - [x] Add loading and success states
-- [x] Update Navigation (`src/app/course/layout.tsx`)
+- [x] Database Schema Evolution
+- [x] Core Logic Updates (New 4+2 digit ID logic)
+- [x] ID Migration (Existing users converted to FH-XXXX-YY / FHC-XXXX-YY)
+- [x] Redesign Login Experience (Two-part input + auto-jump)
+- [x] Implement Transition Workflow (Recommendation + Abalat Registration)
+- [x] Module Filtering (memberTypes array logic applied)
 - [/] Verification
-    - [ ] Test Amharic character rendering
-    - [ ] Verify Global Ranking accuracy
-    - [ ] Verify Instructor hours comparison logic
+    - [x] Verify login auto-jump
+    - [x] Verify dual-identity access
+    - [x] Verify data isolation (Course-only students hidden from Abalat)

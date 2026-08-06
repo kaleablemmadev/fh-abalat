@@ -37,6 +37,8 @@ interface MemberDraft {
 interface MemberFormProps {
   initialData?: MemberDraft;
   memberId?: string;
+  recommendationId?: string | null;
+  studentId?: string | null;
 }
 
 const fieldBase = {
@@ -49,7 +51,7 @@ const fieldBase = {
   },
 };
 
-export default function MemberForm({ initialData, memberId }: MemberFormProps) {
+export default function MemberForm({ initialData, memberId, recommendationId, studentId }: MemberFormProps) {
   const router = useRouter();
   const isEditMode = Boolean(memberId);
   const isInitialMount = useRef(true);
@@ -81,6 +83,25 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
+  useEffect(() => {
+    if (studentId && !isEditMode) {
+      async function fetchStudent() {
+        try {
+          const res = await fetch(`/api/course/members/${studentId}`);
+          if (res.ok) {
+            const data = await res.json();
+            setFullName(data.fullName);
+            setAge(data.age);
+            setGender(data.gender);
+          }
+        } catch (err) {
+          console.error("Failed to fetch student data", err);
+        }
+      }
+      fetchStudent();
+    }
+  }, [studentId, isEditMode]);
+
   // Use a ref to track if we've already initialized
   const initialized = useRef(false);
 
@@ -111,8 +132,11 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
     setIsSaving(true);
 
     try {
-      const url = isEditMode ? `/api/abalat/members/${memberId}` : '/api/abalat/members';
-      const method = isEditMode ? 'PUT' : 'POST';
+      const url = recommendationId
+        ? `/api/abalat/recommendations/${recommendationId}/register`
+        : isEditMode ? `/api/abalat/members/${memberId}` : '/api/abalat/members';
+
+      const method = (isEditMode || recommendationId) ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
         method,
@@ -125,6 +149,7 @@ export default function MemberForm({ initialData, memberId }: MemberFormProps) {
           registerDateDay: registerDateDay === '' ? null : Number(registerDateDay),
           registerDateMonth,
           registerDateYear: registerDateYear === '' ? null : Number(registerDateYear),
+          studentId: recommendationId ? studentId : undefined
         }),
       });
 

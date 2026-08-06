@@ -181,7 +181,10 @@ export default async function MultiMonthAttendancePage({
   let members: Array<{ id: string; fullName: string | null }> = [];
   try {
     members = await prisma.user.findMany({
-      where: { type: "MEMBER", memberType: "REGULAR_MEMBER" },
+      where: {
+        type: "MEMBER",
+        memberTypes: { has: "REGULAR_MEMBER" }
+      },
       select: { id: true, fullName: true },
       orderBy: { fullName: "asc" },
     });

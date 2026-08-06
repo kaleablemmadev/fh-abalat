@@ -10,7 +10,7 @@ export default async function MezmurHomePage() {
         type: "MEMBER",
         isActive: true,
         OR: [
-          { memberType: "REGULAR_MEMBER" },
+          { memberTypes: { has: "REGULAR_MEMBER" } },
           { mezmurEnrollments: { some: { status: "ACTIVE" } } }
         ]
       }

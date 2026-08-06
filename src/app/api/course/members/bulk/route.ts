@@ -48,29 +48,28 @@ export async function POST(req: NextRequest) {
     console.log(`Processing chunk ${i}-${i + CHUNK_SIZE} with ${chunk.length} students`);
 
     try {
+      const { getEthiopianToday } = await import("@/src/lib/ethiopiancal");
+      const ethYear = getEthiopianToday().year.toString().slice(-2);
+
       await prisma.$transaction(async (tx) => {
         for (const student of chunk) {
-          console.log(`Creating student: ${student.fullName}, ${student.grandfatherName}, ${student.courseClassId}`);
-          
-          // Generate a unique private ID
-          let privateId = generateCourseStudentCode();
+          // Generate a unique coursePrivateId FHC-XXXX-YY
+          let coursePrivateId = generateCourseStudentCode(ethYear);
           let isUnique = false;
           let attempts = 0;
           while (!isUnique && attempts < 10) {
             const existing = await tx.user.findUnique({
-              where: { privateId },
+              where: { coursePrivateId },
             });
             if (!existing) {
               isUnique = true;
             } else {
-              privateId = generateCourseStudentCode();
+              coursePrivateId = generateCourseStudentCode(ethYear);
               attempts++;
             }
           }
 
-          console.log(`Generated privateId: ${privateId}`);
-
-          // Create user record (without auto-enrollment to reduce transaction time)
+          // Create user record
           const user = await tx.user.create({
             data: {
               fullName: student.fullName,
@@ -80,56 +79,48 @@ export async function POST(req: NextRequest) {
               age: student.age,
               gender: student.gender,
               type: "MEMBER",
-              memberType: "COURSE_STUDENT",
+              memberTypes: { set: ["COURSE_STUDENT"] },
               courseClassId: student.courseClassId,
-              privateId,
+              coursePrivateId,
               isActive: true,
               enrollments: {
                 create: {
                   courseClassId: student.courseClassId,
                   enrolledDate: new Date().toLocaleDateString(),
-                  status: "PENDING", // Requirement: students are pending until first attendance
+                  status: "PENDING",
                 }
               }
             },
           });
 
-          console.log(`Created user with ID: ${user.id}`);
-
           // Track created student for PDF
           createdStudents.push({
             fullName: user.fullName,
             grandfatherName: user.grandfatherName || '',
-            studentId: privateId,
+            studentId: coursePrivateId,
           });
 
           totalCreated++;
-          console.log(`Total created so far: ${totalCreated}`);
         }
       }, {
-        timeout: 60000 // Increased from 30 to 60 seconds
+        timeout: 60000
       });
-      
-      console.log(`Chunk ${i}-${i + CHUNK_SIZE} completed successfully`);
-      
-      // Auto-enroll after transaction is complete (outside transaction)
+
+      // Auto-enroll after transaction is complete
       for (const student of chunk) {
         const createdStudent = createdStudents[totalCreated - chunk.length + students.indexOf(student) % chunk.length];
         if (createdStudent) {
           try {
-            // Find the user by privateId to get the actual user ID
             const user = await prisma.user.findUnique({
-              where: { privateId: createdStudent.studentId },
+              where: { coursePrivateId: createdStudent.studentId },
               select: { id: true }
             });
             
             if (user) {
               await CourseEnrollmentService.autoEnrollInCourses(user.id, student.courseClassId, prisma);
-              console.log(`Auto-enrolled user ${user.id} in courses`);
             }
           } catch (enrollError) {
-            console.error(`Auto-enrollment failed for student ${createdStudent.studentId}:`, enrollError);
-            // Don't fail the whole process if auto-enrollment fails
+            console.error(`Auto-enrollment failed:`, enrollError);
           }
         }
       }

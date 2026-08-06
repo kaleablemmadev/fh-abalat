@@ -158,6 +158,11 @@ export type CourseFreeDay = $Result.DefaultSelection<Prisma.$CourseFreeDayPayloa
  * 
  */
 export type InstructorAttendance = $Result.DefaultSelection<Prisma.$InstructorAttendancePayload>
+/**
+ * Model StudentFollowUp
+ * 
+ */
+export type StudentFollowUp = $Result.DefaultSelection<Prisma.$StudentFollowUpPayload>
 
 /**
  * Enums
@@ -170,6 +175,16 @@ export namespace $Enums {
 };
 
 export type CourseOfferingSemester = (typeof CourseOfferingSemester)[keyof typeof CourseOfferingSemester]
+
+
+export const FollowUpStatus: {
+  PENDING: 'PENDING',
+  CALLED: 'CALLED',
+  INACTIVE: 'INACTIVE',
+  REMOVED: 'REMOVED'
+};
+
+export type FollowUpStatus = (typeof FollowUpStatus)[keyof typeof FollowUpStatus]
 
 
 export const CourseRegistrationType: {
@@ -321,6 +336,10 @@ export type auditAction = (typeof auditAction)[keyof typeof auditAction]
 export type CourseOfferingSemester = $Enums.CourseOfferingSemester
 
 export const CourseOfferingSemester: typeof $Enums.CourseOfferingSemester
+
+export type FollowUpStatus = $Enums.FollowUpStatus
+
+export const FollowUpStatus: typeof $Enums.FollowUpStatus
 
 export type CourseRegistrationType = $Enums.CourseRegistrationType
 
@@ -796,6 +815,16 @@ export class PrismaClient<
     * ```
     */
   get instructorAttendance(): Prisma.InstructorAttendanceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.studentFollowUp`: Exposes CRUD operations for the **StudentFollowUp** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StudentFollowUps
+    * const studentFollowUps = await prisma.studentFollowUp.findMany()
+    * ```
+    */
+  get studentFollowUp(): Prisma.StudentFollowUpDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1271,7 +1300,8 @@ export namespace Prisma {
     Notification: 'Notification',
     Announcement: 'Announcement',
     CourseFreeDay: 'CourseFreeDay',
-    InstructorAttendance: 'InstructorAttendance'
+    InstructorAttendance: 'InstructorAttendance',
+    StudentFollowUp: 'StudentFollowUp'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1287,7 +1317,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "courseRegistration" | "user" | "academicYear" | "event" | "attendanceType" | "attendance" | "permissionType" | "permission" | "eligibilityRule" | "eligibilityCriteria" | "course" | "instructor" | "department" | "courseClass" | "courseEnrollment" | "courseYear" | "mark" | "mezmurEnrollment" | "musicCategory" | "musicFile" | "playlist" | "monthlyMezmurSchedule" | "modePassword" | "adminRegistration" | "auditLog" | "notification" | "announcement" | "courseFreeDay" | "instructorAttendance"
+      modelProps: "courseRegistration" | "user" | "academicYear" | "event" | "attendanceType" | "attendance" | "permissionType" | "permission" | "eligibilityRule" | "eligibilityCriteria" | "course" | "instructor" | "department" | "courseClass" | "courseEnrollment" | "courseYear" | "mark" | "mezmurEnrollment" | "musicCategory" | "musicFile" | "playlist" | "monthlyMezmurSchedule" | "modePassword" | "adminRegistration" | "auditLog" | "notification" | "announcement" | "courseFreeDay" | "instructorAttendance" | "studentFollowUp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3437,6 +3467,80 @@ export namespace Prisma {
           }
         }
       }
+      StudentFollowUp: {
+        payload: Prisma.$StudentFollowUpPayload<ExtArgs>
+        fields: Prisma.StudentFollowUpFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.StudentFollowUpFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.StudentFollowUpFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>
+          }
+          findFirst: {
+            args: Prisma.StudentFollowUpFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.StudentFollowUpFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>
+          }
+          findMany: {
+            args: Prisma.StudentFollowUpFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>[]
+          }
+          create: {
+            args: Prisma.StudentFollowUpCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>
+          }
+          createMany: {
+            args: Prisma.StudentFollowUpCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.StudentFollowUpCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>[]
+          }
+          delete: {
+            args: Prisma.StudentFollowUpDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>
+          }
+          update: {
+            args: Prisma.StudentFollowUpUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>
+          }
+          deleteMany: {
+            args: Prisma.StudentFollowUpDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.StudentFollowUpUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.StudentFollowUpUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>[]
+          }
+          upsert: {
+            args: Prisma.StudentFollowUpUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$StudentFollowUpPayload>
+          }
+          aggregate: {
+            args: Prisma.StudentFollowUpAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudentFollowUp>
+          }
+          groupBy: {
+            args: Prisma.StudentFollowUpGroupByArgs<ExtArgs>
+            result: $Utils.Optional<StudentFollowUpGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.StudentFollowUpCountArgs<ExtArgs>
+            result: $Utils.Optional<StudentFollowUpCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3589,6 +3693,7 @@ export namespace Prisma {
     announcement?: AnnouncementOmit
     courseFreeDay?: CourseFreeDayOmit
     instructorAttendance?: InstructorAttendanceOmit
+    studentFollowUp?: StudentFollowUpOmit
   }
 
   /* Types for Logging */
@@ -3684,6 +3789,7 @@ export namespace Prisma {
     reviewedPermissions: number
     playlists: number
     markedInstructorAttendances: number
+    followUps: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3702,6 +3808,7 @@ export namespace Prisma {
     reviewedPermissions?: boolean | UserCountOutputTypeCountReviewedPermissionsArgs
     playlists?: boolean | UserCountOutputTypeCountPlaylistsArgs
     markedInstructorAttendances?: boolean | UserCountOutputTypeCountMarkedInstructorAttendancesArgs
+    followUps?: boolean | UserCountOutputTypeCountFollowUpsArgs
   }
 
   // Custom InputTypes
@@ -3818,6 +3925,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMarkedInstructorAttendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InstructorAttendanceWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFollowUpsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFollowUpWhereInput
   }
 
 
@@ -5984,6 +6098,7 @@ export namespace Prisma {
     reviewedPermissions?: boolean | User$reviewedPermissionsArgs<ExtArgs>
     playlists?: boolean | User$playlistsArgs<ExtArgs>
     markedInstructorAttendances?: boolean | User$markedInstructorAttendancesArgs<ExtArgs>
+    followUps?: boolean | User$followUpsArgs<ExtArgs>
     courseClass?: boolean | User$courseClassArgs<ExtArgs>
     department?: boolean | User$departmentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -6085,6 +6200,7 @@ export namespace Prisma {
     reviewedPermissions?: boolean | User$reviewedPermissionsArgs<ExtArgs>
     playlists?: boolean | User$playlistsArgs<ExtArgs>
     markedInstructorAttendances?: boolean | User$markedInstructorAttendancesArgs<ExtArgs>
+    followUps?: boolean | User$followUpsArgs<ExtArgs>
     courseClass?: boolean | User$courseClassArgs<ExtArgs>
     department?: boolean | User$departmentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -6116,6 +6232,7 @@ export namespace Prisma {
       reviewedPermissions: Prisma.$PermissionPayload<ExtArgs>[]
       playlists: Prisma.$PlaylistPayload<ExtArgs>[]
       markedInstructorAttendances: Prisma.$InstructorAttendancePayload<ExtArgs>[]
+      followUps: Prisma.$StudentFollowUpPayload<ExtArgs>[]
       courseClass: Prisma.$CourseClassPayload<ExtArgs> | null
       department: Prisma.$DepartmentPayload<ExtArgs> | null
     }
@@ -6551,6 +6668,7 @@ export namespace Prisma {
     reviewedPermissions<T extends User$reviewedPermissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$reviewedPermissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     playlists<T extends User$playlistsArgs<ExtArgs> = {}>(args?: Subset<T, User$playlistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlaylistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     markedInstructorAttendances<T extends User$markedInstructorAttendancesArgs<ExtArgs> = {}>(args?: Subset<T, User$markedInstructorAttendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorAttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    followUps<T extends User$followUpsArgs<ExtArgs> = {}>(args?: Subset<T, User$followUpsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     courseClass<T extends User$courseClassArgs<ExtArgs> = {}>(args?: Subset<T, User$courseClassArgs<ExtArgs>>): Prisma__CourseClassClient<$Result.GetResult<Prisma.$CourseClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     department<T extends User$departmentArgs<ExtArgs> = {}>(args?: Subset<T, User$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -7362,6 +7480,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InstructorAttendanceScalarFieldEnum | InstructorAttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * User.followUps
+   */
+  export type User$followUpsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    where?: StudentFollowUpWhereInput
+    orderBy?: StudentFollowUpOrderByWithRelationInput | StudentFollowUpOrderByWithRelationInput[]
+    cursor?: StudentFollowUpWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentFollowUpScalarFieldEnum | StudentFollowUpScalarFieldEnum[]
   }
 
   /**
@@ -20938,8 +21080,18 @@ export namespace Prisma {
 
   export type AggregateCourseClass = {
     _count: CourseClassCountAggregateOutputType | null
+    _avg: CourseClassAvgAggregateOutputType | null
+    _sum: CourseClassSumAggregateOutputType | null
     _min: CourseClassMinAggregateOutputType | null
     _max: CourseClassMaxAggregateOutputType | null
+  }
+
+  export type CourseClassAvgAggregateOutputType = {
+    dailyDurationHours: number | null
+  }
+
+  export type CourseClassSumAggregateOutputType = {
+    dailyDurationHours: number | null
   }
 
   export type CourseClassMinAggregateOutputType = {
@@ -20949,6 +21101,7 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     isActive: boolean | null
+    dailyDurationHours: number | null
     academicYearId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -20961,6 +21114,7 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     isActive: boolean | null
+    dailyDurationHours: number | null
     academicYearId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -20973,12 +21127,21 @@ export namespace Prisma {
     startDate: number
     endDate: number
     isActive: number
+    dailyDurationHours: number
     academicYearId: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type CourseClassAvgAggregateInputType = {
+    dailyDurationHours?: true
+  }
+
+  export type CourseClassSumAggregateInputType = {
+    dailyDurationHours?: true
+  }
 
   export type CourseClassMinAggregateInputType = {
     id?: true
@@ -20987,6 +21150,7 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     isActive?: true
+    dailyDurationHours?: true
     academicYearId?: true
     createdAt?: true
     updatedAt?: true
@@ -20999,6 +21163,7 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     isActive?: true
+    dailyDurationHours?: true
     academicYearId?: true
     createdAt?: true
     updatedAt?: true
@@ -21011,6 +21176,7 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     isActive?: true
+    dailyDurationHours?: true
     academicYearId?: true
     createdAt?: true
     updatedAt?: true
@@ -21055,6 +21221,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: CourseClassAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CourseClassSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: CourseClassMinAggregateInputType
@@ -21085,6 +21263,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: CourseClassCountAggregateInputType | true
+    _avg?: CourseClassAvgAggregateInputType
+    _sum?: CourseClassSumAggregateInputType
     _min?: CourseClassMinAggregateInputType
     _max?: CourseClassMaxAggregateInputType
   }
@@ -21096,10 +21276,13 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     isActive: boolean
+    dailyDurationHours: number
     academicYearId: string | null
     createdAt: Date
     updatedAt: Date
     _count: CourseClassCountAggregateOutputType | null
+    _avg: CourseClassAvgAggregateOutputType | null
+    _sum: CourseClassSumAggregateOutputType | null
     _min: CourseClassMinAggregateOutputType | null
     _max: CourseClassMaxAggregateOutputType | null
   }
@@ -21125,6 +21308,7 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     isActive?: boolean
+    dailyDurationHours?: boolean
     academicYearId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -21144,6 +21328,7 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     isActive?: boolean
+    dailyDurationHours?: boolean
     academicYearId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -21157,6 +21342,7 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     isActive?: boolean
+    dailyDurationHours?: boolean
     academicYearId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -21170,12 +21356,13 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     isActive?: boolean
+    dailyDurationHours?: boolean
     academicYearId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CourseClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "year" | "startDate" | "endDate" | "isActive" | "academicYearId" | "createdAt" | "updatedAt", ExtArgs["result"]["courseClass"]>
+  export type CourseClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "year" | "startDate" | "endDate" | "isActive" | "dailyDurationHours" | "academicYearId" | "createdAt" | "updatedAt", ExtArgs["result"]["courseClass"]>
   export type CourseClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     academicYear?: boolean | CourseClass$academicYearArgs<ExtArgs>
     courses?: boolean | CourseClass$coursesArgs<ExtArgs>
@@ -21209,6 +21396,7 @@ export namespace Prisma {
       startDate: Date | null
       endDate: Date | null
       isActive: boolean
+      dailyDurationHours: number
       academicYearId: string | null
       createdAt: Date
       updatedAt: Date
@@ -21647,6 +21835,7 @@ export namespace Prisma {
     readonly startDate: FieldRef<"CourseClass", 'DateTime'>
     readonly endDate: FieldRef<"CourseClass", 'DateTime'>
     readonly isActive: FieldRef<"CourseClass", 'Boolean'>
+    readonly dailyDurationHours: FieldRef<"CourseClass", 'Float'>
     readonly academicYearId: FieldRef<"CourseClass", 'String'>
     readonly createdAt: FieldRef<"CourseClass", 'DateTime'>
     readonly updatedAt: FieldRef<"CourseClass", 'DateTime'>
@@ -38452,8 +38641,18 @@ export namespace Prisma {
 
   export type AggregateInstructorAttendance = {
     _count: InstructorAttendanceCountAggregateOutputType | null
+    _avg: InstructorAttendanceAvgAggregateOutputType | null
+    _sum: InstructorAttendanceSumAggregateOutputType | null
     _min: InstructorAttendanceMinAggregateOutputType | null
     _max: InstructorAttendanceMaxAggregateOutputType | null
+  }
+
+  export type InstructorAttendanceAvgAggregateOutputType = {
+    durationHours: number | null
+  }
+
+  export type InstructorAttendanceSumAggregateOutputType = {
+    durationHours: number | null
   }
 
   export type InstructorAttendanceMinAggregateOutputType = {
@@ -38463,6 +38662,11 @@ export namespace Prisma {
     attendanceTypeId: string | null
     markedById: string | null
     note: string | null
+    durationHours: number | null
+    absenceReason: string | null
+    substituteForId: string | null
+    isBonus: boolean | null
+    courseId: string | null
     mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -38475,6 +38679,11 @@ export namespace Prisma {
     attendanceTypeId: string | null
     markedById: string | null
     note: string | null
+    durationHours: number | null
+    absenceReason: string | null
+    substituteForId: string | null
+    isBonus: boolean | null
+    courseId: string | null
     mode: $Enums.appMode | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -38487,12 +38696,25 @@ export namespace Prisma {
     attendanceTypeId: number
     markedById: number
     note: number
+    durationHours: number
+    absenceReason: number
+    substituteForId: number
+    isBonus: number
+    courseId: number
     mode: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type InstructorAttendanceAvgAggregateInputType = {
+    durationHours?: true
+  }
+
+  export type InstructorAttendanceSumAggregateInputType = {
+    durationHours?: true
+  }
 
   export type InstructorAttendanceMinAggregateInputType = {
     id?: true
@@ -38501,6 +38723,11 @@ export namespace Prisma {
     attendanceTypeId?: true
     markedById?: true
     note?: true
+    durationHours?: true
+    absenceReason?: true
+    substituteForId?: true
+    isBonus?: true
+    courseId?: true
     mode?: true
     createdAt?: true
     updatedAt?: true
@@ -38513,6 +38740,11 @@ export namespace Prisma {
     attendanceTypeId?: true
     markedById?: true
     note?: true
+    durationHours?: true
+    absenceReason?: true
+    substituteForId?: true
+    isBonus?: true
+    courseId?: true
     mode?: true
     createdAt?: true
     updatedAt?: true
@@ -38525,6 +38757,11 @@ export namespace Prisma {
     attendanceTypeId?: true
     markedById?: true
     note?: true
+    durationHours?: true
+    absenceReason?: true
+    substituteForId?: true
+    isBonus?: true
+    courseId?: true
     mode?: true
     createdAt?: true
     updatedAt?: true
@@ -38569,6 +38806,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: InstructorAttendanceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InstructorAttendanceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: InstructorAttendanceMinAggregateInputType
@@ -38599,6 +38848,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: InstructorAttendanceCountAggregateInputType | true
+    _avg?: InstructorAttendanceAvgAggregateInputType
+    _sum?: InstructorAttendanceSumAggregateInputType
     _min?: InstructorAttendanceMinAggregateInputType
     _max?: InstructorAttendanceMaxAggregateInputType
   }
@@ -38610,10 +38861,17 @@ export namespace Prisma {
     attendanceTypeId: string
     markedById: string
     note: string | null
+    durationHours: number
+    absenceReason: string | null
+    substituteForId: string | null
+    isBonus: boolean
+    courseId: string | null
     mode: $Enums.appMode
     createdAt: Date
     updatedAt: Date
     _count: InstructorAttendanceCountAggregateOutputType | null
+    _avg: InstructorAttendanceAvgAggregateOutputType | null
+    _sum: InstructorAttendanceSumAggregateOutputType | null
     _min: InstructorAttendanceMinAggregateOutputType | null
     _max: InstructorAttendanceMaxAggregateOutputType | null
   }
@@ -38639,6 +38897,11 @@ export namespace Prisma {
     attendanceTypeId?: boolean
     markedById?: boolean
     note?: boolean
+    durationHours?: boolean
+    absenceReason?: boolean
+    substituteForId?: boolean
+    isBonus?: boolean
+    courseId?: boolean
     mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -38655,6 +38918,11 @@ export namespace Prisma {
     attendanceTypeId?: boolean
     markedById?: boolean
     note?: boolean
+    durationHours?: boolean
+    absenceReason?: boolean
+    substituteForId?: boolean
+    isBonus?: boolean
+    courseId?: boolean
     mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -38671,6 +38939,11 @@ export namespace Prisma {
     attendanceTypeId?: boolean
     markedById?: boolean
     note?: boolean
+    durationHours?: boolean
+    absenceReason?: boolean
+    substituteForId?: boolean
+    isBonus?: boolean
+    courseId?: boolean
     mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -38687,12 +38960,17 @@ export namespace Prisma {
     attendanceTypeId?: boolean
     markedById?: boolean
     note?: boolean
+    durationHours?: boolean
+    absenceReason?: boolean
+    substituteForId?: boolean
+    isBonus?: boolean
+    courseId?: boolean
     mode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type InstructorAttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "instructorId" | "eventId" | "attendanceTypeId" | "markedById" | "note" | "mode" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorAttendance"]>
+  export type InstructorAttendanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "instructorId" | "eventId" | "attendanceTypeId" | "markedById" | "note" | "durationHours" | "absenceReason" | "substituteForId" | "isBonus" | "courseId" | "mode" | "createdAt" | "updatedAt", ExtArgs["result"]["instructorAttendance"]>
   export type InstructorAttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attendanceType?: boolean | AttendanceTypeDefaultArgs<ExtArgs>
     event?: boolean | EventDefaultArgs<ExtArgs>
@@ -38727,6 +39005,11 @@ export namespace Prisma {
       attendanceTypeId: string
       markedById: string
       note: string | null
+      durationHours: number
+      absenceReason: string | null
+      substituteForId: string | null
+      isBonus: boolean
+      courseId: string | null
       mode: $Enums.appMode
       createdAt: Date
       updatedAt: Date
@@ -39163,6 +39446,11 @@ export namespace Prisma {
     readonly attendanceTypeId: FieldRef<"InstructorAttendance", 'String'>
     readonly markedById: FieldRef<"InstructorAttendance", 'String'>
     readonly note: FieldRef<"InstructorAttendance", 'String'>
+    readonly durationHours: FieldRef<"InstructorAttendance", 'Float'>
+    readonly absenceReason: FieldRef<"InstructorAttendance", 'String'>
+    readonly substituteForId: FieldRef<"InstructorAttendance", 'String'>
+    readonly isBonus: FieldRef<"InstructorAttendance", 'Boolean'>
+    readonly courseId: FieldRef<"InstructorAttendance", 'String'>
     readonly mode: FieldRef<"InstructorAttendance", 'appMode'>
     readonly createdAt: FieldRef<"InstructorAttendance", 'DateTime'>
     readonly updatedAt: FieldRef<"InstructorAttendance", 'DateTime'>
@@ -39586,6 +39874,1108 @@ export namespace Prisma {
 
 
   /**
+   * Model StudentFollowUp
+   */
+
+  export type AggregateStudentFollowUp = {
+    _count: StudentFollowUpCountAggregateOutputType | null
+    _min: StudentFollowUpMinAggregateOutputType | null
+    _max: StudentFollowUpMaxAggregateOutputType | null
+  }
+
+  export type StudentFollowUpMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    reason: string | null
+    status: $Enums.FollowUpStatus | null
+    notes: string | null
+    resolvedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentFollowUpMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    reason: string | null
+    status: $Enums.FollowUpStatus | null
+    notes: string | null
+    resolvedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type StudentFollowUpCountAggregateOutputType = {
+    id: number
+    studentId: number
+    reason: number
+    status: number
+    notes: number
+    resolvedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type StudentFollowUpMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    reason?: true
+    status?: true
+    notes?: true
+    resolvedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentFollowUpMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    reason?: true
+    status?: true
+    notes?: true
+    resolvedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type StudentFollowUpCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    reason?: true
+    status?: true
+    notes?: true
+    resolvedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type StudentFollowUpAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFollowUp to aggregate.
+     */
+    where?: StudentFollowUpWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFollowUps to fetch.
+     */
+    orderBy?: StudentFollowUpOrderByWithRelationInput | StudentFollowUpOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: StudentFollowUpWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFollowUps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFollowUps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StudentFollowUps
+    **/
+    _count?: true | StudentFollowUpCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StudentFollowUpMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StudentFollowUpMaxAggregateInputType
+  }
+
+  export type GetStudentFollowUpAggregateType<T extends StudentFollowUpAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudentFollowUp]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudentFollowUp[P]>
+      : GetScalarType<T[P], AggregateStudentFollowUp[P]>
+  }
+
+
+
+
+  export type StudentFollowUpGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentFollowUpWhereInput
+    orderBy?: StudentFollowUpOrderByWithAggregationInput | StudentFollowUpOrderByWithAggregationInput[]
+    by: StudentFollowUpScalarFieldEnum[] | StudentFollowUpScalarFieldEnum
+    having?: StudentFollowUpScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StudentFollowUpCountAggregateInputType | true
+    _min?: StudentFollowUpMinAggregateInputType
+    _max?: StudentFollowUpMaxAggregateInputType
+  }
+
+  export type StudentFollowUpGroupByOutputType = {
+    id: string
+    studentId: string
+    reason: string
+    status: $Enums.FollowUpStatus
+    notes: string | null
+    resolvedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: StudentFollowUpCountAggregateOutputType | null
+    _min: StudentFollowUpMinAggregateOutputType | null
+    _max: StudentFollowUpMaxAggregateOutputType | null
+  }
+
+  type GetStudentFollowUpGroupByPayload<T extends StudentFollowUpGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<StudentFollowUpGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StudentFollowUpGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StudentFollowUpGroupByOutputType[P]>
+            : GetScalarType<T[P], StudentFollowUpGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StudentFollowUpSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    reason?: boolean
+    status?: boolean
+    notes?: boolean
+    resolvedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFollowUp"]>
+
+  export type StudentFollowUpSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    reason?: boolean
+    status?: boolean
+    notes?: boolean
+    resolvedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFollowUp"]>
+
+  export type StudentFollowUpSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    reason?: boolean
+    status?: boolean
+    notes?: boolean
+    resolvedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["studentFollowUp"]>
+
+  export type StudentFollowUpSelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    reason?: boolean
+    status?: boolean
+    notes?: boolean
+    resolvedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type StudentFollowUpOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "reason" | "status" | "notes" | "resolvedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["studentFollowUp"]>
+  export type StudentFollowUpInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type StudentFollowUpIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type StudentFollowUpIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $StudentFollowUpPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "StudentFollowUp"
+    objects: {
+      student: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      reason: string
+      status: $Enums.FollowUpStatus
+      notes: string | null
+      resolvedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["studentFollowUp"]>
+    composites: {}
+  }
+
+  type StudentFollowUpGetPayload<S extends boolean | null | undefined | StudentFollowUpDefaultArgs> = $Result.GetResult<Prisma.$StudentFollowUpPayload, S>
+
+  type StudentFollowUpCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<StudentFollowUpFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: StudentFollowUpCountAggregateInputType | true
+    }
+
+  export interface StudentFollowUpDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StudentFollowUp'], meta: { name: 'StudentFollowUp' } }
+    /**
+     * Find zero or one StudentFollowUp that matches the filter.
+     * @param {StudentFollowUpFindUniqueArgs} args - Arguments to find a StudentFollowUp
+     * @example
+     * // Get one StudentFollowUp
+     * const studentFollowUp = await prisma.studentFollowUp.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends StudentFollowUpFindUniqueArgs>(args: SelectSubset<T, StudentFollowUpFindUniqueArgs<ExtArgs>>): Prisma__StudentFollowUpClient<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one StudentFollowUp that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {StudentFollowUpFindUniqueOrThrowArgs} args - Arguments to find a StudentFollowUp
+     * @example
+     * // Get one StudentFollowUp
+     * const studentFollowUp = await prisma.studentFollowUp.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends StudentFollowUpFindUniqueOrThrowArgs>(args: SelectSubset<T, StudentFollowUpFindUniqueOrThrowArgs<ExtArgs>>): Prisma__StudentFollowUpClient<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFollowUp that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFollowUpFindFirstArgs} args - Arguments to find a StudentFollowUp
+     * @example
+     * // Get one StudentFollowUp
+     * const studentFollowUp = await prisma.studentFollowUp.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends StudentFollowUpFindFirstArgs>(args?: SelectSubset<T, StudentFollowUpFindFirstArgs<ExtArgs>>): Prisma__StudentFollowUpClient<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first StudentFollowUp that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFollowUpFindFirstOrThrowArgs} args - Arguments to find a StudentFollowUp
+     * @example
+     * // Get one StudentFollowUp
+     * const studentFollowUp = await prisma.studentFollowUp.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends StudentFollowUpFindFirstOrThrowArgs>(args?: SelectSubset<T, StudentFollowUpFindFirstOrThrowArgs<ExtArgs>>): Prisma__StudentFollowUpClient<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more StudentFollowUps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFollowUpFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StudentFollowUps
+     * const studentFollowUps = await prisma.studentFollowUp.findMany()
+     * 
+     * // Get first 10 StudentFollowUps
+     * const studentFollowUps = await prisma.studentFollowUp.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const studentFollowUpWithIdOnly = await prisma.studentFollowUp.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends StudentFollowUpFindManyArgs>(args?: SelectSubset<T, StudentFollowUpFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a StudentFollowUp.
+     * @param {StudentFollowUpCreateArgs} args - Arguments to create a StudentFollowUp.
+     * @example
+     * // Create one StudentFollowUp
+     * const StudentFollowUp = await prisma.studentFollowUp.create({
+     *   data: {
+     *     // ... data to create a StudentFollowUp
+     *   }
+     * })
+     * 
+     */
+    create<T extends StudentFollowUpCreateArgs>(args: SelectSubset<T, StudentFollowUpCreateArgs<ExtArgs>>): Prisma__StudentFollowUpClient<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many StudentFollowUps.
+     * @param {StudentFollowUpCreateManyArgs} args - Arguments to create many StudentFollowUps.
+     * @example
+     * // Create many StudentFollowUps
+     * const studentFollowUp = await prisma.studentFollowUp.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends StudentFollowUpCreateManyArgs>(args?: SelectSubset<T, StudentFollowUpCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many StudentFollowUps and returns the data saved in the database.
+     * @param {StudentFollowUpCreateManyAndReturnArgs} args - Arguments to create many StudentFollowUps.
+     * @example
+     * // Create many StudentFollowUps
+     * const studentFollowUp = await prisma.studentFollowUp.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many StudentFollowUps and only return the `id`
+     * const studentFollowUpWithIdOnly = await prisma.studentFollowUp.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends StudentFollowUpCreateManyAndReturnArgs>(args?: SelectSubset<T, StudentFollowUpCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a StudentFollowUp.
+     * @param {StudentFollowUpDeleteArgs} args - Arguments to delete one StudentFollowUp.
+     * @example
+     * // Delete one StudentFollowUp
+     * const StudentFollowUp = await prisma.studentFollowUp.delete({
+     *   where: {
+     *     // ... filter to delete one StudentFollowUp
+     *   }
+     * })
+     * 
+     */
+    delete<T extends StudentFollowUpDeleteArgs>(args: SelectSubset<T, StudentFollowUpDeleteArgs<ExtArgs>>): Prisma__StudentFollowUpClient<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one StudentFollowUp.
+     * @param {StudentFollowUpUpdateArgs} args - Arguments to update one StudentFollowUp.
+     * @example
+     * // Update one StudentFollowUp
+     * const studentFollowUp = await prisma.studentFollowUp.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends StudentFollowUpUpdateArgs>(args: SelectSubset<T, StudentFollowUpUpdateArgs<ExtArgs>>): Prisma__StudentFollowUpClient<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more StudentFollowUps.
+     * @param {StudentFollowUpDeleteManyArgs} args - Arguments to filter StudentFollowUps to delete.
+     * @example
+     * // Delete a few StudentFollowUps
+     * const { count } = await prisma.studentFollowUp.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends StudentFollowUpDeleteManyArgs>(args?: SelectSubset<T, StudentFollowUpDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFollowUps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFollowUpUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StudentFollowUps
+     * const studentFollowUp = await prisma.studentFollowUp.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends StudentFollowUpUpdateManyArgs>(args: SelectSubset<T, StudentFollowUpUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StudentFollowUps and returns the data updated in the database.
+     * @param {StudentFollowUpUpdateManyAndReturnArgs} args - Arguments to update many StudentFollowUps.
+     * @example
+     * // Update many StudentFollowUps
+     * const studentFollowUp = await prisma.studentFollowUp.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more StudentFollowUps and only return the `id`
+     * const studentFollowUpWithIdOnly = await prisma.studentFollowUp.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends StudentFollowUpUpdateManyAndReturnArgs>(args: SelectSubset<T, StudentFollowUpUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one StudentFollowUp.
+     * @param {StudentFollowUpUpsertArgs} args - Arguments to update or create a StudentFollowUp.
+     * @example
+     * // Update or create a StudentFollowUp
+     * const studentFollowUp = await prisma.studentFollowUp.upsert({
+     *   create: {
+     *     // ... data to create a StudentFollowUp
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StudentFollowUp we want to update
+     *   }
+     * })
+     */
+    upsert<T extends StudentFollowUpUpsertArgs>(args: SelectSubset<T, StudentFollowUpUpsertArgs<ExtArgs>>): Prisma__StudentFollowUpClient<$Result.GetResult<Prisma.$StudentFollowUpPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of StudentFollowUps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFollowUpCountArgs} args - Arguments to filter StudentFollowUps to count.
+     * @example
+     * // Count the number of StudentFollowUps
+     * const count = await prisma.studentFollowUp.count({
+     *   where: {
+     *     // ... the filter for the StudentFollowUps we want to count
+     *   }
+     * })
+    **/
+    count<T extends StudentFollowUpCountArgs>(
+      args?: Subset<T, StudentFollowUpCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StudentFollowUpCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StudentFollowUp.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFollowUpAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StudentFollowUpAggregateArgs>(args: Subset<T, StudentFollowUpAggregateArgs>): Prisma.PrismaPromise<GetStudentFollowUpAggregateType<T>>
+
+    /**
+     * Group by StudentFollowUp.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StudentFollowUpGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StudentFollowUpGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StudentFollowUpGroupByArgs['orderBy'] }
+        : { orderBy?: StudentFollowUpGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StudentFollowUpGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudentFollowUpGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the StudentFollowUp model
+   */
+  readonly fields: StudentFollowUpFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StudentFollowUp.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__StudentFollowUpClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the StudentFollowUp model
+   */
+  interface StudentFollowUpFieldRefs {
+    readonly id: FieldRef<"StudentFollowUp", 'String'>
+    readonly studentId: FieldRef<"StudentFollowUp", 'String'>
+    readonly reason: FieldRef<"StudentFollowUp", 'String'>
+    readonly status: FieldRef<"StudentFollowUp", 'FollowUpStatus'>
+    readonly notes: FieldRef<"StudentFollowUp", 'String'>
+    readonly resolvedAt: FieldRef<"StudentFollowUp", 'DateTime'>
+    readonly createdAt: FieldRef<"StudentFollowUp", 'DateTime'>
+    readonly updatedAt: FieldRef<"StudentFollowUp", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * StudentFollowUp findUnique
+   */
+  export type StudentFollowUpFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFollowUp to fetch.
+     */
+    where: StudentFollowUpWhereUniqueInput
+  }
+
+  /**
+   * StudentFollowUp findUniqueOrThrow
+   */
+  export type StudentFollowUpFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFollowUp to fetch.
+     */
+    where: StudentFollowUpWhereUniqueInput
+  }
+
+  /**
+   * StudentFollowUp findFirst
+   */
+  export type StudentFollowUpFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFollowUp to fetch.
+     */
+    where?: StudentFollowUpWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFollowUps to fetch.
+     */
+    orderBy?: StudentFollowUpOrderByWithRelationInput | StudentFollowUpOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFollowUps.
+     */
+    cursor?: StudentFollowUpWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFollowUps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFollowUps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFollowUps.
+     */
+    distinct?: StudentFollowUpScalarFieldEnum | StudentFollowUpScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFollowUp findFirstOrThrow
+   */
+  export type StudentFollowUpFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFollowUp to fetch.
+     */
+    where?: StudentFollowUpWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFollowUps to fetch.
+     */
+    orderBy?: StudentFollowUpOrderByWithRelationInput | StudentFollowUpOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StudentFollowUps.
+     */
+    cursor?: StudentFollowUpWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFollowUps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFollowUps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFollowUps.
+     */
+    distinct?: StudentFollowUpScalarFieldEnum | StudentFollowUpScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFollowUp findMany
+   */
+  export type StudentFollowUpFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * Filter, which StudentFollowUps to fetch.
+     */
+    where?: StudentFollowUpWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StudentFollowUps to fetch.
+     */
+    orderBy?: StudentFollowUpOrderByWithRelationInput | StudentFollowUpOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StudentFollowUps.
+     */
+    cursor?: StudentFollowUpWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StudentFollowUps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StudentFollowUps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StudentFollowUps.
+     */
+    distinct?: StudentFollowUpScalarFieldEnum | StudentFollowUpScalarFieldEnum[]
+  }
+
+  /**
+   * StudentFollowUp create
+   */
+  export type StudentFollowUpCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * The data needed to create a StudentFollowUp.
+     */
+    data: XOR<StudentFollowUpCreateInput, StudentFollowUpUncheckedCreateInput>
+  }
+
+  /**
+   * StudentFollowUp createMany
+   */
+  export type StudentFollowUpCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many StudentFollowUps.
+     */
+    data: StudentFollowUpCreateManyInput | StudentFollowUpCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * StudentFollowUp createManyAndReturn
+   */
+  export type StudentFollowUpCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * The data used to create many StudentFollowUps.
+     */
+    data: StudentFollowUpCreateManyInput | StudentFollowUpCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFollowUp update
+   */
+  export type StudentFollowUpUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * The data needed to update a StudentFollowUp.
+     */
+    data: XOR<StudentFollowUpUpdateInput, StudentFollowUpUncheckedUpdateInput>
+    /**
+     * Choose, which StudentFollowUp to update.
+     */
+    where: StudentFollowUpWhereUniqueInput
+  }
+
+  /**
+   * StudentFollowUp updateMany
+   */
+  export type StudentFollowUpUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update StudentFollowUps.
+     */
+    data: XOR<StudentFollowUpUpdateManyMutationInput, StudentFollowUpUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFollowUps to update
+     */
+    where?: StudentFollowUpWhereInput
+    /**
+     * Limit how many StudentFollowUps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFollowUp updateManyAndReturn
+   */
+  export type StudentFollowUpUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * The data used to update StudentFollowUps.
+     */
+    data: XOR<StudentFollowUpUpdateManyMutationInput, StudentFollowUpUncheckedUpdateManyInput>
+    /**
+     * Filter which StudentFollowUps to update
+     */
+    where?: StudentFollowUpWhereInput
+    /**
+     * Limit how many StudentFollowUps to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * StudentFollowUp upsert
+   */
+  export type StudentFollowUpUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * The filter to search for the StudentFollowUp to update in case it exists.
+     */
+    where: StudentFollowUpWhereUniqueInput
+    /**
+     * In case the StudentFollowUp found by the `where` argument doesn't exist, create a new StudentFollowUp with this data.
+     */
+    create: XOR<StudentFollowUpCreateInput, StudentFollowUpUncheckedCreateInput>
+    /**
+     * In case the StudentFollowUp was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<StudentFollowUpUpdateInput, StudentFollowUpUncheckedUpdateInput>
+  }
+
+  /**
+   * StudentFollowUp delete
+   */
+  export type StudentFollowUpDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+    /**
+     * Filter which StudentFollowUp to delete.
+     */
+    where: StudentFollowUpWhereUniqueInput
+  }
+
+  /**
+   * StudentFollowUp deleteMany
+   */
+  export type StudentFollowUpDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which StudentFollowUps to delete
+     */
+    where?: StudentFollowUpWhereInput
+    /**
+     * Limit how many StudentFollowUps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * StudentFollowUp without action
+   */
+  export type StudentFollowUpDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentFollowUp
+     */
+    select?: StudentFollowUpSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentFollowUp
+     */
+    omit?: StudentFollowUpOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentFollowUpInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -39852,6 +41242,7 @@ export namespace Prisma {
     startDate: 'startDate',
     endDate: 'endDate',
     isActive: 'isActive',
+    dailyDurationHours: 'dailyDurationHours',
     academicYearId: 'academicYearId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -40088,12 +41479,31 @@ export namespace Prisma {
     attendanceTypeId: 'attendanceTypeId',
     markedById: 'markedById',
     note: 'note',
+    durationHours: 'durationHours',
+    absenceReason: 'absenceReason',
+    substituteForId: 'substituteForId',
+    isBonus: 'isBonus',
+    courseId: 'courseId',
     mode: 'mode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type InstructorAttendanceScalarFieldEnum = (typeof InstructorAttendanceScalarFieldEnum)[keyof typeof InstructorAttendanceScalarFieldEnum]
+
+
+  export const StudentFollowUpScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    reason: 'reason',
+    status: 'status',
+    notes: 'notes',
+    resolvedAt: 'resolvedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type StudentFollowUpScalarFieldEnum = (typeof StudentFollowUpScalarFieldEnum)[keyof typeof StudentFollowUpScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -40424,6 +41834,20 @@ export namespace Prisma {
    */
   export type ListEnumauditActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'auditAction[]'>
     
+
+
+  /**
+   * Reference to a field of type 'FollowUpStatus'
+   */
+  export type EnumFollowUpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FollowUpStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'FollowUpStatus[]'
+   */
+  export type ListEnumFollowUpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FollowUpStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -40562,6 +41986,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionListRelationFilter
     playlists?: PlaylistListRelationFilter
     markedInstructorAttendances?: InstructorAttendanceListRelationFilter
+    followUps?: StudentFollowUpListRelationFilter
     courseClass?: XOR<CourseClassNullableScalarRelationFilter, CourseClassWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
   }
@@ -40604,6 +42029,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionOrderByRelationAggregateInput
     playlists?: PlaylistOrderByRelationAggregateInput
     markedInstructorAttendances?: InstructorAttendanceOrderByRelationAggregateInput
+    followUps?: StudentFollowUpOrderByRelationAggregateInput
     courseClass?: CourseClassOrderByWithRelationInput
     department?: DepartmentOrderByWithRelationInput
   }
@@ -40650,6 +42076,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionListRelationFilter
     playlists?: PlaylistListRelationFilter
     markedInstructorAttendances?: InstructorAttendanceListRelationFilter
+    followUps?: StudentFollowUpListRelationFilter
     courseClass?: XOR<CourseClassNullableScalarRelationFilter, CourseClassWhereInput> | null
     department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
   }, "id" | "email" | "privateId" | "fullName_grandfatherName">
@@ -41801,6 +43228,7 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"CourseClass"> | Date | string | null
     endDate?: DateTimeNullableFilter<"CourseClass"> | Date | string | null
     isActive?: BoolFilter<"CourseClass"> | boolean
+    dailyDurationHours?: FloatFilter<"CourseClass"> | number
     academicYearId?: StringNullableFilter<"CourseClass"> | string | null
     createdAt?: DateTimeFilter<"CourseClass"> | Date | string
     updatedAt?: DateTimeFilter<"CourseClass"> | Date | string
@@ -41819,6 +43247,7 @@ export namespace Prisma {
     startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    dailyDurationHours?: SortOrder
     academicYearId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -41841,6 +43270,7 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"CourseClass"> | Date | string | null
     endDate?: DateTimeNullableFilter<"CourseClass"> | Date | string | null
     isActive?: BoolFilter<"CourseClass"> | boolean
+    dailyDurationHours?: FloatFilter<"CourseClass"> | number
     academicYearId?: StringNullableFilter<"CourseClass"> | string | null
     createdAt?: DateTimeFilter<"CourseClass"> | Date | string
     updatedAt?: DateTimeFilter<"CourseClass"> | Date | string
@@ -41859,12 +43289,15 @@ export namespace Prisma {
     startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    dailyDurationHours?: SortOrder
     academicYearId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CourseClassCountOrderByAggregateInput
+    _avg?: CourseClassAvgOrderByAggregateInput
     _max?: CourseClassMaxOrderByAggregateInput
     _min?: CourseClassMinOrderByAggregateInput
+    _sum?: CourseClassSumOrderByAggregateInput
   }
 
   export type CourseClassScalarWhereWithAggregatesInput = {
@@ -41877,6 +43310,7 @@ export namespace Prisma {
     startDate?: DateTimeNullableWithAggregatesFilter<"CourseClass"> | Date | string | null
     endDate?: DateTimeNullableWithAggregatesFilter<"CourseClass"> | Date | string | null
     isActive?: BoolWithAggregatesFilter<"CourseClass"> | boolean
+    dailyDurationHours?: FloatWithAggregatesFilter<"CourseClass"> | number
     academicYearId?: StringNullableWithAggregatesFilter<"CourseClass"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CourseClass"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CourseClass"> | Date | string
@@ -43045,6 +44479,11 @@ export namespace Prisma {
     attendanceTypeId?: StringFilter<"InstructorAttendance"> | string
     markedById?: StringFilter<"InstructorAttendance"> | string
     note?: StringNullableFilter<"InstructorAttendance"> | string | null
+    durationHours?: FloatFilter<"InstructorAttendance"> | number
+    absenceReason?: StringNullableFilter<"InstructorAttendance"> | string | null
+    substituteForId?: StringNullableFilter<"InstructorAttendance"> | string | null
+    isBonus?: BoolFilter<"InstructorAttendance"> | boolean
+    courseId?: StringNullableFilter<"InstructorAttendance"> | string | null
     mode?: EnumappModeFilter<"InstructorAttendance"> | $Enums.appMode
     createdAt?: DateTimeFilter<"InstructorAttendance"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorAttendance"> | Date | string
@@ -43061,6 +44500,11 @@ export namespace Prisma {
     attendanceTypeId?: SortOrder
     markedById?: SortOrder
     note?: SortOrderInput | SortOrder
+    durationHours?: SortOrder
+    absenceReason?: SortOrderInput | SortOrder
+    substituteForId?: SortOrderInput | SortOrder
+    isBonus?: SortOrder
+    courseId?: SortOrderInput | SortOrder
     mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -43072,7 +44516,6 @@ export namespace Prisma {
 
   export type InstructorAttendanceWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    instructorId_eventId?: InstructorAttendanceInstructorIdEventIdCompoundUniqueInput
     AND?: InstructorAttendanceWhereInput | InstructorAttendanceWhereInput[]
     OR?: InstructorAttendanceWhereInput[]
     NOT?: InstructorAttendanceWhereInput | InstructorAttendanceWhereInput[]
@@ -43081,6 +44524,11 @@ export namespace Prisma {
     attendanceTypeId?: StringFilter<"InstructorAttendance"> | string
     markedById?: StringFilter<"InstructorAttendance"> | string
     note?: StringNullableFilter<"InstructorAttendance"> | string | null
+    durationHours?: FloatFilter<"InstructorAttendance"> | number
+    absenceReason?: StringNullableFilter<"InstructorAttendance"> | string | null
+    substituteForId?: StringNullableFilter<"InstructorAttendance"> | string | null
+    isBonus?: BoolFilter<"InstructorAttendance"> | boolean
+    courseId?: StringNullableFilter<"InstructorAttendance"> | string | null
     mode?: EnumappModeFilter<"InstructorAttendance"> | $Enums.appMode
     createdAt?: DateTimeFilter<"InstructorAttendance"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorAttendance"> | Date | string
@@ -43088,7 +44536,7 @@ export namespace Prisma {
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     markedBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     instructor?: XOR<InstructorScalarRelationFilter, InstructorWhereInput>
-  }, "id" | "instructorId_eventId">
+  }, "id">
 
   export type InstructorAttendanceOrderByWithAggregationInput = {
     id?: SortOrder
@@ -43097,12 +44545,19 @@ export namespace Prisma {
     attendanceTypeId?: SortOrder
     markedById?: SortOrder
     note?: SortOrderInput | SortOrder
+    durationHours?: SortOrder
+    absenceReason?: SortOrderInput | SortOrder
+    substituteForId?: SortOrderInput | SortOrder
+    isBonus?: SortOrder
+    courseId?: SortOrderInput | SortOrder
     mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InstructorAttendanceCountOrderByAggregateInput
+    _avg?: InstructorAttendanceAvgOrderByAggregateInput
     _max?: InstructorAttendanceMaxOrderByAggregateInput
     _min?: InstructorAttendanceMinOrderByAggregateInput
+    _sum?: InstructorAttendanceSumOrderByAggregateInput
   }
 
   export type InstructorAttendanceScalarWhereWithAggregatesInput = {
@@ -43115,9 +44570,84 @@ export namespace Prisma {
     attendanceTypeId?: StringWithAggregatesFilter<"InstructorAttendance"> | string
     markedById?: StringWithAggregatesFilter<"InstructorAttendance"> | string
     note?: StringNullableWithAggregatesFilter<"InstructorAttendance"> | string | null
+    durationHours?: FloatWithAggregatesFilter<"InstructorAttendance"> | number
+    absenceReason?: StringNullableWithAggregatesFilter<"InstructorAttendance"> | string | null
+    substituteForId?: StringNullableWithAggregatesFilter<"InstructorAttendance"> | string | null
+    isBonus?: BoolWithAggregatesFilter<"InstructorAttendance"> | boolean
+    courseId?: StringNullableWithAggregatesFilter<"InstructorAttendance"> | string | null
     mode?: EnumappModeWithAggregatesFilter<"InstructorAttendance"> | $Enums.appMode
     createdAt?: DateTimeWithAggregatesFilter<"InstructorAttendance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"InstructorAttendance"> | Date | string
+  }
+
+  export type StudentFollowUpWhereInput = {
+    AND?: StudentFollowUpWhereInput | StudentFollowUpWhereInput[]
+    OR?: StudentFollowUpWhereInput[]
+    NOT?: StudentFollowUpWhereInput | StudentFollowUpWhereInput[]
+    id?: StringFilter<"StudentFollowUp"> | string
+    studentId?: StringFilter<"StudentFollowUp"> | string
+    reason?: StringFilter<"StudentFollowUp"> | string
+    status?: EnumFollowUpStatusFilter<"StudentFollowUp"> | $Enums.FollowUpStatus
+    notes?: StringNullableFilter<"StudentFollowUp"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"StudentFollowUp"> | Date | string | null
+    createdAt?: DateTimeFilter<"StudentFollowUp"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFollowUp"> | Date | string
+    student?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type StudentFollowUpOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    student?: UserOrderByWithRelationInput
+  }
+
+  export type StudentFollowUpWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: StudentFollowUpWhereInput | StudentFollowUpWhereInput[]
+    OR?: StudentFollowUpWhereInput[]
+    NOT?: StudentFollowUpWhereInput | StudentFollowUpWhereInput[]
+    studentId?: StringFilter<"StudentFollowUp"> | string
+    reason?: StringFilter<"StudentFollowUp"> | string
+    status?: EnumFollowUpStatusFilter<"StudentFollowUp"> | $Enums.FollowUpStatus
+    notes?: StringNullableFilter<"StudentFollowUp"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"StudentFollowUp"> | Date | string | null
+    createdAt?: DateTimeFilter<"StudentFollowUp"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFollowUp"> | Date | string
+    student?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type StudentFollowUpOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: StudentFollowUpCountOrderByAggregateInput
+    _max?: StudentFollowUpMaxOrderByAggregateInput
+    _min?: StudentFollowUpMinOrderByAggregateInput
+  }
+
+  export type StudentFollowUpScalarWhereWithAggregatesInput = {
+    AND?: StudentFollowUpScalarWhereWithAggregatesInput | StudentFollowUpScalarWhereWithAggregatesInput[]
+    OR?: StudentFollowUpScalarWhereWithAggregatesInput[]
+    NOT?: StudentFollowUpScalarWhereWithAggregatesInput | StudentFollowUpScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"StudentFollowUp"> | string
+    studentId?: StringWithAggregatesFilter<"StudentFollowUp"> | string
+    reason?: StringWithAggregatesFilter<"StudentFollowUp"> | string
+    status?: EnumFollowUpStatusWithAggregatesFilter<"StudentFollowUp"> | $Enums.FollowUpStatus
+    notes?: StringNullableWithAggregatesFilter<"StudentFollowUp"> | string | null
+    resolvedAt?: DateTimeNullableWithAggregatesFilter<"StudentFollowUp"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"StudentFollowUp"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"StudentFollowUp"> | Date | string
   }
 
   export type CourseRegistrationCreateInput = {
@@ -43260,6 +44790,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -43302,6 +44833,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserUpdateInput = {
@@ -43340,6 +44872,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -43382,6 +44915,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -44681,6 +46215,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     academicYear?: AcademicYearCreateNestedOneWithoutClassesInput
@@ -44698,6 +46233,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     academicYearId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44715,6 +46251,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicYear?: AcademicYearUpdateOneWithoutClassesNestedInput
@@ -44732,6 +46269,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44749,6 +46287,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     academicYearId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -44761,6 +46300,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44772,6 +46312,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46054,6 +47595,11 @@ export namespace Prisma {
   export type InstructorAttendanceCreateInput = {
     id?: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46070,6 +47616,11 @@ export namespace Prisma {
     attendanceTypeId: string
     markedById: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46078,6 +47629,11 @@ export namespace Prisma {
   export type InstructorAttendanceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46094,6 +47650,11 @@ export namespace Prisma {
     attendanceTypeId?: StringFieldUpdateOperationsInput | string
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46106,6 +47667,11 @@ export namespace Prisma {
     attendanceTypeId: string
     markedById: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46114,6 +47680,11 @@ export namespace Prisma {
   export type InstructorAttendanceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46126,7 +47697,88 @@ export namespace Prisma {
     attendanceTypeId?: StringFieldUpdateOperationsInput | string
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFollowUpCreateInput = {
+    id?: string
+    reason: string
+    status?: $Enums.FollowUpStatus
+    notes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: UserCreateNestedOneWithoutFollowUpsInput
+  }
+
+  export type StudentFollowUpUncheckedCreateInput = {
+    id?: string
+    studentId: string
+    reason: string
+    status?: $Enums.FollowUpStatus
+    notes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFollowUpUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: UserUpdateOneRequiredWithoutFollowUpsNestedInput
+  }
+
+  export type StudentFollowUpUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFollowUpCreateManyInput = {
+    id?: string
+    studentId: string
+    reason: string
+    status?: $Enums.FollowUpStatus
+    notes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFollowUpUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFollowUpUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46451,6 +48103,12 @@ export namespace Prisma {
     none?: InstructorAttendanceWhereInput
   }
 
+  export type StudentFollowUpListRelationFilter = {
+    every?: StudentFollowUpWhereInput
+    some?: StudentFollowUpWhereInput
+    none?: StudentFollowUpWhereInput
+  }
+
   export type CourseClassNullableScalarRelationFilter = {
     is?: CourseClassWhereInput | null
     isNot?: CourseClassWhereInput | null
@@ -46510,6 +48168,10 @@ export namespace Prisma {
   }
 
   export type InstructorAttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type StudentFollowUpOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -47563,9 +49225,14 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     isActive?: SortOrder
+    dailyDurationHours?: SortOrder
     academicYearId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type CourseClassAvgOrderByAggregateInput = {
+    dailyDurationHours?: SortOrder
   }
 
   export type CourseClassMaxOrderByAggregateInput = {
@@ -47575,6 +49242,7 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     isActive?: SortOrder
+    dailyDurationHours?: SortOrder
     academicYearId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -47587,9 +49255,14 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     isActive?: SortOrder
+    dailyDurationHours?: SortOrder
     academicYearId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type CourseClassSumOrderByAggregateInput = {
+    dailyDurationHours?: SortOrder
   }
 
   export type EnumCourseClassTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -48442,11 +50115,6 @@ export namespace Prisma {
     ethiopianDay?: SortOrder
   }
 
-  export type InstructorAttendanceInstructorIdEventIdCompoundUniqueInput = {
-    instructorId: string
-    eventId: string
-  }
-
   export type InstructorAttendanceCountOrderByAggregateInput = {
     id?: SortOrder
     instructorId?: SortOrder
@@ -48454,9 +50122,18 @@ export namespace Prisma {
     attendanceTypeId?: SortOrder
     markedById?: SortOrder
     note?: SortOrder
+    durationHours?: SortOrder
+    absenceReason?: SortOrder
+    substituteForId?: SortOrder
+    isBonus?: SortOrder
+    courseId?: SortOrder
     mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InstructorAttendanceAvgOrderByAggregateInput = {
+    durationHours?: SortOrder
   }
 
   export type InstructorAttendanceMaxOrderByAggregateInput = {
@@ -48466,6 +50143,11 @@ export namespace Prisma {
     attendanceTypeId?: SortOrder
     markedById?: SortOrder
     note?: SortOrder
+    durationHours?: SortOrder
+    absenceReason?: SortOrder
+    substituteForId?: SortOrder
+    isBonus?: SortOrder
+    courseId?: SortOrder
     mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -48478,9 +50160,68 @@ export namespace Prisma {
     attendanceTypeId?: SortOrder
     markedById?: SortOrder
     note?: SortOrder
+    durationHours?: SortOrder
+    absenceReason?: SortOrder
+    substituteForId?: SortOrder
+    isBonus?: SortOrder
+    courseId?: SortOrder
     mode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type InstructorAttendanceSumOrderByAggregateInput = {
+    durationHours?: SortOrder
+  }
+
+  export type EnumFollowUpStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FollowUpStatus | EnumFollowUpStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFollowUpStatusFilter<$PrismaModel> | $Enums.FollowUpStatus
+  }
+
+  export type StudentFollowUpCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    resolvedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFollowUpMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    resolvedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StudentFollowUpMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    reason?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    resolvedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumFollowUpStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FollowUpStatus | EnumFollowUpStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFollowUpStatusWithAggregatesFilter<$PrismaModel> | $Enums.FollowUpStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFollowUpStatusFilter<$PrismaModel>
+    _max?: NestedEnumFollowUpStatusFilter<$PrismaModel>
   }
 
   export type UserCreateNestedOneWithoutRegistrationsInput = {
@@ -48626,6 +50367,13 @@ export namespace Prisma {
     connect?: InstructorAttendanceWhereUniqueInput | InstructorAttendanceWhereUniqueInput[]
   }
 
+  export type StudentFollowUpCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentFollowUpCreateWithoutStudentInput, StudentFollowUpUncheckedCreateWithoutStudentInput> | StudentFollowUpCreateWithoutStudentInput[] | StudentFollowUpUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFollowUpCreateOrConnectWithoutStudentInput | StudentFollowUpCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentFollowUpCreateManyStudentInputEnvelope
+    connect?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+  }
+
   export type CourseClassCreateNestedOneWithoutUsersInput = {
     create?: XOR<CourseClassCreateWithoutUsersInput, CourseClassUncheckedCreateWithoutUsersInput>
     connectOrCreate?: CourseClassCreateOrConnectWithoutUsersInput
@@ -48741,6 +50489,13 @@ export namespace Prisma {
     connectOrCreate?: InstructorAttendanceCreateOrConnectWithoutMarkedByInput | InstructorAttendanceCreateOrConnectWithoutMarkedByInput[]
     createMany?: InstructorAttendanceCreateManyMarkedByInputEnvelope
     connect?: InstructorAttendanceWhereUniqueInput | InstructorAttendanceWhereUniqueInput[]
+  }
+
+  export type StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<StudentFollowUpCreateWithoutStudentInput, StudentFollowUpUncheckedCreateWithoutStudentInput> | StudentFollowUpCreateWithoutStudentInput[] | StudentFollowUpUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFollowUpCreateOrConnectWithoutStudentInput | StudentFollowUpCreateOrConnectWithoutStudentInput[]
+    createMany?: StudentFollowUpCreateManyStudentInputEnvelope
+    connect?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -48981,6 +50736,20 @@ export namespace Prisma {
     deleteMany?: InstructorAttendanceScalarWhereInput | InstructorAttendanceScalarWhereInput[]
   }
 
+  export type StudentFollowUpUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentFollowUpCreateWithoutStudentInput, StudentFollowUpUncheckedCreateWithoutStudentInput> | StudentFollowUpCreateWithoutStudentInput[] | StudentFollowUpUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFollowUpCreateOrConnectWithoutStudentInput | StudentFollowUpCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentFollowUpUpsertWithWhereUniqueWithoutStudentInput | StudentFollowUpUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentFollowUpCreateManyStudentInputEnvelope
+    set?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+    disconnect?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+    delete?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+    connect?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+    update?: StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput | StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentFollowUpUpdateManyWithWhereWithoutStudentInput | StudentFollowUpUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentFollowUpScalarWhereInput | StudentFollowUpScalarWhereInput[]
+  }
+
   export type CourseClassUpdateOneWithoutUsersNestedInput = {
     create?: XOR<CourseClassCreateWithoutUsersInput, CourseClassUncheckedCreateWithoutUsersInput>
     connectOrCreate?: CourseClassCreateOrConnectWithoutUsersInput
@@ -49209,6 +50978,20 @@ export namespace Prisma {
     update?: InstructorAttendanceUpdateWithWhereUniqueWithoutMarkedByInput | InstructorAttendanceUpdateWithWhereUniqueWithoutMarkedByInput[]
     updateMany?: InstructorAttendanceUpdateManyWithWhereWithoutMarkedByInput | InstructorAttendanceUpdateManyWithWhereWithoutMarkedByInput[]
     deleteMany?: InstructorAttendanceScalarWhereInput | InstructorAttendanceScalarWhereInput[]
+  }
+
+  export type StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<StudentFollowUpCreateWithoutStudentInput, StudentFollowUpUncheckedCreateWithoutStudentInput> | StudentFollowUpCreateWithoutStudentInput[] | StudentFollowUpUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: StudentFollowUpCreateOrConnectWithoutStudentInput | StudentFollowUpCreateOrConnectWithoutStudentInput[]
+    upsert?: StudentFollowUpUpsertWithWhereUniqueWithoutStudentInput | StudentFollowUpUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: StudentFollowUpCreateManyStudentInputEnvelope
+    set?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+    disconnect?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+    delete?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+    connect?: StudentFollowUpWhereUniqueInput | StudentFollowUpWhereUniqueInput[]
+    update?: StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput | StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: StudentFollowUpUpdateManyWithWhereWithoutStudentInput | StudentFollowUpUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: StudentFollowUpScalarWhereInput | StudentFollowUpScalarWhereInput[]
   }
 
   export type CourseClassCreateNestedManyWithoutAcademicYearInput = {
@@ -51085,6 +52868,24 @@ export namespace Prisma {
     update?: XOR<XOR<InstructorUpdateToOneWithWhereWithoutAttendancesInput, InstructorUpdateWithoutAttendancesInput>, InstructorUncheckedUpdateWithoutAttendancesInput>
   }
 
+  export type UserCreateNestedOneWithoutFollowUpsInput = {
+    create?: XOR<UserCreateWithoutFollowUpsInput, UserUncheckedCreateWithoutFollowUpsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFollowUpsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumFollowUpStatusFieldUpdateOperationsInput = {
+    set?: $Enums.FollowUpStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutFollowUpsNestedInput = {
+    create?: XOR<UserCreateWithoutFollowUpsInput, UserUncheckedCreateWithoutFollowUpsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFollowUpsInput
+    upsert?: UserUpsertWithoutFollowUpsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFollowUpsInput, UserUpdateWithoutFollowUpsInput>, UserUncheckedUpdateWithoutFollowUpsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -51637,6 +53438,23 @@ export namespace Prisma {
     _max?: NestedEnumauditActionFilter<$PrismaModel>
   }
 
+  export type NestedEnumFollowUpStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.FollowUpStatus | EnumFollowUpStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFollowUpStatusFilter<$PrismaModel> | $Enums.FollowUpStatus
+  }
+
+  export type NestedEnumFollowUpStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.FollowUpStatus | EnumFollowUpStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.FollowUpStatus[] | ListEnumFollowUpStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumFollowUpStatusWithAggregatesFilter<$PrismaModel> | $Enums.FollowUpStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumFollowUpStatusFilter<$PrismaModel>
+    _max?: NestedEnumFollowUpStatusFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutRegistrationsInput = {
     id?: string
     email?: string | null
@@ -51672,6 +53490,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -51713,6 +53532,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutRegistrationsInput = {
@@ -51766,6 +53586,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -51807,6 +53628,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type AdminRegistrationCreateWithoutReviewedByInput = {
@@ -52352,6 +54174,11 @@ export namespace Prisma {
   export type InstructorAttendanceCreateWithoutMarkedByInput = {
     id?: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52366,6 +54193,11 @@ export namespace Prisma {
     eventId: string
     attendanceTypeId: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52381,6 +54213,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StudentFollowUpCreateWithoutStudentInput = {
+    id?: string
+    reason: string
+    status?: $Enums.FollowUpStatus
+    notes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFollowUpUncheckedCreateWithoutStudentInput = {
+    id?: string
+    reason: string
+    status?: $Enums.FollowUpStatus
+    notes?: string | null
+    resolvedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFollowUpCreateOrConnectWithoutStudentInput = {
+    where: StudentFollowUpWhereUniqueInput
+    create: XOR<StudentFollowUpCreateWithoutStudentInput, StudentFollowUpUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentFollowUpCreateManyStudentInputEnvelope = {
+    data: StudentFollowUpCreateManyStudentInput | StudentFollowUpCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CourseClassCreateWithoutUsersInput = {
     id?: string
     name?: $Enums.CourseClassType
@@ -52388,6 +54250,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     academicYear?: AcademicYearCreateNestedOneWithoutClassesInput
@@ -52404,6 +54267,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     academicYearId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52908,9 +54772,44 @@ export namespace Prisma {
     attendanceTypeId?: StringFilter<"InstructorAttendance"> | string
     markedById?: StringFilter<"InstructorAttendance"> | string
     note?: StringNullableFilter<"InstructorAttendance"> | string | null
+    durationHours?: FloatFilter<"InstructorAttendance"> | number
+    absenceReason?: StringNullableFilter<"InstructorAttendance"> | string | null
+    substituteForId?: StringNullableFilter<"InstructorAttendance"> | string | null
+    isBonus?: BoolFilter<"InstructorAttendance"> | boolean
+    courseId?: StringNullableFilter<"InstructorAttendance"> | string | null
     mode?: EnumappModeFilter<"InstructorAttendance"> | $Enums.appMode
     createdAt?: DateTimeFilter<"InstructorAttendance"> | Date | string
     updatedAt?: DateTimeFilter<"InstructorAttendance"> | Date | string
+  }
+
+  export type StudentFollowUpUpsertWithWhereUniqueWithoutStudentInput = {
+    where: StudentFollowUpWhereUniqueInput
+    update: XOR<StudentFollowUpUpdateWithoutStudentInput, StudentFollowUpUncheckedUpdateWithoutStudentInput>
+    create: XOR<StudentFollowUpCreateWithoutStudentInput, StudentFollowUpUncheckedCreateWithoutStudentInput>
+  }
+
+  export type StudentFollowUpUpdateWithWhereUniqueWithoutStudentInput = {
+    where: StudentFollowUpWhereUniqueInput
+    data: XOR<StudentFollowUpUpdateWithoutStudentInput, StudentFollowUpUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type StudentFollowUpUpdateManyWithWhereWithoutStudentInput = {
+    where: StudentFollowUpScalarWhereInput
+    data: XOR<StudentFollowUpUpdateManyMutationInput, StudentFollowUpUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type StudentFollowUpScalarWhereInput = {
+    AND?: StudentFollowUpScalarWhereInput | StudentFollowUpScalarWhereInput[]
+    OR?: StudentFollowUpScalarWhereInput[]
+    NOT?: StudentFollowUpScalarWhereInput | StudentFollowUpScalarWhereInput[]
+    id?: StringFilter<"StudentFollowUp"> | string
+    studentId?: StringFilter<"StudentFollowUp"> | string
+    reason?: StringFilter<"StudentFollowUp"> | string
+    status?: EnumFollowUpStatusFilter<"StudentFollowUp"> | $Enums.FollowUpStatus
+    notes?: StringNullableFilter<"StudentFollowUp"> | string | null
+    resolvedAt?: DateTimeNullableFilter<"StudentFollowUp"> | Date | string | null
+    createdAt?: DateTimeFilter<"StudentFollowUp"> | Date | string
+    updatedAt?: DateTimeFilter<"StudentFollowUp"> | Date | string
   }
 
   export type CourseClassUpsertWithoutUsersInput = {
@@ -52931,6 +54830,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicYear?: AcademicYearUpdateOneWithoutClassesNestedInput
@@ -52947,6 +54847,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -52998,6 +54899,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     courses?: CourseCreateNestedManyWithoutCourseClassInput
@@ -53014,6 +54916,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     courses?: CourseUncheckedCreateNestedManyWithoutCourseClassInput
@@ -53059,6 +54962,7 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"CourseClass"> | Date | string | null
     endDate?: DateTimeNullableFilter<"CourseClass"> | Date | string | null
     isActive?: BoolFilter<"CourseClass"> | boolean
+    dailyDurationHours?: FloatFilter<"CourseClass"> | number
     academicYearId?: StringNullableFilter<"CourseClass"> | string | null
     createdAt?: DateTimeFilter<"CourseClass"> | Date | string
     updatedAt?: DateTimeFilter<"CourseClass"> | Date | string
@@ -53103,6 +55007,11 @@ export namespace Prisma {
   export type InstructorAttendanceCreateWithoutEventInput = {
     id?: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53117,6 +55026,11 @@ export namespace Prisma {
     attendanceTypeId: string
     markedById: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53139,6 +55053,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     academicYear?: AcademicYearCreateNestedOneWithoutClassesInput
@@ -53155,6 +55070,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     academicYearId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53204,6 +55120,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -53245,6 +55162,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutCreatedEventsInput = {
@@ -53329,6 +55247,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicYear?: AcademicYearUpdateOneWithoutClassesNestedInput
@@ -53345,6 +55264,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53400,6 +55320,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -53441,6 +55362,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type EligibilityRuleUpsertWithoutEventsInput = {
@@ -53515,6 +55437,11 @@ export namespace Prisma {
   export type InstructorAttendanceCreateWithoutAttendanceTypeInput = {
     id?: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53529,6 +55456,11 @@ export namespace Prisma {
     eventId: string
     markedById: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53693,6 +55625,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -53734,6 +55667,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutMarkedAttendancesInput = {
@@ -53776,6 +55710,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -53817,6 +55752,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutAttendancesInput = {
@@ -54001,6 +55937,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -54042,6 +55979,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutAttendancesInput = {
@@ -54090,6 +56028,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -54131,6 +56070,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PermissionUpsertWithoutAttendancesInput = {
@@ -54305,6 +56245,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -54346,6 +56287,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutPermissionsInput = {
@@ -54427,6 +56369,7 @@ export namespace Prisma {
     permissions?: PermissionCreateNestedManyWithoutMemberInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -54468,6 +56411,7 @@ export namespace Prisma {
     permissions?: PermissionUncheckedCreateNestedManyWithoutMemberInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReviewedPermissionsInput = {
@@ -54537,6 +56481,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -54578,6 +56523,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PermissionTypeUpsertWithoutPermissionsInput = {
@@ -54671,6 +56617,7 @@ export namespace Prisma {
     permissions?: PermissionUpdateManyWithoutMemberNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -54712,6 +56659,7 @@ export namespace Prisma {
     permissions?: PermissionUncheckedUpdateManyWithoutMemberNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type EligibilityCriteriaCreateWithoutEligibilityRuleInput = {
@@ -54920,6 +56868,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     academicYear?: AcademicYearCreateNestedOneWithoutClassesInput
@@ -54936,6 +56885,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     academicYearId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55080,6 +57030,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicYear?: AcademicYearUpdateOneWithoutClassesNestedInput
@@ -55096,6 +57047,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55327,6 +57279,11 @@ export namespace Prisma {
   export type InstructorAttendanceCreateWithoutInstructorInput = {
     id?: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55341,6 +57298,11 @@ export namespace Prisma {
     attendanceTypeId: string
     markedById: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -55622,6 +57584,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
   }
 
@@ -55662,6 +57625,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -56049,6 +58013,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
 
@@ -56089,6 +58054,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutCourseClassInput = {
@@ -56239,6 +58205,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     academicYear?: AcademicYearCreateNestedOneWithoutClassesInput
@@ -56255,6 +58222,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     academicYearId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56304,6 +58272,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -56345,6 +58314,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -56370,6 +58340,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicYear?: AcademicYearUpdateOneWithoutClassesNestedInput
@@ -56386,6 +58357,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56441,6 +58413,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -56482,6 +58455,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseClassCreateWithoutCourseYearsInput = {
@@ -56491,6 +58465,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     academicYear?: AcademicYearCreateNestedOneWithoutClassesInput
@@ -56507,6 +58482,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     academicYearId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -56695,6 +58671,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     academicYear?: AcademicYearUpdateOneWithoutClassesNestedInput
@@ -56711,6 +58688,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56946,6 +58924,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -56987,6 +58966,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutMarksInput = {
@@ -57093,6 +59073,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -57134,6 +59115,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutMezmurEnrollmentsInput = {
@@ -57171,6 +59153,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -57212,6 +59195,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutMezmurEnrollmentsInput = {
@@ -57265,6 +59249,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -57306,6 +59291,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type MusicFileCreateWithoutCategoriesInput = {
@@ -57400,6 +59386,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -57441,6 +59428,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutUploadedMusicFilesInput = {
@@ -57561,6 +59549,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -57602,6 +59591,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type MusicCategoryUpsertWithWhereUniqueWithoutMusicFilesInput = {
@@ -57710,6 +59700,7 @@ export namespace Prisma {
     permissions?: PermissionCreateNestedManyWithoutMemberInput
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -57751,6 +59742,7 @@ export namespace Prisma {
     permissions?: PermissionUncheckedCreateNestedManyWithoutMemberInput
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutPlaylistsInput = {
@@ -57845,6 +59837,7 @@ export namespace Prisma {
     permissions?: PermissionUpdateManyWithoutMemberNestedInput
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -57886,6 +59879,7 @@ export namespace Prisma {
     permissions?: PermissionUncheckedUpdateManyWithoutMemberNestedInput
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type MusicFileUpsertWithWhereUniqueWithoutPlaylistsInput = {
@@ -57996,6 +59990,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -58037,6 +60032,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReviewedRegistrationsInput = {
@@ -58090,6 +60086,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -58131,6 +60128,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutPerformedAuditLogsInput = {
@@ -58168,6 +60166,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -58209,6 +60208,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutPerformedAuditLogsInput = {
@@ -58296,6 +60296,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -58337,6 +60338,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutAuditLogInput = {
@@ -58423,6 +60425,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -58464,6 +60467,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutTargetNotificationsInput = {
@@ -58556,6 +60560,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -58597,6 +60602,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseYearCreateWithoutCourseFreeDaysInput = {
@@ -58816,6 +60822,7 @@ export namespace Prisma {
     permissions?: PermissionCreateNestedManyWithoutMemberInput
     reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
+    followUps?: StudentFollowUpCreateNestedManyWithoutStudentInput
     courseClass?: CourseClassCreateNestedOneWithoutUsersInput
     department?: DepartmentCreateNestedOneWithoutMembersInput
   }
@@ -58857,6 +60864,7 @@ export namespace Prisma {
     permissions?: PermissionUncheckedCreateNestedManyWithoutMemberInput
     reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
+    followUps?: StudentFollowUpUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutMarkedInstructorAttendancesInput = {
@@ -59035,6 +61043,7 @@ export namespace Prisma {
     permissions?: PermissionUpdateManyWithoutMemberNestedInput
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
@@ -59076,6 +61085,7 @@ export namespace Prisma {
     permissions?: PermissionUncheckedUpdateManyWithoutMemberNestedInput
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type InstructorUpsertWithoutAttendancesInput = {
@@ -59113,6 +61123,182 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
     courseYears?: CourseYearUncheckedUpdateManyWithoutInstructorNestedInput
+  }
+
+  export type UserCreateWithoutFollowUpsInput = {
+    id?: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mustChangePassword?: boolean
+    address?: string | null
+    age?: number | null
+    christianName?: string | null
+    grandfatherName?: string | null
+    ethiopianCreatedAt?: string | null
+    fullName?: string | null
+    gender?: $Enums.genderType
+    isActive?: boolean
+    memberType?: $Enums.memberType | null
+    mode?: $Enums.appMode | null
+    privateId?: string | null
+    passwordHash?: string | null
+    phoneNumber?: string | null
+    registerDate?: string | null
+    type?: $Enums.userType
+    reviewedRegistrations?: AdminRegistrationCreateNestedManyWithoutReviewedByInput
+    markedAttendances?: AttendanceCreateNestedManyWithoutMarkedByInput
+    attendances?: AttendanceCreateNestedManyWithoutMemberInput
+    performedAuditLogs?: AuditLogCreateNestedManyWithoutPerformedByInput
+    enrollments?: CourseEnrollmentCreateNestedManyWithoutStudentInput
+    registrations?: CourseRegistrationCreateNestedManyWithoutMemberInput
+    createdEvents?: EventCreateNestedManyWithoutCreatedByInput
+    marks?: MarkCreateNestedManyWithoutStudentInput
+    mezmurEnrollments?: MezmurEnrollmentCreateNestedManyWithoutStudentInput
+    uploadedMusicFiles?: MusicFileCreateNestedManyWithoutUploadedByInput
+    targetNotifications?: NotificationCreateNestedManyWithoutTargetUserInput
+    permissions?: PermissionCreateNestedManyWithoutMemberInput
+    reviewedPermissions?: PermissionCreateNestedManyWithoutReviewedByInput
+    playlists?: PlaylistCreateNestedManyWithoutUserInput
+    markedInstructorAttendances?: InstructorAttendanceCreateNestedManyWithoutMarkedByInput
+    courseClass?: CourseClassCreateNestedOneWithoutUsersInput
+    department?: DepartmentCreateNestedOneWithoutMembersInput
+  }
+
+  export type UserUncheckedCreateWithoutFollowUpsInput = {
+    id?: string
+    email?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mustChangePassword?: boolean
+    address?: string | null
+    age?: number | null
+    christianName?: string | null
+    grandfatherName?: string | null
+    courseClassId?: string | null
+    departmentId?: string | null
+    ethiopianCreatedAt?: string | null
+    fullName?: string | null
+    gender?: $Enums.genderType
+    isActive?: boolean
+    memberType?: $Enums.memberType | null
+    mode?: $Enums.appMode | null
+    privateId?: string | null
+    passwordHash?: string | null
+    phoneNumber?: string | null
+    registerDate?: string | null
+    type?: $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+    markedAttendances?: AttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+    attendances?: AttendanceUncheckedCreateNestedManyWithoutMemberInput
+    performedAuditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByInput
+    enrollments?: CourseEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    registrations?: CourseRegistrationUncheckedCreateNestedManyWithoutMemberInput
+    createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
+    marks?: MarkUncheckedCreateNestedManyWithoutStudentInput
+    mezmurEnrollments?: MezmurEnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    uploadedMusicFiles?: MusicFileUncheckedCreateNestedManyWithoutUploadedByInput
+    targetNotifications?: NotificationUncheckedCreateNestedManyWithoutTargetUserInput
+    permissions?: PermissionUncheckedCreateNestedManyWithoutMemberInput
+    reviewedPermissions?: PermissionUncheckedCreateNestedManyWithoutReviewedByInput
+    playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
+    markedInstructorAttendances?: InstructorAttendanceUncheckedCreateNestedManyWithoutMarkedByInput
+  }
+
+  export type UserCreateOrConnectWithoutFollowUpsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFollowUpsInput, UserUncheckedCreateWithoutFollowUpsInput>
+  }
+
+  export type UserUpsertWithoutFollowUpsInput = {
+    update: XOR<UserUpdateWithoutFollowUpsInput, UserUncheckedUpdateWithoutFollowUpsInput>
+    create: XOR<UserCreateWithoutFollowUpsInput, UserUncheckedCreateWithoutFollowUpsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFollowUpsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFollowUpsInput, UserUncheckedUpdateWithoutFollowUpsInput>
+  }
+
+  export type UserUpdateWithoutFollowUpsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    christianName?: NullableStringFieldUpdateOperationsInput | string | null
+    grandfatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    ethiopianCreatedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
+    privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registerDate?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUpdateManyWithoutReviewedByNestedInput
+    markedAttendances?: AttendanceUpdateManyWithoutMarkedByNestedInput
+    attendances?: AttendanceUpdateManyWithoutMemberNestedInput
+    performedAuditLogs?: AuditLogUpdateManyWithoutPerformedByNestedInput
+    enrollments?: CourseEnrollmentUpdateManyWithoutStudentNestedInput
+    registrations?: CourseRegistrationUpdateManyWithoutMemberNestedInput
+    createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
+    marks?: MarkUpdateManyWithoutStudentNestedInput
+    mezmurEnrollments?: MezmurEnrollmentUpdateManyWithoutStudentNestedInput
+    uploadedMusicFiles?: MusicFileUpdateManyWithoutUploadedByNestedInput
+    targetNotifications?: NotificationUpdateManyWithoutTargetUserNestedInput
+    permissions?: PermissionUpdateManyWithoutMemberNestedInput
+    reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
+    playlists?: PlaylistUpdateManyWithoutUserNestedInput
+    markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
+    department?: DepartmentUpdateOneWithoutMembersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFollowUpsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    christianName?: NullableStringFieldUpdateOperationsInput | string | null
+    grandfatherName?: NullableStringFieldUpdateOperationsInput | string | null
+    courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentId?: NullableStringFieldUpdateOperationsInput | string | null
+    ethiopianCreatedAt?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: EnumgenderTypeFieldUpdateOperationsInput | $Enums.genderType
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    memberType?: NullableEnummemberTypeFieldUpdateOperationsInput | $Enums.memberType | null
+    mode?: NullableEnumappModeFieldUpdateOperationsInput | $Enums.appMode | null
+    privateId?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    registerDate?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumuserTypeFieldUpdateOperationsInput | $Enums.userType
+    reviewedRegistrations?: AdminRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+    markedAttendances?: AttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    attendances?: AttendanceUncheckedUpdateManyWithoutMemberNestedInput
+    performedAuditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByNestedInput
+    enrollments?: CourseEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    registrations?: CourseRegistrationUncheckedUpdateManyWithoutMemberNestedInput
+    createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
+    marks?: MarkUncheckedUpdateManyWithoutStudentNestedInput
+    mezmurEnrollments?: MezmurEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    uploadedMusicFiles?: MusicFileUncheckedUpdateManyWithoutUploadedByNestedInput
+    targetNotifications?: NotificationUncheckedUpdateManyWithoutTargetUserNestedInput
+    permissions?: PermissionUncheckedUpdateManyWithoutMemberNestedInput
+    reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
+    playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
+    markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
   }
 
   export type AdminRegistrationCreateManyReviewedByInput = {
@@ -59312,7 +61498,22 @@ export namespace Prisma {
     eventId: string
     attendanceTypeId: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type StudentFollowUpCreateManyStudentInput = {
+    id?: string
+    reason: string
+    status?: $Enums.FollowUpStatus
+    notes?: string | null
+    resolvedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -59911,6 +62112,11 @@ export namespace Prisma {
   export type InstructorAttendanceUpdateWithoutMarkedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59925,6 +62131,11 @@ export namespace Prisma {
     eventId?: StringFieldUpdateOperationsInput | string
     attendanceTypeId?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59936,7 +62147,42 @@ export namespace Prisma {
     eventId?: StringFieldUpdateOperationsInput | string
     attendanceTypeId?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFollowUpUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFollowUpUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StudentFollowUpUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    status?: EnumFollowUpStatusFieldUpdateOperationsInput | $Enums.FollowUpStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -59948,6 +62194,7 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     isActive?: boolean
+    dailyDurationHours?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -59959,6 +62206,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courses?: CourseUpdateManyWithoutCourseClassNestedInput
@@ -59975,6 +62223,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courses?: CourseUncheckedUpdateManyWithoutCourseClassNestedInput
@@ -59991,6 +62240,7 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    dailyDurationHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60014,6 +62264,11 @@ export namespace Prisma {
     attendanceTypeId: string
     markedById: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60061,6 +62316,11 @@ export namespace Prisma {
   export type InstructorAttendanceUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60075,6 +62335,11 @@ export namespace Prisma {
     attendanceTypeId?: StringFieldUpdateOperationsInput | string
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60086,6 +62351,11 @@ export namespace Prisma {
     attendanceTypeId?: StringFieldUpdateOperationsInput | string
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60110,6 +62380,11 @@ export namespace Prisma {
     eventId: string
     markedById: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60157,6 +62432,11 @@ export namespace Prisma {
   export type InstructorAttendanceUpdateWithoutAttendanceTypeInput = {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60171,6 +62451,11 @@ export namespace Prisma {
     eventId?: StringFieldUpdateOperationsInput | string
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60182,6 +62467,11 @@ export namespace Prisma {
     eventId?: StringFieldUpdateOperationsInput | string
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60568,6 +62858,11 @@ export namespace Prisma {
     attendanceTypeId: string
     markedById: string
     note?: string | null
+    durationHours?: number
+    absenceReason?: string | null
+    substituteForId?: string | null
+    isBonus?: boolean
+    courseId?: string | null
     mode?: $Enums.appMode
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -60705,6 +63000,11 @@ export namespace Prisma {
   export type InstructorAttendanceUpdateWithoutInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60719,6 +63019,11 @@ export namespace Prisma {
     attendanceTypeId?: StringFieldUpdateOperationsInput | string
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60730,6 +63035,11 @@ export namespace Prisma {
     attendanceTypeId?: StringFieldUpdateOperationsInput | string
     markedById?: StringFieldUpdateOperationsInput | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
+    durationHours?: FloatFieldUpdateOperationsInput | number
+    absenceReason?: NullableStringFieldUpdateOperationsInput | string | null
+    substituteForId?: NullableStringFieldUpdateOperationsInput | string | null
+    isBonus?: BoolFieldUpdateOperationsInput | boolean
+    courseId?: NullableStringFieldUpdateOperationsInput | string | null
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60931,6 +63241,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     courseClass?: CourseClassUpdateOneWithoutUsersNestedInput
   }
 
@@ -60971,6 +63282,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -61375,6 +63687,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUpdateManyWithoutStudentNestedInput
     department?: DepartmentUpdateOneWithoutMembersNestedInput
   }
 
@@ -61415,6 +63728,7 @@ export namespace Prisma {
     reviewedPermissions?: PermissionUncheckedUpdateManyWithoutReviewedByNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
     markedInstructorAttendances?: InstructorAttendanceUncheckedUpdateManyWithoutMarkedByNestedInput
+    followUps?: StudentFollowUpUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCourseClassInput = {

@@ -3,14 +3,14 @@ import prisma from '@/src/lib/prisma';
 export class TeachingHoursService {
   /**
    * Calculate weekly teaching hours for a class type
-   * Regular classes (KEDAMAY, KALEAY, SALSAY, RABEAY): 4 hours (2 Sat + 2 Sun)
-   * Keremt: 12 hours (2 hours Mon-Sat)
+   * Regular classes (KEDAMAY, KALEAY, SALSAY, RABEAY): duration * 2 days (Sat + Sun)
+   * Keremt: duration * 6 days (Mon-Sat)
    */
-  static getWeeklyHoursForClassType(classType: string): number {
-    if (classType === 'KEREMT') {
-      return 12; // 2 hours/day * 6 days (Mon-Sat)
+  static getWeeklyHoursForClass(courseClass: { name: string, dailyDurationHours: number }): number {
+    if (courseClass.name === 'KEREMT') {
+      return courseClass.dailyDurationHours * 6;
     }
-    return 4; // 2 hours/day * 2 days (Sat-Sun)
+    return courseClass.dailyDurationHours * 2;
   }
 
   /**
@@ -31,7 +31,7 @@ export class TeachingHoursService {
       throw new Error('Course class not found');
     }
 
-    const weeklyHours = this.getWeeklyHoursForClassType(courseClass.name);
+    const weeklyHours = this.getWeeklyHoursForClass(courseClass);
     
     // Calculate total weeks in the period
     const totalWeeks = Math.ceil((endDate.getTime() - startDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
@@ -62,14 +62,14 @@ export class TeachingHoursService {
       const dayOfWeek = freeDay.date.getDay();
       
       if (courseClass.name === 'KEREMT') {
-        // Keremt: Mon-Sat (1-6), each day is 2 hours
+        // Keremt: Mon-Sat (1-6), each day is duration hours
         if (dayOfWeek >= 1 && dayOfWeek <= 6) {
-          totalHours -= 2;
+          totalHours -= courseClass.dailyDurationHours;
         }
       } else {
-        // Regular classes: Sat-Sun (6, 0), each day is 2 hours
+        // Regular classes: Sat-Sun (6, 0), each day is duration hours
         if (dayOfWeek === 6 || dayOfWeek === 0) {
-          totalHours -= 2;
+          totalHours -= courseClass.dailyDurationHours;
         }
       }
     }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Calendar, CheckCircle2, XCircle, Loader2, Save, X, Edit2, Users, Trash2, Clock, TrendingUp } from "lucide-react";
+import { Plus, Calendar, CheckCircle2, XCircle, Loader2, Save, X, Edit2, Users, Trash2, Clock, TrendingUp, AlertTriangle, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import EthiopianDatePicker from "@/src/components/EthiopianDatePicker";
@@ -28,6 +28,7 @@ interface AcademicYear {
     id: string;
     name: string;
     isActive: boolean;
+    dailyDurationHours: number;
   }>;
 }
 
@@ -41,6 +42,8 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [transferData, setTransferData] = useState<{ fromId: string; fromYear: string; toId: string } | null>(null);
+  const [showTransferDialog, setShowTransferDialog] = useState(false);
 
   const todayEthISO = ethiopianDateWordsToISO(getEthiopianToday());
 
@@ -60,6 +63,7 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
     midExamMinAttendance: 5,
     finalExamMinAttendance: 5,
     includedClasses: ['KEDAMAY', 'KALEAY', 'SALSAY', 'RABEAY', 'KEREMT'],
+    keremtDailyDuration: 2.0,
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -89,6 +93,7 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
       midExamMinAttendance: year.midExamMinAttendance,
       finalExamMinAttendance: year.finalExamMinAttendance,
       includedClasses: year.classes.map(c => c.name),
+      keremtDailyDuration: year.classes.find(c => c.name === 'KEREMT')?.dailyDurationHours || 2.0,
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -110,6 +115,7 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
         s1FinalExamDate: ethiopianISOToGregorianDate(formData.s1FinalExamDate).toISOString(),
         s2MidExamDate: ethiopianISOToGregorianDate(formData.s2MidExamDate).toISOString(),
         s2FinalExamDate: ethiopianISOToGregorianDate(formData.s2FinalExamDate).toISOString(),
+        keremtDailyDuration: formData.keremtDailyDuration,
       };
 
       const url = editingId ? `/api/course/academic-years/${editingId}` : "/api/course/academic-years";
@@ -130,6 +136,9 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
         }
         resetForm();
         router.refresh();
+      } else {
+        const error = await res.json();
+        alert(error.error || error.message || "Failed to save academic year");
       }
     } catch (err) {
       console.error(err);
@@ -177,7 +186,13 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
         router.refresh();
       } else {
         const error = await res.json();
-        alert(error.error || "Failed to delete academic year");
+        if (error.error === "STUDENTS_ENROLLED") {
+          const fromYear = years.find(y => y.id === yearId);
+          setTransferData({ fromId: yearId, fromYear: fromYear?.year || "", toId: "" });
+          setShowTransferDialog(true);
+        } else {
+          alert(error.message || error.error || "Failed to delete academic year");
+        }
       }
     } catch (err) {
       console.error(err);
@@ -187,8 +202,90 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
     }
   };
 
+  const handleTransfer = async () => {
+    if (!transferData?.toId) return;
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/course/academic-years/transfer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fromYearId: transferData.fromId,
+          toYearId: transferData.toId
+        }),
+      });
+
+      if (res.ok) {
+        setShowTransferDialog(false);
+        setTransferData(null);
+        alert("Transfer successful. You can now delete the empty academic year.");
+        router.refresh();
+      } else {
+        const error = await res.json();
+        alert(error.error || "Transfer failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Transfer failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* Transfer Dialog */}
+      {showTransferDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 space-y-4">
+              <div className="w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto">
+                <AlertTriangle size={24} />
+              </div>
+              <div className="text-center space-y-2">
+                <h3 className="text-lg font-bold">Transfer Students Required</h3>
+                <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                  Academic year <span className="font-bold text-[hsl(var(--foreground))]">{transferData?.fromYear}</span> has enrolled students.
+                  To delete it, you must first transfer all records to another year.
+                </p>
+              </div>
+
+              <div className="space-y-3 pt-4">
+                <label className="text-xs font-bold uppercase opacity-50 block">Target Academic Year</label>
+                <select
+                  className="w-full h-11 px-4 bg-[hsl(var(--background))] border border-[hsl(var(--border))] rounded-xl text-sm font-medium focus:ring-2 focus:ring-blue-500/20 transition-all outline-none"
+                  value={transferData?.toId}
+                  onChange={e => setTransferData(prev => prev ? { ...prev, toId: e.target.value } : null)}
+                >
+                  <option value="">Select a destination year...</option>
+                  {years.filter(y => y.id !== transferData?.fromId).map(y => (
+                    <option key={y.id} value={y.id}>{y.year}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2 pt-4">
+                <button
+                  onClick={handleTransfer}
+                  disabled={!transferData?.toId || isLoading}
+                  className="w-full h-11 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"
+                >
+                  {isLoading ? <Loader2 size={18} className="animate-spin" /> : <ArrowRight size={18} />}
+                  Complete Transfer
+                </button>
+                <button
+                  onClick={() => { setShowTransferDialog(false); setTransferData(null); }}
+                  disabled={isLoading}
+                  className="w-full h-11 text-sm font-bold text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-end">
         {!isAdding && (
           <button
@@ -288,6 +385,21 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
                       </label>
                     ))}
                   </div>
+
+                  {formData.includedClasses.includes('KEREMT') && (
+                    <div className="mt-4 pt-3 border-t border-blue-500/10 space-y-2">
+                      <label className="text-[9px] font-black uppercase text-blue-500">Keremt Session Duration</label>
+                      <select
+                        className="w-full h-8 px-2 bg-white border border-blue-500/20 rounded text-[10px] font-bold outline-none"
+                        value={formData.keremtDailyDuration}
+                        onChange={e => setFormData({ ...formData, keremtDailyDuration: parseFloat(e.target.value) })}
+                      >
+                        <option value="2.0">2.0 Hours (Standard)</option>
+                        <option value="2.5">2.5 Hours (1h 15m/course)</option>
+                        <option value="3.0">3.0 Hours (1h 30m/course)</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
 
                 {/* Level 2 Group */}
@@ -509,6 +621,9 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
                        >
                          {cls.isActive ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
                          {cls.name === 'KEDAMAY' ? 'Kedamay' : 'Keremt'}
+                         {cls.name === 'KEREMT' && (
+                           <span className="opacity-50">({cls.dailyDurationHours}h)</span>
+                         )}
                        </button>
                      ))}
                    </div>

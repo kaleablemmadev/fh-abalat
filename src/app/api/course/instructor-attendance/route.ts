@@ -3,9 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const instructorAttendanceSchema = z.object({
+  id: z.string().optional(),
   instructorId: z.string().min(1),
   eventId: z.string().min(1),
   attendanceTypeId: z.string().min(1),
+  durationHours: z.number().default(1.0),
+  absenceReason: z.string().optional().nullable(),
+  substituteForId: z.string().optional().nullable(),
+  isBonus: z.boolean().default(false),
+  courseId: z.string().optional().nullable(),
 });
 
 export async function GET(request: NextRequest) {
@@ -13,16 +19,28 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const eventId = searchParams.get("eventId");
     const instructorId = searchParams.get("instructorId");
+    const academicYearId = searchParams.get("academicYearId");
 
-    const where: any = {};
+    const where: any = { mode: 'COURSE' };
     if (eventId) where.eventId = eventId;
     if (instructorId) where.instructorId = instructorId;
+    if (academicYearId) {
+      where.event = {
+        courseClass: {
+          academicYearId: academicYearId
+        }
+      };
+    }
 
     const attendances = await prisma.instructorAttendance.findMany({
       where,
       include: {
         instructor: true,
-        event: true,
+        event: {
+          include: {
+            courseClass: true
+          }
+        },
         attendanceType: true,
         markedBy: true,
       },
@@ -42,8 +60,6 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
-    // Support both direct array and { attendance: [...] } format
     const records = Array.isArray(body) ? body : body.attendance;
 
     if (!Array.isArray(records) || records.length === 0) {
@@ -53,7 +69,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate records
     const validation = z.array(instructorAttendanceSchema).safeParse(records);
     if (!validation.success) {
       return NextResponse.json(
@@ -63,50 +78,78 @@ export async function POST(request: NextRequest) {
     }
 
     let adminUser = await prisma.user.findFirst({
-      where: { type: "ADMIN" }
-    }) || await prisma.user.findFirst({
-      where: { type: "SUPERADMIN" }
+      where: { type: { in: ["ADMIN", "SUPERADMIN"] }, mode: 'COURSE' }
     });
 
     if (!adminUser) {
       return NextResponse.json(
-        { error: "No admin user found to mark attendance" },
+        { error: "No authorized admin user found" },
         { status: 400 }
       );
     }
 
-    // Process in chunks to avoid transaction timeout
-    const CHUNK_SIZE = 10;
-    const results = [];
-
-    for (let i = 0; i < records.length; i += CHUNK_SIZE) {
-      const chunk = records.slice(i, i + CHUNK_SIZE);
-
-      const chunkResults = await prisma.$transaction(
-        chunk.map((record: { instructorId: string; eventId: string; attendanceTypeId: string }) =>
-          prisma.instructorAttendance.upsert({
-            where: {
-              instructorId_eventId: {
-                instructorId: record.instructorId,
-                eventId: record.eventId,
-              },
-            },
-            update: {
+    // Process records
+    const results = await prisma.$transaction(async (tx) => {
+      const ops = [];
+      for (const record of validation.data) {
+        if (record.id) {
+          // Update existing
+          ops.push(tx.instructorAttendance.update({
+            where: { id: record.id },
+            data: {
+              instructorId: record.instructorId,
               attendanceTypeId: record.attendanceTypeId,
+              durationHours: record.durationHours,
+              absenceReason: record.absenceReason,
+              substituteForId: record.substituteForId,
+              isBonus: record.isBonus,
+              courseId: record.courseId,
               markedById: adminUser.id,
-            },
-            create: {
+            }
+          }));
+        } else {
+          // Since we removed unique constraint, we check if a similar record exists to avoid accidental duplicates
+          // (same instructor, same event, same course)
+          const existing = await tx.instructorAttendance.findFirst({
+            where: {
               instructorId: record.instructorId,
               eventId: record.eventId,
-              attendanceTypeId: record.attendanceTypeId,
-              markedById: adminUser.id,
-            },
-          })
-        )
-      );
+              courseId: record.courseId,
+            }
+          });
 
-      results.push(...chunkResults);
-    }
+          if (existing) {
+            ops.push(tx.instructorAttendance.update({
+              where: { id: existing.id },
+              data: {
+                attendanceTypeId: record.attendanceTypeId,
+                durationHours: record.durationHours,
+                absenceReason: record.absenceReason,
+                substituteForId: record.substituteForId,
+                isBonus: record.isBonus,
+                markedById: adminUser.id,
+              }
+            }));
+          } else {
+            ops.push(tx.instructorAttendance.create({
+              data: {
+                instructorId: record.instructorId,
+                eventId: record.eventId,
+                attendanceTypeId: record.attendanceTypeId,
+                durationHours: record.durationHours,
+                absenceReason: record.absenceReason,
+                substituteForId: record.substituteForId,
+                isBonus: record.isBonus,
+                courseId: record.courseId,
+                markedById: adminUser.id,
+                mode: 'COURSE'
+              }
+            }));
+          }
+        }
+      }
+      return Promise.all(ops);
+    });
 
     return NextResponse.json(
       { message: `Instructor attendance saved successfully (${results.length} records)` },
@@ -115,11 +158,9 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error("Instructor bulk save error:", error);
     return NextResponse.json(
-      {
-        error: "Failed to bulk save instructor attendance",
-        details: error?.message || "Unknown error",
-      },
+      { error: "Failed to save instructor attendance", details: error?.message },
       { status: 500 }
     );
   }
 }
+

@@ -2,10 +2,13 @@ import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { isWithinAcademicYearTimeline } from "@/src/lib/utils";
 import { CourseAttendanceService } from "@/src/services/course-attendance.service";
+import { FollowUpService } from "@/src/services/followup.service";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    // ... rest of the logic until after saving ...
+
 
     // Support both direct array and { attendance: [...] } format
     const records = Array.isArray(body) ? body : body.attendance;
@@ -110,10 +113,12 @@ export async function POST(request: NextRequest) {
 
     // Post-attendance processing: Update PENDING enrollments to ACTIVE
     // Only if the attendance value is >= 1 (Attended)
-    const activeTypeIds = (await prisma.attendanceType.findMany({
-      where: { value: { gte: 1 } },
-      select: { id: true }
-    })).map(t => t.id);
+    const allTypeIds = await prisma.attendanceType.findMany({
+      select: { id: true, value: true }
+    });
+
+    const activeTypeIds = allTypeIds.filter(t => t.value >= 1).map(t => t.id);
+    const absentTypeIds = allTypeIds.filter(t => t.value === 0).map(t => t.id);
 
     const eventIds = Array.from(new Set(records.map(r => r.eventId)));
 
@@ -128,6 +133,7 @@ export async function POST(request: NextRequest) {
     for (const record of records) {
       const courseClassId = classIdMap.get(record.eventId);
       const isAttended = activeTypeIds.includes(record.attendanceTypeId);
+      const isAbsent = absentTypeIds.includes(record.attendanceTypeId);
 
       if (courseClassId && isAttended) {
         await prisma.courseEnrollment.updateMany({
@@ -138,6 +144,11 @@ export async function POST(request: NextRequest) {
           },
           data: { status: 'ACTIVE' }
         });
+      }
+
+      // Check for consecutive absences
+      if (isAbsent) {
+        await FollowUpService.checkConsecutiveAbsences(record.memberId, record.eventId);
       }
     }
 

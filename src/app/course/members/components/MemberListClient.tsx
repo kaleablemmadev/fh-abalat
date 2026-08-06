@@ -183,13 +183,13 @@ export default function MemberListClient({ students, courseClasses }: MemberList
               <span className="text-[hsl(var(--foreground))] font-bold">
                 {totals.total}
               </span>
-              <span>Students</span>
+              <span>ተማሪዎች</span>
             </div>
 
             <div className="flex gap-4">
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span className="font-bold text-[hsl(var(--foreground))]">{totals.active}</span> Active
+                <span className="font-bold text-[hsl(var(--foreground))]">{totals.active}</span> የሚከታተሉ
               </span>
               {selectedIds.size > 0 && (
                 <span className="flex items-center gap-1.5 text-blue-600">
@@ -231,7 +231,7 @@ export default function MemberListClient({ students, courseClasses }: MemberList
                 type="search"
                 value={searchText}
                 onChange={(event) => setSearchText(event.target.value)}
-                placeholder="Search by name, code, phone..."
+                placeholder="በስም፣ በኮድ ወይም በስልክ ቁጥር ፈልግ..."
               />
             </div>
 
@@ -268,7 +268,7 @@ export default function MemberListClient({ students, courseClasses }: MemberList
               className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold transition-all bg-[hsl(217,70%,32%)] text-white hover:bg-[hsl(217,70%,36%)] active:scale-95 shadow-md shadow-[hsl(217,70%,32%)/0.2]"
             >
               <Plus size={18} />
-              New Student
+              ዐዲስ ተማሪ
             </Link>
           </div>
         </div>
@@ -333,7 +333,7 @@ export default function MemberListClient({ students, courseClasses }: MemberList
                       <h3
                         className="text-base font-bold text-[hsl(var(--foreground))] leading-tight truncate"
                       >
-                        {student.fullName ?? "Unnamed student"}
+                        {student.fullName ?? "ስም አልተመዘገበም"}
                       </h3>
                       <p
                         className="text-xs mt-1 font-medium text-[hsl(var(--muted-foreground))]"
@@ -345,11 +345,11 @@ export default function MemberListClient({ students, courseClasses }: MemberList
                     <div className="space-y-3 flex-1">
                       <div className="flex flex-col gap-1.5">
                         <div className="flex items-center justify-between text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
-                          <span>Student Code</span>
+                          <span>የኮርሰኛ መለያ ኮድ</span>
                           <span className="font-mono font-bold text-sky-500">{student.privateId ?? "None"}</span>
                         </div>
                         <div className="flex items-center justify-between text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
-                          <span>Current Class</span>
+                          <span>የክፍል ደረጃ</span>
                           <span className="text-[hsl(var(--foreground))]">
                             {courseClass
                               ? `${courseClassTypeDisplayNames[courseClass.name as keyof typeof courseClassTypeDisplayNames] || courseClass.name} (${courseClass.year})`
@@ -357,7 +357,7 @@ export default function MemberListClient({ students, courseClasses }: MemberList
                           </span>
                         </div>
                         <div className="flex items-center justify-between text-[11px] font-medium text-[hsl(var(--muted-foreground))]">
-                          <span>Phone Number</span>
+                          <span>ስልክ ቁጥር</span>
                           <span className="text-[hsl(var(--foreground))]">{student.phoneNumber ?? "N/A"}</span>
                         </div>
                       </div>
@@ -377,7 +377,7 @@ export default function MemberListClient({ students, courseClasses }: MemberList
                           href={`/course/members/${student.id}`}
                           className="text-xs font-bold text-[hsl(217,70%,32%)] hover:underline underline-offset-4 decoration-2 transition-all"
                         >
-                          Details →
+                          ዝርዝር →
                         </Link>
                       </div>
                     </div>

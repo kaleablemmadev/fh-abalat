@@ -64,6 +64,7 @@ model User {
   reviewedPermissions   Permission[]              @relation("ReviewedByAdmin")
   playlists             Playlist[]
   markedInstructorAttendances InstructorAttendance[] @relation("InstructorAttendanceMarker")
+  followUps             StudentFollowUp[]
   courseClass           CourseClass?              @relation(fields: [courseClassId], references: [id])
   department            Department?               @relation(fields: [departmentId], references: [id])
 
@@ -329,6 +330,7 @@ model CourseClass {
   startDate         DateTime?
   endDate           DateTime?
   isActive          Boolean            @default(true)
+  dailyDurationHours Float             @default(2.0)
   academicYearId    String?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -603,6 +605,11 @@ model InstructorAttendance {
   attendanceTypeId      String
   markedById            String
   note                  String?
+  durationHours         Float          @default(1.0)
+  absenceReason         String?
+  substituteForId       String?
+  isBonus               Boolean        @default(false)
+  courseId              String?
   mode                  appMode        @default(COURSE)
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @updatedAt
@@ -611,12 +618,36 @@ model InstructorAttendance {
   markedBy              User           @relation("InstructorAttendanceMarker", fields: [markedById], references: [id])
   instructor            Instructor     @relation(fields: [instructorId], references: [id])
 
-  @@unique([instructorId, eventId])
   @@index([eventId])
   @@index([instructorId])
   @@index([attendanceTypeId])
   @@index([mode])
+  @@index([substituteForId])
+  @@index([courseId])
 }
+
+model StudentFollowUp {
+  id          String           @id @default(cuid())
+  studentId   String
+  reason      String
+  status      FollowUpStatus   @default(PENDING)
+  notes       String?
+  resolvedAt  DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  student     User             @relation(fields: [studentId], references: [id])
+
+  @@index([studentId])
+  @@index([status])
+}
+
+enum FollowUpStatus {
+  PENDING
+  CALLED
+  INACTIVE
+  REMOVED
+}
+
 
 enum CourseRegistrationType {
   BEGA

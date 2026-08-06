@@ -488,7 +488,7 @@ export class EligibilityService {
       where: {
         OR: [
           { targetMemberTypes: { has: member.memberType as any } },
-          { courseClassId: member.courseClassId }
+          { courseClassId: member.courseClassId || undefined }
         ],
         isActive: true,
         eligibilityRuleId: { not: null }

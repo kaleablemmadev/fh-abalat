@@ -18,6 +18,7 @@ const academicYearSchema = z.object({
   midExamMinAttendance: z.number().optional(),
   finalExamMinAttendance: z.number().optional(),
   includedClasses: z.array(z.string()).optional(),
+  keremtDailyDuration: z.number().optional(),
 });
 
 export async function PUT(
@@ -41,7 +42,7 @@ export async function PUT(
       s1Start, s1End, s2Start, s2End,
       s1MidExamDate, s1FinalExamDate, s2MidExamDate, s2FinalExamDate,
       midExamMinAttendance, finalExamMinAttendance,
-      includedClasses
+      includedClasses, keremtDailyDuration
     } = validation.data;
 
     // If setting to active, deactivate others
@@ -53,6 +54,15 @@ export async function PUT(
     }
 
     const academicYear = await prisma.$transaction(async (tx) => {
+      // Check if the new year name conflicts with another record
+      const existingWithYear = await tx.academicYear.findFirst({
+        where: { year, id: { not: id } }
+      });
+
+      if (existingWithYear) {
+        throw new Error(`Another academic year with name ${year} already exists.`);
+      }
+
       const updated = await tx.academicYear.update({
         where: { id },
         data: {
@@ -77,9 +87,11 @@ export async function PUT(
       });
 
       if (includedClasses) {
+        // Ensure unique class types from input
+        const uniqueIncludedClasses = [...new Set(includedClasses)];
         // Find existing classes to avoid duplicates
         const existingClassNames = updated.classes.map(c => c.name);
-        const newClassTypes = includedClasses.filter(c => !existingClassNames.includes(c as any));
+        const newClassTypes = uniqueIncludedClasses.filter(c => !existingClassNames.includes(c as any));
 
         if (newClassTypes.length > 0) {
           const courses = await tx.course.findMany({ where: { isGiven: true } });
@@ -93,6 +105,7 @@ export async function PUT(
                 isActive: true,
                 startDate: updated.startDate,
                 endDate: updated.endDate,
+                dailyDurationHours: type === 'KEREMT' ? (keremtDailyDuration || 2.0) : 2.0,
               },
             });
 
@@ -132,6 +145,17 @@ export async function PUT(
         }
       }
 
+      // If keremtDailyDuration is provided, update existing KEREMT class
+      if (keremtDailyDuration !== undefined) {
+          const keremtClass = updated.classes.find(c => c.name === 'KEREMT');
+          if (keremtClass) {
+              await tx.courseClass.update({
+                  where: { id: keremtClass.id },
+                  data: { dailyDurationHours: keremtDailyDuration }
+              });
+          }
+      }
+
       return updated;
     }, {
       timeout: 30000
@@ -143,11 +167,18 @@ export async function PUT(
     });
 
     return NextResponse.json(finalResult);
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    if (error.code === 'P2002') {
+      const target = error.meta?.target || 'record';
+      return NextResponse.json(
+        { error: `Unique constraint failed: A ${target} with these details already exists.` },
+        { status: 400 }
+      );
+    }
     return NextResponse.json(
-      { error: "Failed to update academic year" },
-      { status: 500 },
+      { error: error.message || "Failed to update academic year" },
+      { status: 500 }
     );
   }
 }
@@ -177,6 +208,25 @@ export async function DELETE(
       return NextResponse.json(
         { error: "Cannot delete active academic year. Please deactivate it first." },
         { status: 400 },
+      );
+    }
+
+    // Check if there are any enrollments in this year
+    const enrollmentCount = await prisma.courseEnrollment.count({
+      where: {
+        courseClass: {
+          academicYearId: id
+        }
+      }
+    });
+
+    if (enrollmentCount > 0) {
+      return NextResponse.json(
+        {
+          error: "STUDENTS_ENROLLED",
+          message: `There are ${enrollmentCount} students enrolled in this academic year. Please transfer them to another year before deleting.`
+        },
+        { status: 400 }
       );
     }
 

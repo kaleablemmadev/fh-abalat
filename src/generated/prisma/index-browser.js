@@ -334,6 +334,7 @@ exports.Prisma.CourseClassScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   isActive: 'isActive',
+  dailyDurationHours: 'dailyDurationHours',
   academicYearId: 'academicYearId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -525,7 +526,23 @@ exports.Prisma.InstructorAttendanceScalarFieldEnum = {
   attendanceTypeId: 'attendanceTypeId',
   markedById: 'markedById',
   note: 'note',
+  durationHours: 'durationHours',
+  absenceReason: 'absenceReason',
+  substituteForId: 'substituteForId',
+  isBonus: 'isBonus',
+  courseId: 'courseId',
   mode: 'mode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentFollowUpScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  reason: 'reason',
+  status: 'status',
+  notes: 'notes',
+  resolvedAt: 'resolvedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -647,6 +664,13 @@ exports.auditAction = exports.$Enums.auditAction = {
   DELETE: 'DELETE'
 };
 
+exports.FollowUpStatus = exports.$Enums.FollowUpStatus = {
+  PENDING: 'PENDING',
+  CALLED: 'CALLED',
+  INACTIVE: 'INACTIVE',
+  REMOVED: 'REMOVED'
+};
+
 exports.Prisma.ModelName = {
   CourseRegistration: 'CourseRegistration',
   User: 'User',
@@ -676,7 +700,8 @@ exports.Prisma.ModelName = {
   Notification: 'Notification',
   Announcement: 'Announcement',
   CourseFreeDay: 'CourseFreeDay',
-  InstructorAttendance: 'InstructorAttendance'
+  InstructorAttendance: 'InstructorAttendance',
+  StudentFollowUp: 'StudentFollowUp'
 };
 
 /**

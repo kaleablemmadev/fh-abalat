@@ -36,13 +36,13 @@ export default async function CourseMembersPage() {
             className="text-xl font-bold tracking-tight"
             style={{ color: "hsl(var(--foreground))" }}
           >
-            Course Students
+            ኮርሰኛ አባላት
           </h1>
           <p
             className="text-sm mt-0.5"
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
-            Manage student enrollments and records
+            የተማሪዎችን ዝርዝርና መረጃዎች ተመልከቱ
           </p>
         </div>
 
@@ -56,14 +56,14 @@ export default async function CourseMembersPage() {
             }}
           >
             <Plus size={14} />
-            New Student
+            ዐዲስ ተማሪ
           </Link>
           <Link
             href="/course/members/bulk-new"
             className="inline-flex items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 border border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]"
           >
             <Plus size={14} />
-            Bulk Add
+            ብዙ ተማሪዎች
           </Link>
         </div>
       </div>

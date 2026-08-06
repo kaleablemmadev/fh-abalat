@@ -15,15 +15,17 @@ export const supabase = createClient(
 );
 
 // Admin client for server-side operations (service role)
-// Service key is optional here to prevent crash on client-side if this file is imported there,
-// but we check it for the admin client specifically.
-export const supabaseAdmin = createClient(
-  supabaseUrl,
-  supabaseServiceKey || "",
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-);
+// We guard this to prevent crashes in the browser where the service key is missing.
+export const supabaseAdmin = typeof window === 'undefined' && supabaseServiceKey
+  ? createClient(
+      supabaseUrl,
+      supabaseServiceKey,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      }
+    )
+  : null as any; // Cast to any to avoid type issues when null, but will error if used on client
+

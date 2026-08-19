@@ -18,7 +18,7 @@ export interface CourseEvent {
   eventType: string;
   courseClassId: string;
   createdById: string;
-  targetMemberTypes: string[];
+  targetRoles: string[];
 }
 
 // Schedule rules for each course class type
@@ -53,7 +53,7 @@ export const COURSE_SCHEDULE_RULES: Record<string, ScheduleRule> = {
  * @param termEnd - Ethiopian end date of the term
  * @param courseClassId - ID of the course class
  * @param createdById - ID of the user creating the events
- * @param targetMemberTypes - Member types this event applies to
+ * @param targetRoles - Member types this event applies to
  * @param eventTitle - Title for the generated events (defaults to "Class")
  * @returns Array of course events to be created
  */
@@ -63,7 +63,7 @@ export function generateCourseEvents(
   termEnd: EthDateWords,
   courseClassId: string,
   createdById: string,
-  targetMemberTypes: string[] = ["COURSE_STUDENT"],
+  targetRoles: string[] = ["COURSE_STUDENT"],
   eventTitle: string = "Class"
 ): CourseEvent[] {
   const events: CourseEvent[] = [];
@@ -97,7 +97,7 @@ export function generateCourseEvents(
         eventType: "CHORE", // Reuse CHORE type for course attendance
         courseClassId,
         createdById,
-        targetMemberTypes,
+        targetRoles,
       });
     }
     

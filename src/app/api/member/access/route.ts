@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     // Verify role existence in array
     const requiredRole = context === 'ABALAT' ? 'REGULAR_MEMBER' : 'COURSE_STUDENT';
-    if (!member.memberTypes.includes(requiredRole as any)) {
+    if (!member.roles.includes(requiredRole as any)) {
        return NextResponse.json({ error: 'User does not have permission for this role' }, { status: 403 });
     }
 
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
         id: member.id,
         fullName: member.fullName,
         type: member.type,
-        memberTypes: member.memberTypes,
+        roles: member.roles,
         mode: 'MEMBER',
         privateId: member.privateId,
         coursePrivateId: member.coursePrivateId

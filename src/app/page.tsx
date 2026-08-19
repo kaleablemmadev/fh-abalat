@@ -51,7 +51,7 @@ export default function MemberAccessPage() {
         userId: user.id,
         userType: 'MEMBER',
         fullName: user.fullName,
-        memberTypes: user.memberTypes,
+        roles: user.roles,
         mode: 'MEMBER',
         privateId: user.privateId,
         coursePrivateId: user.coursePrivateId,

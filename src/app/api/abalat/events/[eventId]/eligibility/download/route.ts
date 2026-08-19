@@ -17,7 +17,7 @@ export async function POST(
       where: { id: eventId },
     });
 
-    if (!event) {
+    if (!event || event.courseClassId) {
       return NextResponse.json(
         { error: "Event not found" },
         { status: 404 }

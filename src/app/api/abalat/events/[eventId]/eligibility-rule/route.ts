@@ -24,7 +24,7 @@ export async function PUT(
       where: { id: eventId },
     });
 
-    if (!event) {
+    if (!event || event.courseClassId) {
       return NextResponse.json(
         { error: "Event not found" },
         { status: 404 }
@@ -83,7 +83,7 @@ export async function DELETE(
       where: { id: eventId },
     });
 
-    if (!event) {
+    if (!event || event.courseClassId) {
       return NextResponse.json(
         { error: "Event not found" },
         { status: 404 }

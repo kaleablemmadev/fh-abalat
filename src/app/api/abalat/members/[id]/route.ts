@@ -20,7 +20,7 @@ export async function GET(
     const routeParams = await params;
     const member = await prisma.user.findUnique({ where: { id: routeParams.id } });
 
-    if (!member || member.type !== "MEMBER") {
+    if (!member || member.type !== "MEMBER" || member.roles.includes("COURSE_STUDENT")) {
       return NextResponse.json({ error: "Member not found" }, { status: 404 });
     }
 
@@ -50,7 +50,7 @@ export async function PUT(
     }
 
     const member = await prisma.user.findUnique({ where: { id: routeParams.id } });
-    if (!member || member.type !== "MEMBER") {
+    if (!member || member.type !== "MEMBER" || member.roles.includes("COURSE_STUDENT")) {
       return NextResponse.json({ error: "Member not found" }, { status: 404 });
     }
 
@@ -61,7 +61,7 @@ export async function PUT(
     if (body.gender !== undefined) updateData.gender = body.gender;
     if (body.age !== undefined) updateData.age = Number(body.age);
     if (body.christianName !== undefined) updateData.christianName = body.christianName || null;
-    if (body.memberTypes !== undefined) updateData.memberTypes = { set: body.memberTypes };
+    if (body.roles !== undefined) updateData.roles = { set: body.roles };
 
     // Handle Ethiopian date fields from form → registerDate string
     if (body.registerDateDay && body.registerDateMonth && body.registerDateYear) {
@@ -95,7 +95,7 @@ export async function DELETE(
   try {
     const routeParams = await params;
     const member = await prisma.user.findUnique({ where: { id: routeParams.id } });
-    if (!member || member.type !== "MEMBER") {
+    if (!member || member.type !== "MEMBER" || member.roles.includes("COURSE_STUDENT")) {
       return NextResponse.json({ error: "Member not found" }, { status: 404 });
     }
 

@@ -20,7 +20,8 @@ export async function GET() {
     const members = await prisma.user.findMany({
       where: {
         type: "MEMBER",
-        memberTypes: { has: "REGULAR_MEMBER" }
+        roles: { has: "REGULAR_MEMBER" },
+        NOT: { roles: { has: "COURSE_STUDENT" } },
       },
       orderBy: { fullName: "asc" },
     });
@@ -84,18 +85,9 @@ export async function POST(request: NextRequest) {
         age: body.age,
         christianName: body.christianName,
         registerDate: registerDate,
-        memberTypes: { set: ["REGULAR_MEMBER"] },
+        roles: { set: ["REGULAR_MEMBER"] },
         type: "MEMBER",
         privateId,
-        ...(body.courseClassId && {
-            enrollments: {
-                create: {
-                    courseClassId: body.courseClassId,
-                    enrolledDate: new Date().toLocaleDateString(),
-                    status: "ACTIVE"
-                }
-            }
-        })
       },
     });
 

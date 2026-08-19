@@ -22,6 +22,8 @@ interface EligibilityResult {
   memberId: string;
   fullName: string | null;
   eligible: boolean;
+  byPermission?: boolean;
+  permissionType?: string;
   reasons: string[];
   scores: {
     choreScore: number;
@@ -517,6 +519,11 @@ export default function EligibilityReportClient({
                           <span className="text-xs" style={{ color: 'hsl(160 60% 55%)' }}>
                             ✓ መስፈርት ያሟላ
                           </span>
+                          {member.byPermission && (
+                            <span className="text-xs" style={{ color: 'hsl(45 70% 55%)' }}>
+                              By permission{member.permissionType ? `: ${member.permissionType}` : ''}
+                            </span>
+                          )}
                         </div>
                       </li>
                     ))}

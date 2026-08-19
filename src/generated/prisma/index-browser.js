@@ -204,7 +204,7 @@ exports.Prisma.EventScalarFieldEnum = {
   recurringMonth: 'recurringMonth',
   recurringDay: 'recurringDay',
   eligibilityRuleId: 'eligibilityRuleId',
-  targetMemberTypes: 'targetMemberTypes',
+  targetRoles: 'targetRoles',
   createdById: 'createdById',
   courseClassId: 'courseClassId',
   isActive: 'isActive',

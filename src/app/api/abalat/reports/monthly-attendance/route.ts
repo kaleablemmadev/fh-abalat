@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
       where: { 
         type: 'MEMBER',
         memberType: 'REGULAR_MEMBER',
+        NOT: { roles: { has: 'COURSE_STUDENT' } },
       },
       orderBy: { fullName: 'asc' },
     });
@@ -77,6 +78,7 @@ export async function POST(request: NextRequest) {
             gte: startDate,
             lte: endDate,
           },
+          courseClassId: null,
         };
 
         if (attendanceType === 'CHORE') {

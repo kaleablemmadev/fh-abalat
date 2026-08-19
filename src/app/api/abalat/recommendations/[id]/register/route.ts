@@ -57,7 +57,7 @@ export async function PUT(
           christianName,
           registerDate,
           privateId,
-          memberTypes: {
+          roles: {
              push: 'REGULAR_MEMBER'
           }
         }

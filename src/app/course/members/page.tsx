@@ -10,7 +10,7 @@ export default async function CourseMembersPage() {
   const students = await prisma.user.findMany({
     where: {
       type: "MEMBER",
-      memberTypes: { has: "COURSE_STUDENT" },
+      roles: { has: "COURSE_STUDENT" },
     },
     orderBy: {
       fullName: "asc",

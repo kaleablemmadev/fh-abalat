@@ -53,7 +53,7 @@ export class ReportService {
             status: 'ACTIVE'
           }
         },
-        memberTypes: { has: "COURSE_STUDENT" }
+        roles: { has: "COURSE_STUDENT" }
       },
       include: {
         enrollments: {

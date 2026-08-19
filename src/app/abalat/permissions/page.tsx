@@ -61,6 +61,10 @@ export default async function PermissionsPage() {
     },
     include: {
       member: {
+        where: {
+          type: 'MEMBER',
+          NOT: { roles: { has: 'COURSE_STUDENT' } },
+        },
         select: {
           id: true,
           fullName: true,

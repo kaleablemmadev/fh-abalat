@@ -9,6 +9,19 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const member = await prisma.user.findFirst({
+      where: {
+        id,
+        type: 'MEMBER',
+        NOT: { roles: { has: 'COURSE_STUDENT' } },
+      },
+      select: { id: true },
+    });
+
+    if (!member) {
+      return NextResponse.json({ error: 'Member not found' }, { status: 404 });
+    }
+
     const permissions = await prisma.permission.findMany({
       where: { memberId: id },
       include: {
@@ -37,6 +50,19 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+    const member = await prisma.user.findFirst({
+      where: {
+        id,
+        type: 'MEMBER',
+        NOT: { roles: { has: 'COURSE_STUDENT' } },
+      },
+      select: { id: true },
+    });
+
+    if (!member) {
+      return NextResponse.json({ error: 'Member not found' }, { status: 404 });
+    }
+
     const body = await request.json();
     const {
       permissionTypeId,

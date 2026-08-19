@@ -10191,7 +10191,7 @@ export namespace Prisma {
     recurringMonth: number
     recurringDay: number
     eligibilityRuleId: number
-    targetMemberTypes: number
+    targetRoles: number
     createdById: number
     courseClassId: number
     isActive: number
@@ -10279,7 +10279,7 @@ export namespace Prisma {
     recurringMonth?: true
     recurringDay?: true
     eligibilityRuleId?: true
-    targetMemberTypes?: true
+    targetRoles?: true
     createdById?: true
     courseClassId?: true
     isActive?: true
@@ -10390,7 +10390,7 @@ export namespace Prisma {
     recurringMonth: number | null
     recurringDay: number | null
     eligibilityRuleId: string | null
-    targetMemberTypes: $Enums.memberType[]
+    targetRoles: $Enums.memberType[]
     createdById: string
     courseClassId: string | null
     isActive: boolean
@@ -10433,7 +10433,7 @@ export namespace Prisma {
     recurringMonth?: boolean
     recurringDay?: boolean
     eligibilityRuleId?: boolean
-    targetMemberTypes?: boolean
+    targetRoles?: boolean
     createdById?: boolean
     courseClassId?: boolean
     isActive?: boolean
@@ -10463,7 +10463,7 @@ export namespace Prisma {
     recurringMonth?: boolean
     recurringDay?: boolean
     eligibilityRuleId?: boolean
-    targetMemberTypes?: boolean
+    targetRoles?: boolean
     createdById?: boolean
     courseClassId?: boolean
     isActive?: boolean
@@ -10490,7 +10490,7 @@ export namespace Prisma {
     recurringMonth?: boolean
     recurringDay?: boolean
     eligibilityRuleId?: boolean
-    targetMemberTypes?: boolean
+    targetRoles?: boolean
     createdById?: boolean
     courseClassId?: boolean
     isActive?: boolean
@@ -10517,7 +10517,7 @@ export namespace Prisma {
     recurringMonth?: boolean
     recurringDay?: boolean
     eligibilityRuleId?: boolean
-    targetMemberTypes?: boolean
+    targetRoles?: boolean
     createdById?: boolean
     courseClassId?: boolean
     isActive?: boolean
@@ -10527,7 +10527,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "date" | "location" | "ethiopianYear" | "ethiopianMonth" | "ethiopianDay" | "eventType" | "isRecurring" | "recurringMonth" | "recurringDay" | "eligibilityRuleId" | "targetMemberTypes" | "createdById" | "courseClassId" | "isActive" | "mode" | "isAcademicTimeline" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "date" | "location" | "ethiopianYear" | "ethiopianMonth" | "ethiopianDay" | "eventType" | "isRecurring" | "recurringMonth" | "recurringDay" | "eligibilityRuleId" | "targetRoles" | "createdById" | "courseClassId" | "isActive" | "mode" | "isAcademicTimeline" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attendances?: boolean | Event$attendancesArgs<ExtArgs>
     instructorAttendances?: boolean | Event$instructorAttendancesArgs<ExtArgs>
@@ -10570,7 +10570,7 @@ export namespace Prisma {
       recurringMonth: number | null
       recurringDay: number | null
       eligibilityRuleId: string | null
-      targetMemberTypes: $Enums.memberType[]
+      targetRoles: $Enums.memberType[]
       createdById: string
       courseClassId: string | null
       isActive: boolean
@@ -11019,7 +11019,7 @@ export namespace Prisma {
     readonly recurringMonth: FieldRef<"Event", 'Int'>
     readonly recurringDay: FieldRef<"Event", 'Int'>
     readonly eligibilityRuleId: FieldRef<"Event", 'String'>
-    readonly targetMemberTypes: FieldRef<"Event", 'memberType[]'>
+    readonly targetRoles: FieldRef<"Event", 'memberType[]'>
     readonly createdById: FieldRef<"Event", 'String'>
     readonly courseClassId: FieldRef<"Event", 'String'>
     readonly isActive: FieldRef<"Event", 'Boolean'>
@@ -42356,7 +42356,7 @@ export namespace Prisma {
     recurringMonth: 'recurringMonth',
     recurringDay: 'recurringDay',
     eligibilityRuleId: 'eligibilityRuleId',
-    targetMemberTypes: 'targetMemberTypes',
+    targetRoles: 'targetRoles',
     createdById: 'createdById',
     courseClassId: 'courseClassId',
     isActive: 'isActive',
@@ -43645,7 +43645,7 @@ export namespace Prisma {
     recurringMonth?: IntNullableFilter<"Event"> | number | null
     recurringDay?: IntNullableFilter<"Event"> | number | null
     eligibilityRuleId?: StringNullableFilter<"Event"> | string | null
-    targetMemberTypes?: EnummemberTypeNullableListFilter<"Event">
+    targetRoles?: EnummemberTypeNullableListFilter<"Event">
     createdById?: StringFilter<"Event"> | string
     courseClassId?: StringNullableFilter<"Event"> | string | null
     isActive?: BoolFilter<"Event"> | boolean
@@ -43674,7 +43674,7 @@ export namespace Prisma {
     recurringMonth?: SortOrderInput | SortOrder
     recurringDay?: SortOrderInput | SortOrder
     eligibilityRuleId?: SortOrderInput | SortOrder
-    targetMemberTypes?: SortOrder
+    targetRoles?: SortOrder
     createdById?: SortOrder
     courseClassId?: SortOrderInput | SortOrder
     isActive?: SortOrder
@@ -43706,7 +43706,7 @@ export namespace Prisma {
     recurringMonth?: IntNullableFilter<"Event"> | number | null
     recurringDay?: IntNullableFilter<"Event"> | number | null
     eligibilityRuleId?: StringNullableFilter<"Event"> | string | null
-    targetMemberTypes?: EnummemberTypeNullableListFilter<"Event">
+    targetRoles?: EnummemberTypeNullableListFilter<"Event">
     createdById?: StringFilter<"Event"> | string
     courseClassId?: StringNullableFilter<"Event"> | string | null
     isActive?: BoolFilter<"Event"> | boolean
@@ -43735,7 +43735,7 @@ export namespace Prisma {
     recurringMonth?: SortOrderInput | SortOrder
     recurringDay?: SortOrderInput | SortOrder
     eligibilityRuleId?: SortOrderInput | SortOrder
-    targetMemberTypes?: SortOrder
+    targetRoles?: SortOrder
     createdById?: SortOrder
     courseClassId?: SortOrderInput | SortOrder
     isActive?: SortOrder
@@ -43767,7 +43767,7 @@ export namespace Prisma {
     recurringMonth?: IntNullableWithAggregatesFilter<"Event"> | number | null
     recurringDay?: IntNullableWithAggregatesFilter<"Event"> | number | null
     eligibilityRuleId?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    targetMemberTypes?: EnummemberTypeNullableListFilter<"Event">
+    targetRoles?: EnummemberTypeNullableListFilter<"Event">
     createdById?: StringWithAggregatesFilter<"Event"> | string
     courseClassId?: StringNullableWithAggregatesFilter<"Event"> | string | null
     isActive?: BoolWithAggregatesFilter<"Event"> | boolean
@@ -46596,7 +46596,7 @@ export namespace Prisma {
     isRecurring?: boolean
     recurringMonth?: number | null
     recurringDay?: number | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     isActive?: boolean
     mode?: $Enums.appMode
     isAcademicTimeline?: boolean
@@ -46623,7 +46623,7 @@ export namespace Prisma {
     recurringMonth?: number | null
     recurringDay?: number | null
     eligibilityRuleId?: string | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
@@ -46648,7 +46648,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isAcademicTimeline?: BoolFieldUpdateOperationsInput | boolean
@@ -46675,7 +46675,7 @@ export namespace Prisma {
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     eligibilityRuleId?: NullableStringFieldUpdateOperationsInput | string | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -46701,7 +46701,7 @@ export namespace Prisma {
     recurringMonth?: number | null
     recurringDay?: number | null
     eligibilityRuleId?: string | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
@@ -46724,7 +46724,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isAcademicTimeline?: BoolFieldUpdateOperationsInput | boolean
@@ -46746,7 +46746,7 @@ export namespace Prisma {
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     eligibilityRuleId?: NullableStringFieldUpdateOperationsInput | string | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -49959,7 +49959,7 @@ export namespace Prisma {
     recurringMonth?: SortOrder
     recurringDay?: SortOrder
     eligibilityRuleId?: SortOrder
-    targetMemberTypes?: SortOrder
+    targetRoles?: SortOrder
     createdById?: SortOrder
     courseClassId?: SortOrder
     isActive?: SortOrder
@@ -52647,7 +52647,7 @@ export namespace Prisma {
     deleteMany?: CourseClassScalarWhereInput | CourseClassScalarWhereInput[]
   }
 
-  export type EventCreatetargetMemberTypesInput = {
+  export type EventCreatetargetRolesInput = {
     set: $Enums.memberType[]
   }
 
@@ -52701,7 +52701,7 @@ export namespace Prisma {
     set?: $Enums.eventType
   }
 
-  export type EventUpdatetargetMemberTypesInput = {
+  export type EventUpdatetargetRolesInput = {
     set?: $Enums.memberType[]
     push?: $Enums.memberType | $Enums.memberType[]
   }
@@ -55483,7 +55483,7 @@ export namespace Prisma {
     isRecurring?: boolean
     recurringMonth?: number | null
     recurringDay?: number | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     isActive?: boolean
     mode?: $Enums.appMode
     isAcademicTimeline?: boolean
@@ -55509,7 +55509,7 @@ export namespace Prisma {
     recurringMonth?: number | null
     recurringDay?: number | null
     eligibilityRuleId?: string | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     courseClassId?: string | null
     isActive?: boolean
     mode?: $Enums.appMode
@@ -56197,7 +56197,7 @@ export namespace Prisma {
     recurringMonth?: IntNullableFilter<"Event"> | number | null
     recurringDay?: IntNullableFilter<"Event"> | number | null
     eligibilityRuleId?: StringNullableFilter<"Event"> | string | null
-    targetMemberTypes?: EnummemberTypeNullableListFilter<"Event">
+    targetRoles?: EnummemberTypeNullableListFilter<"Event">
     createdById?: StringFilter<"Event"> | string
     courseClassId?: StringNullableFilter<"Event"> | string | null
     isActive?: BoolFilter<"Event"> | boolean
@@ -57651,7 +57651,7 @@ export namespace Prisma {
     isRecurring?: boolean
     recurringMonth?: number | null
     recurringDay?: number | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     isActive?: boolean
     mode?: $Enums.appMode
     isAcademicTimeline?: boolean
@@ -57677,7 +57677,7 @@ export namespace Prisma {
     recurringMonth?: number | null
     recurringDay?: number | null
     eligibilityRuleId?: string | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
@@ -57969,7 +57969,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isAcademicTimeline?: BoolFieldUpdateOperationsInput | boolean
@@ -57995,7 +57995,7 @@ export namespace Prisma {
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     eligibilityRuleId?: NullableStringFieldUpdateOperationsInput | string | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -58858,7 +58858,7 @@ export namespace Prisma {
     isRecurring?: boolean
     recurringMonth?: number | null
     recurringDay?: number | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     isActive?: boolean
     mode?: $Enums.appMode
     isAcademicTimeline?: boolean
@@ -58883,7 +58883,7 @@ export namespace Prisma {
     isRecurring?: boolean
     recurringMonth?: number | null
     recurringDay?: number | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
@@ -60088,7 +60088,7 @@ export namespace Prisma {
     isRecurring?: boolean
     recurringMonth?: number | null
     recurringDay?: number | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     isActive?: boolean
     mode?: $Enums.appMode
     isAcademicTimeline?: boolean
@@ -60114,7 +60114,7 @@ export namespace Prisma {
     recurringMonth?: number | null
     recurringDay?: number | null
     eligibilityRuleId?: string | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     createdById: string
     isActive?: boolean
     mode?: $Enums.appMode
@@ -63005,7 +63005,7 @@ export namespace Prisma {
     isRecurring?: boolean
     recurringMonth?: number | null
     recurringDay?: number | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     isActive?: boolean
     mode?: $Enums.appMode
     isAcademicTimeline?: boolean
@@ -63031,7 +63031,7 @@ export namespace Prisma {
     recurringMonth?: number | null
     recurringDay?: number | null
     eligibilityRuleId?: string | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
@@ -63226,7 +63226,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isAcademicTimeline?: BoolFieldUpdateOperationsInput | boolean
@@ -63252,7 +63252,7 @@ export namespace Prisma {
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     eligibilityRuleId?: NullableStringFieldUpdateOperationsInput | string | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -63678,7 +63678,7 @@ export namespace Prisma {
     recurringMonth?: number | null
     recurringDay?: number | null
     eligibilityRuleId?: string | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     courseClassId?: string | null
     isActive?: boolean
     mode?: $Enums.appMode
@@ -64070,7 +64070,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isAcademicTimeline?: BoolFieldUpdateOperationsInput | boolean
@@ -64096,7 +64096,7 @@ export namespace Prisma {
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     eligibilityRuleId?: NullableStringFieldUpdateOperationsInput | string | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
@@ -64121,7 +64121,7 @@ export namespace Prisma {
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     eligibilityRuleId?: NullableStringFieldUpdateOperationsInput | string | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
@@ -64963,7 +64963,7 @@ export namespace Prisma {
     isRecurring?: boolean
     recurringMonth?: number | null
     recurringDay?: number | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     createdById: string
     courseClassId?: string | null
     isActive?: boolean
@@ -65019,7 +65019,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isAcademicTimeline?: BoolFieldUpdateOperationsInput | boolean
@@ -65044,7 +65044,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -65069,7 +65069,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     courseClassId?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
@@ -65733,7 +65733,7 @@ export namespace Prisma {
     recurringMonth?: number | null
     recurringDay?: number | null
     eligibilityRuleId?: string | null
-    targetMemberTypes?: EventCreatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventCreatetargetRolesInput | $Enums.memberType[]
     createdById: string
     isActive?: boolean
     mode?: $Enums.appMode
@@ -65948,7 +65948,7 @@ export namespace Prisma {
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
     isAcademicTimeline?: BoolFieldUpdateOperationsInput | boolean
@@ -65974,7 +65974,7 @@ export namespace Prisma {
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     eligibilityRuleId?: NullableStringFieldUpdateOperationsInput | string | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode
@@ -65999,7 +65999,7 @@ export namespace Prisma {
     recurringMonth?: NullableIntFieldUpdateOperationsInput | number | null
     recurringDay?: NullableIntFieldUpdateOperationsInput | number | null
     eligibilityRuleId?: NullableStringFieldUpdateOperationsInput | string | null
-    targetMemberTypes?: EventUpdatetargetMemberTypesInput | $Enums.memberType[]
+    targetRoles?: EventUpdatetargetRolesInput | $Enums.memberType[]
     createdById?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     mode?: EnumappModeFieldUpdateOperationsInput | $Enums.appMode

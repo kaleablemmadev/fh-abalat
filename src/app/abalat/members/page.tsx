@@ -12,7 +12,7 @@ interface Member {
   age: number;
   christianName: string | null;
   registerDate: string | null;
-  memberTypes: ("COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT")[];
+  roles: ("COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT")[];
   privateId: string | null;
 }
 
@@ -74,7 +74,7 @@ export default function MembersPage() {
       const normalizedFields = [
         member.fullName ?? "",
         member.gender ?? "",
-        member.memberTypes.join(" ") ?? "",
+        member.roles.join(" ") ?? "",
         member.christianName ?? "",
         member.registerDate ?? "",
       ]
@@ -86,7 +86,7 @@ export default function MembersPage() {
         : true;
 
       const matchesType = memberTypeFilter
-        ? member.memberTypes.includes(memberTypeFilter as any)
+        ? member.roles.includes(memberTypeFilter as any)
         : true;
 
       return matchesSearch && matchesType;
@@ -96,9 +96,9 @@ export default function MembersPage() {
   const totals = useMemo(
     () => ({
       total: filteredMembers.length,
-      regular: filteredMembers.filter((m) => m.memberTypes.includes("REGULAR_MEMBER")).length,
-      course: filteredMembers.filter((m) => m.memberTypes.includes("COURSE_STUDENT")).length,
-      youth: filteredMembers.filter((m) => m.memberTypes.includes("YOUTH_STUDENT")).length,
+      regular: filteredMembers.filter((m) => m.roles.includes("REGULAR_MEMBER")).length,
+      course: filteredMembers.filter((m) => m.roles.includes("COURSE_STUDENT")).length,
+      youth: filteredMembers.filter((m) => m.roles.includes("YOUTH_STUDENT")).length,
     }),
     [filteredMembers]
   );
@@ -377,7 +377,7 @@ export default function MembersPage() {
                       </div>
 
                       <div className="flex flex-wrap gap-1 pt-1">
-                        {member.memberTypes.map(type => (
+                        {member.roles.map(type => (
                           <span
                             key={type}
                             className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${memberTypeColors[type] || "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"}`}
@@ -385,7 +385,7 @@ export default function MembersPage() {
                             {memberTypeLabels[type] ?? type}
                           </span>
                         ))}
-                        {member.memberTypes.length === 0 && (
+                        {member.roles.length === 0 && (
                            <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold bg-zinc-500/10 text-zinc-400 border-zinc-500/20">
                              No type
                            </span>

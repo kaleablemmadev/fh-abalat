@@ -1,12 +1,14 @@
 // src/services/eligibility.service.ts
 import prisma from '@/src/lib/prisma';
 import { dateToEthiopian } from '@/src/lib/ethiopiancal';
-import { checkMemberPermission, getMemberPermissions } from './permission.service';
+import { checkMemberPermission, getMemberPermissions, isMemberExcusedForEvent } from './permission.service';
 
 export interface EligibilityCheckResult {
   memberId: string;
   fullName: string | null;
   eligible: boolean;
+  byPermission?: boolean;
+  permissionType?: string;
   reasons: string[];
   scores: {
     choreScore: number;
@@ -53,6 +55,17 @@ export interface EventEligibilityReport {
   };
 }
 
+type MemberScore = {
+  choreScore: number;
+  sundayScore: number;
+  mezmurScore: number;
+  totalScore: number;
+  attendanceDetails: any[];
+  activePermissions: any[];
+  byPermission?: boolean;
+  permissionType?: string;
+};
+
 export class EligibilityService {
   /**
    * Calculate the score for a member based on attendance records
@@ -62,14 +75,7 @@ export class EligibilityService {
     memberId: string,
     lookbackMonths: number,
     targetDate: Date
-  ): Promise<{ 
-    choreScore: number; 
-    sundayScore: number; 
-    mezmurScore: number;
-    totalScore: number;
-    attendanceDetails: any[];
-    activePermissions: any[];
-  }> {
+  ): Promise<MemberScore> {
     const cutoffDate = new Date(targetDate);
     cutoffDate.setMonth(cutoffDate.getMonth() - lookbackMonths);
 
@@ -101,6 +107,10 @@ export class EligibilityService {
     });
 
     const activePermissionsRecords = await getMemberPermissions(memberId);
+    return this.buildMemberScore(attendances, activePermissionsRecords);
+  }
+
+  private static buildMemberScore(attendances: any[], activePermissionsRecords: any[]): MemberScore {
     const activePermissions = activePermissionsRecords.map(p => ({
       permissionType: p.permissionType.name,
       reason: p.reason,
@@ -141,6 +151,90 @@ export class EligibilityService {
     return { choreScore, sundayScore, mezmurScore, totalScore, attendanceDetails, activePermissions };
   }
 
+  private static async calculateMemberScores(
+    memberIds: string[],
+    lookbackMonths: number,
+    targetDate: Date,
+    eventType: 'CHORE' | 'SUNDAY' | 'EVENT',
+  ): Promise<Map<string, MemberScore>> {
+    const cutoffDate = new Date(targetDate);
+    cutoffDate.setMonth(cutoffDate.getMonth() - lookbackMonths);
+
+    const [attendances, permissions] = await Promise.all([
+      prisma.attendance.findMany({
+        where: {
+          memberId: { in: memberIds },
+          event: { date: { gte: cutoffDate, lt: targetDate } },
+        },
+        include: {
+          event: true,
+          attendanceType: true,
+          permission: { include: { permissionType: true } },
+        },
+        orderBy: { event: { date: 'desc' } },
+      }),
+      prisma.permission.findMany({
+        where: { memberId: { in: memberIds }, status: 'APPROVED' },
+        include: { permissionType: true },
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
+
+    const attendancesByMember = new Map<string, any[]>();
+    for (const attendance of attendances) {
+      const records = attendancesByMember.get(attendance.memberId) ?? [];
+      records.push(attendance);
+      attendancesByMember.set(attendance.memberId, records);
+    }
+
+    const permissionsByMember = new Map<string, any[]>();
+    for (const permission of permissions) {
+      const records = permissionsByMember.get(permission.memberId) ?? [];
+      records.push(permission);
+      permissionsByMember.set(permission.memberId, records);
+    }
+
+    const scores = await Promise.all(memberIds.map(async (id) => {
+      const memberPermissions = permissionsByMember.get(id) ?? [];
+      const score = this.buildMemberScore(
+        attendancesByMember.get(id) ?? [],
+        memberPermissions,
+      );
+
+      for (const permission of memberPermissions) {
+        const isExcused = await isMemberExcusedForEvent(
+          permission.permissionType,
+          dateToEthiopian(targetDate),
+          targetDate,
+          eventType,
+          permission.ethiopianStartDate,
+        );
+
+        if (isExcused) {
+          score.byPermission = true;
+          score.permissionType = permission.permissionType.name;
+          score.totalScore += 0.5;
+          if (eventType === 'CHORE') score.choreScore += 0.5;
+          if (eventType === 'SUNDAY') score.sundayScore += 0.5;
+          score.attendanceDetails.push({
+            eventId: `permission-${permission.id}`,
+            eventTitle: 'By permission',
+            eventDate: targetDate,
+            attendanceType: 'By permission',
+            value: 0.5,
+            excused: true,
+            permissionType: permission.permissionType.name,
+          });
+          break;
+        }
+      }
+
+      return [id, score] as const;
+    }));
+
+    return new Map(scores);
+  }
+
   /**
    * Check if a member is eligible based on the criteria
    */
@@ -152,7 +246,8 @@ export class EligibilityService {
       lookbackMonths: number;
       isTotalAttendance: boolean;
     }[],
-    targetDate: Date
+    targetDate: Date,
+    preloadedScore?: MemberScore,
   ): Promise<EligibilityCheckResult> {
     const member = await prisma.user.findUnique({
       where: { id: memberId },
@@ -185,8 +280,8 @@ export class EligibilityService {
       }
     }
 
-    const { choreScore, sundayScore, mezmurScore, totalScore, attendanceDetails, activePermissions } =
-      await this.calculateMemberScore(memberId, maxLookbackMonths, targetDate);
+    const { choreScore, sundayScore, mezmurScore, totalScore, attendanceDetails, activePermissions, byPermission, permissionType } =
+      preloadedScore ?? await this.calculateMemberScore(memberId, maxLookbackMonths, targetDate);
 
     // Check chore criteria
     if (requiredChore > 0 && choreScore < requiredChore) {
@@ -211,7 +306,9 @@ export class EligibilityService {
     return {
       memberId: member.id,
       fullName: member.fullName,
-      eligible: reasons.length === 0,
+      eligible: reasons.length === 0 || !!byPermission,
+      byPermission,
+      permissionType,
       reasons,
       scores: {
         choreScore,
@@ -274,14 +371,27 @@ export class EligibilityService {
     const members = await prisma.user.findMany({
       where: {
         type: 'MEMBER',
-        ...(event.targetMemberTypes.length > 0 ? {
-          memberTypes: { hasSome: event.targetMemberTypes },
+        NOT: { roles: { has: 'COURSE_STUDENT' } },
+        ...(event.targetRoles.length > 0 ? {
+          roles: { hasSome: event.targetRoles },
         } : {
-          memberTypes: { has: 'REGULAR_MEMBER' },
+          roles: { has: 'REGULAR_MEMBER' },
         }),
       },
       select: { id: true, fullName: true }
     });
+
+    const maxLookbackMonths = Math.max(...activeCriteria.map((criterion) => criterion.lookbackMonths), 0);
+    const permissionEventType: 'CHORE' | 'SUNDAY' | 'EVENT' =
+      event.eventType === 'CHORE' || event.eventType === 'SUNDAY' || event.eventType === 'EVENT'
+        ? event.eventType
+        : 'EVENT';
+    const scoresByMember = await this.calculateMemberScores(
+      members.map((member) => member.id),
+      maxLookbackMonths,
+      event.date,
+      permissionEventType,
+    );
 
     const results: EligibilityCheckResult[] = [];
     for (const member of members) {
@@ -289,7 +399,8 @@ export class EligibilityService {
         const result = await this.checkMemberEligibility(
           member.id,
           activeCriteria,
-          event.date
+          event.date,
+          scoresByMember.get(member.id),
         );
         results.push(result);
       } catch (error) {
@@ -370,14 +481,27 @@ export class EligibilityService {
     const members = await prisma.user.findMany({
       where: {
         type: 'MEMBER',
-        ...(event.targetMemberTypes.length > 0 ? {
-          memberTypes: { hasSome: event.targetMemberTypes },
+        NOT: { roles: { has: 'COURSE_STUDENT' } },
+        ...(event.targetRoles.length > 0 ? {
+          roles: { hasSome: event.targetRoles },
         } : {
-          memberTypes: { has: 'REGULAR_MEMBER' },
+          roles: { has: 'REGULAR_MEMBER' },
         }),
       },
       select: { id: true, fullName: true }
     });
+
+    const maxLookbackMonths = Math.max(...activeCriteria.map((criterion: { lookbackMonths: number }) => criterion.lookbackMonths), 0);
+    const permissionEventType: 'CHORE' | 'SUNDAY' | 'EVENT' =
+      event.eventType === 'CHORE' || event.eventType === 'SUNDAY' || event.eventType === 'EVENT'
+        ? event.eventType
+        : 'EVENT';
+    const scoresByMember = await this.calculateMemberScores(
+      members.map((member) => member.id),
+      maxLookbackMonths,
+      event.date,
+      permissionEventType,
+    );
 
     const results: EligibilityCheckResult[] = [];
     for (const member of members) {
@@ -385,7 +509,8 @@ export class EligibilityService {
         const result = await this.checkMemberEligibility(
           member.id,
           activeCriteria,
-          event.date
+          event.date,
+          scoresByMember.get(member.id),
         );
         results.push(result);
       } catch (error) {
@@ -487,7 +612,7 @@ export class EligibilityService {
     const events = await prisma.event.findMany({
       where: {
         OR: [
-          { targetMemberTypes: { hasSome: member.memberTypes } },
+          { targetRoles: { hasSome: member.roles } },
           { courseClassId: member.courseClassId || undefined }
         ],
         isActive: true,

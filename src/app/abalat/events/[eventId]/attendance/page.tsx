@@ -19,7 +19,7 @@ export default async function SingleDayAttendancePage({
     where: { id: eventId },
   });
 
-  if (!event) {
+  if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
     notFound();
   }
 
@@ -27,7 +27,10 @@ export default async function SingleDayAttendancePage({
 
   // 2. Fetch all Members
   const members = await prisma.user.findMany({
-    where: { type: "MEMBER" },
+    where: {
+      type: "MEMBER",
+      NOT: { roles: { has: "COURSE_STUDENT" } },
+    },
     select: { id: true, fullName: true },
     orderBy: { fullName: "asc" },
   });

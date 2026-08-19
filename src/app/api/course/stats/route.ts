@@ -15,7 +15,7 @@ export async function GET() {
         where: { event: { courseClassId: { not: null } } }
       }),
       prisma.user.count({
-        where: { memberTypes: { has: "COURSE_STUDENT" }, type: "MEMBER" }
+        where: { roles: { has: "COURSE_STUDENT" }, type: "MEMBER" }
       }),
       prisma.course.count(),
       prisma.instructor.count(),

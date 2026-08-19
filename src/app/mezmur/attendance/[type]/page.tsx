@@ -87,7 +87,7 @@ export default async function MezmurAttendanceTypePage({
       where: {
         type: "MEMBER",
         isActive: true,
-        memberTypes: { has: "REGULAR_MEMBER" }
+        roles: { has: "REGULAR_MEMBER" }
       },
       orderBy: { fullName: "asc" },
     });

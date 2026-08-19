@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
           age: validatedData.age,
           phoneNumber: validatedData.phoneNumber,
           address: validatedData.address,
-          memberTypes: { set: ["COURSE_STUDENT"] },
+          roles: { set: ["COURSE_STUDENT"] },
           type: "MEMBER",
           coursePrivateId,
           enrollments: {

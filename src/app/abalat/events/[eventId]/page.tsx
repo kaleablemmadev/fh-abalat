@@ -28,7 +28,7 @@ export default async function EventDetailPage({
     },
   });
 
-  if (!event) {
+  if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
     notFound();
   }
 

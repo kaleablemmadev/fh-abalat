@@ -15,7 +15,7 @@ type EventPayload = {
   recurringMonth?: number | null;
   recurringDay?: number | null;
   eligibilityRuleId?: string;
-  targetMemberTypes?: string[];
+  targetRoles?: string[];
 };
 
 type EventTargetMemberTypes = "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT";
@@ -25,14 +25,8 @@ export async function GET() {
     const events = await prisma.event.findMany({
       where: {
         eventType: 'EVENT',
+        isRecurring: true,
         courseClassId: null,
-        OR: [
-          { isRecurring: false },
-          {
-            isRecurring: true,
-            ethiopianYear: new Date().getFullYear() - 8,
-          }
-        ]
       },
       include: {
         eligibilityRule: true,
@@ -57,8 +51,8 @@ export async function GET() {
       recurringDay: event.recurringDay,
       eligibilityRule: event.eligibilityRule?.name ?? "",
       eligibilityRuleId: event.eligibilityRuleId,
-      targetMemberTypes: Array.isArray(event.targetMemberTypes)
-        ? event.targetMemberTypes.map(t => String(t))
+      targetRoles: Array.isArray(event.targetRoles)
+        ? event.targetRoles.map(t => String(t))
         : [],
       ethDate: dateToEthiopian(new Date(event.date)),
       _count: event._count,
@@ -105,6 +99,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (body.isRecurring !== true) {
+      return NextResponse.json(
+        { error: "Only recurring events can be created in Abalat mode" },
+        { status: 400 }
+      );
+    }
+
     // Get admin user
     let adminUser = await prisma.user.findFirst({ where: { type: "ADMIN" } });
     if (!adminUser) {
@@ -120,7 +121,7 @@ export async function POST(request: NextRequest) {
 
     console.log("Admin user found:", adminUser.id);
 
-    const targetMemberTypes = body.targetMemberTypes as EventTargetMemberTypes[] | undefined;
+    const targetRoles = body.targetRoles as EventTargetMemberTypes[] | undefined;
 
     // Build create data
     const createData: any = {
@@ -135,7 +136,7 @@ export async function POST(request: NextRequest) {
       recurringMonth: body.isRecurring ? (body.recurringMonth ?? null) : null,
       recurringDay: body.isRecurring ? (body.recurringDay ?? null) : null,
       eligibilityRuleId: body.eligibilityRuleId || null,
-      targetMemberTypes: targetMemberTypes || [],
+      targetRoles: targetRoles || [],
       eventType: 'EVENT',
       createdById: adminUser.id,
     };

@@ -75,8 +75,8 @@ export default async function CourseStudentDetailsPage({ params }: { params: Pro
 
   if (!student) notFound();
 
-  const isEligibleForAbalat = student.memberTypes.includes("COURSE_STUDENT" as any) &&
-                             !student.memberTypes.includes("REGULAR_MEMBER" as any) &&
+  const isEligibleForAbalat = student.roles.includes("COURSE_STUDENT" as any) &&
+                             !student.roles.includes("REGULAR_MEMBER" as any) &&
                              student.enrollments.some(e => ["SALSAY", "RABEAY"].includes(e.courseClass?.name as any));
 
   return (

@@ -13,6 +13,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const memberIds = Array.from(new Set(body.map((record) => record.memberId)));
+    const courseMembers = await prisma.user.findMany({
+      where: {
+        id: { in: memberIds },
+        OR: [
+          { type: { not: "MEMBER" } },
+          { roles: { has: "COURSE_STUDENT" } },
+        ],
+      },
+      select: { id: true },
+    });
+
+    if (courseMembers.length > 0) {
+      return NextResponse.json(
+        { error: "Course members cannot receive Abalat attendance" },
+        { status: 403 }
+      );
+    }
+
     let adminUser = await prisma.user.findFirst({
       where: { type: "ADMIN" }
     });

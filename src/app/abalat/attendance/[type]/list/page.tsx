@@ -24,6 +24,7 @@ export default async function AttendanceListPage({
   const events = await prisma.event.findMany({
     where: {
       eventType,
+      courseClassId: null,
     },
     include: {
       _count: {

@@ -133,7 +133,7 @@ model Event {
   recurringMonth    Int?
   recurringDay      Int?
   eligibilityRuleId String?
-  targetMemberTypes memberType[]
+  targetRoles       memberType[]
   createdById       String
   courseClassId     String?
   isActive          Boolean          @default(true)

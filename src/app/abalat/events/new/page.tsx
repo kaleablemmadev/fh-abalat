@@ -18,7 +18,7 @@ interface FormData {
   hour: string;
   minute: string;
   isRecurring: boolean;
-  targetMemberTypes: string[];
+  targetRoles: string[];
   eligibilityRuleId: string;
 }
 
@@ -50,7 +50,7 @@ export default function NewEventPage() {
     hour: '10',
     minute: '00',
     isRecurring: false,
-    targetMemberTypes: [],
+    targetRoles: [],
     eligibilityRuleId: '',
   });
 
@@ -132,7 +132,7 @@ export default function NewEventPage() {
         recurringMonth: formData.isRecurring ? monthNumber : null,
         recurringDay: formData.isRecurring ? day : null,
         eligibilityRuleId: formData.eligibilityRuleId || undefined,
-        targetMemberTypes: formData.targetMemberTypes.length > 0 ? formData.targetMemberTypes : undefined,
+        targetRoles: formData.targetRoles.length > 0 ? formData.targetRoles : undefined,
       };
 
       const response = await fetch('/api/abalat/events', {
@@ -389,17 +389,17 @@ export default function NewEventPage() {
                 <label key={option.value} className="flex items-center gap-2 text-sm">
                   <input
                     type="checkbox"
-                    checked={formData.targetMemberTypes.includes(option.value)}
+                    checked={formData.targetRoles.includes(option.value)}
                     onChange={(e) => {
                       if (e.target.checked) {
                         setFormData({
                           ...formData,
-                          targetMemberTypes: [...formData.targetMemberTypes, option.value],
+                          targetRoles: [...formData.targetRoles, option.value],
                         });
                       } else {
                         setFormData({
                           ...formData,
-                          targetMemberTypes: formData.targetMemberTypes.filter((t) => t !== option.value),
+                          targetRoles: formData.targetRoles.filter((t) => t !== option.value),
                         });
                       }
                     }}

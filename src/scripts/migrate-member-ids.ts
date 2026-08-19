@@ -43,7 +43,7 @@ async function main() {
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        memberTypes: { set: memberTypes },
+        roles: { set: memberTypes },
         privateId: newPrivateId,
         coursePrivateId: newCoursePrivateId
       }

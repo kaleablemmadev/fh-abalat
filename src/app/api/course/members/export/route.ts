@@ -4,7 +4,7 @@ import prisma from "@/src/lib/prisma";
 export async function GET() {
   try {
     const students = await prisma.user.findMany({
-      where: { memberTypes: { has: "COURSE_STUDENT" }, type: "MEMBER" },
+      where: { roles: { has: "COURSE_STUDENT" }, type: "MEMBER" },
       include: {
         enrollments: {
           where: { status: "ACTIVE" },

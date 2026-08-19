@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
               age: student.age,
               gender: student.gender,
               type: "MEMBER",
-              memberTypes: { set: ["COURSE_STUDENT"] },
+              roles: { set: ["COURSE_STUDENT"] },
               courseClassId: student.courseClassId,
               coursePrivateId,
               isActive: true,

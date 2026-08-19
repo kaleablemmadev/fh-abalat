@@ -15,7 +15,7 @@ type EventPayload = {
   recurringMonth?: number | null;
   recurringDay?: number | null;
   eligibilityRuleId?: string;
-  targetMemberTypes?: string[];
+  targetRoles?: string[];
 };
 
 export async function GET() {
@@ -54,8 +54,8 @@ export async function GET() {
       recurringDay: event.recurringDay,
       eligibilityRule: event.eligibilityRule?.name ?? "",
       eligibilityRuleId: event.eligibilityRuleId,
-      targetMemberTypes: Array.isArray(event.targetMemberTypes)
-        ? event.targetMemberTypes.map(t => String(t))
+      targetRoles: Array.isArray(event.targetRoles)
+        ? event.targetRoles.map(t => String(t))
         : [],
       ethDate: dateToEthiopian(new Date(event.date)),
       _count: event._count,
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
       recurringMonth: body.isRecurring ? (body.recurringMonth ?? null) : null,
       recurringDay: body.isRecurring ? (body.recurringDay ?? null) : null,
       eligibilityRuleId: body.eligibilityRuleId || null,
-      targetMemberTypes: body.targetMemberTypes || [],
+      targetRoles: body.targetRoles || [],
       eventType: 'MEZMUR_EVENT',
       mode: 'MEZMUR',
       createdById: adminUser.id,

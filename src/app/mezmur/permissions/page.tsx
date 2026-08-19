@@ -21,7 +21,7 @@ export default async function MezmurPermissionsPage() {
         type: "MEMBER",
         isActive: true,
         OR: [
-          { memberTypes: { has: "REGULAR_MEMBER" } },
+          { roles: { has: "REGULAR_MEMBER" } },
           { mezmurEnrollments: { some: { status: "ACTIVE" } } }
         ]
       },

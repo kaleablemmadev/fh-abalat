@@ -1,0 +1,22 @@
+
+> fh-abalat@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.56.1:3000
+- Environments: .env
+✓ Ready in 27.6s
+
+ GET /abalat/login 200 in 4.0s (next.js: 2.3s, application-code: 1735ms)
+ GET /api/abalat/events 200 in 30.0s (next.js: 1516ms, application-code: 28.5s)
+ GET /abalat/login 200 in 618ms (next.js: 322ms, application-code: 296ms)
+ GET /abalat/login 200 in 443ms (next.js: 34ms, application-code: 410ms)
+ GET /abalat/login 200 in 414ms (next.js: 10ms, application-code: 403ms)
+ GET /abalat/login 200 in 420ms (next.js: 36ms, application-code: 384ms)
+ GET /abalat/login 200 in 238ms (next.js: 9ms, application-code: 229ms)
+ GET /abalat/login 200 in 121ms (next.js: 10ms, application-code: 111ms)
+ GET /abalat/login 200 in 395ms (next.js: 18ms, application-code: 378ms)
+ GET /abalat/login 200 in 257ms (next.js: 29ms, application-code: 227ms)
+ GET /abalat/login 200 in 119ms (next.js: 8ms, application-code: 111ms)
+ GET /api/abalat/events 200 in 17.9s (next.js: 642ms, application-code: 17.3s)

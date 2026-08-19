@@ -9,7 +9,7 @@ import { CourseEnrollmentService } from "@/src/services/course-enrollment.servic
 export async function GET() {
     try {
         const courseMember = await prisma.user.findMany({
-            where: { memberTypes: { has: "COURSE_STUDENT" } },
+            where: { roles: { has: "COURSE_STUDENT" } },
             include: {
                 enrollments: {
                     where: { status: "ACTIVE" },
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
                     age: validatedData.age,
                     phoneNumber: validatedData.phoneNumber,
                     address: validatedData.address,
-                    memberTypes: { set: ["COURSE_STUDENT"] },
+                    roles: { set: ["COURSE_STUDENT"] },
                     type: "MEMBER",
                     coursePrivateId,
                     enrollments: {

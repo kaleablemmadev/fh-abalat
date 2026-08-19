@@ -10,6 +10,19 @@ export async function DELETE(
   try {
     const { id, permissionId } = await params;
 
+    const member = await prisma.user.findFirst({
+      where: {
+        id,
+        type: 'MEMBER',
+        NOT: { roles: { has: 'COURSE_STUDENT' } },
+      },
+      select: { id: true },
+    });
+
+    if (!member) {
+      return NextResponse.json({ error: 'Member not found' }, { status: 404 });
+    }
+
     // Verify the permission belongs to this member
     const permission = await prisma.permission.findUnique({
       where: { id: permissionId },

@@ -8,6 +8,15 @@ export async function GET(
 ) {
   try {
     const { eventId } = await params;
+
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: { courseClassId: true, eventType: true, isRecurring: true },
+    });
+
+    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
     
     const attendances = await prisma.attendance.findMany({
       where: { eventId },
@@ -34,6 +43,15 @@ export async function POST(
   try {
     const { eventId } = await params;
     const body = await request.json();
+
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: { courseClassId: true, eventType: true, isRecurring: true },
+    });
+
+    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
     
     if (!Array.isArray(body)) {
       return NextResponse.json(
@@ -59,6 +77,25 @@ export async function POST(
        return NextResponse.json(
         { error: "No admin user found to mark attendance" },
         { status: 400 }
+      );
+    }
+
+    const memberIds = Array.from(new Set(body.map((record: { memberId: string }) => record.memberId)));
+    const courseMembers = await prisma.user.findMany({
+      where: {
+        id: { in: memberIds },
+        OR: [
+          { type: { not: "MEMBER" } },
+          { roles: { has: "COURSE_STUDENT" } },
+        ],
+      },
+      select: { id: true },
+    });
+
+    if (courseMembers.length > 0) {
+      return NextResponse.json(
+        { error: "Course members cannot receive Abalat attendance" },
+        { status: 403 }
       );
     }
 
@@ -104,6 +141,15 @@ export async function DELETE(
 ) {
   try {
     const { eventId } = await params;
+
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: { courseClassId: true, eventType: true, isRecurring: true },
+    });
+
+    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
     
     await prisma.attendance.deleteMany({
       where: { eventId },

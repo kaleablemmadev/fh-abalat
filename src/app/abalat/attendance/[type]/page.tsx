@@ -88,6 +88,7 @@ export default async function MultiMonthAttendancePage({
             ethiopianMonth: currentEthMonth,
             ethiopianDay: ethDay.day,
             title: { contains: 'Chore' },
+            courseClassId: null,
           },
         });
         
@@ -145,6 +146,7 @@ export default async function MultiMonthAttendancePage({
               ethiopianMonth: currentEthMonth,
               ethiopianDay: day,
               title: { contains: 'Sunday' },
+              courseClassId: null,
             },
           });
           
@@ -183,7 +185,8 @@ export default async function MultiMonthAttendancePage({
     members = await prisma.user.findMany({
       where: {
         type: "MEMBER",
-        memberTypes: { has: "REGULAR_MEMBER" }
+        roles: { has: "REGULAR_MEMBER" },
+        NOT: { roles: { has: "COURSE_STUDENT" } },
       },
       select: { id: true, fullName: true },
       orderBy: { fullName: "asc" },

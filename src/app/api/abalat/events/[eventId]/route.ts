@@ -16,7 +16,7 @@ type EventUpdatePayload = Partial<{
   recurringMonth: number;
   recurringDay: number;
   eligibilityRuleId: string;
-  targetMemberTypes: string[];
+  targetRoles: string[];
 }>;
 
 type EventTargetMemberTypes = "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT";
@@ -35,7 +35,7 @@ export async function GET(
       },
     });
 
-    if (!event) {
+    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
@@ -53,7 +53,7 @@ export async function GET(
       recurringDay: event.recurringDay,
       eligibilityRule: event.eligibilityRule?.name ?? "",
       eligibilityRuleId: event.eligibilityRuleId,
-      targetMemberTypes: event.targetMemberTypes,
+      targetRoles: event.targetRoles,
       ethDate: dateToEthiopian(new Date(event.date)),
     };
 
@@ -92,7 +92,7 @@ export async function PUT(
         }
       }
     });
-    if (!event) {
+    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
@@ -121,7 +121,7 @@ export async function PUT(
       recurringMonth?: number | null;
       recurringDay?: number | null;
       eligibilityRuleId?: string | null;
-      targetMemberTypes?: EventTargetMemberTypes[];
+      targetRoles?: EventTargetMemberTypes[];
     } = {};
 
     if (body.title !== undefined) updateData.title = body.title;
@@ -135,8 +135,8 @@ export async function PUT(
     if (body.recurringMonth !== undefined) updateData.recurringMonth = body.recurringMonth;
     if (body.recurringDay !== undefined) updateData.recurringDay = body.recurringDay;
     if (body.eligibilityRuleId !== undefined) updateData.eligibilityRuleId = body.eligibilityRuleId;
-    if (body.targetMemberTypes) {
-      updateData.targetMemberTypes = body.targetMemberTypes as EventTargetMemberTypes[];
+    if (body.targetRoles) {
+      updateData.targetRoles = body.targetRoles as EventTargetMemberTypes[];
     }
 
     const updatedEvent = await prisma.event.update({
@@ -162,7 +162,7 @@ export async function DELETE(
     const { eventId } = await params;
     
     const event = await prisma.event.findUnique({ where: { id: eventId } });
-    if (!event) {
+    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 

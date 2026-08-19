@@ -18,7 +18,7 @@ export default async function EligibilityPage({
     where: { id: eventId },
   });
 
-  if (!event) {
+  if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
     notFound();
   }
 

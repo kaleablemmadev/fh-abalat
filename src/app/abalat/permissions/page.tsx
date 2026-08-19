@@ -58,13 +58,14 @@ export default async function PermissionsPage() {
   const permissions = await prisma.permission.findMany({
     where: {
       status: 'APPROVED',
+      mode: 'ABALAT',
+      member: {
+        type: 'MEMBER',
+        NOT: { roles: { has: 'COURSE_STUDENT' } },
+      },
     },
     include: {
       member: {
-        where: {
-          type: 'MEMBER',
-          NOT: { roles: { has: 'COURSE_STUDENT' } },
-        },
         select: {
           id: true,
           fullName: true,

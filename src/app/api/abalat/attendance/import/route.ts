@@ -41,12 +41,21 @@ async function getAdminId() {
 async function getAttendanceTypes() {
   const types = await prisma.attendanceType.findMany({ where: { mode: "ABALAT" } });
   const find = (names: string[]) => types.find((type) => names.some((name) => type.name.toLowerCase().includes(name)));
-  const attended = find(["attend", "present", "yes"]);
-  const permission = find(["permission", "excused"]);
-  const absent = find(["absent", "no"]);
-  if (!attended || !permission || !absent) {
-    throw new Error("Abalat attendance types must include attended, permission/excused, and absent");
-  }
+  const ensure = async (current: typeof types[number] | undefined, name: string, value: number) => {
+    if (current) return current;
+    return prisma.attendanceType.create({
+      data: {
+        name: `Abalat ${name}`,
+        value,
+        mode: "ABALAT",
+        isDefault: value === 1,
+      },
+    });
+  };
+
+  const attended = await ensure(find(["attend", "present", "yes"]), "Present", 1);
+  const permission = await ensure(find(["permission", "excused"]), "Permission", 0.5);
+  const absent = await ensure(find(["absent", "no"]), "Absent", 0);
   return { attended, permission, absent };
 }
 
@@ -122,6 +131,14 @@ function buildWorkbook(type: ImportType, year: number, members: { fullName: stri
   worksheet["!cols"] = [{ wch: 8 }, { wch: 30 }, ...columns.map(() => ({ wch: 8 }))];
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, `${type}-${year}`);
+  const instructions = XLSX.utils.aoa_to_sheet([
+    ["Attendance values"],
+    ["1", "Attended"],
+    ["P or p", "Permission / excused"],
+    ["0", "Absent"],
+    ["Blank", "No attendance value will be imported"],
+  ]);
+  XLSX.utils.book_append_sheet(workbook, instructions, "Instructions");
   return XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
 }
 
@@ -185,6 +202,10 @@ export async function POST(request: NextRequest) {
           continue;
         }
         for (const column of columns) {
+          // Empty cells mean "do not save or change attendance for this slot".
+          if (row[column.column] === null || row[column.column] === undefined || String(row[column.column]).trim() === "") {
+            continue;
+          }
           const status = normalizeStatus(row[column.column]);
           if (!status) continue;
           const attendanceTypeId = status === "1" ? attendanceTypes.attended.id : status === "P" ? attendanceTypes.permission.id : attendanceTypes.absent.id;

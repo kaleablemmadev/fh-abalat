@@ -15,11 +15,11 @@ export default async function SingleDayAttendancePage({
   const { eventId } = await params;
 
   // 1. Fetch the Event
-  const event = await prisma.event.findUnique({
-    where: { id: eventId },
+  const event = await prisma.event.findFirst({
+    where: { id: eventId, mode: "ABALAT", courseClassId: null, eventType: { in: ["EVENT", "CHORE", "SUNDAY"] } },
   });
 
-  if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+  if (!event) {
     notFound();
   }
 
@@ -29,6 +29,7 @@ export default async function SingleDayAttendancePage({
   const members = await prisma.user.findMany({
     where: {
       type: "MEMBER",
+      mode: "ABALAT",
       NOT: { roles: { has: "COURSE_STUDENT" } },
     },
     select: { id: true, fullName: true },
@@ -37,13 +38,14 @@ export default async function SingleDayAttendancePage({
 
   // 3. Fetch all AttendanceTypes and filter "Late"
   const allAttendanceTypes = await prisma.attendanceType.findMany({
+    where: { mode: "ABALAT" },
     orderBy: { name: "asc" },
   });
   const attendanceTypes = allAttendanceTypes.filter(t => t.name.toLowerCase() !== 'late');
 
   // 4. Fetch existing Attendance for this event
   const existingAttendances = await prisma.attendance.findMany({
-    where: { eventId },
+    where: { eventId, mode: "ABALAT" },
     select: { memberId: true, attendanceTypeId: true },
   });
 

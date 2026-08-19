@@ -9,17 +9,17 @@ export async function GET(
   try {
     const { eventId } = await params;
 
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
+    const event = await prisma.event.findFirst({
+      where: { id: eventId, mode: "ABALAT", courseClassId: null, eventType: { in: ["EVENT", "CHORE", "SUNDAY"] } },
       select: { courseClassId: true, eventType: true, isRecurring: true },
     });
 
-    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+    if (!event) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
     
     const attendances = await prisma.attendance.findMany({
-      where: { eventId },
+      where: { eventId, mode: "ABALAT" },
       include: {
         member: true,
         attendanceType: true,
@@ -44,12 +44,12 @@ export async function POST(
     const { eventId } = await params;
     const body = await request.json();
 
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
+    const event = await prisma.event.findFirst({
+      where: { id: eventId, mode: "ABALAT", courseClassId: null, eventType: { in: ["EVENT", "CHORE", "SUNDAY"] } },
       select: { courseClassId: true, eventType: true, isRecurring: true },
     });
 
-    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+    if (!event) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
     
@@ -63,13 +63,13 @@ export async function POST(
     // For now, assume the first ADMIN is the one marking attendance
     // In a real app with auth, you'd get this from the session
     let adminUser = await prisma.user.findFirst({
-      where: { type: "ADMIN" }
+      where: { type: "ADMIN", mode: "ABALAT" }
     });
     
     // Fallback if no admin exists
     if (!adminUser) {
       adminUser = await prisma.user.findFirst({
-          where: { type: "SUPERADMIN" }
+          where: { type: "SUPERADMIN", mode: "ABALAT" }
       });
     }
 
@@ -142,12 +142,12 @@ export async function DELETE(
   try {
     const { eventId } = await params;
 
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
+    const event = await prisma.event.findFirst({
+      where: { id: eventId, mode: "ABALAT", courseClassId: null, eventType: { in: ["EVENT", "CHORE", "SUNDAY"] } },
       select: { courseClassId: true, eventType: true, isRecurring: true },
     });
 
-    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+    if (!event) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
     

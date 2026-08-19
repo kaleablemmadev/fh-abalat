@@ -7,7 +7,7 @@ import { Home, Users, Calendar, CheckSquare, Shield, FileText, BarChart3, Scroll
 const abalatNavItems: NavSection[] = [
   {
     items: [
-      { name: 'ዋና ገጽ', href: '/abalat', icon: Home },
+      { name: 'ዛሬ', href: '/abalat', icon: Home },
     ]
   },
   {

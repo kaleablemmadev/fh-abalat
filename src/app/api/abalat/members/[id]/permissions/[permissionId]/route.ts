@@ -42,6 +42,13 @@ export async function DELETE(
       );
     }
 
+    if (permission.mode !== 'ABALAT') {
+      return NextResponse.json(
+        { error: 'Permission does not belong to Abalat mode' },
+        { status: 403 }
+      );
+    }
+
     await prisma.permission.delete({
       where: { id: permissionId },
     });

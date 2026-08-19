@@ -23,7 +23,7 @@ export async function GET(
     }
 
     const permissions = await prisma.permission.findMany({
-      where: { memberId: id },
+      where: { memberId: id, mode: 'ABALAT' },
       include: {
         permissionType: true,
         reviewedBy: {
@@ -83,6 +83,7 @@ export async function POST(
         permissionTypeId,
         reason: reason || null,
         ethiopianStartDate: ethiopianStartDate || null,
+        mode: 'ABALAT',
         status: 'APPROVED', // Auto-approve when assigned by admin
       },
       include: {

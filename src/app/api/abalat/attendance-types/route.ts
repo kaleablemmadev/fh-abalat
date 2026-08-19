@@ -42,6 +42,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const normalizedName = name.trim().toLowerCase();
+    const normalizedValue = normalizedName.includes('permission') || normalizedName.includes('excused')
+      ? 0.5
+      : value;
+
     // If setting as default, remove default from other types
     if (isDefault) {
       await prisma.attendanceType.updateMany({
@@ -53,7 +58,7 @@ export async function POST(request: NextRequest) {
     const attendanceType = await prisma.attendanceType.create({
       data: {
         name: name.trim(),
-        value,
+        value: normalizedValue,
         isDefault: isDefault || false,
         mode: 'ABALAT',
       },

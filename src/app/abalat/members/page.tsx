@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Search, Filter, Plus, Edit, Users } from "lucide-react";
+import { Search, Filter, Plus, Edit, Users, FileSpreadsheet, Download, Upload, Loader2 } from "lucide-react";
 
 interface Member {
   id: string;
@@ -39,6 +39,39 @@ export default function MembersPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchText, setSearchText] = useState("");
   const [memberTypeFilter, setMemberTypeFilter] = useState("");
+  const [isImporting, setIsImporting] = useState(false);
+  const [importMessage, setImportMessage] = useState<string | null>(null);
+
+  const downloadTemplate = () => {
+    window.location.href = "/api/abalat/members/import";
+  };
+
+  const importMembers = async (file: File) => {
+    setIsImporting(true);
+    setImportMessage(null);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch("/api/abalat/members/import", {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Import failed");
+      setImportMessage(`Imported ${result.created} of ${result.totalRows} rows${result.failed ? ` (${result.failed} failed)` : ""}.`);
+      if (result.created > 0) {
+        const refreshed = await fetch("/api/abalat/members", { cache: "no-store" });
+        if (refreshed.ok) setMembers(await refreshed.json());
+      }
+      if (result.errors?.length) {
+        console.error("Member import row errors:", result.errors);
+      }
+    } catch (err) {
+      setImportMessage(err instanceof Error ? err.message : "Import failed");
+    } finally {
+      setIsImporting(false);
+    }
+  };
 
   useEffect(() => {
     async function fetchMembers() {
@@ -133,7 +166,46 @@ export default function MembersPage() {
           <span className="hidden sm:inline">ዐዲስ አባል</span>
           <span className="sm:hidden">አባል</span>
         </Link>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={downloadTemplate}
+            className="inline-flex items-center gap-1.5 rounded border px-3 py-2 text-sm font-medium"
+            style={{ borderColor: "hsl(var(--border))", color: "hsl(var(--foreground))" }}
+          >
+            <Download size={14} />
+            Template
+          </button>
+          <label
+            className="inline-flex cursor-pointer items-center gap-1.5 rounded px-3 py-2 text-sm font-semibold"
+            style={{ background: "hsl(160 70% 32%)", color: "#fff" }}
+          >
+            {isImporting ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+            {isImporting ? "Importing..." : "Import Excel"}
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              className="hidden"
+              disabled={isImporting}
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) void importMembers(file);
+                event.currentTarget.value = "";
+              }}
+            />
+          </label>
+        </div>
       </div>
+
+      {importMessage && (
+        <div
+          className="flex items-center gap-2 rounded border p-3 text-sm"
+          style={{ borderColor: "hsl(var(--border))", color: "hsl(var(--foreground))", background: "hsl(var(--card))" }}
+        >
+          <FileSpreadsheet size={16} />
+          {importMessage}
+        </div>
+      )}
 
       <div
         className="rounded-lg overflow-hidden"

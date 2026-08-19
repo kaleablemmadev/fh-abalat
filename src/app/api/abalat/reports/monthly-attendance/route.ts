@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     const members = await prisma.user.findMany({
       where: { 
         type: 'MEMBER',
-        memberType: 'REGULAR_MEMBER',
+        roles: { has: 'REGULAR_MEMBER' },
         NOT: { roles: { has: 'COURSE_STUDENT' } },
       },
       orderBy: { fullName: 'asc' },
@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
         // Convert to Date objects for Prisma
         const startDate = gregorianDateToDate(gregorianStart);
         const endDate = gregorianDateToDate(gregorianEnd);
+        endDate.setHours(23, 59, 59, 999);
 
         // Build where clause for attendance type filtering
         const eventWhere: any = {
@@ -101,7 +102,9 @@ export async function POST(request: NextRequest) {
         // Calculate weighted attendance (attended=1, excused=0.5, absent=0)
         let weightedScore = 0;
         for (const attendance of attendances) {
-          const value = attendance.attendanceType?.value || 0;
+          const attendanceName = attendance.attendanceType?.name?.toLowerCase() || '';
+          const isPermission = attendanceName.includes('permission') || attendanceName.includes('excused');
+          const value = isPermission ? 0.5 : (attendance.attendanceType?.value || 0);
           weightedScore += value;
         }
 

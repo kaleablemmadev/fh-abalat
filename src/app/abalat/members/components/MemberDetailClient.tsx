@@ -13,7 +13,7 @@ interface Member {
   christianName: string | null;
   gender: "MALE" | "FEMALE";
   age: number;
-  memberType: "COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT" | null;
+  roles: ("COURSE_STUDENT" | "REGULAR_MEMBER" | "YOUTH_STUDENT")[];
   type: string;
   registerDate: string | null;
 }
@@ -38,6 +38,17 @@ interface Permission {
   ethiopianStartDate: string | null;
   status: string;
   createdAt: string;
+}
+
+interface EligibilitySummary {
+  eventId: string;
+  eventTitle: string;
+  eventDate: string;
+  eligible: boolean;
+  byPermission?: boolean;
+  permissionType?: string;
+  reasons: string[];
+  scores: { totalScore: number };
 }
 
 const memberTypeLabels: Record<string, string> = {
@@ -76,6 +87,7 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
 
   const [isAddingPermission, setIsAddingPermission] = useState(false);
   const [deletingPermissionId, setDeletingPermissionId] = useState<string | null>(null);
+  const [eligibility, setEligibility] = useState<EligibilitySummary[]>([]);
 
   useEffect(() => {
     if (!memberId) {
@@ -90,12 +102,9 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
         const res = await fetch(`/api/abalat/members/${memberId}`, {
           cache: "no-store",
         });
-
         if (!res.ok) {
           const errorData = await res.json().catch(() => null);
-          throw new Error(
-            errorData?.error || `Unable to load member (${res.status})`
-          );
+          throw new Error(errorData?.error || `Unable to load member (${res.status})`);
         }
 
         const data = (await res.json()) as Member;
@@ -109,6 +118,21 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
     }
 
     loadMember();
+  }, [memberId]);
+
+  useEffect(() => {
+    if (!memberId) return;
+
+    async function loadEligibility() {
+      try {
+        const res = await fetch(`/api/abalat/members/${memberId}/eligibility`, { cache: 'no-store' });
+        if (res.ok) setEligibility(await res.json());
+      } catch (err) {
+        console.error('Failed to load member eligibility:', err);
+      }
+    }
+
+    loadEligibility();
   }, [memberId]);
 
   useEffect(() => {
@@ -230,8 +254,9 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
     }
   };
 
-  const badgeClass = member?.memberType
-    ? memberTypeColors[member.memberType] ??
+  const memberRole = member?.roles?.find((role) => role !== 'COURSE_STUDENT') ?? null;
+  const badgeClass = memberRole
+    ? memberTypeColors[memberRole] ??
       "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"
     : "bg-zinc-500/10 text-zinc-400 border-zinc-500/20";
 
@@ -364,8 +389,8 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                   badgeClass
                 }`}
               >
-                {member.memberType
-                  ? memberTypeLabels[member.memberType] ?? member.memberType
+                {memberRole
+                  ? memberTypeLabels[memberRole] ?? memberRole
                   : "No type"}
               </span>
             </div>
@@ -706,6 +731,60 @@ export default function MemberDetailClient({ memberId }: { memberId: string }) {
                   ))}
                 </ul>
               )}
+            </div>
+          </section>
+        )}
+
+        {member && (
+          <section
+            className="rounded-lg animate-slide-in overflow-hidden"
+            style={{
+              background: "hsl(var(--card))",
+              border: "1px solid hsl(var(--border))",
+            }}
+          >
+            <div className="px-5 py-4" style={{ borderBottom: "1px solid hsl(var(--border))" }}>
+              <h2 className="text-base font-semibold" style={{ color: "hsl(var(--foreground))" }}>
+                Upcoming event eligibility
+              </h2>
+            </div>
+            <div className="p-4 space-y-2">
+              {eligibility.length === 0 ? (
+                <p className="text-sm text-center" style={{ color: "hsl(var(--muted-foreground))" }}>
+                  No upcoming Abalat events with eligibility rules.
+                </p>
+              ) : eligibility.map((event) => (
+                <div
+                  key={event.eventId}
+                  className="flex items-center justify-between gap-3 rounded p-3"
+                  style={{
+                    background: "hsl(var(--background))",
+                    border: "1px solid hsl(var(--border))",
+                  }}
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold truncate" style={{ color: "hsl(var(--foreground))" }}>
+                      {event.eventTitle}
+                    </p>
+                    <p className="text-xs mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>
+                      {new Date(event.eventDate).toLocaleDateString()}
+                      {' · Score: '}{event.scores.totalScore}
+                    </p>
+                  </div>
+                  {event.byPermission ? (
+                    <span className="shrink-0 text-xs font-semibold" style={{ color: "hsl(45 70% 55%)" }}>
+                      Eligible by permission{event.permissionType ? `: ${event.permissionType}` : ''}
+                    </span>
+                  ) : (
+                    <span
+                      className="shrink-0 text-xs font-semibold"
+                      style={{ color: event.eligible ? "hsl(160 60% 55%)" : "hsl(0 55% 55%)" }}
+                    >
+                      {event.eligible ? 'Eligible' : 'Not eligible'}
+                    </span>
+                  )}
+                </div>
+              ))}
             </div>
           </section>
         )}

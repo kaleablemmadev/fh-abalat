@@ -74,7 +74,8 @@ export class EligibilityService {
   static async calculateMemberScore(
     memberId: string,
     lookbackMonths: number,
-    targetDate: Date
+    targetDate: Date,
+    eventType: 'CHORE' | 'SUNDAY' | 'EVENT' = 'EVENT',
   ): Promise<MemberScore> {
     const cutoffDate = new Date(targetDate);
     cutoffDate.setMonth(cutoffDate.getMonth() - lookbackMonths);
@@ -107,7 +108,25 @@ export class EligibilityService {
     });
 
     const activePermissionsRecords = await getMemberPermissions(memberId);
-    return this.buildMemberScore(attendances, activePermissionsRecords);
+    const score = this.buildMemberScore(attendances, activePermissionsRecords);
+    for (const permission of activePermissionsRecords) {
+      const isExcused = await isMemberExcusedForEvent(
+        permission.permissionType,
+        dateToEthiopian(targetDate),
+        targetDate,
+        eventType,
+        permission.ethiopianStartDate,
+      );
+      if (isExcused) {
+        score.byPermission = true;
+        score.permissionType = permission.permissionType.name;
+        score.totalScore += 0.5;
+        if (eventType === 'CHORE') score.choreScore += 0.5;
+        if (eventType === 'SUNDAY') score.sundayScore += 0.5;
+        break;
+      }
+    }
+    return score;
   }
 
   private static buildMemberScore(attendances: any[], activePermissionsRecords: any[]): MemberScore {
@@ -123,7 +142,9 @@ export class EligibilityService {
     const attendanceDetails: any[] = [];
 
     for (const attendance of attendances) {
-      const value = attendance.attendanceType?.value || 0;
+      const attendanceName = attendance.attendanceType?.name?.toLowerCase() || '';
+      const isPermission = attendanceName.includes('permission') || attendanceName.includes('excused');
+      const value = isPermission ? 0.5 : (attendance.attendanceType?.value || 0);
       totalScore += value;
 
       const eventTitle = attendance.event?.title || '';
@@ -248,6 +269,7 @@ export class EligibilityService {
     }[],
     targetDate: Date,
     preloadedScore?: MemberScore,
+    eventType: 'CHORE' | 'SUNDAY' | 'EVENT' = 'EVENT',
   ): Promise<EligibilityCheckResult> {
     const member = await prisma.user.findUnique({
       where: { id: memberId },
@@ -281,7 +303,7 @@ export class EligibilityService {
     }
 
     const { choreScore, sundayScore, mezmurScore, totalScore, attendanceDetails, activePermissions, byPermission, permissionType } =
-      preloadedScore ?? await this.calculateMemberScore(memberId, maxLookbackMonths, targetDate);
+      preloadedScore ?? await this.calculateMemberScore(memberId, maxLookbackMonths, targetDate, eventType);
 
     // Check chore criteria
     if (requiredChore > 0 && choreScore < requiredChore) {
@@ -561,6 +583,9 @@ export class EligibilityService {
           gte: now,
         },
         eventType: 'EVENT',
+        courseClassId: null,
+        mode: 'ABALAT',
+        isRecurring: true,
       },
       include: {
         eligibilityRule: {
@@ -611,11 +636,12 @@ export class EligibilityService {
     // Get all events that the member is targeted for
     const events = await prisma.event.findMany({
       where: {
-        OR: [
-          { targetRoles: { hasSome: member.roles } },
-          { courseClassId: member.courseClassId || undefined }
-        ],
+        targetRoles: { hasSome: member.roles },
         isActive: true,
+        eventType: 'EVENT',
+        courseClassId: null,
+        mode: 'ABALAT',
+        isRecurring: true,
         eligibilityRuleId: { not: null }
       },
       include: {

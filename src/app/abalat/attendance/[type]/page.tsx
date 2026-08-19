@@ -1,6 +1,7 @@
 // /abalat/attendance/[type]/page.tsx
 import prisma from "@/src/lib/prisma";
 import MultiMonthGrid from "../components/MultiMonthGrid";
+import AttendanceExcelImport from "../components/AttendanceExcelImport";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { 
@@ -330,6 +331,8 @@ export default async function MultiMonthAttendancePage({
             {monthName} {currentEthYear} ዓ.ም. • {generatedEvents.length} {type === 'sunday' ? 'እሑድ ጉባዔያት' : 'የሠርክ ቀናት'}
           </p>
         </div>
+
+        <AttendanceExcelImport type={type as 'chore' | 'sunday'} />
         
         {/* Navigation buttons */}
         <div className="flex items-center gap-2">

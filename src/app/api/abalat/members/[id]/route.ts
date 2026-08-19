@@ -63,6 +63,20 @@ export async function PUT(
     if (body.christianName !== undefined) updateData.christianName = body.christianName || null;
     if (body.roles !== undefined) updateData.roles = { set: body.roles };
 
+    if (body.fullName !== undefined) {
+      const duplicateName = await prisma.user.findFirst({
+        where: {
+          type: "MEMBER",
+          fullName: body.fullName.trim(),
+          NOT: { id: routeParams.id },
+        },
+        select: { id: true },
+      });
+      if (duplicateName) {
+        return NextResponse.json({ error: "A member with this full name already exists" }, { status: 409 });
+      }
+    }
+
     // Handle Ethiopian date fields from form → registerDate string
     if (body.registerDateDay && body.registerDateMonth && body.registerDateYear) {
       const monthName = ethMonthNames[parseInt(body.registerDateMonth)];

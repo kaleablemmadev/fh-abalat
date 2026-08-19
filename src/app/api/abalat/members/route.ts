@@ -50,6 +50,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const duplicateName = await prisma.user.findFirst({
+      where: { type: "MEMBER", fullName: body.fullName.trim() },
+      select: { id: true },
+    });
+    if (duplicateName) {
+      return NextResponse.json({ error: "A member with this full name already exists" }, { status: 409 });
+    }
+
     // Build registration date string from Ethiopian calendar parts
     let registerDate: string | undefined;
     if (body.registerDateDay && body.registerDateMonth && body.registerDateYear) {

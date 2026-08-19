@@ -133,12 +133,12 @@ export async function POST(request: NextRequest) {
         },
         select: { fullName: true, christianName: true },
       });
-      const existingKeys = new Set(existing.map((member) => `${member.fullName}|${member.christianName ?? ""}`));
+      const existingKeys = new Set(existing.map((member) => member.fullName?.trim().toLowerCase()));
 
       for (const row of validRows) {
-        const key = `${row.fullName}|${row.christianName ?? ""}`;
+        const key = row.fullName.trim().toLowerCase();
         if (existingKeys.has(key)) {
-          errors.push({ row: row.rowNumber, error: "A member with this name and Christian name already exists" });
+          errors.push({ row: row.rowNumber, error: "A member with this full name already exists" });
           continue;
         }
 

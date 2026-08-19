@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Search, Filter, Plus, Edit, Users, FileSpreadsheet, Download, Upload, Loader2 } from "lucide-react";
+import { Search, Filter, Plus, Edit, Users, FileSpreadsheet, Download, Upload, Loader2, Trash2 } from "lucide-react";
 
 interface Member {
   id: string;
@@ -41,6 +41,9 @@ export default function MembersPage() {
   const [memberTypeFilter, setMemberTypeFilter] = useState("");
   const [isImporting, setIsImporting] = useState(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
+  const [selectedMemberIds, setSelectedMemberIds] = useState<Set<string>>(new Set());
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState<string | null>(null);
 
   const downloadTemplate = () => {
     window.location.href = "/api/abalat/members/import";
@@ -135,6 +138,56 @@ export default function MembersPage() {
     }),
     [filteredMembers]
   );
+
+  const allVisibleSelected = filteredMembers.length > 0 && filteredMembers.every((member) => selectedMemberIds.has(member.id));
+
+  const toggleMember = (memberId: string) => {
+    setSelectedMemberIds((current) => {
+      const next = new Set(current);
+      if (next.has(memberId)) next.delete(memberId);
+      else next.add(memberId);
+      return next;
+    });
+  };
+
+  const toggleAllVisible = () => {
+    setSelectedMemberIds((current) => {
+      const next = new Set(current);
+      if (allVisibleSelected) {
+        filteredMembers.forEach((member) => next.delete(member.id));
+      } else {
+        filteredMembers.forEach((member) => next.add(member.id));
+      }
+      return next;
+    });
+  };
+
+  const deleteSelectedMembers = async () => {
+    const ids = [...selectedMemberIds];
+    if (!ids.length || !window.confirm(`Delete ${ids.length} selected member${ids.length === 1 ? "" : "s"}?`)) return;
+
+    setIsDeleting(true);
+    setDeleteMessage(null);
+    try {
+      const response = await fetch("/api/abalat/members/bulk", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        const blocked = result.ids?.length ? ` Blocked IDs: ${result.ids.join(", ")}.` : "";
+        throw new Error(`${result.error || "Failed to delete members"}${blocked}`);
+      }
+      setMembers((current) => current.filter((member) => !ids.includes(member.id)));
+      setSelectedMemberIds(new Set());
+      setDeleteMessage(`${result.deletedCount} member${result.deletedCount === 1 ? "" : "s"} deleted.`);
+    } catch (err) {
+      setDeleteMessage(err instanceof Error ? err.message : "Failed to delete members");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className="space-y-5 animate-fade-in">
@@ -301,6 +354,34 @@ export default function MembersPage() {
               </select>
             </div>
           </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <label className="inline-flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={allVisibleSelected} onChange={toggleAllVisible} />
+              Select all shown ({filteredMembers.length})
+            </label>
+            {selectedMemberIds.size > 0 && (
+              <div className="flex items-center gap-2">
+                <span>{selectedMemberIds.size} selected</span>
+                <button
+                  type="button"
+                  onClick={deleteSelectedMembers}
+                  disabled={isDeleting}
+                  className="inline-flex items-center gap-1 rounded px-2.5 py-1.5 font-semibold disabled:opacity-50"
+                  style={{ background: "hsl(0 55% 35%)", color: "#fff" }}
+                >
+                  {isDeleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                  {isDeleting ? "Deleting..." : "Delete selected"}
+                </button>
+              </div>
+            )}
+          </div>
+
+          {deleteMessage && (
+            <div className="rounded border p-2 text-xs" style={{ borderColor: "hsl(var(--border))", color: "hsl(var(--foreground))" }}>
+              {deleteMessage}
+            </div>
+          )}
         </div>
 
         <div className="p-3">
@@ -382,6 +463,13 @@ export default function MembersPage() {
                       border: "1px solid hsl(var(--border))",
                     }}
                   >
+                    <input
+                      type="checkbox"
+                      aria-label={`Select ${member.fullName ?? "member"}`}
+                      checked={selectedMemberIds.has(member.id)}
+                      onChange={() => toggleMember(member.id)}
+                      className="absolute left-3 top-3 z-10"
+                    />
                     <Link
                       href={`/abalat/members/${member.id}/edit`}
                       className="absolute top-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 hover:text-[hsl(160_60%_55%)]"
@@ -390,7 +478,7 @@ export default function MembersPage() {
                       <Edit size={13} />
                     </Link>
 
-                    <div className="mb-2.5 pr-5">
+                    <div className="mb-2.5 pl-6 pr-5">
                       <h3
                         className="text-sm font-semibold leading-tight truncate"
                         style={{ color: "hsl(var(--foreground))" }}

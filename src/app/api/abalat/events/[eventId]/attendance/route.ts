@@ -1,6 +1,8 @@
 /* /api/events/[eventId]/attendance/route.ts */
 import prisma from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { createAuditLog } from "@/src/services/audit.service";
+import { dateToEthiopian } from "@/src/lib/ethiopiancal";
 
 export async function GET(
   _request: NextRequest,
@@ -11,7 +13,7 @@ export async function GET(
 
     const event = await prisma.event.findFirst({
       where: { id: eventId, mode: "ABALAT", courseClassId: null, eventType: { in: ["EVENT", "CHORE", "SUNDAY"] } },
-      select: { courseClassId: true, eventType: true, isRecurring: true },
+      select: { courseClassId: true, eventType: true, isRecurring: true, title: true, date: true },
     });
 
     if (!event) {
@@ -46,7 +48,7 @@ export async function POST(
 
     const event = await prisma.event.findFirst({
       where: { id: eventId, mode: "ABALAT", courseClassId: null, eventType: { in: ["EVENT", "CHORE", "SUNDAY"] } },
-      select: { courseClassId: true, eventType: true, isRecurring: true },
+      select: { courseClassId: true, eventType: true, isRecurring: true, title: true, date: true },
     });
 
     if (!event) {
@@ -100,6 +102,7 @@ export async function POST(
     }
 
     // Perform upsert for each record
+    const before = await prisma.attendance.findMany({ where: { eventId, mode: "ABALAT" }, select: { memberId: true, attendanceTypeId: true } });
     await prisma.$transaction(
       body.map((record: { memberId: string; attendanceTypeId: string; permissionId?: string | null }) =>
         prisma.attendance.upsert({
@@ -124,6 +127,16 @@ export async function POST(
         })
       )
     );
+
+    await createAuditLog({
+      action: "UPDATE",
+      entityType: "ATTENDANCE",
+      entityId: eventId,
+      entityName: `${event.title} (${dateToEthiopian(event.date).month} ${dateToEthiopian(event.date).day})`,
+      changes: { before, after: body, attendanceDate: event.date.toISOString() },
+      mode: "ABALAT",
+      performedById: adminUser.id,
+    });
 
     return NextResponse.json({ message: "Attendance saved successfully" }, { status: 200 });
   } catch (error) {

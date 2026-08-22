@@ -14,7 +14,7 @@ export default async function SingleDayAttendancePage({
 }) {
   const { eventId } = await params;
 
-  // 1. Fetch the Event
+  // Fetch the event.
   const event = await prisma.event.findFirst({
     where: { id: eventId, mode: "ABALAT", courseClassId: null, eventType: { in: ["EVENT", "CHORE", "SUNDAY"] } },
   });

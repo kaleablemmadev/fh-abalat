@@ -2,10 +2,21 @@
 import prisma from '@/src/lib/prisma';
 import Breadcrumb from '@/src/components/navigation/Breadcrumb';
 import { Bell, Check, Clock } from 'lucide-react';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default async function AbalatNotificationsPage() {
+  const sessionCookie = (await cookies()).get('mode_session')?.value;
+  let targetUserId: string | undefined;
+  let userType: string | undefined;
+  try {
+    const session = sessionCookie ? JSON.parse(decodeURIComponent(sessionCookie)) : null;
+    targetUserId = session?.userId;
+    userType = session?.userType;
+  } catch { /* Invalid sessions are handled by the layout. */ }
+  if (userType !== 'SUPERADMIN') redirect('/abalat');
   const notifications = await prisma.notification.findMany({
-    where: { mode: 'ABALAT' },
+    where: { mode: 'ABALAT', ...(targetUserId ? { targetUserId } : {}) },
     include: {
       targetUser: {
         select: {
@@ -14,6 +25,7 @@ export default async function AbalatNotificationsPage() {
           email: true,
         },
       },
+      auditLog: { select: { entityType: true, entityId: true } },
     },
     orderBy: { createdAt: 'desc' },
     take: 50,
@@ -41,7 +53,9 @@ export default async function AbalatNotificationsPage() {
           ) : (
             <div className="divide-y" style={{ borderColor: 'hsl(var(--border))' }}>
               {notifications.map((notification) => (
-                <div 
+                <a href={notification.auditLog?.entityType === 'ATTENDANCE'
+                  ? `/abalat/events/${notification.auditLog.entityId}/attendance`
+                  : notification.auditLogId ? `/abalat/audit-log?highlight=${notification.auditLogId}` : '/abalat/notifications'}
                   key={notification.id} 
                   className={`p-4 hover:bg-[hsl(var(--muted)/0.3)] transition-colors ${!notification.isRead ? 'bg-[hsl(var(--muted)/0.2)]' : ''}`}
                 >
@@ -88,7 +102,7 @@ export default async function AbalatNotificationsPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           )}

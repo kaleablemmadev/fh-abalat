@@ -357,7 +357,7 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
           <div className="flex items-center gap-6">
             {/* Mode switcher */}
             <div className="flex items-center gap-1 bg-[hsl(var(--muted))] rounded-lg p-1">
-              {['Abalat', 'Course', 'Mezmur'].map((m) => (
+              {['Member', 'Abalat', 'Course', 'Mezmur'].map((m) => (
                 <Link
                   key={m}
                   href={`/${m.toLowerCase()}`}
@@ -367,7 +367,7 @@ export default function AppLayout({ children, navItems, modeLabel }: AppLayoutPr
                       : 'text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]'
                   }`}
                 >
-                  {m === 'Abalat' ? 'አባላት' : m === 'Course' ? 'ኮርስ' : 'መዝሙር'}
+                  {m === 'Member' ? 'የአባል' : m === 'Abalat' ? 'አባላት' : m === 'Course' ? 'ኮርስ' : 'መዝሙር'}
                 </Link>
               ))}
             </div>

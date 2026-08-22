@@ -3,6 +3,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { ethMonthNames, getEthiopianToday } from "@/src/lib/ethiopiancal";
 import { generateAccessCode } from "@/src/lib/utils";
 
+async function notifyDuplicateName(name: string) {
+  const admins = await prisma.user.findMany({
+    where: { type: "SUPERADMIN", mode: "ABALAT" },
+    select: { id: true },
+  });
+  await prisma.notification.createMany({
+    data: admins.map((admin) => ({
+      title: "Duplicate member name needs review",
+      message: `The member name "${name}" is duplicated. Please review the records and change the duplicate name(s).`,
+      type: "DUPLICATE_NAME",
+      mode: "ABALAT" as const,
+      targetUserId: admin.id,
+    })),
+  });
+}
+
 type MemberPayload = {
   fullName: string;
   gender?: "MALE" | "FEMALE";
@@ -55,6 +71,7 @@ export async function POST(request: NextRequest) {
       select: { id: true },
     });
     if (duplicateName) {
+      await notifyDuplicateName(body.fullName.trim());
       return NextResponse.json({ error: "A member with this full name already exists" }, { status: 409 });
     }
 

@@ -60,7 +60,7 @@ export async function DELETE(request: NextRequest) {
     const ids = result.data.ids;
     const deleted = await prisma.$transaction(async (tx) => {
       await tx.attendance.deleteMany({ where: { eventId: { in: ids } } });
-      return tx.event.deleteMany({ where: { id: { in: ids }, eventType: "EVENT", isRecurring: true, courseClassId: null, mode: "ABALAT" } });
+      return tx.event.deleteMany({ where: { id: { in: ids }, eventType: "EVENT", courseClassId: null, mode: "ABALAT" } });
     });
     return NextResponse.json({ deletedCount: deleted.count });
   } catch (error) {

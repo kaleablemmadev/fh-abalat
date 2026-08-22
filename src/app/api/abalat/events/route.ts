@@ -25,7 +25,6 @@ export async function GET() {
     const events = await prisma.event.findMany({
       where: {
         eventType: 'EVENT',
-        isRecurring: true,
         courseClassId: null,
       },
       include: {
@@ -95,13 +94,6 @@ export async function POST(request: NextRequest) {
     if (isNaN(eventDate.getTime())) {
       return NextResponse.json(
         { error: `Invalid date format: "${body.date}"` },
-        { status: 400 }
-      );
-    }
-
-    if (body.isRecurring !== true) {
-      return NextResponse.json(
-        { error: "Only recurring events can be created in Abalat mode" },
         { status: 400 }
       );
     }

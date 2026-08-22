@@ -2,7 +2,7 @@
 import prisma from "@/src/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Calendar, MapPin, ArrowLeft, Clock, Users, Settings } from "lucide-react";
+import { Calendar, MapPin, ArrowLeft, Clock, Users, Settings, Pencil } from "lucide-react";
 import { dateToEthiopian } from "@/src/lib/ethiopiancal";
 import EventEligibilitySelector from "./components/EventEligibilitySelector";
 import Breadcrumb from "@/src/components/navigation/Breadcrumb";
@@ -28,7 +28,7 @@ export default async function EventDetailPage({
     },
   });
 
-  if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+  if (!event || event.courseClassId || event.eventType !== "EVENT") {
     notFound();
   }
 
@@ -65,6 +65,9 @@ export default async function EventDetailPage({
         <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'hsl(var(--foreground))' }}>
           {event.title}
         </h1>
+        <Link href={`/abalat/events/${eventId}/edit`} className="inline-flex items-center gap-1.5 mt-3 rounded border px-3 py-2 text-sm font-semibold">
+          <Pencil size={14} /> Edit event
+        </Link>
         {event.description && (
           <p className="text-sm mt-2" style={{ color: 'hsl(var(--muted-foreground))' }}>
             {event.description}

@@ -108,7 +108,9 @@ export default async function AbalatTodayPage() {
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
           {weekEvents.map((event) => {
-            const ethDate = dateToEthiopian(event.date);
+            const ethDate = event.ethiopianMonth && event.ethiopianDay
+              ? { month: ethMonthNames[event.ethiopianMonth], day: event.ethiopianDay, year: event.ethiopianYear ?? today.year }
+              : dateToEthiopian(event.date);
             const label = event.eventType === 'CHORE' ? 'የሠርክ' : 'የእሑድ';
             const eventDate = new Date(event.date);
             const isToday = eventDate.getFullYear() === now.getFullYear()

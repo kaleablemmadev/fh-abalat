@@ -113,8 +113,12 @@ export class DocumentService {
             margin: {
               top: 500,
               bottom: 500,
-              left: 500,
-              right: 500,
+              left: 360,
+              right: 360,
+            },
+            size: {
+              width: 15840,
+              height: 12240,
             },
           },
         },
@@ -155,6 +159,7 @@ export class DocumentService {
 
           // Table
           new Table({
+            layout: 'fixed',
             rows: [
               // Header Row
               new TableRow({

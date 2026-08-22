@@ -4,7 +4,7 @@
 import { formatEthiopianDate, dateToEthiopian } from "@/src/lib/ethiopiancal";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Calendar, ChevronRight, Plus, Trash2, Loader2 } from 'lucide-react';
+import { Calendar, ChevronRight, Plus, Trash2, Loader2, Pencil } from 'lucide-react';
 
 interface EventProps {
   id: string;
@@ -228,6 +228,13 @@ export default function EventsPage() {
                     >
                       ዝርዝር
                       <ChevronRight size={14} />
+                    </Link>
+                    <Link
+                      href={`/abalat/events/${e.id}/edit`}
+                      className="inline-flex items-center gap-1 rounded border px-2 py-1 text-xs font-medium"
+                      title="Edit event"
+                    >
+                      <Pencil size={12} /> Edit
                     </Link>
                     {/* Delete button */}
                     <button

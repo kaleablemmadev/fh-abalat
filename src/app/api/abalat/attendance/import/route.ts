@@ -8,6 +8,7 @@ import {
   getEthiopianToday,
   getSundaysInMonth,
 } from "@/src/lib/ethiopiancal";
+import { createAuditLog } from "@/src/services/audit.service";
 
 const CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 type ImportType = "chore" | "sunday";
@@ -148,7 +149,7 @@ export async function GET(request: NextRequest) {
     const year = getEthiopianToday().year;
     const columns = await getEventColumns(type, year);
     const members = await prisma.user.findMany({
-      where: { type: "MEMBER", roles: { has: "REGULAR_MEMBER" }, NOT: { roles: { has: "COURSE_STUDENT" } }, mode: "ABALAT" },
+      where: { type: "MEMBER", mode: "ABALAT", NOT: { roles: { has: "COURSE_STUDENT" } } },
       select: { fullName: true },
       orderBy: { fullName: "asc" },
     });
@@ -180,13 +181,14 @@ export async function POST(request: NextRequest) {
     if (rows.length < 3) return NextResponse.json({ error: "The workbook has no member rows" }, { status: 400 });
 
     const members = await prisma.user.findMany({
-      where: { type: "MEMBER", roles: { has: "REGULAR_MEMBER" }, NOT: { roles: { has: "COURSE_STUDENT" } }, mode: "ABALAT" },
+      where: { type: "MEMBER", mode: "ABALAT", NOT: { roles: { has: "COURSE_STUDENT" } } },
       select: { id: true, fullName: true },
     });
     const memberByName = new Map(members.map((member) => [member.fullName?.trim().toLowerCase(), member]));
     const attendanceTypes = await getAttendanceTypes();
     const adminId = await getAdminId();
     const saved = new Set<string>();
+    const changed = new Set<string>();
     const errors: { row: number; error: string }[] = [];
 
     for (let offset = 2; offset < rows.length; offset += 25) {
@@ -246,6 +248,7 @@ export async function POST(request: NextRequest) {
           }
         }, { maxWait: 60000, timeout: 60000 });
         newRecords.forEach((record) => saved.add(`${record.month}:${record.day}`));
+        [...newRecords, ...existingRecords].forEach((record) => changed.add(`${record.month}:${record.day}`));
       }
     }
 
@@ -253,6 +256,23 @@ export async function POST(request: NextRequest) {
       const [month, day] = value.split(":").map(Number);
       return `${ethMonthNames[month]} ${day}`;
     });
+    if (changed.size > 0) {
+      await createAuditLog({
+        action: "UPDATE",
+        entityType: "ATTENDANCE_IMPORT",
+        entityId: `import-${Date.now()}`,
+        entityName: `${type} attendance import`,
+        changes: {
+          attendanceDates: [...changed].map((value) => {
+            const [month, day] = value.split(":").map(Number);
+            return `${ethMonthNames[month]} ${day}`;
+          }),
+          errors,
+        },
+        mode: "ABALAT",
+        performedById: adminId,
+      });
+    }
     return NextResponse.json({ success: true, savedCount: saved.size, savedDates, errors });
   } catch (error) {
     console.error("Abalat attendance import error:", error);

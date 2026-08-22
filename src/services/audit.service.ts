@@ -43,7 +43,7 @@ async function notifyAdminsOfAudit(auditLog: any, mode: 'ABALAT' | 'COURSE' | 'M
     // Get all admins and superadmins for this mode
     const admins = await prisma.user.findMany({
       where: {
-        type: { in: ['ADMIN', 'SUPERADMIN'] },
+        type: 'SUPERADMIN',
         mode: mode,
       },
     });

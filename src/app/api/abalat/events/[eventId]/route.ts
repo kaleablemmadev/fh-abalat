@@ -35,7 +35,7 @@ export async function GET(
       },
     });
 
-    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+    if (!event || event.courseClassId || event.eventType !== "EVENT") {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
@@ -92,7 +92,7 @@ export async function PUT(
         }
       }
     });
-    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+    if (!event || event.courseClassId || event.eventType !== "EVENT") {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
@@ -162,7 +162,7 @@ export async function DELETE(
     const { eventId } = await params;
     
     const event = await prisma.event.findUnique({ where: { id: eventId } });
-    if (!event || event.courseClassId || event.eventType !== "EVENT" || !event.isRecurring) {
+    if (!event || event.courseClassId || event.eventType !== "EVENT") {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 

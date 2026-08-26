@@ -9,6 +9,7 @@ const courseClassSchema = z.object({
   year: z.string().min(1),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
+  migrateStudents: z.boolean().optional(), // If true, migrate students from previous year's class
 });
 
 export async function GET() {
@@ -47,7 +48,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, year, startDate, endDate } = validation.data;
+    const { name, year, startDate, endDate, migrateStudents } = validation.data;
 
     // Check if class already exists for this year
     const existing = await prisma.courseClass.findUnique({
@@ -66,16 +67,79 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const courseClass = await prisma.courseClass.create({
-      data: {
+    // Check if there's a previous year's class with the same name that has students
+    const previousYearClass = await prisma.courseClass.findFirst({
+      where: {
         name,
-        year,
-        startDate: startDate ? new Date(startDate) : null,
-        endDate: endDate ? new Date(endDate) : null,
+        isActive: true,
       },
+      orderBy: { year: 'desc' },
     });
 
-    return NextResponse.json(courseClass, { status: 201 });
+    let migrationInfo = null;
+    if (previousYearClass && previousYearClass.year !== year) {
+      const studentCount = await prisma.courseEnrollment.count({
+        where: {
+          courseClassId: previousYearClass.id,
+          status: 'ACTIVE',
+        },
+      });
+
+      if (studentCount > 0) {
+        migrationInfo = {
+          hasPreviousStudents: true,
+          previousYear: previousYearClass.year,
+          studentCount,
+          previousClassId: previousYearClass.id,
+        };
+      }
+    }
+
+    const courseClass = await prisma.$transaction(async (tx) => {
+      const newClass = await tx.courseClass.create({
+        data: {
+          name,
+          year,
+          startDate: startDate ? new Date(startDate) : null,
+          endDate: endDate ? new Date(endDate) : null,
+        },
+      });
+
+      // If migrateStudents is true and there are previous students, migrate them
+      if (migrateStudents && migrationInfo && migrationInfo.previousClassId) {
+        const previousEnrollments = await tx.courseEnrollment.findMany({
+          where: {
+            courseClassId: migrationInfo.previousClassId,
+            status: 'ACTIVE',
+          },
+        });
+
+        for (const enrollment of previousEnrollments) {
+          // Create new enrollment for the new class
+          await tx.courseEnrollment.create({
+            data: {
+              studentId: enrollment.studentId,
+              courseClassId: newClass.id,
+              status: 'ACTIVE',
+              enrolledDate: new Date().toISOString().split('T')[0],
+            },
+          });
+
+          // Update user's current class reference
+          await tx.user.update({
+            where: { id: enrollment.studentId },
+            data: { courseClassId: newClass.id },
+          });
+        }
+      }
+
+      return newClass;
+    });
+
+    return NextResponse.json({
+      ...courseClass,
+      migrationInfo,
+    }, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

@@ -44,6 +44,9 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
   const [isLoading, setIsLoading] = useState(false);
   const [transferData, setTransferData] = useState<{ fromId: string; fromYear: string; toId: string } | null>(null);
   const [showTransferDialog, setShowTransferDialog] = useState(false);
+  const [migrationData, setMigrationData] = useState<Record<string, { previousYear: string; studentCount: number }> | null>(null);
+  const [showMigrationDialog, setShowMigrationDialog] = useState(false);
+  const [pendingYearData, setPendingYearData] = useState<any>(null);
 
   const todayEthISO = ethiopianDateWordsToISO(getEthiopianToday());
 
@@ -98,7 +101,7 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, withMigration: boolean = false) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -116,6 +119,12 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
         s2MidExamDate: ethiopianISOToGregorianDate(formData.s2MidExamDate).toISOString(),
         s2FinalExamDate: ethiopianISOToGregorianDate(formData.s2FinalExamDate).toISOString(),
         keremtDailyDuration: formData.keremtDailyDuration,
+        // Add migration data if confirmed
+        ...(withMigration && migrationData ? {
+          migrateStudents: Object.fromEntries(
+            Object.keys(migrationData).map(key => [key, true])
+          )
+        } : {}),
       };
 
       const url = editingId ? `/api/course/academic-years/${editingId}` : "/api/course/academic-years";
@@ -129,12 +138,25 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
 
       if (res.ok) {
         const result = await res.json();
+        
+        // Check if there's migration info and we haven't shown the dialog yet
+        if (result.migrationInfo && Object.keys(result.migrationInfo).length > 0 && !withMigration) {
+          setMigrationData(result.migrationInfo);
+          setPendingYearData(result);
+          setShowMigrationDialog(true);
+          setIsLoading(false);
+          return;
+        }
+
         if (editingId) {
           setYears(years.map(y => y.id === editingId ? result : (payload.isActive ? { ...y, isActive: false } : y)));
         } else {
           setYears([result, ...years.map(y => payload.isActive ? { ...y, isActive: false } : y)]);
         }
         resetForm();
+        setShowMigrationDialog(false);
+        setMigrationData(null);
+        setPendingYearData(null);
         router.refresh();
       } else {
         const error = await res.json();
@@ -143,8 +165,28 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
     } catch (err) {
       console.error(err);
     } finally {
-      setIsLoading(false);
+      if (!showMigrationDialog) {
+        setIsLoading(false);
+      }
     }
+  };
+
+  const handleConfirmMigration = () => {
+    setShowMigrationDialog(false);
+    handleSubmit(new Event('submit') as any, true);
+  };
+
+  const handleSkipMigration = () => {
+    setShowMigrationDialog(false);
+    setMigrationData(null);
+    // Add the pending year without migration
+    if (pendingYearData) {
+      setYears([pendingYearData, ...years.map(y => formData.isActive ? { ...y, isActive: false } : y)]);
+      resetForm();
+      setPendingYearData(null);
+      router.refresh();
+    }
+    setIsLoading(false);
   };
 
   const toggleClass = async (yearId: string, classId: string, currentStatus: boolean) => {
@@ -279,6 +321,58 @@ export default function AcademicYearList({ initialYears }: AcademicYearListProps
                   className="w-full h-11 text-sm font-bold text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
                 >
                   Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Migration Dialog */}
+      {showMigrationDialog && migrationData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 space-y-4">
+              <div className="w-12 h-12 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center mx-auto">
+                <Users size={24} />
+              </div>
+              <div className="text-center space-y-2">
+                <h3 className="text-lg font-bold">Migrate Students from Previous Year?</h3>
+                <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                  The following classes have students from previous years. Would you like to migrate them to the new classes?
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-4">
+                {Object.entries(migrationData).map(([className, info]) => (
+                  <div key={className} className="flex items-center justify-between p-3 bg-[hsl(var(--muted))] rounded-lg">
+                    <div>
+                      <p className="text-sm font-bold">{className}</p>
+                      <p className="text-xs text-[hsl(var(--muted-foreground))]">From {info.previousYear}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-blue-600">{info.studentCount}</p>
+                      <p className="text-xs text-[hsl(var(--muted-foreground))]">students</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-2 pt-4">
+                <button
+                  onClick={handleConfirmMigration}
+                  disabled={isLoading}
+                  className="w-full h-11 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"
+                >
+                  {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Users size={18} />}
+                  Migrate Students
+                </button>
+                <button
+                  onClick={handleSkipMigration}
+                  disabled={isLoading}
+                  className="w-full h-11 text-sm font-bold text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
+                >
+                  Skip Migration
                 </button>
               </div>
             </div>

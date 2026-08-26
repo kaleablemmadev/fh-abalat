@@ -19,6 +19,7 @@ const academicYearSchema = z.object({
   finalExamMinAttendance: z.number().optional(),
   includedClasses: z.array(z.string()).optional(),
   keremtDailyDuration: z.number().optional(),
+  migrateStudents: z.record(z.string(), z.boolean()).optional(), // Map of class name to boolean for migration
 });
 
 export async function GET() {
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
       s1Start, s1End, s2Start, s2End,
       s1MidExamDate, s1FinalExamDate, s2MidExamDate, s2FinalExamDate,
       midExamMinAttendance, finalExamMinAttendance,
-      includedClasses, keremtDailyDuration
+      includedClasses, keremtDailyDuration, migrateStudents
     } = validation.data;
 
     // Check if the year already exists
@@ -103,10 +104,41 @@ export async function POST(request: NextRequest) {
       // Ensure class types are unique and valid
       const classTypes = [...new Set((includedClasses || defaultClasses).filter(c => defaultClasses.includes(c)))];
 
+      // Check for previous year classes with students
+      const migrationInfo: Record<string, { previousYear: string; studentCount: number; previousClassId: string }> = {};
+      for (const type of classTypes) {
+        const previousYearClass = await tx.courseClass.findFirst({
+          where: {
+            name: type as any,
+            isActive: true,
+          },
+          orderBy: { year: 'desc' },
+        });
+
+        if (previousYearClass && previousYearClass.year !== academicYear.year) {
+          const studentCount = await tx.courseEnrollment.count({
+            where: {
+              courseClassId: previousYearClass.id,
+              status: 'ACTIVE',
+            },
+          });
+
+          if (studentCount > 0) {
+            migrationInfo[type] = {
+              previousYear: previousYearClass.year,
+              studentCount,
+              previousClassId: previousYearClass.id,
+            };
+          }
+        }
+      }
+
       // Create classes AND CourseYear records for existing courses
       const courses = await tx.course.findMany({
         where: { isGiven: true }
       });
+
+      const createdClasses: Record<string, string> = {};
 
       for (const type of classTypes) {
         const courseClass = await tx.courseClass.create({
@@ -120,6 +152,36 @@ export async function POST(request: NextRequest) {
             dailyDurationHours: type === 'KEREMT' ? (keremtDailyDuration || 2.0) : 2.0,
           },
         });
+
+        createdClasses[type] = courseClass.id;
+
+        // If migration is requested for this class, migrate students
+        if (migrateStudents?.[type] && migrationInfo[type]) {
+          const previousEnrollments = await tx.courseEnrollment.findMany({
+            where: {
+              courseClassId: migrationInfo[type].previousClassId,
+              status: 'ACTIVE',
+            },
+          });
+
+          for (const enrollment of previousEnrollments) {
+            // Create new enrollment for the new class
+            await tx.courseEnrollment.create({
+              data: {
+                studentId: enrollment.studentId,
+                courseClassId: courseClass.id,
+                status: 'ACTIVE',
+                enrolledDate: new Date().toISOString().split('T')[0],
+              },
+            });
+
+            // Update user's current class reference
+            await tx.user.update({
+              where: { id: enrollment.studentId },
+              data: { courseClassId: courseClass.id },
+            });
+          }
+        }
 
         // Create CourseYear for each course assigned to this class type
         const classCourses = courses.filter(c => c.classTypes.includes(type as any));
@@ -156,10 +218,15 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      return await tx.academicYear.findUnique({
+      const result = await tx.academicYear.findUnique({
         where: { id: academicYear.id },
         include: { classes: true }
       });
+
+      return {
+        ...result,
+        migrationInfo,
+      };
     }, {
       timeout: 30000 // Increase timeout for complex initialization
     });

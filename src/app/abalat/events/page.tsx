@@ -19,6 +19,8 @@ interface EventProps {
   _count?: {
     attendances: number;
   };
+  mode?: string;
+  courseClassId?: string | null;
 }
 
 export default function EventsPage() {
@@ -40,7 +42,13 @@ export default function EventsPage() {
         }
 
         const data: EventProps[] = await response.json();
-        setEvents(data);
+        // Client-side filtering to ensure only ABALAT events are shown (matching API logic)
+        const filteredEvents = data.filter(event => {
+          // Filter out any events that might belong to COURSE or MEZMUR modes
+          // This matches the API filtering: mode: 'ABALAT', eventType: 'EVENT', courseClassId: null
+          return event.mode === 'ABALAT' && event.courseClassId === null;
+        });
+        setEvents(filteredEvents);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load events");
         setEvents([]);

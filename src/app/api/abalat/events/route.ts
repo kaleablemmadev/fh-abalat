@@ -56,6 +56,8 @@ export async function GET() {
         : [],
       ethDate: dateToEthiopian(new Date(event.date)),
       _count: event._count,
+      mode: event.mode,
+      courseClassId: event.courseClassId,
     }));
 
     return NextResponse.json(serialized);

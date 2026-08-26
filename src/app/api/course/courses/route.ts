@@ -21,6 +21,7 @@ const courseSchema = z.object({
   midExamWeight: z.number().min(0).max(100).optional(),
   assignmentWeight: z.number().min(0).max(100).optional(),
   finalExamWeight: z.number().min(0).max(100).optional(),
+  courseClassIds: z.array(z.string()).optional(), // New field for many-to-many relationship
 });
 
 export async function GET() {
@@ -28,6 +29,11 @@ export async function GET() {
     const courses = await prisma.course.findMany({
       include: {
         instructor: true,
+        courseClasses: {
+          include: {
+            courseClass: true,
+          },
+        },
         courseYears: {
           include: {
             courseClass: true,
@@ -63,7 +69,7 @@ export async function POST(request: NextRequest) {
     const {
       name, description, topics, credits, requiredHours, instructorId, departmentId, isGiven, classTypes,
       semesterPreference, teacherHandoutUrl, studentHandoutUrl,
-      attendanceWeight, midExamWeight, assignmentWeight, finalExamWeight
+      attendanceWeight, midExamWeight, assignmentWeight, finalExamWeight, courseClassIds
     } = validation.data;
 
     // Check if course name already exists
@@ -121,6 +127,13 @@ export async function POST(request: NextRequest) {
           midExamWeight: midExamWeight ?? 25,
           assignmentWeight: assignmentWeight ?? 15,
           finalExamWeight: finalExamWeight ?? 50,
+          courseClasses: courseClassIds && courseClassIds.length > 0
+            ? {
+                create: courseClassIds.map(courseClassId => ({
+                  courseClassId,
+                })),
+              }
+            : undefined,
         },
       });
 
@@ -130,10 +143,21 @@ export async function POST(request: NextRequest) {
         include: { classes: true }
       });
 
-      for (const year of activeYears) {
-        const matchingClasses = year.classes.filter(c => classTypes.includes(c.name as any));
+      // Use the provided courseClassIds if available, otherwise use classTypes to find matching classes
+      const targetClassIds = courseClassIds && courseClassIds.length > 0
+        ? courseClassIds
+        : activeYears.flatMap(year =>
+            year.classes.filter(c => classTypes.includes(c.name as any)).map(c => c.id)
+          );
 
-        for (const cls of matchingClasses) {
+      // Remove duplicates
+      const uniqueClassIds = [...new Set(targetClassIds)];
+
+      for (const year of activeYears) {
+        for (const courseClassId of uniqueClassIds) {
+          const cls = year.classes.find(c => c.id === courseClassId);
+          if (!cls) continue;
+
           // Determine which semesters to create records for
           const targetSemesters: ("FIRST" | "SECOND")[] = [];
           if (newCourse.semesterPreference === "BOTH") {

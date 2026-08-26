@@ -20,6 +20,7 @@ const courseSchema = z.object({
   midExamWeight: z.number().min(0).max(100).optional(),
   assignmentWeight: z.number().min(0).max(100).optional(),
   finalExamWeight: z.number().min(0).max(100).optional(),
+  courseClassIds: z.array(z.string()).optional(), // New field for many-to-many relationship
 });
 
 export async function GET(
@@ -32,6 +33,11 @@ export async function GET(
       where: { id },
       include: {
         instructor: true,
+        courseClasses: {
+          include: {
+            courseClass: true,
+          },
+        },
         courseYears: {
           include: {
             courseClass: true,
@@ -82,7 +88,7 @@ export async function PUT(
     const {
       name, description, topics, credits, requiredHours, instructorId, departmentId, isGiven, classTypes,
       semesterPreference, teacherHandoutUrl, studentHandoutUrl,
-      attendanceWeight, midExamWeight, assignmentWeight, finalExamWeight
+      attendanceWeight, midExamWeight, assignmentWeight, finalExamWeight, courseClassIds
     } = validation.data;
 
     // Check if new name conflicts with existing
@@ -151,6 +157,22 @@ export async function PUT(
         data: updateData,
       });
 
+      // Handle courseClassIds update (many-to-many relationship)
+      if (courseClassIds !== undefined) {
+        await tx.courseClassCourse.deleteMany({
+          where: { courseId: id },
+        });
+
+        if (courseClassIds.length > 0) {
+          await tx.courseClassCourse.createMany({
+            data: courseClassIds.map(courseClassId => ({
+              courseId: id,
+              courseClassId,
+            })),
+          });
+        }
+      }
+
       // Sync weights and status to ALL CourseYears (past and present)
       await tx.courseYear.updateMany({
         where: { courseId: id },
@@ -163,15 +185,18 @@ export async function PUT(
         }
       });
 
-      // If classTypes changed, update CourseYears for the ACTIVE academic year
-      if (classTypes !== undefined) {
+      // If classTypes or courseClassIds changed, update CourseYears for the ACTIVE academic year
+      if (classTypes !== undefined || courseClassIds !== undefined) {
         const activeYear = await tx.academicYear.findFirst({
           where: { isActive: true },
           include: { classes: true }
         });
 
         if (activeYear) {
-          // Remove from classes no longer assigned (if no marks)
+          const targetClassIds = courseClassIds && courseClassIds.length > 0
+            ? courseClassIds
+            : activeYear.classes.filter(c => classTypes?.includes(c.name as any)).map(c => c.id);
+
           const currentCourseYears = await tx.courseYear.findMany({
             where: {
               courseId: id,
@@ -181,7 +206,7 @@ export async function PUT(
           });
 
           for (const cy of currentCourseYears) {
-            if (!classTypes.includes(cy.courseClass.name as any)) {
+            if (!targetClassIds.includes(cy.courseClassId)) {
                if (cy._count.marks === 0) {
                  await tx.courseYear.delete({ where: { id: cy.id } });
                } else {
@@ -190,9 +215,8 @@ export async function PUT(
             }
           }
 
-          // Add to new classes
-          for (const type of classTypes) {
-            const cls = activeYear.classes.find(c => c.name === type);
+          for (const courseClassId of targetClassIds) {
+            const cls = activeYear.classes.find(c => c.id === courseClassId);
             if (cls) {
               await tx.courseYear.upsert({
                 where: {

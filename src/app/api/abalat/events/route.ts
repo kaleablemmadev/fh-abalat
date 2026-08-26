@@ -24,13 +24,14 @@ export async function GET() {
   try {
     const events = await prisma.event.findMany({
       where: {
+        mode: 'ABALAT',
         eventType: 'EVENT',
         courseClassId: null,
       },
       include: {
         eligibilityRule: true,
         _count: {
-          select: { attendances: true },
+          select: { attendances: { where: { mode: 'ABALAT' } } },
         },
       },
       orderBy: { date: "asc" },
@@ -130,6 +131,7 @@ export async function POST(request: NextRequest) {
       eligibilityRuleId: body.eligibilityRuleId || null,
       targetRoles: targetRoles || [],
       eventType: 'EVENT',
+      mode: 'ABALAT',
       createdById: adminUser.id,
     };
 

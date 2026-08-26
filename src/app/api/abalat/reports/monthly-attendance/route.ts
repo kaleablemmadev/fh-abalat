@@ -45,6 +45,7 @@ export async function POST(request: NextRequest) {
     const members = await prisma.user.findMany({
       where: { 
         type: 'MEMBER',
+        mode: 'ABALAT',
         roles: { has: 'REGULAR_MEMBER' },
         NOT: { roles: { has: 'COURSE_STUDENT' } },
       },
@@ -75,6 +76,7 @@ export async function POST(request: NextRequest) {
 
         // Build where clause for attendance type filtering
         const eventWhere: any = {
+          mode: 'ABALAT',
           date: {
             gte: startDate,
             lte: endDate,

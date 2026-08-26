@@ -41,12 +41,20 @@ export default async function CourseMarksDashboard() {
             {activeYear ? `Active Academic Year: ${activeYear.year}` : "Select a course to manage student grades and performance"}
           </p>
         </div>
-        <Link
-          href="/course/academic-years"
-          className="text-xs font-bold px-3 py-1.5 rounded bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] transition-colors"
-        >
-          Manage Years
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/course/marks/create-link"
+            className="text-xs font-bold px-3 py-1.5 rounded bg-[hsl(217_70%_32%)] text-white hover:bg-[hsl(217_70%_36%)] transition-colors"
+          >
+            Create Shareable Link
+          </Link>
+          <Link
+            href="/course/academic-years"
+            className="text-xs font-bold px-3 py-1.5 rounded bg-[hsl(var(--muted))] hover:bg-[hsl(var(--accent))] transition-colors"
+          >
+            Manage Years
+          </Link>
+        </div>
       </div>
 
       {!activeYear && (

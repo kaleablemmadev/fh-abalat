@@ -36,6 +36,7 @@ export async function GET() {
     const members = await prisma.user.findMany({
       where: {
         type: "MEMBER",
+        mode: "ABALAT",
         roles: { has: "REGULAR_MEMBER" },
         NOT: { roles: { has: "COURSE_STUDENT" } },
       },
